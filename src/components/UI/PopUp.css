@@ -1,0 +1,53 @@
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center; /* or center, if you want it centered */
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 16px;
+}
+
+.modal-sheet {
+  background-color: var(--color-background, #fff);
+  color: var(--color-text, #111);
+  border-radius: 32px;
+  padding: 24px 16px;
+  width: 100%;
+  max-width: 520px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+  animation: modal-in 0.2s ease-out forwards;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.modal-sheet h2 {
+  text-align: center;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 15px;
+  justify-content: flex-end;
+}
+/* animation */
+@keyframes modal-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

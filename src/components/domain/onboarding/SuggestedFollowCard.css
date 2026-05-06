@@ -1,0 +1,63 @@
+.suggest-follow-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 16px;
+  padding: 12px 10px 8px; /* top 12, sides 10, bottom 8 per design */
+  background: var(--color-background); /* #fbfbfb */
+  border: 1.5px solid var(--color-gray-300); /* #dfe0e7 */
+  border-radius: 8px;
+  width: 110px; /* matches Figma card width */
+  box-sizing: border-box;
+}
+
+/* Name text block */
+.suggest-follow-card-name {
+  font-size: 12px;
+  line-height: 12px;
+  font-weight: 500; /* Geist Medium maps to 500 */
+  font-family: var(--font-sans, Geist, system-ui, sans-serif);
+  text-align: center;
+  width: 90px; /* Figma text frame width */
+  color: var(--color-text);
+  word-break: break-word;
+}
+
+/* Button tweaks inside the card (outline small variant) */
+.suggest-follow-card .button.button--small.button--outline {
+  height: 28px; /* explicit height from design */
+  padding: 0 8px; /* keep horizontal padding, remove vertical to honor height */
+  border-width: 1.5px; /* design uses 1.5px stroke */
+  display: inline-flex;
+}
+
+/* Ensure text doesn't wrap awkwardly */
+.suggest-follow-card .button p {
+  white-space: nowrap;
+  font-size: 12px;
+  line-height: 12px;
+  font-weight: 500;
+}
+
+/* Plus icon size per Figma (24px frame) */
+.suggest-follow-card .button .button-icon {
+  width: 24px;
+  height: 24px;
+}
+
+/* Grid wrapper for cards */
+.suggest-follow-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px; /* Figma gap */
+}
+
+@media (max-width: 520px) {
+  .suggest-follow-card {
+    width: 100px; /* slightly narrower on very small screens */
+  }
+  .suggest-follow-card-name {
+    width: 80px;
+  }
+}

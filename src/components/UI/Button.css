@@ -1,0 +1,153 @@
+.button {
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: auto;
+  /* Ensure Geist applies even on native <button> elements (some UAs don't inherit) */
+  font-family: "Geist", sans-serif;
+  transition:
+    background-color 200ms ease,
+    color 200ms ease,
+    border-color 200ms ease,
+    transform 300ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    padding 220ms ease,
+    gap 220ms ease;
+  will-change: transform;
+}
+
+.button-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.button--medium {
+  padding: 9px 16px;
+  border-radius: 8px;
+}
+
+.button--medium p {
+  font-size: var(--text-sm);
+}
+
+.button--small {
+  padding: 8px;
+  border-radius: 6px;
+}
+
+.button--small p {
+  font-size: var(--text-xs);
+}
+
+.button--big {
+  display: flex;
+  width: 100%;
+  /* 8px vertical padding as requested, keep horizontal spacing at 16px */
+  padding: 8px 16px;
+  border-radius: 8px;
+}
+
+.button--big p {
+  font-size: var(--text-base);
+}
+
+.button--primary {
+  background-color: var(--color-accent);
+  color: var(--color-background);
+}
+
+.button--primary:hover {
+  background-color: var(--color-buttons);
+}
+
+.button--primary:disabled {
+  background-color: var(--color-gray-100);
+  color: var(--gray-500);
+}
+
+.button--outline {
+  background-color: transparent;
+  border: 2px solid var(--color-gray-300);
+  color: var(--color-text);
+}
+
+.button--outline:hover {
+  border-color: var(--color-gray-700);
+}
+
+.button--outline:disabled {
+  background-color: var(--color-gray-100);
+  color: var(--color-gray-500);
+}
+
+/* Keep outlined buttons transparent when selected/active/focused
+   Some components toggle a `selected` class — ensure background stays transparent
+   so only the border (and optionally color) indicates selection. */
+.button--outline.selected,
+.button--outline:active,
+.button--outline:focus {
+  background-color: transparent;
+}
+
+.button--subtle {
+  background-color: transparent;
+  color: var(--color-accent);
+}
+
+.button--subtle:hover {
+  color: var(--color-buttons);
+}
+
+.button--subtle:disabled {
+  color: var(--color-gray-700);
+}
+
+.button--gray {
+  background-color: var(--color-gray-100);
+  color: var(--color-text);
+}
+
+.button--following {
+  background-color: var(--color-gray-100);
+  color: var(--color-accent);
+  gap: 0;
+  animation: button-pop 400ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.button--following .button-icon {
+  animation: icon-pop-in 350ms ease-out 40ms both;
+}
+
+@keyframes button-pop {
+  0% {
+    transform: scale(1);
+  }
+  45% {
+    transform: scale(0.92);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes icon-pop-in {
+  0% {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button {
+    transition: none;
+    animation: none;
+  }
+  .button .button-icon {
+    animation: none;
+  }
+}

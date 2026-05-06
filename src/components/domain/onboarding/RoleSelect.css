@@ -1,0 +1,32 @@
+.role-grid {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap; /* allow items to flow to the next line on overflow */
+  gap: 12px;
+  width: 100%;
+  margin: 12px 0 24px;
+  align-items: flex-start;
+}
+
+/* Header shown above the role cards */
+.role-header {
+  margin-bottom: 12px;
+}
+
+.role-header-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--color-text, #0b0b0b);
+}
+
+.role-header-subtitle {
+  margin: 0;
+  font-size: 14px;
+  color: var(--color-gray-900, #111827); /* gray-900 */
+}
+
+/*
+  Role card visual styles live in `SelectionCard.css` so we avoid duplicating
+  rules here. Keep this file focused on layout. If you need role-card overrides
+  for this page, add them below.
+*/

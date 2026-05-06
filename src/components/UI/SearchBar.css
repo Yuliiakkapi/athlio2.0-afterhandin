@@ -1,0 +1,33 @@
+.search-card {
+  width: 100%;
+  height: 60px;
+  border-radius: 10px;
+  background: #FFFFFF;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  cursor: pointer;
+}
+
+.search-content{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  width:100%;
+}
+
+.search-icon svg { width:24px; height:24px; color: currentColor; }
+.search-label{ color: #9B9B9B; font-size:16px; }
+.search-clear{ margin-left:auto; background:transparent; border:none; padding:8px; display:flex; align-items:center; }
+.search-clear svg{ width:16px; height:16px; }
+
+/* Editable input inside the search bar */
+.search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  background: transparent;
+  color: inherit;
+}

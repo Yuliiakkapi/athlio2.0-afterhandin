@@ -1,0 +1,41 @@
+.match-section {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+  gap: 20px;
+  width: 100%;
+}
+
+.inputs-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+}
+
+.score-inputs-container {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+}
+
+.score {
+  display: flex;
+  gap: 15px;
+}
+
+.score p {
+  color: var(--color-gray-900);
+  font-weight: 300;
+}
+
+.stats-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: flex-start;
+}

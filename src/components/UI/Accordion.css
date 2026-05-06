@@ -1,0 +1,77 @@
+.accordion {
+  display: inline-flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* === Header Button (Chip Style) === */
+.accordion-header {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 12px;
+  height: 28px;
+  border-radius: 8px;
+  border: 0;
+  background: var(--color-gray-300);
+  cursor: pointer;
+}
+
+.accordion-title {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-accent);
+}
+
+.accordion-icon {
+  width: 14px;
+  height: 14px;
+  stroke: var(--color-accent);
+}
+
+.accordion-icon.rotated {
+  transform: rotate(180deg);
+}
+
+/* === Dropdown Content === */
+.accordion-content {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: var(--color-background);
+  border: 1px solid var(--color-gray-300);
+  border-radius: 8px;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  z-index: 10;
+}
+
+.accordion-content.show {
+  padding: 8px;
+  max-height: 300px;
+  opacity: 1;
+}
+
+.accordion-content button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: none;
+  background: transparent;
+  padding: 6px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  color: var(--color-text);
+  font-size: var(--text-sm);
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.accordion-content button:focus,
+.accordion-content button:active {
+  background: var(--color-gray-300);
+  color: var(--color-text);
+}

@@ -1,0 +1,155 @@
+.textinput-container {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+  font-family: inherit;
+}
+
+.textinput-wrapper {
+  position: relative;
+  width: 100%;
+  /* Outlined style per Material spec */
+  border-radius: 8px;
+  background: var(--Gray-100, #F0F0F3);
+  /* Outer border drawn via outline span, so we remove native border from wrapper */
+}
+
+.textinput-field {
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 16px;
+  color: var(--color-gray-900);
+  padding: 20px 44px 6px 12px; /* add right padding for clear button */
+  border-radius: 8px;
+  /* ensure text doesn’t overlap the label */
+}
+
+/* Hide native placeholder text */
+.textinput-field::placeholder {
+  color: transparent;
+}
+
+/* Outline border */
+.textinput-outline {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  /* No outline by default; show only when focused (selected) */
+  border: none;
+  border-radius: 8px;
+  transition: border-color 0.18s ease, border-width 0.18s ease;
+}
+
+/* Label (floating) */
+.textinput-label {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  padding: 0 4px;
+  /* match normal paragraph text from app.css */
+  font-size: var(--text-base);
+  font-weight: 500;
+  /* default label color: paragraph style grey-900 */
+  color: var(--color-gray-900);
+  pointer-events: none;
+  transition: top 0.2s ease, font-size 0.2s ease, color 0.2s ease;
+}
+
+/* Focus state */
+.textinput-container:focus-within .textinput-outline {
+  /* show a 1.5px grey-700 outline when the input is focused/selected */
+  border: 1.5px solid var(--color-gray-700);
+  box-shadow: none;
+}
+
+/* Make the wrapper background transparent when the input is focused (selected)
+   so the outlined style appears on a transparent background. Uses focus-within
+   on the container so we can target the wrapper (the input is a child). */
+.textinput-container:focus-within .textinput-wrapper {
+  background: transparent;
+}
+
+/* Also when the container is filled and focused, keep the wrapper transparent */
+.textinput-container.filled:focus-within .textinput-wrapper {
+  background: transparent;
+}
+
+/* When the field has content but is not focused, make the wrapper transparent
+   and display a subtle gray-300 outline (1.5px) to indicate filled state. */
+.textinput-container.filled:not(:focus-within) .textinput-wrapper {
+  background: transparent;
+}
+
+.textinput-container.filled:not(:focus-within) .textinput-outline {
+  border: 1.5px solid var(--color-gray-300);
+}
+
+/* Ensure the actual input element has a transparent background when filled/unfocused
+   and override browser autofill background/shadow that can tint the field. */
+.textinput-container.filled:not(:focus-within) .textinput-field {
+  background: transparent;
+  -webkit-box-shadow: none !important;
+  box-shadow: none !important;
+  background-clip: padding-box;
+}
+
+/* Chrome / WebKit autofill overrides — force transparent background */
+.textinput-field:-webkit-autofill,
+.textinput-field:-webkit-autofill:hover,
+.textinput-field:-webkit-autofill:focus,
+.textinput-field:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
+  box-shadow: 0 0 0px 1000px transparent inset !important;
+  background-color: transparent !important;
+}
+
+/* Clear (×) button shown when filled and not focused */
+.textinput-clear {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 28px;
+  height: 28px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  color: var(--color-gray-700);
+  font-size: 18px;
+  cursor: pointer;
+  padding: 0;
+}
+
+/* Show clear button when field has content and is not focused */
+.textinput-container.filled:not(:focus-within) .textinput-clear {
+  display: inline-flex;
+}
+
+.textinput-clear:focus {
+  outline: 2px solid rgba(16,24,40,0.06);
+  border-radius: 6px;
+}
+
+/* Floating label when focused or filled */
+.textinput-field:focus ~ .textinput-label,
+.textinput-container.filled .textinput-label {
+  /* lift label slightly and reduce size */
+  top: 4px;
+  font-size: 12px;
+  font-weight: 500; /* medium */
+  /* use a dark grey (gray-900) when selected/outlined */
+  color: #111827;
+  /* match the page background so the label appears to float */
+  background: var(--color-background);
+  padding: 0 4px;
+}

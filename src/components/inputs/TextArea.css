@@ -1,0 +1,61 @@
+/* Figma frame 2557 - textarea styling for Bio step */
+.ta-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ta-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text, #0b0b0b);
+}
+
+.ta-input {
+  width: 100%;
+}
+
+.ta-input textarea {
+  width: 100%;
+  min-height: 140px; /* roomy textarea for bio */
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1.5px solid var(--color-gray-100, #E6E9FF);
+  background: var(--color-white, #ffffff);
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--color-text, #0b0b0b);
+  font-family: inherit;
+  resize: vertical;
+  outline: none;
+  transition: box-shadow 120ms ease, border-color 120ms ease;
+}
+
+.ta-input textarea::placeholder {
+  color: var(--color-gray-400, #9CA3AF);
+}
+
+.ta-input textarea:focus {
+  border-color: var(--color-accent, #3b82f6);
+  box-shadow: 0 6px 18px rgba(59,130,246,0.12);
+}
+
+.ta-suggestions {
+  margin-top: 12px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.ta-suggestion-btn {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--color-gray-200, #E6E9EF);
+  background: var(--color-white, #fff);
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.ta-suggestion-btn:hover {
+  background: #f7f9ff;
+}

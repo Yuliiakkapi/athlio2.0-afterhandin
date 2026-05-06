@@ -1,0 +1,31 @@
+.match-post {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: flex-start;
+  background-color: var(--color-background);
+  padding: 8px;
+  border-radius: 8px;
+  gap: 16px;
+}
+
+.match-post-content {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-weight: 400;
+}
+
+.match-post-content.expanded {
+  -webkit-line-clamp: unset;
+}
+
+.see-more {
+  background: none;
+  border: none;
+  color: var(--color-accent);
+  cursor: pointer;
+  font-size: var(--text-sm);
+  margin-top: 4px;
+}

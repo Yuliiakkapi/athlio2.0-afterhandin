@@ -1,0 +1,95 @@
+.navbartabs {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  font-size: var(--text-button);
+  color: var(--color-gray-700);
+  font-weight: 400;
+  line-height: 1.3;
+  justify-content: start;
+}
+
+.tabContainer {
+  align-self: stretch;
+  display: flex;
+  min-width: 240px;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1 0 0%;
+  margin: 0;
+  padding: 0 15px; /* align with header/container padding */
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.tab {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-self: stretch;
+  min-height: 40px; /* taller tap targets */
+  gap: 10px;
+  width: auto; /* let label define width */
+  margin: 0;
+  padding: 8px 10px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--color-gray-700);
+  transition: color 120ms ease;
+  position: relative; /* needed for ::after underline */
+}
+
+.tab:hover {
+  color: var(--color-text);
+}
+
+/* Active underline using pseudo-element */
+.tab::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px; /* overlap the header-bottom border */
+  height: 2px;
+  background: transparent;
+  pointer-events: none;
+  transition: background 120ms ease;
+}
+
+.tabActive {
+  color: var(--color-text);
+}
+
+.tabActive::after {
+  background: var(--color-accent);
+}
+
+.tabLabel {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  align-self: stretch;
+  display: inline-flex;
+  align-items: center;
+}
+
+.tabLabelActive {
+  color: var(--color-text);
+}
+
+/* Responsive: tighter spacing on small screens */
+@media (max-width: 600px) {
+  .tabContainer {
+    gap: 2px;
+    padding: 0 12px;
+  }
+  .tab {
+    padding: 8px 8px;
+    min-height: 36px;
+  }
+  .tabLabel {
+    font-size: var(--text-xs);
+  }
+}

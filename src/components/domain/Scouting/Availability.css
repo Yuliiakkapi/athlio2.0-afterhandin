@@ -1,0 +1,168 @@
+.availability-container {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 16px;
+}
+
+.availability-card {
+  border-radius: 8px;
+  max-width: 361px;
+  background-color: var(--color-background);
+  font: 500 12px/1 Geist, -apple-system, Roboto, Helvetica, sans-serif;
+  flex: 1;
+  min-width: 300px;
+}
+
+.availability-header {
+  justify-content: center;
+  align-items: stretch;
+  border-bottom: 1px solid var(--color-gray-300);
+  display: flex;
+  min-height: 48px;
+  width: 100%;
+  flex-direction: column;
+  color: var(--color-text);
+  padding: 10px;
+}
+
+.availability-player-info {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 11px;
+  justify-content: start;
+}
+
+.availability-avatar {
+  aspect-ratio: 0.97;
+  object-fit: contain;
+  object-position: center;
+  width: 28px;
+  border-radius: 100px;
+  align-self: stretch;
+  flex-shrink: 0;
+  margin: auto 0;
+}
+
+.availability-player-name {
+  align-self: stretch;
+  width: 194px;
+  margin: auto 0;
+  color: var(--color-text);
+}
+
+.availability-status-section {
+  display: flex;
+  min-height: 60px;
+  width: 100%;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  padding: 19px 10px;
+}
+
+.availability-status-content {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 11px;
+  justify-content: start;
+  padding: 0 16px;
+}
+
+.availability-status-label {
+  color: var(--color-text);
+  align-self: stretch;
+  margin: auto 0;
+}
+
+.availability-status-badge {
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+  align-self: stretch;
+  display: flex;
+  min-height: 22px;
+  gap: 10px;
+  color: var(--color-accent);
+  white-space: nowrap;
+  background-color: var(--color-gray-100);
+  margin: auto 0;
+  padding: 5px 10px;
+}
+
+.availability-status-badge.available {
+  background-color: rgba(19, 115, 51, 0.12);
+  color: #137333;
+}
+
+.availability-status-badge.unavailable {
+  background-color: rgba(179, 38, 30, 0.12);
+  color: #b3261e;
+}
+
+.availability-status-text {
+  color: var(--color-accent);
+  align-self: stretch;
+  margin: auto 0;
+}
+
+.availability-injury-item {
+  justify-content: center;
+  align-items: stretch;
+  border-top: 1px solid var(--color-gray-300);
+  border-bottom: 1px solid var(--color-gray-300);
+  display: flex;
+  min-height: 60px;
+  width: 100%;
+  flex-direction: column;
+  padding: 17px 10px;
+}
+
+.availability-injury-item.first-injury {
+  border-top: 1px solid var(--color-gray-300);
+}
+
+.availability-injury-item:last-child {
+  border-bottom: none;
+}
+
+.availability-injury-content {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 11px;
+  justify-content: start;
+}
+
+.availability-injury-icon {
+  aspect-ratio: 1;
+  object-fit: contain;
+  object-position: center;
+  width: 24px;
+  align-self: stretch;
+  flex-shrink: 0;
+  margin: auto 0;
+}
+
+.availability-injury-details {
+  align-self: stretch;
+  width: 194px;
+  margin: auto 0;
+}
+
+.availability-injury-type {
+  color: var(--color-text);
+}
+
+.availability-injury-period {
+  color: var(--color-gray-700);
+}
+
+.availability-empty {
+  font-size: 12px;
+  color: var(--color-gray-700);
+  padding: 12px 16px;
+  margin: 0;
+}

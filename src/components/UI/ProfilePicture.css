@@ -1,0 +1,45 @@
+.profile-picture-container {
+  position: relative;
+  display: inline-block;
+}
+
+.verification-badge-profile {
+  position: absolute;
+  bottom: 0.5px;
+  right: 0;
+}
+
+.profile-picture {
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+}
+
+.profile-picture--xlarge {
+  width: 80px;
+  height: 80px;
+}
+
+.profile-picture--large {
+  width: 60px;
+  height: 60px;
+}
+
+.profile-picture--medium {
+  width: 44px;
+  height: 44px;
+}
+
+.profile-picture--small {
+  width: 32px;
+  height: 32px;
+}
+
+/* Placeholder appearance when no image URL is provided */
+.profile-picture--placeholder {
+  background: var(--color-gray-100, #f3f4f6);
+  color: var(--color-gray-700, #6b7280);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}

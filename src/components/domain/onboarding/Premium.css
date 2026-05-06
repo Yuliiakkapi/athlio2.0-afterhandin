@@ -1,0 +1,134 @@
+.premium-root {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 0; /* removed outer padding as requested */
+}
+
+.premium-title {
+  font-size: 24px; /* Geist 24 / 600 */
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.premium-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--color-accent);
+  color: var(--color-background);
+  padding: 4px 10px;
+  border-radius: 8px;
+  width: max-content;
+  font-size: var(--text-base);
+  font-weight: 500;
+}
+
+.premium-badge-dot {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--color-background);
+}
+
+.premium-card {
+  background: var(--color-background);
+  border: 1px solid var(--color-gray-300);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.premium-card--small {
+  height: 139px;
+}
+
+.premium-card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Inline SVG icon usage */
+.premium-icon-svg {
+  width: 24px;
+  height: 24px;
+  display: inline-block;
+}
+.premium-icon-svg--accent {
+  color: var(--color-accent);
+}
+
+.premium-card-title {
+  font-size: 16px; /* List Item */
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+.premium-card-subtext {
+  margin-top: 4px;
+  color: #717182; /* design gray */
+  font-size: var(--text-base); /* 14px */
+  line-height: 1.3;
+}
+
+
+
+.premium-features {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* keep two cards side-by-side on mobile */
+  gap: 8px;
+}
+
+/* Premium graph illustration */
+.premium-graph {
+  margin-top: 8px;
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 8px;
+}
+
+/* CTA section styles (restored) */
+.premium-cta {
+  background: var(--color-accent);
+  border-radius: 8px;
+  padding: 24px 26px;
+  color: var(--color-background);
+}
+
+.premium-cta-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.premium-cta-sub {
+  color: var(--color-gray-100);
+  font-size: var(--text-base);
+  margin-top: 4px;
+  margin-bottom: 16px;
+}
+
+.premium-cta-button .button.button--outline {
+  width: 100%;
+  border-color: var(--color-gray-300);
+  color: var(--color-background);
+}
+
+/* Deprecated CSS-drawn icons removed; all icons now use inline <img> with these sizes */
+.premium-icon-svg {
+  width: 24px;
+  height: 24px;
+  display: inline-block;
+}
+.premium-icon-svg--accent {
+  color: var(--color-accent);
+}
+
+/* Keep two columns even on small devices per design; only stack on very narrow screens */
+@media (max-width: 320px) {
+  .premium-features {
+    grid-template-columns: 1fr;
+  }
+}

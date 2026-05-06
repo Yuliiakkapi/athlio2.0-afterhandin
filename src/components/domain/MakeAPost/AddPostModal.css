@@ -1,0 +1,51 @@
+/* Backdrop */
+.addmodal-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  margin-bottom: 80px;
+  display: flex;
+  z-index: 1000; /* higher than your navbar */
+  border-radius: 8px;
+}
+
+/* Panel */
+.addmodal-sheet {
+  background-color: var(--color-background);
+  color: var(--color-text, #fff);
+  border-radius: 8px;
+  padding: 10px 18px 10px 10px;
+  outline: none; /* allow focus without ugly outline if you style focus elsewhere */
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .addmodal-sheet {
+    transform: translateY(6px);
+    opacity: 0;
+    animation: modal-in 160ms ease-out forwards;
+  }
+
+  .addmodal-sheet.closing {
+    animation: modal-out 160ms ease-in forwards;
+  }
+
+  @keyframes modal-in {
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes modal-out {
+    from {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    to {
+      transform: translateY(6px);
+      opacity: 0;
+    }
+  }
+}

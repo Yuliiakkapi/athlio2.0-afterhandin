@@ -1,0 +1,22 @@
+.verdict {
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--color-background);
+  font-size: var(--text-secondary);
+}
+
+.win {
+  background-color: var(--color-green);
+}
+
+.draw {
+  background-color: var(--color-orange);
+}
+
+.lose {
+  background-color: var(--color-red);
+}

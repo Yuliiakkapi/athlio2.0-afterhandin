@@ -1,0 +1,45 @@
+.post {
+  display: flex;
+  background-color: var(--color-background);
+  padding: 8px;
+  border-radius: 8px;
+  flex-direction: column;
+  justify-content: start;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.post-content {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-weight: 400;
+}
+
+.post-content.expanded {
+  -webkit-line-clamp: unset;
+}
+
+.see-more {
+  background: none;
+  border: none;
+  color: var(--color-accent);
+  cursor: pointer;
+  font-size: var(--text-sm);
+  margin-top: 4px;
+}
+
+.post-media {
+  width: auto;
+  display: flex;
+  justify-content: center;
+  height: 300px;
+}
+
+.post-image {
+  width: 100%;
+  height: auto;
+  border-radius: 8px; /* optional, makes it look less brutalist */
+  object-fit: cover; /* trims if you ever add fixed height */
+}

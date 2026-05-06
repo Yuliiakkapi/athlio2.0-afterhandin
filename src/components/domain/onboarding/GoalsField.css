@@ -1,0 +1,106 @@
+:root{
+  /* adjust these vars to match Figma spacing precisely */
+  --goals-gap: 12px;
+  --goal-min: 160px;
+  --goal-radius: 10px;
+  --goal-padding-vertical: 12px;
+  --goal-padding-horizontal: 14px;
+  --goal-font-size: 14px;
+}
+
+.goals-field-root {
+  width: 100%;
+}
+
+.goals-grid {
+  display: grid;
+  /* Full-width single column per request */
+  grid-template-columns: 1fr;
+  gap: var(--goals-gap);
+}
+
+/* Figma style option card (unselected) */
+.goal-card {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 19px 17px; /* from Figma: px-[17] py-[19] */
+  border-radius: 8px; /* Figma shows 8px */
+  /* Keep consistent size; show accent outline only when selected */
+  border: 1.5px solid transparent;
+  background: var(--color-background);
+  color: var(--color-text);
+  cursor: pointer;
+  font-size: 16px; /* List Item size */
+  font-weight: 500; /* Geist Medium */
+  line-height: 1.2;
+  transition: background 0.12s ease, box-shadow 0.12s ease;
+  text-align: left;
+}
+
+.goal-card:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(12,18,31,0.06);
+}
+
+.goal-card:focus{
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0,120,230,0.12);
+}
+
+/* Selected state: highlight background and adjust radio */
+.goal-card.active,
+.goal-card[aria-pressed="true"] {
+  /* Selected: do NOT change background; only show accent outline */
+  background: var(--color-background);
+  border-color: var(--color-accent);
+  color: var(--color-text);
+}
+
+.goal-card.active .goal-radio,
+.goal-card[aria-pressed="true"] .goal-radio {
+  /* Accent outline only, 1.5px, no fill */
+  border-color: var(--color-accent);
+  border-width: 1.5px;
+  background: transparent;
+}
+
+.goal-card.active .goal-radio::after,
+.goal-card[aria-pressed="true"] .goal-radio::after {
+  opacity: 0; /* keep unfilled center */
+}
+
+/* Make sure long labels wrap nicely */
+/* Label styling */
+.goal-label {
+  white-space: normal; /* allow wrapping on full-width cards */
+}
+
+/* Custom radio circle mimic from Figma */
+.goal-radio {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid var(--color-details); /* #c6cbfe stroke */
+  background: var(--color-background);
+  position: relative;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.goal-radio::after {
+  content: "";
+  width: 12px;
+  height: 12px;
+  background: var(--color-accent);
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.goal-card:hover .goal-radio {
+  border-color: var(--color-accent);
+}

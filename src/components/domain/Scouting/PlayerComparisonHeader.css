@@ -1,0 +1,38 @@
+.player-comparison-header {
+  width: 100%;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 1;
+}
+
+/* Top row (title + actions) */
+.header-top {
+  padding: 16px;
+}
+
+.content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #000215;
+}
+.actions { display: flex; gap: 12px; }
+
+.header-bottom {
+  margin-top: 0;         
+  padding: 0;        
+  border-bottom: 1px solid #e0e0e0; 
+  position: sticky;
+  top: var(--topbar-height, 64px);
+  z-index: 2;
+  background: #fff;
+}
+
+
+

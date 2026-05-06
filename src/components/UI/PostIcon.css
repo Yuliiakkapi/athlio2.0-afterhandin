@@ -1,0 +1,61 @@
+.postIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text);
+  transition: all 0.2s ease;
+}
+
+.postIcon p {
+  font-size: var(--text-secondary);
+  color: var(--color-text);
+}
+
+.icon-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 32px;
+  width: 32px;
+  background-color: transparent;
+}
+
+.icon {
+  height: 24px;
+  width: 24px;
+}
+
+/* This targets the SVG */
+.icon-container svg {
+  height: 24px;
+  width: 24px;
+  transition: all 0.2s ease;
+}
+
+/* Default colors */
+.icon-container .aura-circle {
+  stroke: currentColor;
+  fill: none;
+}
+
+.icon-container .aura-star {
+  fill: currentColor;
+}
+
+/* Active state — matches your mock */
+.postIcon.active {
+  color: var(--color-accent); /* text and SVG base color */
+}
+
+.postIcon.active .aura-circle {
+  fill: var(--color-accent);
+  stroke: var(--color-accent);
+}
+
+.postIcon.active .aura-star {
+  fill: white;
+}
+
+.postIcon.active .icon-container svg {
+  color: var(--color-accent);
+}

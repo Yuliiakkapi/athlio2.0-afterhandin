@@ -1,0 +1,50 @@
+.verified-badge-container {
+  background-color: var(--color-accent);
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.verified-badge {
+  width: 20px;
+  height: 20px;
+  color: white;
+  stroke-width: 1.5px;
+}
+
+.container-xlarge {
+  padding: 3px;
+}
+
+.icon-xlarge {
+  width: 14px;
+  height: 14px;
+}
+
+.container-large {
+  padding: 2.25px;
+}
+
+.icon-large {
+  width: 10px;
+  height: 10px;
+}
+
+.container-medium {
+  padding: 2.25px;
+}
+
+.icon-medium {
+  width: 8px;
+  height: 8px;
+}
+
+.container-small {
+  padding: 1.5px;
+}
+
+.icon-small {
+  width: 5px;
+  height: 5px;
+}

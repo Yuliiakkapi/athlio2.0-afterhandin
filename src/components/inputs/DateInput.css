@@ -1,0 +1,102 @@
+/* Container */
+.date-input {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  position: relative;
+  width: 100%;
+}
+
+/* Label */
+.date-input label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-gray-900);
+}
+
+/* Field */
+.date-input input[type="date"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  padding: 10px 40px 10px 12px; /* right padding for calendar icon */
+  border-radius: 8px;
+  border: 1.5px solid var(--color-gray-100, #e6e9ff);
+  background: var(--color-gray-100, #f7f9ff);
+  color: var(--color-gray-900, #111827);
+  font-size: 14px;
+  line-height: 1.3;
+  font-family: inherit;
+  transition:
+    box-shadow 120ms ease,
+    border-color 120ms ease,
+    background-color 120ms ease;
+}
+
+.date-input input[type="date"]:hover {
+  background: #f1f5ff;
+}
+
+.date-input input[type="date"]:focus-visible {
+  outline: none;
+  border-color: var(--color-accent, #3b82f6);
+  box-shadow: 0 6px 18px rgba(59, 130, 246, 0.12);
+  background: #fff;
+}
+
+/* Placeholder color (when field is empty) */
+.date-input input[type="date"]:invalid {
+  color: var(--color-gray-500, #6b7280);
+}
+
+/* Chrome/Safari date text parts */
+.date-input input[type="date"]::-webkit-datetime-edit {
+  color: inherit;
+  padding: 2px 0;
+}
+.date-input input[type="date"]::-webkit-datetime-edit-fields-wrapper {
+  display: inline-flex;
+  gap: 2px;
+}
+.date-input input[type="date"]::-webkit-datetime-edit-year-field,
+.date-input input[type="date"]::-webkit-datetime-edit-month-field,
+.date-input input[type="date"]::-webkit-datetime-edit-day-field {
+  padding: 0 2px;
+}
+.date-input input[type="date"]::-webkit-datetime-edit-year-field:focus,
+.date-input input[type="date"]::-webkit-datetime-edit-month-field:focus,
+.date-input input[type="date"]::-webkit-datetime-edit-day-field:focus {
+  background: rgba(59, 130, 246, 0.08);
+  border-radius: 4px;
+}
+
+/* Calendar icon button */
+.date-input input[type="date"]::-webkit-calendar-picker-indicator {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+  opacity: 0.7;
+  filter: grayscale(1);
+}
+.date-input input[type="date"]::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+  filter: none;
+}
+
+/* Firefox: remove inner focus padding */
+.date-input input[type="date"]::-moz-focus-inner {
+  border: 0;
+}
+
+/* High-contrast friendly */
+@media (forced-colors: active) {
+  .date-input input[type="date"] {
+    border: 1px solid ButtonText;
+    background: Field;
+    color: FieldText;
+  }
+}

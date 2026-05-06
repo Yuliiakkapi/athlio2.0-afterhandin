@@ -1,0 +1,14 @@
+.pill-bar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+  background-color: white;
+  padding: 12px;
+  border-radius: 40px;
+  position: fixed;
+  left: 16px;
+  right: 16px;
+  bottom: 45px;
+  width: auto;
+}

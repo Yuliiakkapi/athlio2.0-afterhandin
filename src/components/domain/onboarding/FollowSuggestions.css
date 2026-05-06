@@ -1,0 +1,22 @@
+.follow-grid{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.follow-card{
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid var(--color-gray-200);
+  background: #fff;
+}
+
+.follow-name{
+  font-weight: 600;
+}
+
+.follow-meta{
+  font-size: 12px;
+  color: var(--color-gray-600);
+}

@@ -1,0 +1,54 @@
+.progressWrapper {
+  width: 100%;
+  /* Remove top margin so it can sit closer to the top on setup profile page */
+  margin: 0 0 20px;
+}
+
+.logoWrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+.logoWrapper > img,
+.logoImage {
+  
+  padding: 10px;
+  border-radius: 12px;
+  width: 48px;
+  height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logoImage {
+  width: 32px;
+  height: 32px;
+  background: transparent;
+  padding: 0;
+}
+
+.track {
+  width: 100%;
+  height: 10px;
+  /* Use the project's gray-300 token for the unfilled track */
+  background: var(--color-gray-300, #dfe0e7);
+  border-radius: 999px;
+  overflow: hidden;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.04);
+}
+
+.fill {
+  height: 100%;
+  width: 0%;
+  /* Use a solid accent color for the filled portion */
+  background: var(--color-accent, #4051fd);
+  border-radius: 999px;
+  transition: width 220ms ease-in-out, background 200ms ease;
+}
+
+.fill[aria-hidden="true"] {
+  /* intentionally empty selector removed earlier; keep this rule minimal to avoid linter empty-ruleset error */
+  opacity: 1;
+}

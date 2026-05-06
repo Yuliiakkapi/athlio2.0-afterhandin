@@ -1,0 +1,32 @@
+.composer-wrap {
+  height: 100%;
+  background-color: var(--color-gray-100);
+  padding: 16px;
+  height: 100vh;
+  overflow: hidden;
+}
+
+main:has(.composer-wrap) {
+  padding-right: 0;
+  padding-left: 0;
+}
+
+.composer-preview {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+}
+
+.composer-preview-img {
+  max-height: 215px;
+  border-radius: 8px;
+  display: block;
+}
+
+.composer-preview-caption {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  margin: 0;
+  padding: 0;
+}

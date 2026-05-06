@@ -1,0 +1,82 @@
+.search-card-item {
+    display: flex;
+    gap: 10px;
+    padding: 8px 16px;
+    background: var(--color-background, #FBFBFB);
+    border-radius: 8px;
+    border: none;
+    width: 100%;
+    cursor: pointer;
+    text-align: left;
+    transition: all 120ms ease;
+    min-height: 60px;
+    align-items: center;
+}
+
+.search-card-item:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.avatar-wrap {
+    width: 44px;
+    height: 44px;
+    flex: 0 0 44px;
+}
+
+.avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 99px;
+}
+
+.info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.name {
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 1.2;
+    color: #000;
+}
+
+.meta {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.position {
+    background: var(--color-gray-100, #F0F0F3);
+    padding: 5px 8px;
+    border-radius: 8px;
+    font-size: 8px;
+    font-weight: 500;
+    color: var(--color-buttons, #2631A0);
+    white-space: nowrap;
+}
+
+.team-logo {
+    width: 12px;
+    height: 12px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.flag {
+    width: 12px;
+    height: 12px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.team-name,
+.country {
+    font-size: 12px;
+    color: #000;
+}

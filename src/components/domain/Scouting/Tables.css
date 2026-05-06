@@ -1,0 +1,15 @@
+.scouting-tables {
+    display: flex;
+    flex-direction: column;
+    gap: 16px
+}
+
+.tables-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px
+}
+
+.tables-grid > *:first-child {
+    margin-top: 16px;
+}

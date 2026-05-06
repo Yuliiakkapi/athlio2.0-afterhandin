@@ -1,0 +1,122 @@
+.player-selector {
+  border-bottom: 1px solid var(--color-gray-300);
+  backdrop-filter: blur(4px);
+  background-color: rgba(240, 240, 243, 0.8);
+  padding: 16px;
+}
+
+.player-selector-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.player-selector-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  font-family: Geist, -apple-system, Roboto, Helvetica, sans-serif;
+  font-weight: 500;
+}
+
+.season-dropdown-wrapper {
+  position: relative;
+}
+
+.season-selector {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 6px;
+  border: 1.5px solid var(--color-gray-300);
+  min-height: 36px;
+  gap: 4px;
+  overflow: hidden;
+  font-size: 12px;
+  color: var(--color-accent);
+  line-height: 1;
+  padding: 8px;
+  background-color: var(--color-gray-300);
+  cursor: pointer;
+  transition: background-color 200ms ease, border-color 200ms ease;
+}
+
+.season-selector:hover {
+  background-color: var(--color-gray-500);
+}
+
+.season-text {
+  color: var(--color-accent);
+}
+
+.season-dropdown-icon {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+}
+
+.season-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  background-color: var(--color-background);
+  border: 1.5px solid var(--color-gray-300);
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  min-width: 140px;
+}
+
+.season-dropdown-item {
+  display: block;
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-text);
+  background-color: var(--color-background);
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 200ms ease;
+}
+
+.season-dropdown-item:hover {
+  background-color: var(--color-gray-100);
+}
+
+.season-dropdown-item--active {
+  background-color: var(--color-gray-300);
+  color: var(--color-accent);
+}
+
+.season-dropdown-item--active:hover {
+  background-color: var(--color-gray-300);
+}
+
+.player-selector-list {
+  display: flex;
+  gap: 16px;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+}
+
+.player-selector-list--2{
+  padding-left: calc(196px);
+gap: 12px;
+}
+.player-selector-list--3 {
+  padding-left: calc(138px);
+gap: 12px;
+}
+
+@media (max-width: 768px) {
+
+}
+
+.player-selector-empty {
+  font-size: 12px;
+  color: var(--color-gray-700);
+}

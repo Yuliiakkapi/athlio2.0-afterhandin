@@ -1,0 +1,11 @@
+.match-post-count {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.match-post-count p {
+  font-size: 10px;
+  font-weight: 300;
+  text-transform: uppercase;
+}
