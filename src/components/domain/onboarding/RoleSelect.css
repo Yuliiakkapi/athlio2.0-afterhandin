@@ -9,28 +9,24 @@
   margin-bottom: 20px;
 }
 
-/* Inherits .role-header-title and .role-header-subtitle from auth.css / global */
-
 /* ─── Card row ─────────────────────────────────────────────────── */
-.role-cards {
+.role-photo-cards {
   display: flex;
   gap: 10px;
   /*
-   * StepContainer wraps children in two plain <div>s with no height set,
-   * which breaks flex:1 inheritance. Use a direct calc() instead:
-   *   100dvh
-   *   - 68px  setup-profile-page padding-top (52px topbar + 16px gap)
-   *   - 92px  heading area (h1 ~48px + subtitle ~24px + margin 20px)
-   *   - 108px setup-profile-page padding-bottom (bottom navbar clearance)
-   *   = ~268px → rounded to 275px for a small breathing gap
+   * StepContainer wraps children in unstyled divs — use direct calc() to avoid
+   * flex:1 collapsing:
+   *   100dvh - 68px (top padding) - 92px (heading) - 108px (bottom padding)
+   *   ≈ 268px → 275px with breathing room
    */
   height: calc(100dvh - 275px);
-  min-height: 380px; /* never collapses on very short screens */
-  max-height: 640px; /* prevents absurd height on tablets */
+  min-height: 380px;
+  max-height: 640px;
 }
 
 /* ─── Individual card ──────────────────────────────────────────── */
-.role-card {
+.role-photo-card {
+  /* Default: equal share */
   flex: 1;
   min-width: 0;
   position: relative;
@@ -40,20 +36,29 @@
   border: 3px solid transparent;
   padding: 0;
   background: #0d1020;
-  /* Fill the full height of the .role-cards row */
   height: 100%;
+  /* Animate width changes and border */
   transition:
-    border-color 150ms ease,
-    box-shadow 150ms ease;
+    flex 320ms cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 200ms ease,
+    box-shadow 200ms ease;
 }
 
-.role-card--selected {
+/* ─── Expand / shrink on selection ───────────────────────────────
+   When any card inside the row is selected, grow the selected one
+   and shrink the other — pure CSS via :has() selector.
+──────────────────────────────────────────────────────────────────── */
+.role-photo-cards:has(.role-photo-card--selected) .role-photo-card {
+  flex: 0.55; /* shrink unselected to ~35% */
+}
+.role-photo-card--selected {
+  flex: 1.45 !important; /* selected takes ~65% */
   border-color: var(--color-accent, #4051fd);
   box-shadow: 0 0 0 1px var(--color-accent, #4051fd);
 }
 
 /* ─── Photo background ─────────────────────────────────────────── */
-.role-card-img {
+.role-photo-card-img {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -66,31 +71,30 @@
 }
 
 /* ─── Dark overlay ─────────────────────────────────────────────── */
-.role-card-overlay {
+.role-photo-card-overlay {
   position: absolute;
   inset: 0;
   background: rgba(20, 25, 82, 0.22);
   pointer-events: none;
 }
 
-/* ─── Vertical label ───────────────────────────────────────────── */
-/* Wrapper spans full card height, flex-centered so label sits at midpoint */
-.role-card-label-wrap {
+/* ─── Vertical label — bottom-right corner ─────────────────────── */
+.role-photo-card-label-wrap {
   position: absolute;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  width: 60px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  bottom: 62px; /* sits just above the chevron */
+  right: 14px;
   pointer-events: none;
 }
 
-/* Text rotated -90deg so it reads from bottom to top */
-.role-card-label {
+/*
+ * Text rotated -90deg from its bottom-right corner anchor.
+ * After rotation the bottom of the word aligns at the wrapper's
+ * bottom-right, and the text reads upward from there.
+ */
+.role-photo-card-label {
   display: block;
   transform: rotate(-90deg);
+  transform-origin: bottom right;
   white-space: nowrap;
   font-family: var(--font-condensed, "Barlow Condensed", sans-serif);
   font-size: 44px;
@@ -103,8 +107,8 @@
   text-shadow: 0 2px 14px rgba(0, 0, 0, 0.45);
 }
 
-/* ─── Chevron circle ───────────────────────────────────────────── */
-.role-card-chevron {
+/* ─── Chevron circle — bottom-right ────────────────────────────── */
+.role-photo-card-chevron {
   position: absolute;
   bottom: 14px;
   right: 14px;
@@ -116,10 +120,10 @@
   align-items: center;
   justify-content: center;
   pointer-events: none;
-  transition: background 150ms ease, border-color 150ms ease;
+  transition: background 200ms ease, border-color 200ms ease;
 }
 
-.role-card-chevron--active {
+.role-photo-card-chevron--active {
   background: var(--color-accent, #4051fd);
   border-color: var(--color-accent, #4051fd);
 }
