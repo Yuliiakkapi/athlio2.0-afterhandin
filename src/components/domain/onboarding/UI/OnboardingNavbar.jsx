@@ -7,6 +7,7 @@ export default function OnboardingNavbar({
   showFinish = false,
   canContinue = true,
   dark = false,
+  primaryLabel = null,
   // Optional secondary (ghost) button — e.g. "I'm not in a club"
   secondaryLabel = null,
   onSecondary = null,
@@ -50,7 +51,7 @@ export default function OnboardingNavbar({
         disabled={!canContinue}
         aria-disabled={!canContinue}
       >
-        {showFinish ? "Finish" : "Continue"}
+        {primaryLabel || (showFinish ? "Finish" : "Continue")}
       </button>
     </div>
   );

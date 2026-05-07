@@ -80,5 +80,5 @@
 }
 
 .ob-topbar--dark .ob-topbar-fill {
-  background: rgba(255, 255, 255, 0.9);
+  background: var(--primary-default, #4051fd);
 }

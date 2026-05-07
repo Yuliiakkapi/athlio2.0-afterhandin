@@ -64,15 +64,17 @@ export default function SelectionCard({
           typeof icon === "string" ? (
             // remote URL / local asset path
             <img src={icon} alt={`${name} icon`} />
+          ) : typeof icon === "object" && icon.$$typeof ? (
+            // component reference: forwardRef object or similar
+            // (Phosphor icons are forwardRef → typeof === "object" with $$typeof)
+            React.createElement(icon, { size: 28, weight: "bold" })
+          ) : typeof icon === "function" ? (
+            // component reference: plain function
+            React.createElement(icon, { size: 28, weight: "bold" })
           ) : React.isValidElement(icon) ? (
             // already a rendered React element — use as-is
             icon
-          ) : (
-            // component reference: plain function OR forwardRef object
-            // (Phosphor icons are forwardRef → typeof === "object", not "function")
-            // React.createElement handles both cases correctly.
-            React.createElement(icon, { size: 28, weight: "bold" })
-          )
+          ) : null
         ) : null}
       </div>
 

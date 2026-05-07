@@ -5,15 +5,15 @@
  */
 export function getSteps(role) {
   if (role === "athlete") {
-    return ["role", "name", "dob", "basic", "sport", "position", "style", "leg", "club", "goals", "location", "measure", "bio"];
+    return ["role", "name", "dob", "position", "style", "leg", "club", "goals", "highlight", "notifications", "location", "measure", "bio"];
   }
 
   if (role === "scout" || role === "professional") {
-    return ["role", "name", "dob", "basic", "location", "bio", "scout"];
+    return ["role", "name", "dob", "location", "bio", "scout"];
   }
 
   if (role === "organization") {
-    return ["role", "name", "dob", "basic", "location", "bio"];
+    return ["role", "name", "dob", "location", "bio"];
   }
 
   // No role selected yet — show only the role step

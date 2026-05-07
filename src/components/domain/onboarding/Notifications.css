@@ -1,0 +1,180 @@
+/* ──────────────────────────────────────────────────────────────────
+   Notifications — "Keep track on the best prospects" onboarding step
+   Figma node 7425-23443
+────────────────────────────────────────────────────────────────── */
+
+.notif-step {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ─── Header ────────────────────────────────────────────────────── */
+.notif-header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.notif-title {
+  font-family: var(--font-condensed);
+  font-size: var(--heading-5xl);
+  font-weight: 700;
+  font-style: italic;
+  text-transform: uppercase;
+  line-height: 1.1;
+  color: var(--black);
+  margin: 0;
+}
+
+.notif-subtitle {
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--neutral-400, #b8b9c1);
+  margin: 0;
+}
+
+/* ─── Visual area ───────────────────────────────────────────────── */
+.notif-visual {
+  position: relative;
+  margin: 0 -16px;
+}
+
+/* ─── Phone frame ───────────────────────────────────────────────── */
+.notif-phone {
+  position: relative;
+  width: 73%;
+  aspect-ratio: 287 / 290;
+  margin: 0 auto;
+  border: 4px solid var(--primary-950, #141952);
+  border-bottom: none;
+  border-radius: 40px 40px 0 0;
+  overflow: hidden;
+  background: var(--neutral-900, #1a1a2e);
+}
+
+.notif-phone-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.notif-phone-dim {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.notif-timer {
+  position: absolute;
+  bottom: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-condensed);
+  font-size: clamp(48px, 14vw, 72px);
+  font-weight: 700;
+  font-style: italic;
+  color: #fff;
+  line-height: 1;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+  white-space: nowrap;
+}
+
+/* ─── Notification cards ────────────────────────────────────────── */
+.notif-cards {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0 16px;
+  margin-top: -56px;
+  z-index: 2;
+}
+
+.notif-card {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 13px 12px;
+  box-shadow: 0 1px 26px rgba(0, 0, 0, 0.25);
+}
+
+.notif-card--secondary {
+  transform: scale(0.944);
+  transform-origin: center top;
+}
+
+.notif-card-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.notif-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+
+.notif-card-name-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.notif-card-name {
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--black);
+  white-space: nowrap;
+}
+
+.notif-card-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 6px;
+  background: var(--primary-100, #dbe9ff);
+  border-radius: 9999px;
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 600;
+  font-style: italic;
+  text-transform: uppercase;
+  letter-spacing: -0.1px;
+  color: var(--primary-800, #1f2cb4);
+  white-space: nowrap;
+}
+
+.notif-card-text {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ─── Bottom fade ───────────────────────────────────────────────── */
+.notif-fade {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background: linear-gradient(to bottom, rgba(246, 246, 247, 0), var(--neutral-50-bg, #f6f6f7));
+  pointer-events: none;
+  z-index: 1;
+}

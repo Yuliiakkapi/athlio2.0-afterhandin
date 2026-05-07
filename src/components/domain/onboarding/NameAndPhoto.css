@@ -1,8 +1,9 @@
-/* ─── Container ────────────────────────────────────────────────── */
+/* ─── Container — fills remaining content height so body centres ── */
 .name-step {
   display: flex;
   flex-direction: column;
-  gap: 0;
+  /* 176px = 68px top padding + 108px bottom padding from setup-profile-page */
+  min-height: calc(100dvh - 176px);
 }
 
 /* ─── Heading ──────────────────────────────────────────────────── */
@@ -31,11 +32,13 @@
   margin: 0;
 }
 
-/* ─── Body: avatar + input ─────────────────────────────────────── */
+/* ─── Body: avatar + input — centred vertically in remaining space  */
 .name-step-body {
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 36px;
 }
 

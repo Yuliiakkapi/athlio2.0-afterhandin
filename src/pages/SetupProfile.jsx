@@ -17,6 +17,8 @@ import AvatarPicker from "../components/domain/onboarding/AvatarPicker";
 import LocationFields from "../components/domain/onboarding/LocationFields";
 import GoalsField from "../components/domain/onboarding/GoalsField";
 import GoalsSelect from "../components/domain/onboarding/GoalsSelect";
+import AddHighlight from "../components/domain/onboarding/AddHighlight";
+import Notifications from "../components/domain/onboarding/Notifications";
 import Bio from "../components/domain/onboarding/Bio";
 import FollowSuggestions from "../components/domain/onboarding/FollowSuggestions";
 import Premium from "../components/domain/onboarding/Premium";
@@ -40,7 +42,7 @@ export default function Setup() {
     avatar_url: "",
     age: "",
     sports: [],
-    primarySport: "",
+    primarySport: "football",
     gender: "",
     height: "",
     weight: "",
@@ -53,6 +55,10 @@ export default function Setup() {
     city: "",
     dob: "",
     goals: "",
+    highlightUrl: "",
+    highlightType: "",
+    highlightText: "",
+    highlightMatch: "",
     playingStyle: "",
     preferredLeg: "",
     talent_preferences: "",
@@ -216,15 +222,6 @@ export default function Setup() {
           return (form.full_name || "").toString().trim() !== "";
         case "dob":
           return true; // pre-selected by default
-        case "basic":
-          return (
-            (form.full_name || "").toString().trim() !== "" &&
-            (form.username || "").toString().trim() !== "" &&
-            !usernameErr &&
-            !isCheckingUsername
-          );
-        case "sport":
-          return Array.isArray(form.sports) && form.sports.length > 0;
         case "position":
           return true; // position is optional
         case "style":
@@ -267,58 +264,6 @@ export default function Setup() {
         showNext={false}
         showFinish={false}
       >
-        {stepId === "basic" && (
-          <div className="basic-step">
-            <div className="basic-hero">
-              <h1 className="basic-title">Profile setup</h1>
-              <p className="basic-subtitle">Tell us a bit about yourself</p>
-            </div>
-
-            <div className="basic-content">
-              <div className="avatar-wrap">
-                <AvatarPicker
-                  value={form.avatar_url}
-                  onChange={(v) => set({ avatar_url: v })}
-                />
-              </div>
-
-              <div className="basic-fields">
-                <TextInput
-                  label="Full name"
-                  value={form.full_name}
-                  onChange={(v) => set({ full_name: v })}
-                />
-
-                <div className="username-row">
-                  <div className="username-prefix">@</div>
-                  <div className="username-field">
-                    <TextInput
-                      label="Username"
-                      value={form.username}
-                      onChange={(v) => set({ username: v })}
-                    />
-                  </div>
-                </div>
-
-                {usernameErr && <p className="username-error">{usernameErr}</p>}
-
-                <div className="small-row">
-                  <TextInput
-                    label="Age"
-                    value={form.age}
-                    onChange={(v) => set({ age: v })}
-                  />
-                  <TextInput
-                    label="Gender"
-                    value={form.gender}
-                    onChange={(v) => set({ gender: v })}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
         {stepId === "role" && <RoleSelect role={role} onChange={setRole} onNext={next} />}
 
         {stepId === "name" && (
@@ -335,19 +280,6 @@ export default function Setup() {
             value={form.dob}
             onChange={(v) => set({ dob: v })}
           />
-        )}
-
-        {stepId === "sport" && (
-          <div>
-            <SportsSelect
-              sports={form.sports}
-              onChange={(arr) =>
-                set({ sports: arr, primarySport: arr[0] || "", position: [] })
-              }
-              primarySport={form.primarySport}
-              onPrimaryChange={(v) => set({ primarySport: v, position: [] })}
-            />
-          </div>
         )}
 
         {stepId === "position" && role === "athlete" && (
@@ -439,6 +371,27 @@ export default function Setup() {
           <GoalsSelect value={form.goals} onChange={(v) => set({ goals: v })} />
         )}
 
+        {stepId === "highlight" && role === "athlete" && (
+          <AddHighlight
+            mediaUrl={form.highlightUrl}
+            mediaType={form.highlightType}
+            text={form.highlightText}
+            match={form.highlightMatch}
+            onMediaChange={(v) =>
+              set(v
+                ? { highlightUrl: v.url, highlightType: v.type }
+                : { highlightUrl: "", highlightType: "" }
+              )
+            }
+            onTextChange={(v) => set({ highlightText: v })}
+            onMatchChange={(v) => set({ highlightMatch: v })}
+          />
+        )}
+
+        {stepId === "notifications" && (
+          <Notifications />
+        )}
+
         {stepId === "follow" && (role === "athlete" || role === "scout" || role === "professional") && (
           <FollowSuggestions
             role={role}
@@ -503,21 +456,31 @@ export default function Setup() {
       </StepContainer>
       <OnboardingNavbar
         onBack={back}
-        onNext={next}
+        onNext={stepId === "notifications"
+          ? async () => { if ("Notification" in window) await Notification.requestPermission().catch(() => {}); next(); }
+          : next}
         onFinish={finish}
         showNext={idx < steps.length - 1}
         showFinish={idx === steps.length - 1}
         canContinue={canContinue}
         dark={stepId === "position"}
-        /* Club step: "I'm not in a club" skips club selection */
+        primaryLabel={
+          stepId === "highlight" ? "Post" :
+          stepId === "notifications" ? "Turn on notifications" :
+          "Continue"
+        }
         secondaryLabel={
-          stepId === "club"  ? "I'm not in a club" :
-          stepId === "goals" ? "Skip" :
+          stepId === "club"          ? "I'm not in a club" :
+          stepId === "goals"         ? "Skip" :
+          stepId === "highlight"     ? "Skip" :
+          stepId === "notifications" ? "Skip" :
           null
         }
         onSecondary={
-          stepId === "club" ? () => { set({ club_id: null, club_other_name: null }); next(); } :
-          stepId === "goals" ? () => next() :
+          stepId === "club"      ? () => { set({ club_id: null, club_other_name: null }); next(); } :
+          stepId === "goals"     ? () => next() :
+          stepId === "highlight" ? () => next() :
+          stepId === "notifications" ? () => next() :
           null
         }
       />

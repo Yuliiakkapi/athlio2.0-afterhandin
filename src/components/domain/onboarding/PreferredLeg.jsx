@@ -1,13 +1,10 @@
+import { ArrowLeft, ArrowRight, ArrowsLeftRight, SoccerBall } from "@phosphor-icons/react";
 import "./PreferredLeg.css";
-import legLeftIcon  from "../../../assets/images/leg-left.png";
-import legRightIcon from "../../../assets/images/leg-right.png";
-import legBothIcon  from "../../../assets/images/leg-both.png";
-import ballImg      from "../../../assets/images/football-ball.png";
 
 const OPTIONS = [
-  { id: "left",  label: "Left",  icon: legLeftIcon,  pos: "left"  },
-  { id: "right", label: "Right", icon: legRightIcon, pos: "right" },
-  { id: "both",  label: "Both",  icon: legBothIcon,  pos: "both"  },
+  { id: "left",  label: "Left",  icon: ArrowLeft,        pos: "left"  },
+  { id: "right", label: "Right", icon: ArrowRight,       pos: "right" },
+  { id: "both",  label: "Both",  icon: ArrowsLeftRight,  pos: "both"  },
 ];
 
 export default function PreferredLeg({ value, onChange }) {
@@ -25,22 +22,30 @@ export default function PreferredLeg({ value, onChange }) {
       <div className="leg-visual">
         {/* Football circle */}
         <div className="leg-ball" aria-hidden="true">
-          <img src={ballImg} alt="" className="leg-ball-img" />
+          <SoccerBall size={120} weight="duotone" color="var(--neutral-600, #555)" />
         </div>
 
         {/* Left / Right / Both buttons */}
-        {OPTIONS.map((opt) => (
-          <button
-            key={opt.id}
-            type="button"
-            className={`leg-btn leg-btn--${opt.pos}${value === opt.id ? " leg-btn--selected" : ""}`}
-            onClick={() => onChange(opt.id)}
-            aria-pressed={value === opt.id}
-          >
-            <img src={opt.icon} alt="" className="leg-btn-icon" />
-            <span className="leg-btn-label">{opt.label}</span>
-          </button>
-        ))}
+        {OPTIONS.map((opt) => {
+          const Icon = opt.icon;
+          return (
+            <button
+              key={opt.id}
+              type="button"
+              className={`leg-btn leg-btn--${opt.pos}${value === opt.id ? " leg-btn--selected" : ""}`}
+              onClick={() => onChange(opt.id)}
+              aria-pressed={value === opt.id}
+            >
+              <Icon
+                size={28}
+                weight="bold"
+                className="leg-btn-icon-ph"
+                aria-hidden="true"
+              />
+              <span className="leg-btn-label">{opt.label}</span>
+            </button>
+          );
+        })}
       </div>
     </div>
   );
