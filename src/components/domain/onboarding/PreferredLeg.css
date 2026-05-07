@@ -1,13 +1,11 @@
 /* ──────────────────────────────────────────────────────────────────
    PreferredLeg — "Which is your stronger foot?" onboarding step
-   Football centred in viewport with three circular option buttons
-   arranged around it (Left top-left, Right top-right, Both bottom).
+   Figma node 7242-45959
 ────────────────────────────────────────────────────────────────── */
 
 .leg-step {
   display: flex;
   flex-direction: column;
-  /* fill available height so visual can be pushed down to centre */
   min-height: calc(100dvh - 176px);
 }
 
@@ -21,19 +19,18 @@
 
 .leg-title {
   font-family: var(--font-condensed);
-  font-size: var(--heading-5xl);   /* 44px */
+  font-size: var(--heading-5xl);
   font-weight: 700;
   font-style: italic;
   text-transform: uppercase;
   line-height: 1.1;
-  letter-spacing: 0;
   color: var(--black);
   margin: 0;
 }
 
 .leg-subtitle {
   font-family: var(--font-sans);
-  font-size: var(--text-base);     /* 16px */
+  font-size: var(--text-base);
   font-weight: 500;
   line-height: 1.4;
   color: var(--muted);
@@ -41,52 +38,61 @@
 }
 
 /* ─── Visual container ───────────────────────────────────────────
-   Breaks out of the page's 16 px horizontal padding so the buttons
-   can be positioned against the screen edges (matching Figma).
-   Height matches the bounding box of ball + all three buttons.
+   Full viewport bleed, fills remaining height so the group can
+   be centred within it.
 ────────────────────────────────────────────────────────────────── */
 .leg-visual {
   position: relative;
-  /* Full viewport width — bleed past page's 16 px side padding */
   margin: 0 -16px;
   flex: 1;
-  /* Minimum height so buttons don't overlap on very small screens */
-  min-height: 340px;
+  min-height: 320px;
+}
+
+/* ─── Bounding group (361×280 px from Figma) ─────────────────────
+   Centred horizontally; shifted slightly below the mid-point to
+   match the Figma composition.
+────────────────────────────────────────────────────────────────── */
+.leg-group {
+  position: absolute;
+  width: 361px;
+  height: 280px;
+  left: 50%;
+  top: calc(50% + 67px);
+  transform: translate(-50%, -50%);
 }
 
 /* ─── Football circle ────────────────────────────────────────────
-   From Figma: 206×207 px, centred horizontally, top of visual area.
-   11 px border, overflow hidden (image oversized to fill the crop).
+   206×207 px, centred horizontally within the group, sits at the
+   top. Overflow hidden so the oversized ball image is cropped.
 ────────────────────────────────────────────────────────────────── */
 .leg-ball {
   position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  top: 50%;
-  margin-top: -135px;
+  left: calc(50% - 103px); /* (361 - 206) / 2 = 77.5, but centre-based */
+  top: 0;
   width: 206px;
-  height: 206px;
+  height: 207px;
   border-radius: 50%;
   border: 11px solid var(--neutral-200, #e1e1e4);
   background: var(--neutral-50-bg, #f6f6f7);
   overflow: hidden;
   box-sizing: border-box;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
+/* Oversized crop matching Figma image frame */
 .leg-ball-img {
-  width: 78%;
-  height: 78%;
-  display: block;
+  position: absolute;
+  width: 128.64%;
+  height: 128.02%;
+  left: -15.05%;
+  top: -14.98%;
+  object-fit: cover;
   pointer-events: none;
   user-select: none;
 }
 
 /* ─── Leg-option buttons ─────────────────────────────────────────
-   From Figma: 106×106 px circles, semi-transparent white bg,
-   neutral border, subtle shadow.
+   106×106 px circles, semi-transparent white, subtle shadow.
+   Positioned absolutely within .leg-group using Figma coordinates.
 ────────────────────────────────────────────────────────────────── */
 .leg-btn {
   position: absolute;
@@ -112,41 +118,15 @@
   transform: scale(0.93);
 }
 
-/* ── Positional placement relative to visual container ── */
-/* Ball centre is at 50% - 130px + 90px = 50% - 40px from top */
-/* Buttons aligned with ball centre: 50% - 40px - 53px (half button) ≈ 50% - 93px */
-
-.leg-btn--left {
-  left: 16px;
-  top: calc(50% - 93px);
-}
-
-.leg-btn--right {
-  right: 16px;
-  top: calc(50% - 96px);
-}
-
-/* BOTH: below the ball, centred */
-.leg-btn--both {
-  left: 50%;
-  transform: translateX(-50%);
-  top: calc(50% + 60px);
-}
+/* Figma coords: left (0, 50), right (255, 47), both (127, 174) */
+.leg-btn--left  { left: 0;     top: 50px; }
+.leg-btn--right { left: 255px; top: 47px; }
+.leg-btn--both  { left: 127px; top: 174px; }
 
 /* ─── Selected state ─────────────────────────────────────────────── */
 .leg-btn--selected {
   background: var(--primary-100, #dbe9ff);
   border-color: var(--primary-default, #4051fd);
-}
-
-/* Override transform for .both (translateX must stay) */
-.leg-btn--both.leg-btn--selected {
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.leg-btn--both:active {
-  transform: translateX(-50%) scale(0.93);
 }
 
 /* ─── Phosphor icon inside button ────────────────────────────────── */
@@ -164,12 +144,11 @@
 /* ─── Button label ────────────────────────────────────────────────── */
 .leg-btn-label {
   font-family: var(--font-condensed);
-  font-size: 32px;           /* Heading/4xl.italic */
+  font-size: 32px;
   font-weight: 700;
   font-style: italic;
   text-transform: uppercase;
   line-height: 1;
-  letter-spacing: 0;
   color: var(--black);
   white-space: nowrap;
 }
