@@ -21,7 +21,7 @@ export function buildProfilePayload({ role, form, heightUnit, weightUnit }) {
     region: form.region || null,
     city: form.city || null,
     goals: form.goals || null,
-    talent_preferences: form.talent_preferences ? JSON.parse(form.talent_preferences) : null,
+    talent_preferences: form.talent_preferences || null,
   };
 
   // Add organization-specific fields

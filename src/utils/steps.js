@@ -2,19 +2,18 @@
  * Get the step sequence based on user role
  */
 export function getSteps(role) {
-  const baseSteps = ["basic", "role", "sport", "bio", "avatar", "location"];
-
   if (role === "athlete") {
-    return ["basic", "role", "sport", "position", "club", "avatar", "location", "bio"];
+    return ["basic", "role", "sport", "position", "club", "location", "measure", "bio", "goals"];
   }
 
   if (role === "scout") {
-    return ["basic", "role", "avatar", "location", "bio"];
+    return ["basic", "role", "location", "bio", "scout"];
   }
 
   if (role === "organization") {
-    return ["basic", "role", "avatar", "location", "bio"];
+    return ["basic", "role", "location", "bio"];
   }
 
-  return baseSteps;
+  // default fallback
+  return ["basic", "role", "sport", "location", "bio"];
 }

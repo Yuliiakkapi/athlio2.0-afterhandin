@@ -176,15 +176,18 @@ export default function Setup() {
     const {
       data: { user },
     } = await supabase.auth.getUser();
+
     const payload = buildProfilePayload({ role, form, heightUnit, weightUnit });
     console.log("Submitting profile payload:", payload);
-    const { error: upsertErr } = await supabase
-      .from("profiles")
-      .upsert({ id: user.id, ...payload }, { onConflict: "id" });
 
-    // log any errors
-    if (upsertErr) {
-      console.error("PROFILE UPSERT ERROR", upsertErr);
+    if (user) {
+      const { error: upsertErr } = await supabase
+        .from("profiles")
+        .upsert({ id: user.id, ...payload }, { onConflict: "id" });
+
+      if (upsertErr) {
+        console.error("PROFILE UPSERT ERROR", upsertErr);
+      }
     }
 
     navigate("/home");
@@ -207,16 +210,14 @@ export default function Setup() {
         case "sport":
           return Array.isArray(form.sports) && form.sports.length > 0;
         case "position":
-          return role !== "athlete"
-            ? true
-            : Array.isArray(form.position) && form.position.length > 0;
+          return true; // position is optional
         case "club":
           return (
             Boolean(form.club_id) ||
             (form.club_other_name || "").toString().trim() !== ""
           );
         case "bio":
-          return (form.bio || "").toString().trim() !== "";
+          return true; // bio is optional
         default:
           return true;
       }

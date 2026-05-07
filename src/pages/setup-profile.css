@@ -1,5 +1,5 @@
 .main-content:has(.setup-profile-page) {
-  padding: 12px 16px 40px;
+  padding: 12px 16px 100px;
 }
 .setup-profile-page {
   display: flex;
