@@ -1,84 +1,51 @@
-import { useEffect, useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { MagnifyingGlass, Plus, X } from "@phosphor-icons/react";
+import CLUBS, { FEATURED_IDS } from "../../../data/clubs.js";
 import "./ClubPicker.css";
 
-const BASE = "https://www.thesportsdb.com/api/v1/json/3";
+const FEATURED = FEATURED_IDS.map(id => CLUBS.find(c => c.id === id)).filter(Boolean);
 
-// 4 seed clubs shown before the user types anything
-const FEATURED_SEEDS = ["Real Madrid", "FC Barcelona", "Manchester City", "Bayern Munich"];
-
-function isSoccer(t) {
-  const s = (t.strSport || "").toLowerCase();
-  // Accept Soccer, Football, or no sport set (some clubs omit it)
-  return !s || s === "soccer" || s === "football";
+function searchClubs(query) {
+  const term = query.trim().toLowerCase();
+  if (!term) return [];
+  return CLUBS.filter(c =>
+    c.name.toLowerCase().includes(term) ||
+    c.league.toLowerCase().includes(term) ||
+    c.country.toLowerCase().includes(term)
+  ).slice(0, 20);
 }
 
-async function fetchOneSeed(name) {
-  const res  = await fetch(`${BASE}/searchteams.php?t=${encodeURIComponent(name)}`);
-  const json = await res.json();
-  const teams = (json.teams || []).filter(isSoccer);
-  // Prefer an exact name match, fall back to first result
+function ClubLogo({ club }) {
+  if (club.logo) {
+    return <img src={club.logo} alt={`${club.name} logo`} className="team-club-logo" />;
+  }
+  // Coloured initials placeholder
+  const initials = club.name
+    .split(/\s+/)
+    .filter(w => /^[A-Z]/u.test(w))
+    .slice(0, 2)
+    .map(w => w[0])
+    .join("") || club.name[0];
   return (
-    teams.find(t => t.strTeam.toLowerCase() === name.toLowerCase()) ||
-    teams[0] ||
-    null
+    <div className="team-club-logo-placeholder team-club-logo-initials" aria-hidden="true">
+      {initials}
+    </div>
   );
-}
-
-async function fetchFeatured() {
-  const results = await Promise.all(FEATURED_SEEDS.map(name =>
-    fetchOneSeed(name).catch(() => null)
-  ));
-  return results.filter(Boolean);
-}
-
-async function searchTeams(query) {
-  const res  = await fetch(`${BASE}/searchteams.php?t=${encodeURIComponent(query)}`);
-  const json = await res.json();
-  return (json.teams || []).filter(isSoccer).slice(0, 20);
 }
 
 export default function ClubPicker({ value, onChange }) {
   const [query, setQuery]           = useState("");
-  const [results, setResults]       = useState([]);
-  const [loading, setLoading]       = useState(true);
   const [showManual, setShowManual] = useState(false);
   const [manualName, setManualName] = useState(value?.club_other_name || "");
-  const inputRef    = useRef(null);
-  const deb         = useRef(null);
-  const featuredRef = useRef([]);
+  const inputRef = useRef(null);
 
-  // Load featured clubs on mount
-  useEffect(() => {
-    fetchFeatured().then(teams => {
-      featuredRef.current = teams;
-      setResults(teams);
-      setLoading(false);
-    }).catch(() => setLoading(false));
-  }, []);
+  const results  = useMemo(() => searchClubs(query), [query]);
+  const showList = query.trim().length >= 2 ? results : FEATURED;
+  const listLabel = query.trim().length >= 2 ? "Search results" : "Featured clubs";
 
-  // Debounced search — restore featured when query is cleared
-  useEffect(() => {
-    if (deb.current) clearTimeout(deb.current);
-
-    const term = query.trim();
-
-    if (term.length < 2) {
-      setResults(featuredRef.current);
-      return;
-    }
-
-    setLoading(true);
-    deb.current = setTimeout(() => {
-      searchTeams(term)
-        .then(teams => { setResults(teams); setLoading(false); })
-        .catch(() => setLoading(false));
-    }, 300);
-  }, [query]);
-
-  function pickClub(team) {
+  function pickClub(club) {
     setShowManual(false);
-    onChange({ club_id: null, club_other_name: team.strTeam });
+    onChange({ club_id: null, club_other_name: club.name });
   }
 
   function commitManual() {
@@ -87,8 +54,6 @@ export default function ClubPicker({ value, onChange }) {
     onChange({ club_id: null, club_other_name: clean });
     setShowManual(false);
   }
-
-  const isListLabel = query.trim().length >= 2 ? "Search results" : "Featured clubs";
 
   return (
     <div className="team-step">
@@ -142,38 +107,28 @@ export default function ClubPicker({ value, onChange }) {
 
       {/* ── Club list ──────────────────────────────────────────── */}
       <div className="team-list-wrap">
-        <p className="team-list-label">{isListLabel}</p>
+        <p className="team-list-label">{listLabel}</p>
 
         <div className="team-list">
-          {loading && results.length === 0 && (
-            <p className="team-empty">Loading clubs…</p>
-          )}
-
-          {results.map(club => {
-            const selected = value?.club_other_name === club.strTeam;
-            const logo     = club.strTeamBadge ? `${club.strTeamBadge}/preview` : null;
-            const sub      = club.strLeague || club.strCountry || "";
+          {showList.map(club => {
+            const selected = value?.club_other_name === club.name;
             return (
               <button
-                key={club.idTeam}
+                key={club.id}
                 type="button"
                 className={`team-club-btn${selected ? " team-club-btn--selected" : ""}`}
                 onClick={() => pickClub(club)}
               >
-                {logo ? (
-                  <img src={logo} alt={`${club.strTeam} logo`} className="team-club-logo" />
-                ) : (
-                  <div className="team-club-logo-placeholder" aria-hidden="true" />
-                )}
+                <ClubLogo club={club} />
                 <div className="team-club-meta">
-                  <span className="team-club-name">{club.strTeam}</span>
-                  {sub ? <span className="team-club-sub">{sub}</span> : null}
+                  <span className="team-club-name">{club.name}</span>
+                  <span className="team-club-sub">{club.league} · {club.country}</span>
                 </div>
               </button>
             );
           })}
 
-          {!loading && results.length === 0 && query.trim().length >= 2 && (
+          {query.trim().length >= 2 && results.length === 0 && (
             <p className="team-empty">No clubs found for "{query}"</p>
           )}
 
