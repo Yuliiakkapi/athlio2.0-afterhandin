@@ -7,6 +7,7 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
+  min-height: calc(100dvh - 176px);
 }
 
 /* ─── Header ────────────────────────────────────────────────────── */
@@ -39,8 +40,14 @@
 /* ─── Visual area ───────────────────────────────────────────────── */
 .notif-visual {
   position: relative;
+  flex: 1;
   margin: 0 -16px;
-  padding-top: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  /* slight upward offset so the block reads as centred given the
+     bottom nav bar adds visual weight at the foot of the screen */
+  padding-bottom: 32px;
 }
 
 /* ─── Phone frame ───────────────────────────────────────────────── */
@@ -110,7 +117,8 @@
   border-radius: 12px;
   padding: 13px 12px;
   box-shadow: 0 1px 26px rgba(0, 0, 0, 0.25);
-  transition: transform 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+  /* scale transition when secondary → primary */
+  transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .notif-card--secondary {

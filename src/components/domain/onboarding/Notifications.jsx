@@ -87,9 +87,13 @@ export default function Notifications() {
   const [animating, setAnimating] = useState(false);
 
   useEffect(() => {
+    const ANIM_MS = 800; // must match CSS transition duration
+    const HOLD_MS = 4000;
+
     const timer = setInterval(() => {
       setAnimating(true);
 
+      // Wait for transition to fully finish (+60ms buffer) before swapping DOM
       setTimeout(() => {
         setCards(prev => [
           ...prev.slice(1),
@@ -99,8 +103,8 @@ export default function Notifications() {
           },
         ]);
         setAnimating(false);
-      }, 900);
-    }, 3800);
+      }, ANIM_MS + 60);
+    }, HOLD_MS);
 
     return () => clearInterval(timer);
   }, []);
@@ -132,7 +136,7 @@ export default function Notifications() {
                 transform: `translateY(${(animating ? i - 1 : i) * SLOT}px)`,
                 opacity: i === 0 && animating ? 0 : 1,
                 transition: animating
-                  ? "transform 0.9s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.7s ease"
+                  ? "transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.6s ease-in"
                   : "none",
               }}
             >
