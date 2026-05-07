@@ -30,20 +30,21 @@
   user-select: none;
 }
 
-/* Figma gradient: heavy dark top (header readability) +
-   bottom fades to --neutral-50-bg so the navbar blends in     */
+/* Figma gradient: heavy dark top for header readability,
+   dark bottom so the navbar blends over the pitch            */
 .pos-gradient {
   position: absolute;
   inset: 0;
   background:
     linear-gradient(180deg, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0) 38%),
-    linear-gradient(0deg, var(--neutral-50-bg, #f6f6f7) 0%, rgba(246, 246, 247, 0) 28%);
+    linear-gradient(0deg, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0) 28%);
 }
 
 /* ─── Header — same layout as other onboarding steps ──────────── */
 .pos-header {
   position: relative;
   z-index: 20;    /* above fixed pitch bg (z:5) */
+  margin-top: -20px; /* pull up closer to topbar */
   margin-bottom: 0;
 }
 
