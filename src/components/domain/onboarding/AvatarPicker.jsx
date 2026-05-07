@@ -31,9 +31,7 @@ export default function AvatarPicker({ value, onChange }) {
     reader.readAsDataURL(f);
   }
 
-  // Present the picture on the left and the upload control on the right.
-  // This restores the prior layout where the photo and the "Select picture"
-  // button sit side-by-sideAHoj wuduwnduwud.
+  // Keep the picture and upload action side-by-side.
   return (
     <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
       <div style={{ width: 80, height: 80, borderRadius: "50%", background: "var(--color-gray-50,#f5f6fa)", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>

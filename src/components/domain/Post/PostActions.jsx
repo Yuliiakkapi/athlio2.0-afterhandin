@@ -79,7 +79,7 @@ export default function PostActions({
         await like(postId);
         if (postAuthorId && profile?.id && postAuthorId !== profile.id) {
           await supabase.from("notifications").insert({
-            user_id: postAuthorId,
+            recipient_id: postAuthorId,
             actor_id: profile.id,
             post_id: postId,
             type: "like",
@@ -87,12 +87,14 @@ export default function PostActions({
         }
       } else {
         await unlike(postId);
-        await supabase
-          .from("notifications")
-          .delete()
-          .eq("type", "like")
-          .eq("post_id", postId)
-          .eq("actor_id", profile?.id ?? null);
+        if (profile?.id) {
+          await supabase
+            .from("notifications")
+            .delete()
+            .eq("type", "like")
+            .eq("post_id", postId)
+            .eq("actor_id", profile.id);
+        }
       }
     } catch (e) {
       console.error("toggle like", e);

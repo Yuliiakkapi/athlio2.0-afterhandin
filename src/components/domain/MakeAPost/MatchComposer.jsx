@@ -63,13 +63,11 @@ export default function MatchComposer({
     (async () => {
       const { data } = await supabase
         .from("clubs")
-        .select("name, club_name, title")
+        .select("name")
         .eq("id", id)
         .maybeSingle();
       if (!ignore) {
-        setYourTeamText(
-          data?.name || data?.club_name || data?.title || "Your team",
-        );
+        setYourTeamText(data?.name || "Your team");
       }
     })();
     return () => {
@@ -97,13 +95,11 @@ export default function MatchComposer({
     (async () => {
       const { data } = await supabase
         .from("clubs")
-        .select("name, club_name, title")
+        .select("name")
         .eq("id", id)
         .maybeSingle();
       if (!ignore) {
-        setOpponentText(
-          data?.name || data?.club_name || data?.title || "Opponent",
-        );
+        setOpponentText(data?.name || "Opponent");
       }
     })();
     return () => {

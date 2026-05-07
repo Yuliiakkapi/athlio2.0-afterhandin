@@ -19,7 +19,7 @@ export default function ClubPicker({ sport, value, onChange }) {
       if (!query || query.length < 2) {
         const { data, error } = await supabase
           .from("clubs")
-          .select("id, name, city, country_code, logo_url")
+          .select("id, name, city, country, logo_url")
           .order("name", { ascending: true })
           .limit(6);
         if (!error) setResults(data || []);
@@ -28,7 +28,7 @@ export default function ClubPicker({ sport, value, onChange }) {
 
       const { data, error } = await supabase
         .from("clubs")
-        .select("id, name, city, country_code, logo_url")
+        .select("id, name, city, country, logo_url")
         .ilike("name", `%${query}%`)
         .limit(15);
 
