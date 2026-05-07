@@ -456,17 +456,40 @@ export default function Setup() {
       </StepContainer>
       <OnboardingNavbar
         onBack={back}
-        onNext={stepId === "notifications"
-          ? async () => { if ("Notification" in window) await Notification.requestPermission().catch(() => {}); next(); }
-          : next}
+        onNext={
+          stepId === "notifications"
+            ? async () => { if ("Notification" in window) await Notification.requestPermission().catch(() => {}); next(); }
+          : stepId === "location" && !form.city
+            ? async () => {
+                try {
+                  if (!navigator.geolocation) { next(); return; }
+                  const pos = await new Promise((res, rej) =>
+                    navigator.geolocation.getCurrentPosition(res, rej, { timeout: 9000 })
+                  );
+                  const data = await fetch(
+                    `https://nominatim.openstreetmap.org/reverse?lat=${pos.coords.latitude}&lon=${pos.coords.longitude}&format=json&addressdetails=1`,
+                    { headers: { "Accept-Language": "en" } }
+                  ).then(r => r.json());
+                  if (data.address) {
+                    set({
+                      city:    data.address.city || data.address.town || data.address.village || "",
+                      country: data.address.country || "",
+                    });
+                  }
+                } catch { /* permission denied — just advance */ }
+                next();
+              }
+          : next
+        }
         onFinish={finish}
         showNext={idx < steps.length - 1}
         showFinish={idx === steps.length - 1}
         canContinue={canContinue}
         dark={stepId === "position"}
         primaryLabel={
-          stepId === "highlight" ? "Post" :
+          stepId === "highlight"     ? "Post" :
           stepId === "notifications" ? "Turn on notifications" :
+          stepId === "location" && !form.city ? "Give access to location" :
           "Continue"
         }
         secondaryLabel={
@@ -474,6 +497,7 @@ export default function Setup() {
           stepId === "goals"         ? "Skip" :
           stepId === "highlight"     ? "Skip" :
           stepId === "notifications" ? "Skip" :
+          stepId === "location"      ? "Skip" :
           null
         }
         onSecondary={
