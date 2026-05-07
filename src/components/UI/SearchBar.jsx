@@ -1,7 +1,7 @@
 import React from "react";
 import "./SearchBar.css";
-import SearchIcon from "../../assets/icons/search.svg?react";
-import CloseIcon from "../../assets/icons/close.svg?react";
+import SearchIcon from "../../assets/icons/search.svg";
+import CloseIcon from "../../assets/icons/close.svg";
 
 const SearchBar = ({
   label = "Search",

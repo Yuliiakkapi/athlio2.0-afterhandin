@@ -59,7 +59,7 @@
   font-size: #000;
   font-weight: 500;
   font-size: 16px;
-  font-family: Geist;
+  font-family: "Barlow", sans-serif;
   font-style: normal;
   text-align: center;
 }
@@ -68,7 +68,7 @@
   
   margin: 0;
   color: var(--color-gray-700, #A5A7BB);
-  font-family: Geist;
+  font-family: "Barlow", sans-serif;
   font-size: 12px;
   font-style: normal;
   font-weight: 500;

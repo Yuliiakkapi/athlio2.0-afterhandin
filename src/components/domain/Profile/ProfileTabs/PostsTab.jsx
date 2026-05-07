@@ -133,7 +133,7 @@ export default function PostsTab({ profile, isMe = false }) {
   if (!posts.length && isMe) {
     return (
       <main>
-        <div className="profile-stats-tab">
+        <div className="profile-posts-tab">
           <div className="empty-state-box">
             <p className="empty-title">You don’t have available posts yet.</p>
             <p className="empty-subtitle">Add your post manually.</p>
@@ -156,7 +156,7 @@ export default function PostsTab({ profile, isMe = false }) {
   if (!posts.length)
     return (
       <main>
-        <div className="profile-stats-tab">
+        <div className="profile-posts-tab">
           <p className="empty-subtitle">No posts yet.</p>
         </div>
       </main>
@@ -164,7 +164,7 @@ export default function PostsTab({ profile, isMe = false }) {
 
   return (
     <main>
-      <div className="profile-stats-tab">
+      <div className="profile-posts-tab">
         {posts.map((post) => (
           <PostSwitcher key={post.id} post={post} />
         ))}

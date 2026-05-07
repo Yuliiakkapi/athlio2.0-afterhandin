@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import "./profile.css";
 import { supabase } from "../lib/supabase";
 import ProfileHeader from "../components/domain/Profile/ProfileHeader";
 import { isFollowing, follow, unfollow } from "../lib/follows";
@@ -112,7 +113,7 @@ export default function OtherProfile() {
         profile={profile}
         isMe={false}
         isFollowing={isFollowingState}
-        onToggleFollow={toggleFollow}
+        toggleFollow={toggleFollow}
       />
       <NavigationTabs
         tabs={[

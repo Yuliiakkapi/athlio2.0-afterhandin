@@ -1,0 +1,19 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding-top: 56px;   /* clear fixed topbar */
+  padding-bottom: 90px; /* clear fixed navbar */
+}
+
+.profile-tab-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Tabs render their own <main> — strip its extra padding since the tab containers manage their own */
+.profile-tab-content > main {
+  flex: 1;
+  padding: 0;
+}

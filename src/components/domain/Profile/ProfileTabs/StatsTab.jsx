@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "../../../../lib/supabase";
 import TableStats from "../../Scouting/TableStats";
 import EditIcon from "../../../../assets/icons/edit.svg?react";
@@ -6,6 +7,7 @@ import "./StatsTab.css";
 import Button from "../../../UI/Button";
 
 export default function StatsTab({ profile, isMe = false }) {
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState(null);
   const [error, setError] = useState(null);
@@ -75,7 +77,7 @@ export default function StatsTab({ profile, isMe = false }) {
               type="outline"
               Icon={EditIcon}
               className="edit-info-btn"
-              onClick={() => (window.location.href = "/edit-profile")}
+              onClick={() => navigate("/profile/me/edit")}
             />
           )}
         </div>

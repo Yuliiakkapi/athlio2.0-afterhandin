@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import SelectionCard from "./UI/SelectionCard";
-import FootballIcon from "../../../assets/icons/football.svg?react";
-import BasketballIcon from "../../../assets/icons/basketball.svg?react";
+import FootballIcon from "../../../assets/icons/football.svg";
+import BasketballIcon from "../../../assets/icons/basketball.svg";
 import { supabase } from "../../../lib/supabase";
 
 export default function SportsSelect({
@@ -31,14 +31,14 @@ export default function SportsSelect({
               name: "Football",
               description:
                 "Show your talent and connect with the global football network.",
-              icon: <FootballIcon />,
+              icon: FootballIcon,
             },
             {
               id: "basketball",
               name: "Basketball",
               description:
                 "Play hard, get noticed, and take your game to the next level.",
-              icon: <BasketballIcon />,
+              icon: BasketballIcon,
             },
           ]);
         } else {
@@ -53,9 +53,9 @@ export default function SportsSelect({
               icon: r.icon_url
                 ? r.icon_url
                 : (r.id === "football" || (r.name || "").toLowerCase() === "football")
-                ? <FootballIcon />
+                ? FootballIcon
                 : (r.id === "basketball" || (r.name || "").toLowerCase() === "basketball")
-                ? <BasketballIcon />
+                ? BasketballIcon
                 : null,
             }))
           );

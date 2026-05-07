@@ -9,7 +9,7 @@
   border-radius: 8px;
   max-width: 361px;
   background-color: var(--color-background);
-  font: 500 12px/1 Geist, -apple-system, Roboto, Helvetica, sans-serif;
+  font: 500 12px/1 "Barlow", sans-serif;
   flex: 1;
   min-width: 300px;
 }

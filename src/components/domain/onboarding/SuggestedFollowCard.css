@@ -16,8 +16,8 @@
 .suggest-follow-card-name {
   font-size: 12px;
   line-height: 12px;
-  font-weight: 500; /* Geist Medium maps to 500 */
-  font-family: var(--font-sans, Geist, system-ui, sans-serif);
+  font-weight: 500;
+  font-family: var(--font-sans);
   text-align: center;
   width: 90px; /* Figma text frame width */
   color: var(--color-text);

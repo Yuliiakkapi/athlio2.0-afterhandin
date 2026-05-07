@@ -1,147 +1,81 @@
-:root {
-  color-scheme: dark;
-  font-family:
-    Inter,
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    sans-serif;
-  background: #0b1020;
-  color: #f3f7ff;
+body {
+  font-family: "Barlow", sans-serif;
 }
 
 * {
   box-sizing: border-box;
-}
-
-html,
-body,
-#root {
   margin: 0;
-  min-height: 100%;
+  padding: 0;
 }
 
-body {
-  background:
-    radial-gradient(circle at top, rgba(84, 124, 255, 0.18), transparent 35%),
-    linear-gradient(180deg, #0b1020 0%, #090d18 100%);
+:root {
+  /* Font families */
+  --font-condensed: "Barlow Condensed", sans-serif;
+  --font-sans: "Barlow", sans-serif;
+
+  /* Heading sizes */
+  --heading-6xl: 64px;
+  --heading-5xl: 44px;
+  --heading-4xl: 32px;
+  --heading-3xl: 28px;
+  --heading-2xl: 22px;
+  --heading-xl: 18px;
+
+  /* Body text sizes */
+  --text-lg: 18px;
+  --text-base: 16px;
+  --text-sm: 14px;
+  --text-xs: 12px;
+  --text-2xs: 10px;
+
+  /* Backward-compat aliases (keeps existing component CSS working) */
+  --text-2xl: var(--heading-2xl);
+  --text-xl: var(--heading-xl);
+  --text-l: var(--text-lg);
+  --text-xxs: var(--text-2xs);
+  --list-item-value: var(--text-base);
+  --text-secondary: var(--text-xs);
+  --text-button: var(--text-sm);
+
+  /* Colors */
+  --color-background: #fbfbfb;
+  --color-text: #000215;
+  --color-accent: #4051fd;
+  --color-buttons: #2631a0;
+  --color-details: #c6cbfe;
+  --color-green: #00ab3d;
+  --color-red: #ff3d52;
+  --color-orange: #ff983d;
+  --color-gray-100: #f0f0f3;
+  --color-gray-300: #dfe0e7;
+  --color-gray-500: #cbccd8;
+  --color-gray-700: #a5a7bb;
+  --color-gray-900: #727481;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+.main-content {
+  padding: 56px 16px;
 }
 
-.app-shell {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
-.topbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1rem 1.5rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(18px);
-  background: rgba(8, 12, 24, 0.72);
-}
-
-.topbar-brand {
-  font-weight: 700;
-  letter-spacing: 0.04em;
-}
-
-.topbar-actions {
-  display: flex;
-  gap: 0.75rem;
-  align-items: center;
-  opacity: 0.9;
-}
-
-.app-content {
-  flex: 1;
-  padding: 1.5rem;
-}
-
-.navbar {
-  position: sticky;
-  bottom: 0;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 0.5rem;
-  padding: 0.85rem 1rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(8, 12, 24, 0.86);
-  backdrop-filter: blur(18px);
-}
-
-.navbar a {
-  text-align: center;
-  padding: 0.75rem 0.5rem;
-  border-radius: 999px;
-  color: rgba(243, 247, 255, 0.75);
-}
-
-.navbar a.active {
-  color: #ffffff;
-  background: rgba(84, 124, 255, 0.22);
-}
-
-.page {
-  min-height: calc(100vh - 7rem);
-  display: grid;
-  place-items: center;
-}
-
-.page-card {
-  width: min(720px, 100%);
-  padding: 2rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 24px;
-  background: rgba(10, 15, 30, 0.8);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.28);
-}
-
-.page-kicker {
-  margin: 0 0 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  font-size: 0.75rem;
-  color: rgba(180, 195, 255, 0.85);
-}
-
-.page h1 {
-  margin: 0;
-  font-size: clamp(2rem, 4vw, 3.4rem);
-}
-
-.page-copy {
-  margin: 0.85rem 0 1.5rem;
-  line-height: 1.7;
-  color: rgba(233, 238, 255, 0.8);
-}
-
-.page-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-}
-
-.button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 44px;
-  padding: 0.75rem 1rem;
-  border-radius: 12px;
-  background: #5e7bff;
-  color: #fff;
+h1 {
+  font-family: var(--font-sans);
+  font-size: var(--heading-2xl);
   font-weight: 600;
 }
+h2 {
+  font-family: var(--font-sans);
+  font-size: var(--heading-xl);
+  font-weight: 600;
+}
+p {
+  font-size: var(--text-sm);
+  font-weight: 500;
+}
 
-.button-secondary {
-  background: rgba(255, 255, 255, 0.08);
+.list-item {
+  font-family: var(--font-sans);
+  font-size: var(--list-item-value);
+  font-weight: 500;
+  line-height: 1.2;
+  font-style: normal;
 }

@@ -5,7 +5,7 @@ import BurgerMenuIcon from "../assets/icons/burger-menu.svg";
 import ShareIcon from "../assets/icons/share.svg";
 import NotificationsIcon from "../assets/icons/notifications.svg";
 import BackIcon from "../assets/icons/back.svg";
-import CloseIcon from "../assets/icons/close.svg?react";
+import CloseIcon from "../assets/icons/close.svg";
 import MainLogo from "../assets/logos/main-logo.svg?react";
 import "./Topbar.css";
 import Button from "./UI/Button";
@@ -147,7 +147,7 @@ const TOPBAR_CONFIG = {
   },
   "/scouting": {
     title: null,
-    left: () => <img src={MainLogo} className="main-logo" alt="Athlio" />,
+    left: () => <MainLogo className="main-logo" aria-label="Athlio" />,
     right: (nav, _profile, counts) => (
       <div className="topbar-icons">
         <div className="icon-with-badge" onClick={() => nav("/notifications")}>
@@ -175,7 +175,7 @@ const TOPBAR_CONFIG = {
           onClick={() => nav(-1)}
           className="topbar-back"
         />
-        <img src={MainLogo} className="main-logo" alt="Athlio" />
+        <MainLogo className="main-logo" aria-label="Athlio" />
       </div>
     ),
     right: (nav, _profile, counts) => (
