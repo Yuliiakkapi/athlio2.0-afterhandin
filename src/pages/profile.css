@@ -1,8 +1,16 @@
+/* Remove default side padding from main-content when a profile .page is present
+   so the cover image + header can go full-width */
+.main-content:has(.page.profile) {
+  padding-left: 0;
+  padding-right: 0;
+  padding-bottom: 0;
+}
+
 .page {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  padding-top: 56px;   /* clear fixed topbar */
+  /* No padding-top — .main-content already clears the fixed topbar (56px) */
   padding-bottom: 90px; /* clear fixed navbar */
 }
 

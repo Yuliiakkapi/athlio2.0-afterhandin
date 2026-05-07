@@ -70,7 +70,7 @@ const TOPBAR_CONFIG = {
           type="subtle"
           icon={CloseIcon}
         />
-        <ProfilePicture imgUrl={profile.avatar_url} size="medium" />
+        <ProfilePicture imgUrl={profile?.avatar_url} size="medium" />
       </div>
     ),
     right: () => (

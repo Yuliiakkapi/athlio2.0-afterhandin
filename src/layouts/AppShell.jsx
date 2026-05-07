@@ -19,7 +19,7 @@ export default function AppShell() {
   return (
     <div className="app-shell">
       {!hideTopbar && <Topbar />}
-      <main className="app-content">
+      <main className="main-content">
         <Outlet />
       </main>
       {!hideNavbar && <Navbar />}

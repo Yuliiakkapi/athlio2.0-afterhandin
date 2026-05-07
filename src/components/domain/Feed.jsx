@@ -173,6 +173,7 @@ export default function Feed() {
   `,
         )
         .not("id", "in", `(${excludeIds.join(",")})`)
+        .not("username", "is", null)
         .limit(10);
 
       if (!suggErr && !cancelled) {
@@ -190,6 +191,25 @@ export default function Feed() {
 
   if (userLoading || loading) return <p>Loading feed…</p>;
   if (error) return <p className="error">{error}</p>;
+
+  if (!user) {
+    return (
+      <div className="feed-empty">
+        <p>Sign in to see posts from athletes you follow.</p>
+      </div>
+    );
+  }
+
+  if (posts.length === 0) {
+    return (
+      <div className="posts-feed">
+        <div className="feed-empty">
+          <p>No posts yet. Follow athletes to see their activity here.</p>
+        </div>
+        {suggested.length > 0 && <SuggestedAccounts profiles={suggested} />}
+      </div>
+    );
+  }
 
   return (
     <div className="posts-feed">
