@@ -13,12 +13,6 @@
 .role-photo-cards {
   display: flex;
   gap: 10px;
-  /*
-   * StepContainer wraps children in unstyled divs — use direct calc() to avoid
-   * flex:1 collapsing:
-   *   100dvh - 68px (top padding) - 92px (heading) - 108px (bottom padding)
-   *   ≈ 268px → 275px with breathing room
-   */
   height: calc(100dvh - 275px);
   min-height: 380px;
   max-height: 640px;
@@ -26,7 +20,6 @@
 
 /* ─── Individual card ──────────────────────────────────────────── */
 .role-photo-card {
-  /* Default: equal share */
   flex: 1;
   min-width: 0;
   position: relative;
@@ -37,27 +30,25 @@
   padding: 0;
   background: #0d1020;
   height: 100%;
-  /* Animate width changes and border */
   transition:
     flex 320ms cubic-bezier(0.4, 0, 0.2, 1),
     border-color 200ms ease,
     box-shadow 200ms ease;
 }
 
-/* ─── Expand / shrink on selection ───────────────────────────────
-   When any card inside the row is selected, grow the selected one
-   and shrink the other — pure CSS via :has() selector.
+/* ─── Expand / shrink ─────────────────────────────────────────────
+   Selected card grows to ~65%, unselected shrinks to ~35%.
 ──────────────────────────────────────────────────────────────────── */
 .role-photo-cards:has(.role-photo-card--selected) .role-photo-card {
-  flex: 0.55; /* shrink unselected to ~35% */
+  flex: 0.55;
 }
 .role-photo-card--selected {
-  flex: 1.45 !important; /* selected takes ~65% */
+  flex: 1.45 !important;
   border-color: var(--color-accent, #4051fd);
   box-shadow: 0 0 0 1px var(--color-accent, #4051fd);
 }
 
-/* ─── Photo background ─────────────────────────────────────────── */
+/* ─── Photo ────────────────────────────────────────────────────── */
 .role-photo-card-img {
   position: absolute;
   inset: 0;
@@ -70,31 +61,38 @@
   user-select: none;
 }
 
-/* ─── Dark overlay ─────────────────────────────────────────────── */
+/* ─── Overlay — slightly darker on selected ────────────────────── */
 .role-photo-card-overlay {
   position: absolute;
   inset: 0;
   background: rgba(20, 25, 82, 0.22);
   pointer-events: none;
+  transition: background 300ms ease;
+}
+.role-photo-card--selected .role-photo-card-overlay {
+  background: rgba(10, 12, 40, 0.45);
 }
 
-/* ─── Vertical label — bottom-right corner ─────────────────────── */
+/* ─── Label — top-left corner, reads top-to-bottom ─────────────── */
 .role-photo-card-label-wrap {
   position: absolute;
-  bottom: 62px; /* sits just above the chevron */
-  right: 14px;
+  top: 16px;
+  left: 16px;
   pointer-events: none;
+  /* Clip overflowing text within the card */
+  max-height: calc(100% - 80px);
+  overflow: hidden;
 }
 
 /*
- * Text rotated -90deg from its bottom-right corner anchor.
- * After rotation the bottom of the word aligns at the wrapper's
- * bottom-right, and the text reads upward from there.
+ * writing-mode: vertical-lr → text flows top to bottom
+ * The first letter sits at the top-left corner and reads downward.
+ * Color transitions from white → amber (warning) when selected.
  */
 .role-photo-card-label {
   display: block;
-  transform: rotate(-90deg);
-  transform-origin: bottom right;
+  writing-mode: vertical-lr;
+  text-orientation: mixed;
   white-space: nowrap;
   font-family: var(--font-condensed, "Barlow Condensed", sans-serif);
   font-size: 44px;
@@ -102,9 +100,45 @@
   font-style: italic;
   text-transform: uppercase;
   line-height: 1.05;
-  color: rgba(235, 244, 255, 0.95);
   letter-spacing: -0.01em;
-  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.45);
+  color: rgba(235, 244, 255, 0.95);
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.5);
+  transition: color 250ms ease, text-shadow 250ms ease;
+}
+
+/* Warning (amber) colour when this card is the selected/expanded one */
+.role-photo-card--selected .role-photo-card-label {
+  color: #F5A623;
+  text-shadow: 0 0 20px rgba(245, 166, 35, 0.5), 0 2px 8px rgba(0, 0, 0, 0.6);
+}
+
+/* ─── Description — fades in when expanded ─────────────────────── */
+.role-photo-card-desc {
+  position: absolute;
+  bottom: 62px; /* above the chevron */
+  left: 16px;
+  right: 16px;
+  opacity: 0;
+  transform: translateY(6px);
+  transition:
+    opacity 250ms ease 80ms,
+    transform 250ms ease 80ms;
+  pointer-events: none;
+}
+
+.role-photo-card--selected .role-photo-card-desc {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.role-photo-card-desc p {
+  margin: 0;
+  font-family: var(--font-sans, "Barlow", sans-serif);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.85);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
 }
 
 /* ─── Chevron circle — bottom-right ────────────────────────────── */

@@ -3,8 +3,18 @@ import AthleteImage from "../../../assets/images/role-athlete.jpg";
 import ProfessionalImage from "../../../assets/images/role-professional.jpg";
 
 const ROLES = [
-  { id: "athlete",      label: "Player",       image: AthleteImage },
-  { id: "professional", label: "Professional", image: ProfessionalImage },
+  {
+    id: "athlete",
+    label: "Player",
+    image: AthleteImage,
+    description: "Showcase your skills, connect with scouts and clubs worldwide.",
+  },
+  {
+    id: "professional",
+    label: "Professional",
+    image: ProfessionalImage,
+    description: "Discover talent, manage scouting and build your network.",
+  },
 ];
 
 function ChevronRight() {
@@ -24,7 +34,7 @@ function ChevronRight() {
 export default function RoleSelect({ role, onChange, onNext }) {
   function select(id) {
     onChange(id);
-    if (onNext) setTimeout(onNext, 320); // wait for the expand animation to finish
+    if (onNext) setTimeout(onNext, 340);
   }
 
   return (
@@ -34,7 +44,6 @@ export default function RoleSelect({ role, onChange, onNext }) {
         <p className="role-header-subtitle">Select how you want to use this app</p>
       </div>
 
-      {/* Two portrait cards — selected one expands via CSS :has() */}
       <div className="role-photo-cards" role="radiogroup" aria-label="Choose your role">
         {ROLES.map((r) => {
           const selected = role === r.id;
@@ -47,15 +56,23 @@ export default function RoleSelect({ role, onChange, onNext }) {
               className={`role-photo-card${selected ? " role-photo-card--selected" : ""}`}
               onClick={() => select(r.id)}
             >
+              {/* Photo */}
               <img src={r.image} alt="" className="role-photo-card-img" />
+
+              {/* Overlay — darker when selected */}
               <div className="role-photo-card-overlay" />
 
-              {/* Label at bottom-right, reading bottom-to-top */}
+              {/* Label — top-left, vertical, warning color when selected */}
               <div className="role-photo-card-label-wrap" aria-hidden="true">
                 <span className="role-photo-card-label">{r.label}</span>
               </div>
 
-              {/* Chevron circle */}
+              {/* Description — fades in on expand */}
+              <div className="role-photo-card-desc" aria-hidden={!selected}>
+                <p>{r.description}</p>
+              </div>
+
+              {/* Chevron */}
               <div
                 className={`role-photo-card-chevron${selected ? " role-photo-card-chevron--active" : ""}`}
                 aria-hidden="true"
