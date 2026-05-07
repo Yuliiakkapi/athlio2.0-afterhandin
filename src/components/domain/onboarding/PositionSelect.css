@@ -1,16 +1,24 @@
 /* ──────────────────────────────────────────────────────────────────
-   PositionSelect — full-screen football pitch with position buttons.
-   Escapes SetupProfile's 68px/16px/108px padding via negative margins.
+   PositionSelect — normal document flow, no negative margins.
+   Background and button overlay use position:fixed so they cover
+   the full viewport without adding any width to the layout.
 ────────────────────────────────────────────────────────────────── */
+
 .pos-step {
-  /* Break out of SetupProfile padding */
-  margin: -68px -16px -108px;
-  height: 100dvh; /* explicit height so absolute children have something to fill */
-  position: relative;
-  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  /* No overflow, no extra width — completely normal flow */
 }
 
-/* ─── Background image ─────────────────────────────────────────── */
+/* ─── Full-viewport pitch background (behind everything) ───────── */
+.pos-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 5;          /* above page bg, below topbar/navbar (z:100) */
+  pointer-events: none;
+}
+
 .pos-bg-img {
   position: absolute;
   inset: 0;
@@ -19,55 +27,61 @@
   object-fit: cover;
   object-position: center;
   display: block;
-  pointer-events: none;
   user-select: none;
 }
 
-/* ─── Gradient overlay — dark top + dark bottom ────────────────── */
+/* Figma gradient: heavy dark top (header readability) +
+   bottom fades to --neutral-50-bg so the navbar blends in     */
 .pos-gradient {
   position: absolute;
   inset: 0;
-  /* Figma gradient: dark top (0.72→0 over 40%) + dark bottom (0→0.5 at 100%) */
   background:
-    linear-gradient(180deg, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0) 40%),
-    linear-gradient(0deg, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0) 25%);
-  pointer-events: none;
+    linear-gradient(180deg, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0) 38%),
+    linear-gradient(0deg, var(--neutral-50-bg, #f6f6f7) 0%, rgba(246, 246, 247, 0) 28%);
 }
 
-/* ─── Header text ──────────────────────────────────────────────── */
+/* ─── Header — same layout as other onboarding steps ──────────── */
 .pos-header {
-  position: absolute;
-  top: 108px; /* below status bar + topbar */
-  left: 20px;
-  right: 20px;
-  z-index: 10;
+  position: relative;
+  z-index: 20;    /* above fixed pitch bg (z:5) */
+  margin-bottom: 0;
 }
 
 .pos-title {
-  font-family: var(--font-condensed, "Barlow Condensed", sans-serif);
-  font-size: 44px;
+  font-family: var(--font-condensed);
+  font-size: var(--heading-5xl);   /* 44px */
   font-weight: 700;
   font-style: italic;
   text-transform: uppercase;
   line-height: 1.1;
   letter-spacing: 0;
-  color: #ffffff;
-  margin: 0 0 2px;
+  color: var(--white);
+  margin: 0 0 4px;
 }
 
 .pos-subtitle {
-  font-family: var(--font-sans, "Barlow", sans-serif);
-  font-size: 16px;
+  font-family: var(--font-sans);
+  font-size: var(--text-base);     /* 16px */
   font-weight: 500;
   line-height: 1.4;
-  color: rgba(184, 185, 193, 0.9); /* --neutral-400 */
+  color: var(--neutral-400);       /* #b8b9c1 */
   margin: 0;
 }
 
-/* ─── Position button ──────────────────────────────────────────── */
+/* ─── Position buttons — fixed overlay at viewport coordinates ─── */
+.pos-buttons {
+  position: fixed;
+  inset: 0;
+  z-index: 15;           /* above bg (5), below topbar/navbar (100) */
+  pointer-events: none;  /* let clicks pass through the container */
+}
+
+/* ─── Individual position button ──────────────────────────────── */
 .pos-btn {
   position: absolute;
-  transform: translateX(-50%); /* centre at given left% */
+  transform: translateX(-50%);  /* centre on given left% */
+  pointer-events: auto;          /* restore click on the button itself */
+
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -76,29 +90,27 @@
   border: none;
   padding: 0;
   cursor: pointer;
-  z-index: 10;
-  /* unselected: white jersey */
-  color: var(--primary-default, #4051fd);
+
+  /* Unselected: blue jersey on white circle */
+  color: var(--primary-default);  /* jersey fill via currentColor */
   filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.4));
-  transition: transform 120ms ease, filter 120ms ease;
+  transition: transform 120ms ease;
 }
 
 .pos-btn:active {
-  transform: translateX(-50%) scale(0.92);
+  transform: translateX(-50%) scale(0.9);
 }
 
-/* ─── Position abbreviation label — Heading/xl.italic ─────────────
-   Figma: Barlow SemiBold Italic, 18px, lineHeight 24, tracking -1px
-────────────────────────────────────────────────────────────────── */
+/* ─── Position label — Heading/xl.italic ──────────────────────── */
 .pos-btn-label {
-  font-family: var(--font-sans, "Barlow", sans-serif);
-  font-size: 18px;
+  font-family: var(--font-sans);
+  font-size: var(--heading-xl);    /* 18px */
   font-weight: 600;
   font-style: italic;
   text-transform: uppercase;
   letter-spacing: -1px;
   line-height: 24px;
-  color: #ffffff;
+  color: var(--white);
   display: block;
   text-align: center;
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
@@ -109,11 +121,11 @@
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background: #ffffff;
+  background: var(--white);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 12px;
+  padding: 11px;
   box-sizing: border-box;
   transition: background 150ms ease;
 }
@@ -124,11 +136,11 @@
   display: block;
 }
 
-/* ─── Selected state: blue circle + white jersey ──────────────── */
-.pos-btn--selected .pos-btn-circle {
-  background: var(--primary-default, #4051fd);
+/* ─── Selected: blue circle + white jersey ─────────────────────── */
+.pos-btn--selected {
+  color: var(--white);  /* jersey becomes white via currentColor */
 }
 
-.pos-btn--selected {
-  color: #ffffff; /* jersey becomes white via currentColor */
+.pos-btn--selected .pos-btn-circle {
+  background: var(--primary-default);
 }

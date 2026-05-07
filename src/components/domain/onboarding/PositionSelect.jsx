@@ -2,7 +2,8 @@ import "./PositionSelect.css";
 import PitchBg from "../../../assets/images/position-bg.jpg";
 
 /* ──────────────────────────────────────────────────────────────────
-   Jersey icon — inline SVG so CSS `color` can tint it
+   Jersey icon — inline SVG, `color` prop controls fill via
+   `fill="currentColor"` so CSS can tint selected vs unselected
 ────────────────────────────────────────────────────────────────── */
 function JerseyIcon() {
   return (
@@ -24,9 +25,8 @@ function JerseyIcon() {
 }
 
 /* ──────────────────────────────────────────────────────────────────
-   Football positions — (left%, top%) derived from Figma 7242:45691
-   Coordinates are % of 393×852 full-screen frame.
-   `left` = horizontal centre of button, `top` = top edge of button.
+   Football positions: left = horizontal centre %, top = % of
+   viewport height. Derived from Figma node 7242:45691 (393×852).
 ────────────────────────────────────────────────────────────────── */
 const FOOTBALL_POSITIONS = [
   { id: "st",  label: "ST",  left: 50.0, top: 25.7 },
@@ -43,12 +43,6 @@ const FOOTBALL_POSITIONS = [
   { id: "gk",  label: "GK",  left: 50.0, top: 78.4 },
 ];
 
-/* ──────────────────────────────────────────────────────────────────
-   PositionSelect
-   Props:
-     value    : string[]  — selected position ids
-     onChange : (ids: string[]) => void
-────────────────────────────────────────────────────────────────── */
 export default function PositionSelect({ value = [], onChange }) {
   function toggle(id) {
     const current = Array.isArray(value) ? value.slice() : [];
@@ -60,38 +54,40 @@ export default function PositionSelect({ value = [], onChange }) {
 
   return (
     <div className="pos-step">
-      {/* Full-bleed pitch background */}
-      <img src={PitchBg} alt="" className="pos-bg-img" />
+      {/* ── Fixed full-viewport background (no layout impact) ───── */}
+      <div className="pos-bg" aria-hidden="true">
+        <img src={PitchBg} alt="" className="pos-bg-img" />
+        <div className="pos-gradient" />
+      </div>
 
-      {/* Dark gradient overlay — top-heavy + bottom fade */}
-      <div className="pos-gradient" aria-hidden="true" />
-
-      {/* Page header */}
+      {/* ── Header — same flow & position as every other step ────── */}
       <div className="pos-header">
         <h1 className="pos-title">Select your position</h1>
         <p className="pos-subtitle">You can choose multiple</p>
       </div>
 
-      {/* Position buttons */}
-      {FOOTBALL_POSITIONS.map((p) => {
-        const selected = Array.isArray(value) && value.includes(p.id);
-        return (
-          <button
-            key={p.id}
-            type="button"
-            className={`pos-btn${selected ? " pos-btn--selected" : ""}`}
-            style={{ left: `${p.left}%`, top: `${p.top}%` }}
-            onClick={() => toggle(p.id)}
-            aria-pressed={selected}
-            aria-label={p.label}
-          >
-            <span className="pos-btn-label">{p.label}</span>
-            <div className="pos-btn-circle">
-              <JerseyIcon />
-            </div>
-          </button>
-        );
-      })}
+      {/* ── Position buttons — fixed overlay, viewport coordinates ─ */}
+      <div className="pos-buttons" aria-label="Football positions" role="group">
+        {FOOTBALL_POSITIONS.map((p) => {
+          const selected = Array.isArray(value) && value.includes(p.id);
+          return (
+            <button
+              key={p.id}
+              type="button"
+              className={`pos-btn${selected ? " pos-btn--selected" : ""}`}
+              style={{ left: `${p.left}%`, top: `${p.top}%` }}
+              onClick={() => toggle(p.id)}
+              aria-pressed={selected}
+              aria-label={p.label}
+            >
+              <span className="pos-btn-label">{p.label}</span>
+              <div className="pos-btn-circle">
+                <JerseyIcon />
+              </div>
+            </button>
+          );
+        })}
+      </div>
     </div>
   );
 }
