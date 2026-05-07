@@ -3,7 +3,7 @@ import AthleteImage from "../../../assets/images/role-athlete.jpg";
 import ProfessionalImage from "../../../assets/images/role-professional.jpg";
 
 const ROLES = [
-  { id: "athlete", label: "Athlete", image: AthleteImage },
+  { id: "athlete",      label: "Player",       image: AthleteImage },
   { id: "professional", label: "Professional", image: ProfessionalImage },
 ];
 
@@ -24,19 +24,19 @@ function ChevronRight() {
 export default function RoleSelect({ role, onChange, onNext }) {
   function select(id) {
     onChange(id);
-    if (onNext) {
-      // brief delay so the selection highlight is visible before advancing
-      setTimeout(onNext, 200);
-    }
+    // auto-advance after a short delay so the selection highlight is visible
+    if (onNext) setTimeout(onNext, 220);
   }
 
   return (
     <div className="role-select">
-      <div className="role-header">
+      {/* Heading */}
+      <div className="role-select-header">
         <h1 className="role-header-title">Choose your role</h1>
-        <p className="role-header-subtitle">Select how you want to use athlio</p>
+        <p className="role-header-subtitle">Select how you want to use this app</p>
       </div>
 
+      {/* Two portrait cards */}
       <div className="role-cards" role="radiogroup" aria-label="Choose your role">
         {ROLES.map((r) => {
           const selected = role === r.id;
@@ -49,19 +49,19 @@ export default function RoleSelect({ role, onChange, onNext }) {
               className={`role-card${selected ? " role-card--selected" : ""}`}
               onClick={() => select(r.id)}
             >
-              {/* Background photo */}
+              {/* Photo background */}
               <img src={r.image} alt="" className="role-card-img" />
 
               {/* Dark overlay */}
               <div className="role-card-overlay" />
 
-              {/* Vertical label */}
+              {/* Vertical label — reads bottom-to-top */}
               <div className="role-card-label-wrap" aria-hidden="true">
                 <span className="role-card-label">{r.label}</span>
               </div>
 
-              {/* Chevron button in the bottom-right */}
-              <div className="role-card-chevron" aria-hidden="true">
+              {/* Chevron circle in bottom-right */}
+              <div className={`role-card-chevron${selected ? " role-card-chevron--active" : ""}`} aria-hidden="true">
                 <ChevronRight />
               </div>
             </button>

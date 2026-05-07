@@ -1,22 +1,30 @@
+/* ─── Container ────────────────────────────────────────────────── */
 .role-select {
   display: flex;
   flex-direction: column;
+  /* Fills the full content area between topbar and bottom bar */
+  min-height: calc(100dvh - 52px - 96px); /* 52px topbar, 96px bottom bar */
 }
 
-/* ─── Header ─────────────────────────────────────────────────────── */
-.role-select .role-header {
+/* ─── Heading ──────────────────────────────────────────────────── */
+.role-select-header {
   margin-bottom: 20px;
 }
 
-/* ─── Card row ───────────────────────────────────────────────────── */
+/* Inherits .role-header-title and .role-header-subtitle from auth.css / global */
+
+/* ─── Card row ─────────────────────────────────────────────────── */
 .role-cards {
   display: flex;
   gap: 10px;
-  /* Height matches Figma: 526px on a 393px screen → keep tall but cap */
-  height: clamp(380px, 70vh, 560px);
+  flex: 1; /* Grows to fill all remaining vertical space */
+  /* Minimum so cards are always tall on very small screens */
+  min-height: 420px;
+  /* Maximum so they don't grow absurdly large on tablets */
+  max-height: 640px;
 }
 
-/* ─── Individual card ────────────────────────────────────────────── */
+/* ─── Individual card ──────────────────────────────────────────── */
 .role-card {
   flex: 1;
   min-width: 0;
@@ -30,6 +38,8 @@
   transition:
     border-color 150ms ease,
     box-shadow 150ms ease;
+  /* Make the button element fill the row height */
+  align-self: stretch;
 }
 
 .role-card--selected {
@@ -37,7 +47,7 @@
   box-shadow: 0 0 0 1px var(--color-accent, #4051fd);
 }
 
-/* ─── Background image ───────────────────────────────────────────── */
+/* ─── Photo background ─────────────────────────────────────────── */
 .role-card-img {
   position: absolute;
   inset: 0;
@@ -50,7 +60,7 @@
   user-select: none;
 }
 
-/* ─── Dark overlay ───────────────────────────────────────────────── */
+/* ─── Dark overlay ─────────────────────────────────────────────── */
 .role-card-overlay {
   position: absolute;
   inset: 0;
@@ -58,20 +68,21 @@
   pointer-events: none;
 }
 
-/* ─── Vertical label wrapper ─────────────────────────────────────── */
+/* ─── Vertical label ───────────────────────────────────────────── */
+/* Wrapper spans full card height, flex-centered so label sits at midpoint */
 .role-card-label-wrap {
   position: absolute;
   top: 0;
   bottom: 0;
   right: 0;
-  width: 58px;
+  width: 60px;
   display: flex;
   align-items: center;
   justify-content: center;
   pointer-events: none;
 }
 
-/* The text itself — rotated so it reads bottom-to-top */
+/* Text rotated -90deg so it reads from bottom to top */
 .role-card-label {
   display: block;
   transform: rotate(-90deg);
@@ -84,10 +95,10 @@
   line-height: 1.05;
   color: rgba(235, 244, 255, 0.95);
   letter-spacing: -0.01em;
-  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.45);
 }
 
-/* ─── Chevron circle button ──────────────────────────────────────── */
+/* ─── Chevron circle ───────────────────────────────────────────── */
 .role-card-chevron {
   position: absolute;
   bottom: 14px;
@@ -100,10 +111,10 @@
   align-items: center;
   justify-content: center;
   pointer-events: none;
-  transition: background 150ms ease;
+  transition: background 150ms ease, border-color 150ms ease;
 }
 
-.role-card--selected .role-card-chevron {
+.role-card-chevron--active {
   background: var(--color-accent, #4051fd);
   border-color: var(--color-accent, #4051fd);
 }

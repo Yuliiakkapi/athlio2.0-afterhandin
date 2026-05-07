@@ -17,15 +17,14 @@ import Premium from "../components/domain/onboarding/Premium";
 import { getSteps } from "../utils/steps";
 import { buildProfilePayload } from "../utils/payload";
 import Textarea from "../components/inputs/TextArea";
-import ProgressBar from "../components/domain/onboarding/UI/ProgressBar";
+import OnboardingTopbar from "../components/domain/onboarding/UI/OnboardingTopbar";
 import OnboardingNavbar from "../components/domain/onboarding/UI/OnboardingNavbar";
-import Button from "../components/UI/Button";
 import "./setup-profile.css";
 
 export default function Setup() {
   const navigate = useNavigate();
 
-  const [role, setRole] = useState("athlete");
+  const [role, setRole] = useState(""); // empty until user picks on role step
   const [heightUnit, setHeightUnit] = useState("cm");
   const [weightUnit, setWeightUnit] = useState("kg");
 
@@ -169,6 +168,10 @@ export default function Setup() {
     setIdx((i) => Math.min(i + 1, steps.length - 1));
   }
   function back() {
+    if (idx === 0) {
+      navigate(-1); // go back to wherever the user came from (auth/intro)
+      return;
+    }
     setIdx((i) => Math.max(i - 1, 0));
   }
 
@@ -198,6 +201,8 @@ export default function Setup() {
   const canContinue = (() => {
     try {
       switch (stepId) {
+        case "role":
+          return Boolean(role); // disabled until user taps a card
         case "basic":
           return (
             (form.full_name || "").toString().trim() !== "" &&
@@ -205,8 +210,6 @@ export default function Setup() {
             !usernameErr &&
             !isCheckingUsername
           );
-        case "role":
-          return Boolean(role);
         case "sport":
           return Array.isArray(form.sports) && form.sports.length > 0;
         case "position":
@@ -228,26 +231,14 @@ export default function Setup() {
 
   return (
     <div className="setup-profile-page">
-      {/* Step list (Stepper) hidden per request */}
-      <div style={{ marginTop: 0 }}>
-        <ProgressBar currentStep={idx + 1} totalSteps={steps.length} />
-      </div>
+      {/* Fixed topbar: back arrow + progress bar */}
+      <OnboardingTopbar
+        onBack={back}
+        currentStep={idx + 1}
+        totalSteps={Math.max(steps.length, 1)}
+        showBack={true}
+      />
 
-      {/* Skip button (subtle, medium) aligned right under the progress bar */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "flex-end",
-          padding: "0 16px",
-        }}
-      >
-        <Button
-          size="medium"
-          type="subtle"
-          label="Skip"
-          onClick={() => (idx < steps.length - 1 ? next() : finish())}
-        />
-      </div>
       <StepContainer
         onBack={back}
         onNext={next}
@@ -456,7 +447,6 @@ export default function Setup() {
         onBack={back}
         onNext={next}
         onFinish={finish}
-        showBack={idx > 0}
         showNext={idx < steps.length - 1}
         showFinish={idx === steps.length - 1}
         canContinue={canContinue}
