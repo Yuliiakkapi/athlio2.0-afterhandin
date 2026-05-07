@@ -5,7 +5,7 @@
  */
 export function getSteps(role) {
   if (role === "athlete") {
-    return ["role", "name", "dob", "basic", "sport", "position", "style", "leg", "club", "location", "measure", "bio", "goals"];
+    return ["role", "name", "dob", "basic", "sport", "position", "style", "leg", "club", "goals", "location", "measure", "bio"];
   }
 
   if (role === "scout" || role === "professional") {

@@ -16,6 +16,7 @@ import ClubPicker from "../components/domain/onboarding/ClubPicker";
 import AvatarPicker from "../components/domain/onboarding/AvatarPicker";
 import LocationFields from "../components/domain/onboarding/LocationFields";
 import GoalsField from "../components/domain/onboarding/GoalsField";
+import GoalsSelect from "../components/domain/onboarding/GoalsSelect";
 import Bio from "../components/domain/onboarding/Bio";
 import FollowSuggestions from "../components/domain/onboarding/FollowSuggestions";
 import Premium from "../components/domain/onboarding/Premium";
@@ -435,7 +436,7 @@ export default function Setup() {
         )}
 
         {stepId === "goals" && role === "athlete" && (
-          <GoalsField value={form.goals} onChange={(v) => set({ goals: v })} />
+          <GoalsSelect value={form.goals} onChange={(v) => set({ goals: v })} />
         )}
 
         {stepId === "follow" && (role === "athlete" || role === "scout" || role === "professional") && (
@@ -508,12 +509,17 @@ export default function Setup() {
         showFinish={idx === steps.length - 1}
         canContinue={canContinue}
         dark={stepId === "position"}
-        /* Club step: secondary "I'm not in a club" skips club selection */
-        secondaryLabel={stepId === "club" ? "I'm not in a club" : null}
-        onSecondary={stepId === "club" ? () => {
-          set({ club_id: null, club_other_name: null });
-          next();
-        } : null}
+        /* Club step: "I'm not in a club" skips club selection */
+        secondaryLabel={
+          stepId === "club"  ? "I'm not in a club" :
+          stepId === "goals" ? "Skip" :
+          null
+        }
+        onSecondary={
+          stepId === "club" ? () => { set({ club_id: null, club_other_name: null }); next(); } :
+          stepId === "goals" ? () => next() :
+          null
+        }
       />
     </div>
   );
