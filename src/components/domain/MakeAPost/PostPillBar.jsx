@@ -1,7 +1,5 @@
 import Button from "../../UI/Button";
-import MatchIcon from "../../../assets/icons/stats.svg?react";
-import PictureIcon from "../../../assets/icons/image.svg?react";
-import EventIcon from "../../../assets/icons/event.svg?react";
+import { ChartBar, ImageSquare, CalendarBlank } from "@phosphor-icons/react";
 import "./PostPillBar.css";
 import { useNavigate } from "react-router";
 import { useRef } from "react";
@@ -85,7 +83,7 @@ export default function PostPillBar({ onImageSelected }) {
         size="small"
         type="gray"
         label="Match"
-        Icon={MatchIcon}
+        Icon={ChartBar}
         className="pill-button"
         onClick={handleMatchClick}
       />
@@ -93,7 +91,7 @@ export default function PostPillBar({ onImageSelected }) {
         size="small"
         type="gray"
         label="Picture"
-        Icon={PictureIcon}
+        Icon={ImageSquare}
         className="pill-button"
         onClick={handlePictureClick}
       />
@@ -101,7 +99,7 @@ export default function PostPillBar({ onImageSelected }) {
         size="small"
         type="gray"
         label="Event"
-        Icon={EventIcon}
+        Icon={CalendarBlank}
         className="pill-button"
         onClick={handleEventClick}
       />

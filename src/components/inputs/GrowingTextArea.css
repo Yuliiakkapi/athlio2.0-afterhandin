@@ -1,15 +1,15 @@
-.auto-textarea {
+﻿.auto-textarea {
   width: 100%;
   border: none;
   outline: none;
   overflow: hidden;
   background: transparent;
-  color: var(--color-text);
+  color: var(--black);
   min-height: 44px;
   font: inherit;
   margin-top: 25px;
 }
 
 .auto-textarea::placeholder {
-  color: var(--color-gray-500);
+  color: var(--neutral-50-bg0);
 }

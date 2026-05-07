@@ -1,4 +1,4 @@
-.profile-header {
+﻿.profile-header {
   display: flex;
   flex-direction: column;
   padding: 24px 16px;
@@ -30,7 +30,7 @@
 .profile-name {
   font-size: var(--text-l);
   font-weight: 500;
-  color: var(--color-text);
+  color: var(--black);
 }
 
 .profile-tags {
@@ -49,7 +49,7 @@
 .profile-bio {
   font-size: var(--text-sm);
   font-weight: 400;
-  color: var(--color-text);
+  color: var(--black);
   margin: 0;
 }
 
@@ -60,7 +60,7 @@
   flex-wrap: wrap;
   gap: 4px;
   font-size: var(--text-sm);
-  color: var(--color-gray-900);
+  color: var(--neutral-900);
   max-width: 80%;
 }
 
@@ -74,7 +74,7 @@
 
 .profile-followers strong,
 .profile-following strong {
-  color: var(--color-text);
+  color: var(--black);
   font-weight: 600;
 }
 
@@ -84,7 +84,7 @@
   align-items: center;
   gap: 4px;
   font-size: var(--text-sm);
-  color: var(--color-gray-900);
+  color: var(--neutral-900);
 }
 
 /* 3️⃣ Buttons */

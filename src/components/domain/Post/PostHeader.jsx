@@ -1,8 +1,7 @@
 import { useEffect, useState, useTransition } from "react";
 import ProfilePicture from "../../UI/ProfilePicture";
 import Avatar from "../../../assets/images/avatar.webp";
-import PlusIcon from "../../../assets/icons/plus.svg?react";
-import CheckIcon from "../../../assets/icons/check.svg?react";
+import { Check, Plus } from "@phosphor-icons/react";
 import Button from "../../UI/Button";
 import "./PostHeader.css";
 import {
@@ -128,7 +127,7 @@ export default function PostHeader({
           type={isFollowing ? "following" : "primary"}
           label={loading ? "..." : isFollowing ? "" : "Follow"}
           aria-label={isFollowing ? "Unfollow user" : "Follow user"}
-          Icon={loading ? undefined : isFollowing ? CheckIcon : PlusIcon}
+          Icon={loading ? undefined : isFollowing ? Check : Plus}
           onClick={onToggle}
           disabled={loading}
         />

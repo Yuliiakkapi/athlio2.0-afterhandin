@@ -1,4 +1,4 @@
-.profile-edit-page {
+﻿.profile-edit-page {
   padding: 16px;
 }
 
@@ -21,7 +21,7 @@
 }
 
 .profile-edit-error {
-  color: var(--color-red, #e53e3e);
+  color: var(--negative-default, #e53e3e);
   font-size: var(--text-sm, 14px);
   margin: 0;
 }

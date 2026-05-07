@@ -18,7 +18,7 @@
   text-transform: uppercase;
   line-height: 1.1;
   letter-spacing: 0;
-  color: var(--color-black, #151622);
+  color: var(--black);
   margin: 0 0 4px;
 }
 
@@ -27,7 +27,7 @@
   font-size: 16px;
   font-weight: 500;
   line-height: 1.4;
-  color: var(--color-muted, #91909b);
+  color: var(--muted);
   margin: 0;
 }
 
@@ -51,7 +51,7 @@
   width: 132px;
   height: 132px;
   border-radius: 50%;
-  background: var(--color-gray-200, #e1e1e4);
+  background: var(--neutral-200);
   border: none;
   padding: 4px;
   cursor: pointer;
@@ -82,8 +82,8 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: var(--color-accent, #4051fd);
-  border: 2.5px solid var(--color-background, #f6f6f7);
+  background: var(--primary-default);
+  border: 2.5px solid var(--neutral-50-bg);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -108,14 +108,14 @@
   font-style: normal;
   line-height: 1.1;
   letter-spacing: -0.01em;
-  color: var(--color-black, #151622);
+  color: var(--black);
   text-align: center;
-  caret-color: var(--color-black, #151622);
+  caret-color: var(--black);
   padding: 0;
 }
 
 .name-input::placeholder {
-  color: var(--color-gray-300, #cecfd4);
+  color: var(--neutral-300);
 }
 
 @media (max-width: 380px) {

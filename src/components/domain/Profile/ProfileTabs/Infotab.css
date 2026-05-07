@@ -1,9 +1,9 @@
-.profile-info-tab {
+﻿.profile-info-tab {
   display: flex;
   flex-direction: column;
   justify-content: center;
   gap: 24px; /* increased spacing for cleaner separation */
-  background-color: var(--color-gray-100);
+  background-color: var(--neutral-100);
   padding: 24px 16px;
   border-radius: 12px;
 }
@@ -30,13 +30,13 @@ main:has(.profile-info-tab) {
 .info-section-title {
   font-size: var(--text-l);
   font-weight: 400;
-  color: var(--color-text);
+  color: var(--black);
   margin-bottom: 4px;
 }
 
 .experience-empty {
   font-size: var(--text-sm);
-  color: var(--color-gray-700);
+  color: var(--neutral-700);
   text-align: center;
   padding: 8px 0;
 }

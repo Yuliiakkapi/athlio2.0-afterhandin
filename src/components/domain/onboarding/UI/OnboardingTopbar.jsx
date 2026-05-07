@@ -1,5 +1,5 @@
 import "./OnboardingTopbar.css";
-import BackIcon from "../../../../assets/icons/back.svg";
+import { ArrowLeft } from "@phosphor-icons/react";
 
 export default function OnboardingTopbar({
   onBack,
@@ -21,7 +21,7 @@ export default function OnboardingTopbar({
         aria-label="Go back"
         style={{ visibility: showBack ? "visible" : "hidden" }}
       >
-        <img src={BackIcon} alt="" className="ob-topbar-back-icon" />
+        <ArrowLeft className="ob-topbar-back-icon" aria-hidden="true" />
       </button>
 
       <div

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './SearchBarCard.css';
 import profilePlaceholder from '../../../assets/icons/profile.png';
 import defaultTeamLogo from '../../../assets/logos/main-logo.svg';
-import defaultFlag from '../../../assets/icons/verification.svg';
+import { SealCheck } from '@phosphor-icons/react';
 import { supabase } from '../../../lib/supabase';
 
 const SearchBarCard = ({
@@ -12,7 +12,7 @@ const SearchBarCard = ({
   nationality: fallbackCountry = '—',
   avatar: fallbackAvatar = profilePlaceholder,
   teamLogo: fallbackTeamLogo = defaultTeamLogo,
-  flag: fallbackFlag = defaultFlag,
+  flag: fallbackFlag = SealCheck,
   onSelect,
 }) => {
   const [state, setState] = useState({
@@ -73,6 +73,7 @@ const SearchBarCard = ({
   }, [profileId]);
 
   const { name, team, country, avatar, teamLogo, flag } = state;
+  const FlagIcon = typeof flag === 'string' ? null : flag;
 
   return (
     <button className="search-card-item" onClick={() => onSelect?.(profileId)}>
@@ -97,7 +98,12 @@ const SearchBarCard = ({
           {teamLogo && <img src={teamLogo} alt={`${team} logo`} className="team-logo" />}
           <span className="team-name">{team}</span>
 
-          {flag && <img src={flag} alt={country} className="flag" />}
+          {flag &&
+            (typeof flag === 'string' ? (
+              <img src={flag} alt={country} className="flag" />
+            ) : (
+              <FlagIcon className="flag" aria-hidden="true" />
+            ))}
           <span className="country">{country}</span>
         </div>
       </div>

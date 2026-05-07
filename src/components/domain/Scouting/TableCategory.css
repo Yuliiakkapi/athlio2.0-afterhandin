@@ -1,12 +1,12 @@
-.category-card {
+﻿.category-card {
   width: 100%;
-  border: 1px solid var(--color-gray-300, #dfe0e7);
+  border: 1px solid var(--neutral-300, #e1e1e4);
   border-radius: 12px;
   overflow: hidden;
-  background: var(--color-background, #fbfbfb);
+  background: var(--neutral-50-bg, #f6f6f7);
   font-family: "Barlow", sans-serif;
   font-size: 12px;
-  color: var(--color-text, #000215);
+  color: var(--black, #151622);
 }
 
 .category-card-header {
@@ -28,7 +28,7 @@
 }
 
 .category-row.alt {
-  background: var(--color-gray-100, #f0f0f3);
+  background: var(--neutral-100, #f6f6f7);
 }
 
 .category-label {
@@ -46,10 +46,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--color-text, #000215);
+  color: var(--black, #151622);
 }
 
 .category-value--highlight {
-  color: var(--color-accent, #4051fd);
+  color: var(--primary-default, #4051fd);
   font-weight: 600;
 }

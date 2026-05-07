@@ -1,4 +1,4 @@
-.select-container {
+﻿.select-container {
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -10,7 +10,7 @@
   position: relative;
   width: 100%;
   border-radius: 8px;
-  background: var(--Gray-100, #f0f0f3);
+  background: var(--Gray-100, #f6f6f7);
 }
 
 /* Native select */
@@ -20,7 +20,7 @@
   outline: none;
   background: transparent;
   font-size: 16px;
-  color: var(--color-gray-900);
+  color: var(--neutral-900);
   padding: 20px 44px 6px 12px;
   border-radius: 8px;
   appearance: none;
@@ -55,7 +55,7 @@
   padding: 0 4px;
   font-size: var(--text-base);
   font-weight: 500;
-  color: var(--color-gray-900);
+  color: var(--neutral-900);
   pointer-events: none;
   transition:
     top 0.2s ease,
@@ -65,7 +65,7 @@
 
 /* Focus state */
 .select-container:focus-within .select-outline {
-  border: 1.5px solid var(--color-gray-700);
+  border: 1.5px solid var(--neutral-700);
 }
 
 .select-container:focus-within .select-wrapper {
@@ -78,7 +78,7 @@
 }
 
 .select-container.filled:not(:focus-within) .select-outline {
-  border: 1.5px solid var(--color-gray-300);
+  border: 1.5px solid var(--neutral-300);
 }
 
 /* Floating label when filled or focused */
@@ -87,7 +87,7 @@
   top: 4px;
   font-size: 12px;
   font-weight: 500;
-  color: #111827;
-  background: var(--color-background);
+  color: #151622;
+  background: var(--neutral-50-bg);
   padding: 0 4px;
 }

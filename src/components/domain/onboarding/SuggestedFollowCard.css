@@ -1,12 +1,12 @@
-.suggest-follow-card {
+﻿.suggest-follow-card {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
   gap: 16px;
   padding: 12px 10px 8px; /* top 12, sides 10, bottom 8 per design */
-  background: var(--color-background); /* #fbfbfb */
-  border: 1.5px solid var(--color-gray-300); /* #dfe0e7 */
+  background: var(--neutral-50-bg); /* #f6f6f7 */
+  border: 1.5px solid var(--neutral-300); /* #e1e1e4 */
   border-radius: 8px;
   width: 110px; /* matches Figma card width */
   box-sizing: border-box;
@@ -20,7 +20,7 @@
   font-family: var(--font-sans);
   text-align: center;
   width: 90px; /* Figma text frame width */
-  color: var(--color-text);
+  color: var(--black);
   word-break: break-word;
 }
 

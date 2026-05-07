@@ -1,9 +1,9 @@
-.posts-feed {
+﻿.posts-feed {
   display: flex;
   flex-direction: column;
   gap: 12px;
   padding: 16px 8px 80px 8px;
-  background-color: var(--color-gray-100);
+  background-color: var(--neutral-100);
 }
 
 main:has(.posts-feed) {
@@ -18,5 +18,5 @@ main:has(.posts-feed) {
   justify-content: center;
   padding: 48px 24px;
   text-align: center;
-  color: var(--color-gray-700);
+  color: var(--neutral-700);
 }

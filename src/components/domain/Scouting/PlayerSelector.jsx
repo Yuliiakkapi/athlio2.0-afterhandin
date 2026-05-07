@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './PlayerSelector.css';
 import Button from '../../UI/Button';
-import PlusIcon from '../../../assets/icons/plus.svg';
+import { CaretDown, Plus } from '@phosphor-icons/react';
 import { useNavigate } from 'react-router';
 import PlayerComparisonCard from './PlayerComparisonCard';
 
@@ -62,11 +62,7 @@ const PlayerSelector = ({
           <div className="season-dropdown-wrapper" ref={dropdownRef}>
             <button className="season-selector" onClick={toggleDropdown}>
               <span className="season-text">{selectedSeason}</span>
-              <img
-                src="https://api.builder.io/api/v1/image/assets/e9cac1e18ae64186984fb4d639c633bc/9036da0af52d5c2760ad262991e1bd586471517e?placeholderIfAbsent=true"
-                alt=""
-                className="season-dropdown-icon"
-              />
+              <CaretDown size={16} className="season-dropdown-icon" aria-hidden="true" />
             </button>
             {isDropdownOpen && (
               <div className="season-dropdown-menu">
@@ -86,7 +82,7 @@ const PlayerSelector = ({
             size="small"
             type="primary"
             label="Add a new player"
-            Icon={PlusIcon}
+            Icon={Plus}
             color="white"
             onClick={() => navigate('/scouting/search')}
             disabled={!canAddMore}

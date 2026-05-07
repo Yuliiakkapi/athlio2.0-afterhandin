@@ -1,4 +1,4 @@
-/* ─── Container ────────────────────────────────────────────────── */
+﻿/* ─── Container ────────────────────────────────────────────────── */
 .role-select {
   display: flex;
   flex-direction: column;
@@ -44,8 +44,8 @@
 }
 .role-photo-card--selected {
   flex: 1.45 !important;
-  border-color: var(--color-accent, #4051fd);
-  box-shadow: 0 0 0 1px var(--color-accent, #4051fd);
+  border-color: var(--primary-default, #4051fd);
+  box-shadow: 0 0 0 1px var(--primary-default, #4051fd);
 }
 
 /* ─── Photo ────────────────────────────────────────────────────── */
@@ -158,6 +158,6 @@
 }
 
 .role-photo-card-chevron--active {
-  background: var(--color-accent, #4051fd);
-  border-color: var(--color-accent, #4051fd);
+  background: var(--primary-default, #4051fd);
+  border-color: var(--primary-default, #4051fd);
 }

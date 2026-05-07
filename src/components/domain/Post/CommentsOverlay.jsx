@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../../../lib/supabase";
 import { useUser } from "../../../context/UserContext";
-import ArrowUpIcon from "../../../assets/icons/arrow-up.svg?react";
+import { ArrowUp } from "@phosphor-icons/react";
 import "./CommentsOverlay.css";
 import IconButton from "../../UI/IconButton";
 import CommentCard from "./CommentCard";
@@ -177,7 +177,7 @@ export default function CommentsOverlay({
             disabled={submitting}
           />
           <IconButton
-            icon={ArrowUpIcon}
+            icon={ArrowUp}
             size="medium"
             type="primary"
             disabled={submitting || !text.trim()}

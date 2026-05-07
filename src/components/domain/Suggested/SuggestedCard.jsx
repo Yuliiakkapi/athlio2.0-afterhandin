@@ -2,8 +2,7 @@ import { useEffect, useState, useTransition } from "react";
 import { Link } from "react-router";
 import ProfilePicture from "../../UI/ProfilePicture";
 import Button from "../../UI/Button";
-import PlusIcon from "../../../assets/icons/plus.svg?react";
-import CheckIcon from "../../../assets/icons/check.svg?react";
+import { Check, Plus } from "@phosphor-icons/react";
 import {
   isFollowing as fetchIsFollowing,
   follow,
@@ -65,7 +64,7 @@ export default function SuggestedCard({ profile }) {
         size="small"
         type={isFollowing ? "following" : "primary"}
         label={loading ? "..." : isFollowing ? "" : "Follow"}
-        Icon={loading ? undefined : isFollowing ? CheckIcon : PlusIcon}
+        Icon={loading ? undefined : isFollowing ? Check : Plus}
         onClick={onToggle}
         disabled={loading}
       />

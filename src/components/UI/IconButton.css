@@ -1,4 +1,4 @@
-.icon-button {
+﻿.icon-button {
   border: none;
   border-radius: 50%;
   display: inline-flex;
@@ -41,44 +41,44 @@
 }
 
 .primary {
-  background-color: var(--color-accent);
+  background-color: var(--primary-default);
   color: white;
 }
 
 .primary:hover {
-  background-color: var(--color-buttons);
+  background-color: var(--primary-800);
 }
 
 .primary:disabled {
-  background-color: var(--color-gray-300);
-  color: var(--color-gray-700);
+  background-color: var(--neutral-300);
+  color: var(--neutral-700);
 }
 
 .neutral {
-  background-color: var(--color-gray-100);
-  border: 2px solid var(--color-gray-300);
-  color: var(--color-text);
+  background-color: var(--neutral-100);
+  border: 2px solid var(--neutral-300);
+  color: var(--black);
 }
 
 .neutral:hover {
-  background-color: var(--color-gray-300);
+  background-color: var(--neutral-300);
   border: none;
 }
 
 .neutral:disabled {
-  background-color: var(--color-gray-300);
-  color: var(--color-gray-700);
+  background-color: var(--neutral-300);
+  color: var(--neutral-700);
 }
 
 .subtle {
   background-color: transparent;
-  color: var(--color-text);
+  color: var(--black);
 }
 
 .subtle:hover {
-  color: var(--color-buttons);
+  color: var(--primary-800);
 }
 
 .subtle:disabled {
-  color: var(--color-gray-300);
+  color: var(--neutral-300);
 }

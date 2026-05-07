@@ -1,14 +1,14 @@
-.postIcon {
+﻿.postIcon {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--color-text);
+  color: var(--black);
   transition: all 0.2s ease;
 }
 
 .postIcon p {
   font-size: var(--text-secondary);
-  color: var(--color-text);
+  color: var(--black);
 }
 
 .icon-container {
@@ -44,12 +44,12 @@
 
 /* Active state — matches your mock */
 .postIcon.active {
-  color: var(--color-accent); /* text and SVG base color */
+  color: var(--primary-default); /* text and SVG base color */
 }
 
 .postIcon.active .aura-circle {
-  fill: var(--color-accent);
-  stroke: var(--color-accent);
+  fill: var(--primary-default);
+  stroke: var(--primary-default);
 }
 
 .postIcon.active .aura-star {
@@ -57,5 +57,5 @@
 }
 
 .postIcon.active .icon-container svg {
-  color: var(--color-accent);
+  color: var(--primary-default);
 }

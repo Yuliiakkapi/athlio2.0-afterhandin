@@ -1,15 +1,13 @@
 import { Link, useLocation, useNavigate } from "react-router";
 import { useState } from "react";
 import { useUser } from "../context/UserContext";
-import HomeIcon from "../assets/icons/home.svg";
-import HomeActive from "../assets/icons/home-active.svg";
-import ChallengesIcon from "../assets/icons/challenges.svg";
-import ChallengesActive from "../assets/icons/challenges-active.svg";
-import ComparisonIcon from "../assets/icons/comparison.svg";
-import ComparisonActive from "../assets/icons/comparison-active.svg";
-import SearchIcon from "../assets/icons/search.svg";
-import SearchActive from "../assets/icons/search-active.svg";
-import PlusIcon from "../assets/icons/plus.svg";
+import {
+  House,
+  MagnifyingGlass,
+  Plus,
+  Trophy,
+  UsersThree,
+} from "@phosphor-icons/react";
 import PostTypePicker from "./domain/MakeAPost/PostTypePicker";
 import AddPostModal from "./domain/MakeAPost/AddPostModal";
 import "./Navbar.css";
@@ -32,11 +30,10 @@ export default function Navbar() {
     return (
       <nav className="navbar">
         <Link to="/home" className={isActive("/home") ? "active" : ""}>
-          <img
-            src={isActive("/home") ? HomeActive : HomeIcon}
-            alt="Home"
-            width="24"
-            height="24"
+          <House
+            size={24}
+            weight={isActive("/home") ? "fill" : "regular"}
+            aria-label="Home"
           />
         </Link>
         <span>Loading...</span>
@@ -53,19 +50,17 @@ export default function Navbar() {
     <>
       <nav className="navbar">
         <Link to="/home" className={isActive("/home") ? "active" : ""}>
-          <img
-            src={isActive("/home") ? HomeActive : HomeIcon}
-            alt="Home"
-            width="24"
-            height="24"
+          <House
+            size={24}
+            weight={isActive("/home") ? "fill" : "regular"}
+            aria-label="Home"
           />
         </Link>
         <Link to="/search" className={isActive("/search") ? "active" : ""}>
-          <img
-            src={isActive("/search") ? SearchActive : SearchIcon}
-            alt="Home"
-            width="24"
-            height="24"
+          <MagnifyingGlass
+            size={24}
+            weight={isActive("/search") ? "fill" : "regular"}
+            aria-label="Search"
           />
         </Link>
         <button
@@ -80,18 +75,17 @@ export default function Navbar() {
             cursor: "pointer",
           }}
         >
-          <img src={PlusIcon} alt="Add Post" width="24" height="24" />
+          <Plus size={24} aria-label="Add Post" />
         </button>
         {role === "scout" ? (
           <Link
             to="/scouting"
             className={isActive("/scouting") ? "active" : ""}
           >
-            <img
-              src={isActive("/scouting") ? ComparisonActive : ComparisonIcon}
-              alt="Home"
-              width="24"
-              height="24"
+            <UsersThree
+              size={24}
+              weight={isActive("/scouting") ? "fill" : "regular"}
+              aria-label="Scouting"
             />
           </Link>
         ) : (
@@ -99,11 +93,10 @@ export default function Navbar() {
             to="/challenges"
             className={isActive("/challenges") ? "active" : ""}
           >
-            <img
-              src={isActive("/challenges") ? ChallengesActive : ChallengesIcon}
-              alt="Home"
-              width="24"
-              height="24"
+            <Trophy
+              size={24}
+              weight={isActive("/challenges") ? "fill" : "regular"}
+              aria-label="Challenges"
             />
           </Link>
         )}

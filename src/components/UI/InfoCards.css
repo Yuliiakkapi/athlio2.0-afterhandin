@@ -1,4 +1,4 @@
-/* Card Info Single Component */
+﻿/* Card Info Single Component */
 .card-info-single {
   display: flex;
   flex-direction: column;
@@ -7,7 +7,7 @@
   max-width: 363px;
   padding: 33px 40px;
   border-radius: 8px;
-  background-color: var(--color-background);
+  background-color: var(--neutral-50-bg);
   font-family: "Barlow", sans-serif;
 }
 
@@ -33,7 +33,7 @@
 }
 
 .info-label {
-  color: var(--color-gray-700);
+  color: var(--neutral-700);
   font-size: 10px;
   font-weight: 500;
 }

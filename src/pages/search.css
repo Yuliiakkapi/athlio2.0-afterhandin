@@ -1,4 +1,4 @@
-.search-page {
+﻿.search-page {
   min-height: 100vh;
   padding-top: 56px;
   padding-bottom: 120px;
@@ -37,11 +37,11 @@
   font-size: 14px;
   font-weight: 400;
   line-height: 18px;
-  color: var(--color-text, #000215);
+  color: var(--black, #151622);
 }
 
 .search-input-field::placeholder {
-  color: var(--color-gray-900, #727481);
+  color: var(--neutral-900, #7d7c86);
 }
 
 .recently-saved-title {
@@ -70,7 +70,7 @@
 .search-loading,
 .no-results {
   text-align: center;
-  color: var(--color-gray-900, #727481);
+  color: var(--neutral-900, #7d7c86);
   font-size: 14px;
   padding: 24px 16px;
 }

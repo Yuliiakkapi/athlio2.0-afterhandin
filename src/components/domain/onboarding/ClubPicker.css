@@ -1,4 +1,4 @@
-.club-list {
+﻿.club-list {
   list-style: none;
   margin: 0;
   padding: 0;
@@ -22,7 +22,7 @@
 
 .club-item-btn:hover {
   background: #f7f8ff;
-  border-color: #e6e9ff;
+  border-color: #dbe9ff;
 }
 
 .club-logo {
@@ -37,13 +37,13 @@
   width: 32px;
   height: 32px;
   flex: 0 0 32px;
-  color: var(--color-accent, #3b82f6);
+  color: var(--primary-default, #4051fd);
 }
 
 .club-logo-placeholder {
   width: 32px;
   height: 32px;
-  background: var(--color-gray-100, #f3f4f6);
+  background: var(--neutral-100, #f3f4f6);
   border-radius: 6px;
   flex: 0 0 32px;
 }
@@ -56,12 +56,12 @@
 .club-name {
   font-size: 15px;
   font-weight: 600;
-  color: var(--color-text, #0b0b0b);
+  color: var(--black, #0b0b0b);
 }
 
 .club-city {
   font-size: 13px;
-  color: var(--color-gray-600, #6b7280);
+  color: var(--neutral-600, #6b7280);
   margin-top: 2px;
 }
 
@@ -72,7 +72,7 @@
 
 .club-item-btn.selected {
   background: #ffffff;
-  border: 1.5px solid var(--color-accent, #3b82f6);
+  border: 1.5px solid var(--primary-default, #4051fd);
 }
 
 .club-item-btn.selected:hover {

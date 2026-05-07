@@ -2,7 +2,7 @@ import React from 'react';
 import './PlayerComparisonHeader.css';
 import NavigationTabs from '../../UI/NavTabs';
 import Button from '../../UI/Button';
-import ArchiveIcon from "../../../assets/icons/archive.svg?react";
+import { ArchiveBox } from "@phosphor-icons/react";
 import PlayerSelector from './PlayerSelector';
 import IconButton from '../../UI/IconButton';
 
@@ -18,7 +18,7 @@ const PlayerComparisonHeader = ({ onSave, onArchive, activeTab, onTabChange, onA
                 <IconButton
                   size="small"
                   type="neutral"
-                  icon={ArchiveIcon}
+                  icon={ArchiveBox}
                   onClick={onArchive}
                   
                 />

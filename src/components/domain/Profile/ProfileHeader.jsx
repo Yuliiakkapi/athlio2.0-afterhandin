@@ -1,15 +1,17 @@
-import { useNavigate } from "react-router-dom"; // 👈 import this
+import { useNavigate } from "react-router-dom";
 import Button from "../../UI/Button";
 import ProfilePicture from "../../UI/ProfilePicture";
 import Tag from "../../UI/Tag";
 import VerifiedBadge from "../../UI/VerifiedBadge";
 import Player from "../../../assets/images/player.jpg";
-import PlusIcon from "../../../assets/icons/plus.svg?react";
-import CheckIcon from "../../../assets/icons/check.svg?react";
-import LocationIcon from "../../../assets/icons/location.svg?react";
-import EditIcon from "../../../assets/icons/edit.svg?react";
-import VerifyIcon from "../../../assets/icons/verify.svg?react";
-import ShareIcon from "../../../assets/icons/share.svg?react";
+import {
+  Check,
+  MapPin,
+  PencilSimpleLine,
+  Plus,
+  SealCheck,
+  ShareNetwork,
+} from "@phosphor-icons/react";
 
 import "./ProfileHeader.css";
 
@@ -20,11 +22,10 @@ export default function ProfileHeader({
   toggleFollow,
   busy,
 }) {
-  const navigate = useNavigate(); // ✅ create the navigate hook
+  const navigate = useNavigate();
 
   if (!profile) return null;
 
-  const hasTags = profile.role || profile.position;
   const locationText =
     profile.city && profile.country
       ? `${profile.city}, ${profile.country}`
@@ -32,7 +33,6 @@ export default function ProfileHeader({
 
   return (
     <section className="profile-header">
-      {/* === Top row: avatar, name, and tags === */}
       <div className="profile-header-row profile-header-top">
         <ProfilePicture
           size="large"
@@ -59,7 +59,6 @@ export default function ProfileHeader({
         </div>
       </div>
 
-      {/* === Middle section: bio and stats === */}
       <div className="profile-header-row profile-info">
         {profile.bio && <p className="profile-bio">{profile.bio}</p>}
 
@@ -82,14 +81,13 @@ export default function ProfileHeader({
 
           {locationText && (
             <div className="profile-location">
-              <LocationIcon />
+              <MapPin />
               <span>{locationText}</span>
             </div>
           )}
         </div>
       </div>
 
-      {/* === Bottom section: buttons === */}
       <div className="profile-header-row profile-buttons">
         {isMe ? (
           <>
@@ -97,16 +95,11 @@ export default function ProfileHeader({
               size="medium"
               type="outline"
               label="Edit Profile"
-              Icon={EditIcon}
-              onClick={() => navigate("/profile/me/edit")} // ✅ navigate to edit page
+              Icon={PencilSimpleLine}
+              onClick={() => navigate("/profile/me/edit")}
             />
-            <Button
-              size="medium"
-              type="outline"
-              label="Verify"
-              Icon={VerifyIcon}
-            />
-            <Button size="medium" type="outline" Icon={ShareIcon} />
+            <Button size="medium" type="outline" label="Verify" Icon={SealCheck} />
+            <Button size="medium" type="outline" Icon={ShareNetwork} />
           </>
         ) : (
           <>
@@ -116,7 +109,7 @@ export default function ProfileHeader({
               label={isFollowing ? "Following" : "Follow"}
               onClick={toggleFollow}
               disabled={busy}
-              Icon={isFollowing ? CheckIcon : PlusIcon}
+              Icon={isFollowing ? Check : Plus}
             />
             <Button
               size="medium"

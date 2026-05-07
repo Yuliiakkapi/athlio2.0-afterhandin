@@ -1,6 +1,6 @@
-.post {
+﻿.post {
   display: flex;
-  background-color: var(--color-background);
+  background-color: var(--neutral-50-bg);
   padding: 8px;
   border-radius: 8px;
   flex-direction: column;
@@ -24,7 +24,7 @@
 .see-more {
   background: none;
   border: none;
-  color: var(--color-accent);
+  color: var(--primary-default);
   cursor: pointer;
   font-size: var(--text-sm);
   margin-top: 4px;

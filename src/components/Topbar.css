@@ -1,4 +1,4 @@
-.topbar {
+﻿.topbar {
   position: fixed;
   top: 0;
   right: 0;
@@ -7,7 +7,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 8px 16px;
-  background-color: var(--color-background);
+  background-color: var(--neutral-50-bg);
   z-index: 1000;
 }
 
@@ -29,13 +29,23 @@
   justify-content: center;
   width: 40px;
   height: 40px;
+  color: var(--black);
+  cursor: pointer;
+}
+
+.icon-with-badge svg,
+.topbar-menu-icon,
+.topbar-left-with-back svg {
+  width: 24px;
+  height: 24px;
+  display: block;
 }
 
 .badge {
   position: absolute;
   top: 6px;
   right: 6px;
-  background: var(--color-accent);
+  background: var(--primary-default);
   color: white;
   font-size: 8px;
   border-radius: 50%;
@@ -69,6 +79,12 @@
   display: block;
 }
 
+.topbar-close-btn svg {
+  width: 24px;
+  height: 24px;
+  display: block;
+}
+
 .topbar-close-btn:hover,
 .topbar-close-btn:focus,
 .topbar-close-btn:active {
@@ -81,7 +97,7 @@
 .placeholder {
   width: 32px;
   height: 32px;
-  background-color: var(--color-gray-500);
+  background-color: var(--neutral-50-bg0);
   border-radius: 50%;
 }
 

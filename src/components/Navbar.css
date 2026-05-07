@@ -1,4 +1,4 @@
-.navbar {
+﻿.navbar {
   position: fixed;
   left: 0;
   right: 0;
@@ -9,7 +9,7 @@
   padding: 12px 28px;
   background-color: color-mix(
     in srgb,
-    var(--color-background) 90%,
+    var(--neutral-50-bg) 90%,
     transparent
   );
   border-radius: 100px;
@@ -24,11 +24,28 @@
   text-decoration: none;
   width: 32px;
   height: 32px;
+  color: var(--neutral-700);
 }
 
 .navbar a.active {
-  background-color: var(--color-gray-100);
+  background-color: var(--neutral-100);
   border-radius: 50%;
+  color: var(--primary-default);
+}
+
+.navbar a svg,
+.navbar button svg {
+  width: 24px;
+  height: 24px;
+  display: block;
+}
+
+.navbar button {
+  color: var(--neutral-700);
+}
+
+.navbar button.active {
+  color: var(--primary-default);
 }
 
 .profile-avatar {
@@ -42,7 +59,7 @@
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: var(--color-gray-300);
+  background: var(--neutral-300);
 }
 
 .active > div {
@@ -56,7 +73,7 @@
   right: 11px;
   width: 10px;
   height: 10px;
-  background-color: var(--color-accent, #007bff);
+  background-color: var(--primary-default, #007bff);
   border-radius: 50%;
   border: 2px solid white; /* looks nice on any bg */
   opacity: 0;

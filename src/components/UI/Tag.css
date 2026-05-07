@@ -1,11 +1,11 @@
-.tag {
+﻿.tag {
   display: inline-flex;
   align-items: center;
   justify-content: center;
 
   padding: 2px 8px;
-  background-color: var(--color-gray-100);
-  color: var(--color-buttons);
+  background-color: var(--neutral-100);
+  color: var(--primary-800);
   border-radius: 100px;
 }
 

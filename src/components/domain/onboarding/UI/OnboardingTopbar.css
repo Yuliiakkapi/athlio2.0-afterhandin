@@ -75,10 +75,6 @@
   background: rgba(255, 255, 255, 0.15);
 }
 
-.ob-topbar--dark .ob-topbar-back-icon {
-  filter: brightness(0) invert(1); /* SVG becomes white */
-}
-
 .ob-topbar--dark .ob-topbar-track {
   background: rgba(255, 255, 255, 0.25);
 }

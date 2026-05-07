@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react";
+﻿import { useRef, useState, useEffect } from "react";
 import ProfilePicture from "../../UI/ProfilePicture";
 import Button from "../../UI/Button";
 
@@ -34,11 +34,11 @@ export default function AvatarPicker({ value, onChange }) {
   // Keep the picture and upload action side-by-side.
   return (
     <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
-      <div style={{ width: 80, height: 80, borderRadius: "50%", background: "var(--color-gray-50,#f5f6fa)", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
+      <div style={{ width: 80, height: 80, borderRadius: "50%", background: "var(--neutral-50-bg,#f5f6fa)", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
         {preview ? (
           <ProfilePicture imgUrl={preview} size="large" />
         ) : (
-          <div style={{ padding: 20, lineHeight: 0, display: "flex", alignItems: "center", justifyContent: "center", color: "var(--color-gray-400)" }}>
+          <div style={{ padding: 20, lineHeight: 0, display: "flex", alignItems: "center", justifyContent: "center", color: "var(--neutral-400)" }}>
             <DefaultProfileIcon />
           </div>
         )}

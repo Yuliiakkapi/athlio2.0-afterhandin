@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import './PlayerComparisonCard.css';
 import profilePlaceholder from '../../../assets/icons/profile.png';
 
@@ -30,7 +30,7 @@ const PlayerComparisonCard = ({ playerName, playerAvatar, onRemove, playerIndex,
         aria-label={`Remove ${playerName}`}
       >
         <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M9 3L3 9M3 3L9 9" stroke="#000215" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+          <path d="M9 3L3 9M3 3L9 9" stroke="#151622" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
         </svg>
       </button>
     </div>

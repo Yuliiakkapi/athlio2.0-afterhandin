@@ -1,4 +1,4 @@
-:root{
+﻿:root{
   /* adjust these vars to match Figma spacing precisely */
   --goals-gap: 12px;
   --goal-min: 160px;
@@ -28,8 +28,8 @@
   border-radius: 8px; /* Figma shows 8px */
   /* Keep consistent size; show accent outline only when selected */
   border: 1.5px solid transparent;
-  background: var(--color-background);
-  color: var(--color-text);
+  background: var(--neutral-50-bg);
+  color: var(--black);
   cursor: pointer;
   font-size: 16px; /* List Item size */
   font-weight: 500;
@@ -52,15 +52,15 @@
 .goal-card.active,
 .goal-card[aria-pressed="true"] {
   /* Selected: do NOT change background; only show accent outline */
-  background: var(--color-background);
-  border-color: var(--color-accent);
-  color: var(--color-text);
+  background: var(--neutral-50-bg);
+  border-color: var(--primary-default);
+  color: var(--black);
 }
 
 .goal-card.active .goal-radio,
 .goal-card[aria-pressed="true"] .goal-radio {
   /* Accent outline only, 1.5px, no fill */
-  border-color: var(--color-accent);
+  border-color: var(--primary-default);
   border-width: 1.5px;
   background: transparent;
 }
@@ -81,8 +81,8 @@
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  border: 2px solid var(--color-details); /* #c6cbfe stroke */
-  background: var(--color-background);
+  border: 2px solid var(--primary-200); /* #bfd6ff stroke */
+  background: var(--neutral-50-bg);
   position: relative;
   flex-shrink: 0;
   display: inline-flex;
@@ -95,12 +95,12 @@
   content: "";
   width: 12px;
   height: 12px;
-  background: var(--color-accent);
+  background: var(--primary-default);
   border-radius: 50%;
   opacity: 0;
   transition: opacity 0.15s ease;
 }
 
 .goal-card:hover .goal-radio {
-  border-color: var(--color-accent);
+  border-color: var(--primary-default);
 }

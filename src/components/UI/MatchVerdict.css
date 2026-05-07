@@ -1,22 +1,22 @@
-.verdict {
+﻿.verdict {
   border-radius: 50%;
   width: 24px;
   height: 24px;
   display: flex;
   justify-content: center;
   align-items: center;
-  color: var(--color-background);
+  color: var(--neutral-50-bg);
   font-size: var(--text-secondary);
 }
 
 .win {
-  background-color: var(--color-green);
+  background-color: var(--success-default);
 }
 
 .draw {
-  background-color: var(--color-orange);
+  background-color: var(--warning-default);
 }
 
 .lose {
-  background-color: var(--color-red);
+  background-color: var(--negative-default);
 }

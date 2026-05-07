@@ -1,4 +1,4 @@
-.premium-root {
+﻿.premium-root {
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -8,15 +8,15 @@
 .premium-title {
   font-size: var(--heading-2xl);
   font-weight: 600;
-  color: var(--color-text);
+  color: var(--black);
 }
 
 .premium-badge {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: var(--color-accent);
-  color: var(--color-background);
+  background: var(--primary-default);
+  color: var(--neutral-50-bg);
   padding: 4px 10px;
   border-radius: 8px;
   width: max-content;
@@ -29,12 +29,12 @@
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  background: var(--color-background);
+  background: var(--neutral-50-bg);
 }
 
 .premium-card {
-  background: var(--color-background);
-  border: 1px solid var(--color-gray-300);
+  background: var(--neutral-50-bg);
+  border: 1px solid var(--neutral-300);
   border-radius: 8px;
   padding: 16px;
 }
@@ -56,13 +56,13 @@
   display: inline-block;
 }
 .premium-icon-svg--accent {
-  color: var(--color-accent);
+  color: var(--primary-default);
 }
 
 .premium-card-title {
   font-size: 16px; /* List Item */
   font-weight: 500;
-  color: var(--color-text);
+  color: var(--black);
 }
 
 .premium-card-subtext {
@@ -91,10 +91,10 @@
 
 /* CTA section styles (restored) */
 .premium-cta {
-  background: var(--color-accent);
+  background: var(--primary-default);
   border-radius: 8px;
   padding: 24px 26px;
-  color: var(--color-background);
+  color: var(--neutral-50-bg);
 }
 
 .premium-cta-title {
@@ -104,7 +104,7 @@
 }
 
 .premium-cta-sub {
-  color: var(--color-gray-100);
+  color: var(--neutral-100);
   font-size: var(--text-base);
   margin-top: 4px;
   margin-bottom: 16px;
@@ -112,8 +112,8 @@
 
 .premium-cta-button .button.button--outline {
   width: 100%;
-  border-color: var(--color-gray-300);
-  color: var(--color-background);
+  border-color: var(--neutral-300);
+  color: var(--neutral-50-bg);
 }
 
 /* Deprecated CSS-drawn icons removed; all icons now use inline <img> with these sizes */
@@ -123,7 +123,7 @@
   display: inline-block;
 }
 .premium-icon-svg--accent {
-  color: var(--color-accent);
+  color: var(--primary-default);
 }
 
 /* Keep two columns even on small devices per design; only stack on very narrow screens */
