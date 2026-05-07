@@ -64,7 +64,7 @@ export default function Intro() {
         <div className="intro-actions">
           <Button
             size="medium"
-            type="outline"
+            type="secondary"
             label="Log in"
             onClick={goLogin}
           />
