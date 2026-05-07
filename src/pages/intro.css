@@ -22,25 +22,15 @@
   z-index: 0;
 }
 
-.intro-bg-layer {
-  position: absolute;
-  inset: 0;
-  background-size: cover;
-  background-position: center top;
-  background-repeat: no-repeat;
-  opacity: 0;
-  transition: opacity 220ms ease-in-out;
+.intro-bg-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
 }
 
-.intro-bg-layer.visible {
-  opacity: 1;
-}
-
-.intro-bg-layer.fade-out {
-  opacity: 0;
-}
-
-/* Dark gradient — transparent at top, near-black at ~60% down */
+/* Dark gradient — transparent at top, near-black from ~60% down */
 .intro-overlay {
   position: absolute;
   inset: 0;
@@ -53,7 +43,7 @@
   pointer-events: none;
 }
 
-/* ─── Content block (sits over gradient) ───────────────────── */
+/* ─── Content block ─────────────────────────────────────────── */
 .intro-content {
   position: relative;
   z-index: 1;
