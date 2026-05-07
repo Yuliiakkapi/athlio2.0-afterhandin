@@ -5,6 +5,7 @@ import StepContainer from "../components/wizard/StepContainer";
 import TextInput from "../components/inputs/TextInput";
 import UnitInput from "../components/inputs/UnitInput";
 import RoleSelect from "../components/domain/onboarding/RoleSelect";
+import NameAndPhoto from "../components/domain/onboarding/NameAndPhoto";
 import SportsSelect from "../components/domain/onboarding/SportSelect";
 import PositionPage from "../components/domain/onboarding/PositionPage";
 import ClubPicker from "../components/domain/onboarding/ClubPicker";
@@ -203,6 +204,8 @@ export default function Setup() {
       switch (stepId) {
         case "role":
           return Boolean(role); // disabled until user taps a card
+        case "name":
+          return (form.full_name || "").toString().trim() !== "";
         case "basic":
           return (
             (form.full_name || "").toString().trim() !== "" &&
@@ -250,48 +253,67 @@ export default function Setup() {
         showFinish={false}
       >
         {stepId === "basic" && (
-          <div>
-            <div
-              className="role-header"
-              style={{
-                display: "inline-flex",
-                flexDirection: "column",
-                gap: 8,
-              }}
-            >
-              <h1 className="role-header-title">Profile setup</h1>
-              <p className="role-header-subtitle">tell us about yourself</p>
+          <div className="basic-step">
+            <div className="basic-hero">
+              <h1 className="basic-title">Profile setup</h1>
+              <p className="basic-subtitle">Tell us a bit about yourself</p>
             </div>
-            {/* Avatar picker and input fields grouped together */}
-            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-              <AvatarPicker
-                value={form.avatar_url}
-                onChange={(v) => set({ avatar_url: v })}
-              />
 
-              <TextInput
-                label="Full name"
-                value={form.full_name}
-                onChange={(v) => set({ full_name: v })}
-              />
-              <TextInput
-                label="Username"
-                value={form.username}
-                onChange={(v) => set({ username: v })}
-              />
-              {usernameErr && (
-                <p className="text-red-600 text-sm">{usernameErr}</p>
-              )}
-              <TextInput
-                label="Age"
-                value={form.age}
-                onChange={(v) => set({ age: v })}
-              />
+            <div className="basic-content">
+              <div className="avatar-wrap">
+                <AvatarPicker
+                  value={form.avatar_url}
+                  onChange={(v) => set({ avatar_url: v })}
+                />
+              </div>
+
+              <div className="basic-fields">
+                <TextInput
+                  label="Full name"
+                  value={form.full_name}
+                  onChange={(v) => set({ full_name: v })}
+                />
+
+                <div className="username-row">
+                  <div className="username-prefix">@</div>
+                  <div className="username-field">
+                    <TextInput
+                      label="Username"
+                      value={form.username}
+                      onChange={(v) => set({ username: v })}
+                    />
+                  </div>
+                </div>
+
+                {usernameErr && <p className="username-error">{usernameErr}</p>}
+
+                <div className="small-row">
+                  <TextInput
+                    label="Age"
+                    value={form.age}
+                    onChange={(v) => set({ age: v })}
+                  />
+                  <TextInput
+                    label="Gender"
+                    value={form.gender}
+                    onChange={(v) => set({ gender: v })}
+                  />
+                </div>
+              </div>
             </div>
           </div>
         )}
 
         {stepId === "role" && <RoleSelect role={role} onChange={setRole} onNext={next} />}
+
+        {stepId === "name" && (
+          <NameAndPhoto
+            name={form.full_name}
+            avatarUrl={form.avatar_url}
+            onNameChange={(v) => set({ full_name: v })}
+            onAvatarChange={(v) => set({ avatar_url: v })}
+          />
+        )}
 
         {stepId === "sport" && (
           <div>

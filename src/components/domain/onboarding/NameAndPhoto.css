@@ -1,0 +1,126 @@
+/* ─── Container ────────────────────────────────────────────────── */
+.name-step {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* ─── Heading ──────────────────────────────────────────────────── */
+.name-step-header {
+  margin-bottom: 32px;
+}
+
+.name-step-title {
+  font-family: var(--font-condensed, "Barlow Condensed", sans-serif);
+  font-size: 44px;
+  font-weight: 700;
+  font-style: italic;
+  text-transform: uppercase;
+  line-height: 1.1;
+  letter-spacing: 0;
+  color: var(--color-black, #151622);
+  margin: 0 0 4px;
+}
+
+.name-step-subtitle {
+  font-family: var(--font-sans, "Barlow", sans-serif);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--color-muted, #91909b);
+  margin: 0;
+}
+
+/* ─── Body: avatar + input ─────────────────────────────────────── */
+.name-step-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 36px;
+}
+
+/* ─── Avatar ───────────────────────────────────────────────────── */
+.name-avatar-wrap {
+  position: relative;
+  width: 132px;
+  height: 132px;
+  flex-shrink: 0;
+}
+
+.name-avatar-circle {
+  width: 132px;
+  height: 132px;
+  border-radius: 50%;
+  background: var(--color-gray-200, #e1e1e4);
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: opacity 150ms ease;
+}
+
+.name-avatar-circle:active {
+  opacity: 0.75;
+}
+
+.name-avatar-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Blue "+" badge — bottom-right of circle */
+.name-avatar-add {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--color-accent, #4051fd);
+  border: 2.5px solid var(--color-background, #f6f6f7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  transition: opacity 150ms ease;
+}
+
+.name-avatar-add:active {
+  opacity: 0.8;
+}
+
+/* ─── Name text input ──────────────────────────────────────────── */
+.name-input {
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: var(--font-condensed, "Barlow Condensed", sans-serif);
+  font-size: 40px;
+  font-weight: 700;
+  font-style: normal;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  color: var(--color-black, #151622);
+  text-align: center;
+  caret-color: var(--color-black, #151622);
+  padding: 0;
+}
+
+.name-input::placeholder {
+  color: var(--color-gray-300, #cecfd4);
+}
+
+@media (max-width: 380px) {
+  .name-step-title { font-size: 36px; }
+  .name-input { font-size: 34px; }
+  .name-avatar-circle { width: 112px; height: 112px; }
+  .name-avatar-wrap { width: 112px; height: 112px; }
+}
