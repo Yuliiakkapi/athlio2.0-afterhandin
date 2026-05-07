@@ -1,23 +1,21 @@
 import { Route, Routes } from "react-router-dom";
 import AppShell from "./layouts/AppShell";
-import {
-  Landing,
-  Intro,
-  Auth,
-  SetupProfile,
-  AuthCallback,
-  Home,
-  ProfileMe,
-  ProfileEdit,
-  ProfileFollowing,
-  ProfileOther,
-  Notifications,
-  PostDetails,
-  AddPost,
-  Chat,
-  Scouting,
-  NotFound,
-} from "./pages";
+import Landing from "./pages/Landing";
+import Intro from "./pages/Intro";
+import Auth from "./pages/Auth";
+import SetupProfile from "./pages/SetupProfile";
+import AuthCallback from "./pages/AuthCallback";
+import Home from "./pages/Home";
+import ProfileMe from "./pages/ProfileMe";
+import ProfileEdit from "./pages/ProfileEdit";
+import ProfileFollowing from "./pages/ProfileFollowing";
+import ProfileOther from "./pages/ProfileOther";
+import Notifications from "./pages/Notifications";
+import PostDetails from "./pages/PostDetails";
+import AddPost from "./pages/AddPost";
+import Chat from "./pages/Chat";
+import Scouting from "./pages/Scouting";
+import NotFound from "./pages/NotFound";
 
 export default function App() {
   return (

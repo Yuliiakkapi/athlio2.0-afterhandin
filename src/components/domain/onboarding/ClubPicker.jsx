@@ -16,13 +16,10 @@ export default function ClubPicker({ sport, value, onChange }) {
     if (deb.current) clearTimeout(deb.current);
 
     deb.current = setTimeout(async () => {
-      // If the user hasn't typed much yet, surface a few suggested teams
-      // for the current sport to help them pick faster.
       if (!query || query.length < 2) {
         const { data, error } = await supabase
           .from("clubs")
           .select("id, name, city, country_code, logo_url")
-          .eq("sport", sport)
           .order("name", { ascending: true })
           .limit(6);
         if (!error) setResults(data || []);
@@ -32,7 +29,6 @@ export default function ClubPicker({ sport, value, onChange }) {
       const { data, error } = await supabase
         .from("clubs")
         .select("id, name, city, country_code, logo_url")
-        .eq("sport", sport)
         .ilike("name", `%${query}%`)
         .limit(15);
 
