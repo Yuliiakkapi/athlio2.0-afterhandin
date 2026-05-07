@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "../lib/supabase";
 import TextInput from "../components/inputs/TextInput";
 import Button from "../components/UI/Button";
@@ -21,53 +21,108 @@ async function signInWithGoogle(setErr) {
   if (error) setErr(error.message);
 }
 
-function formatAuthError(message) {
+function formatAuthError(err) {
+  const message = typeof err === "string" ? err : err?.message;
   if (!message) return "An error occurred";
-  if (message.toLowerCase().includes("password") && message.match(/\d+/)) {
+  const lower = message.toLowerCase();
+
+  if (err?.status === 429 || lower.includes("rate") || lower.includes("too many")) {
+    return "Too many attempts right now. Please wait a minute and try again.";
+  }
+  if (lower.includes("password") && message.match(/\d+/)) {
     return "Password must be at least 6 characters";
   }
   if (
-    message.toLowerCase().includes("missing email") ||
-    message.toLowerCase().includes("missing email or phone")
+    lower.includes("missing email") ||
+    lower.includes("missing email or phone")
   ) {
     return "Please enter your email";
   }
   return message;
 }
 
+function isAuthRateLimitError(err) {
+  const message = (typeof err === "string" ? err : err?.message || "").toLowerCase();
+  return err?.status === 429 || message.includes("rate") || message.includes("too many");
+}
+
+function getRetrySeconds(err) {
+  const message = typeof err === "string" ? err : err?.message || "";
+  const match = message.match(/(\d+)\s*(second|sec|minute|min)/i);
+  if (!match) return 60;
+  const amount = Number(match[1]);
+  if (!Number.isFinite(amount) || amount <= 0) return 60;
+  const unit = match[2].toLowerCase();
+  return unit.startsWith("min") ? amount * 60 : amount;
+}
+
 export default function Auth() {
-  const [mode, setMode] = useState("signup");
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [mode, setMode] = useState(location.state?.mode === "login" ? "login" : "signup");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [err, setErr] = useState("");
-  const navigate = useNavigate();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [cooldownLeft, setCooldownLeft] = useState(0);
+
+  useEffect(() => {
+    if (cooldownLeft <= 0) return;
+    const timer = setInterval(() => {
+      setCooldownLeft((v) => (v > 0 ? v - 1 : 0));
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [cooldownLeft]);
+
+  const signupBlocked = mode === "signup" && cooldownLeft > 0;
 
   async function submit(e) {
     e.preventDefault();
+    if (isSubmitting || signupBlocked) return;
     setErr("");
+    setIsSubmitting(true);
 
-    if (mode === "signup") {
-      const { data, error } = await supabase.auth.signUp({ email, password });
-      if (error) return setErr(formatAuthError(error.message));
+    try {
+      const cleanEmail = (email || "").trim();
+
+      if (mode === "signup") {
+        const { data, error } = await supabase.auth.signUp({
+          email: cleanEmail,
+          password,
+        });
+        if (error && isAuthRateLimitError(error)) {
+          setCooldownLeft(getRetrySeconds(error));
+        }
+        if (error) return setErr(formatAuthError(error));
+
+        const uid =
+          data?.user?.id || (await supabase.auth.getUser()).data?.user?.id;
+        if (uid) {
+          await supabase
+            .from("profiles")
+            .upsert({ id: uid }, { onConflict: "id" });
+        }
+        return navigate("/setup-profile", { replace: true });
+      }
+
+      const { data: loginData, error: loginErr } =
+        await supabase.auth.signInWithPassword({ email: cleanEmail, password });
+      if (loginErr && isAuthRateLimitError(loginErr)) {
+        setCooldownLeft(getRetrySeconds(loginErr));
+      }
+      if (loginErr) return setErr(formatAuthError(loginErr));
 
       const uid =
-        data?.user?.id || (await supabase.auth.getUser()).data?.user?.id;
+        loginData?.user?.id || (await supabase.auth.getUser()).data?.user?.id;
       if (uid) {
-        await supabase.from("profiles").upsert({ id: uid }, { onConflict: "id" });
+        await supabase
+          .from("profiles")
+          .upsert({ id: uid }, { onConflict: "id" });
       }
-      return navigate("/setup-profile", { replace: true });
+      navigate("/home", { replace: true });
+    } finally {
+      setIsSubmitting(false);
     }
-
-    const { data: loginData, error: loginErr } =
-      await supabase.auth.signInWithPassword({ email, password });
-    if (loginErr) return setErr(formatAuthError(loginErr.message));
-
-    const uid =
-      loginData?.user?.id || (await supabase.auth.getUser()).data?.user?.id;
-    if (uid) {
-      await supabase.from("profiles").upsert({ id: uid }, { onConflict: "id" });
-    }
-    navigate("/home", { replace: true });
   }
 
   return (
@@ -112,8 +167,15 @@ export default function Auth() {
           <Button
             size="big"
             type="primary"
-            label={mode === "signup" ? "Sign up" : "Log in"}
-            onClick={submit}
+            label={
+              signupBlocked
+                ? `Try again in ${cooldownLeft}s`
+                : mode === "signup"
+                  ? "Sign up"
+                  : "Log in"
+            }
+            htmlType="submit"
+            disabled={isSubmitting || signupBlocked}
           />
 
           <div className="auth-divider">

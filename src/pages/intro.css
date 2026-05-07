@@ -1,214 +1,122 @@
+/* ─── Page shell ────────────────────────────────────────────── */
 .intro-root {
+  position: relative;
   display: flex;
   flex-direction: column;
+  justify-content: flex-end;
   min-height: 100dvh;
-  background: var(--color-background);
+  overflow: hidden;
   font-family: "Barlow", sans-serif;
-  padding: 0 0 32px;
+  background: #000;
 }
 
+/* Strip default main-content padding so the image bleeds edge-to-edge */
 .main-content:has(.intro-root) {
   padding: 0;
 }
 
-.intro-hero {
-  position: relative;
-  flex: 1;
-  display: flex;
-  align-items: flex-end;
-  justify-content: flex-start;
-  padding: 0 24px 80px;
-}
-
-.intro-hero-layers {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 20px;
-  border-bottom-left-radius: 32px;
-  border-bottom-right-radius: 32px;
-  overflow: hidden;
-}
-.intro-hero-layer {
+/* ─── Background image ──────────────────────────────────────── */
+.intro-bg {
   position: absolute;
   inset: 0;
-  background-position: center;
+  z-index: 0;
+}
+
+.intro-bg-layer {
+  position: absolute;
+  inset: 0;
   background-size: cover;
+  background-position: center top;
   background-repeat: no-repeat;
-  transform: scale(1.01);
   opacity: 0;
-  transition:
-    opacity 200ms cubic-bezier(0.16, 1, 0.3, 1),
-    transform 400ms linear;
+  transition: opacity 220ms ease-in-out;
 }
-.intro-hero-layer.visible {
+
+.intro-bg-layer.visible {
   opacity: 1;
 }
-.intro-hero-layer.fade-in {
-  opacity: 1;
-}
-.intro-hero-layer.fade-out {
+
+.intro-bg-layer.fade-out {
   opacity: 0;
 }
 
+/* Dark gradient — transparent at top, near-black at ~60% down */
 .intro-overlay {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 20px;
-  border-bottom-left-radius: 32px;
-  border-bottom-right-radius: 32px;
+  inset: 0;
   background: linear-gradient(
     180deg,
-    rgba(0, 0, 0, 0) 55%,
-    rgba(0, 2, 21, 0.9) 100%
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.88) 65%,
+    rgba(0, 0, 0, 0.96) 100%
   );
   pointer-events: none;
 }
 
-.intro-heading {
+/* ─── Content block (sits over gradient) ───────────────────── */
+.intro-content {
   position: relative;
-  max-width: 480px;
-  width: min(100%, 480px);
+  z-index: 1;
   display: flex;
   flex-direction: column;
+  gap: 20px;
+  padding: 0 16px 20px;
+}
+
+/* Logo icon box */
+.intro-logo {
+  width: 53px;
+  height: 53px;
+  background: var(--color-gray-100, #f0f0f3);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.intro-logo img {
+  width: 34px;
+  height: 34px;
+  display: block;
+}
+
+/* Big condensed headline — 64px Barlow Condensed Bold Italic */
+.intro-headline {
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: 64px;
+  font-weight: 700;
+  font-style: italic;
+  line-height: 1.1;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: #fff;
+  margin: 0;
+}
+
+/* ─── Buttons ───────────────────────────────────────────────── */
+.intro-actions {
+  display: flex;
   gap: 12px;
 }
 
-.intro-logo {
-  background: var(--color-gray-100);
-  border-radius: 9.281px;
-  width: 42px;
-  height: 42px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 8px;
-}
-.intro-logo img {
-  width: 26px;
-  height: 26px;
-  display: block;
-}
-
-.intro-progress {
-  position: absolute;
-  top: 16px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  z-index: 2;
-}
-.intro-progress-item {
-  width: 34px;
-  height: 12px;
-  background: rgba(255, 255, 255, 0.45);
-  border-radius: 999px;
-  transition: all 200ms cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.15);
-}
-.intro-progress-item.is-done {
-  background: rgba(255, 255, 255, 0.75);
-}
-.intro-progress-item.is-active {
-  width: 12px;
-  background: #ffffff;
-  height: 12px;
-  border-radius: 50%;
-  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.35);
-}
-
-.intro-title {
-  font-size: 24px;
-  font-weight: 600;
-  line-height: 1.05;
-  color: #fff;
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  width: 100%;
-}
-.intro-title-block {
-  display: block;
-  line-height: 1.08;
-}
-.intro-title-em {
-  color: #fff;
-}
-
-.intro-line {
-  display: flex;
-  flex-direction: row;
-  gap: 6px;
-  align-items: baseline;
-  flex-wrap: nowrap;
-}
-
-.intro-emph {
-  position: relative;
-  display: inline-block;
-  min-height: 1.05em;
-  margin-left: 4px;
-  top: 4px;
-}
-.intro-emph-layer {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: flex-start;
-  transition:
-    opacity 200ms cubic-bezier(0.16, 1, 0.3, 1),
-    transform 200ms cubic-bezier(0.16, 1, 0.3, 1);
-  opacity: 0;
-  transform: translateY(6px);
-}
-.intro-emph-layer.visible,
-.intro-emph-layer.fade-in {
-  opacity: 1;
-  transform: translateY(0);
-}
-.intro-emph-layer.fade-out {
-  opacity: 0;
-  transform: translateY(-6px);
-}
-
-.intro-sub {
-  font-size: 14px;
-  line-height: 1.3;
-  font-weight: 400;
-  color: #fff;
-}
-
-.intro-actions {
-  margin: 24px 16px 0;
-  display: flex;
-  gap: 8px;
-  justify-content: center;
-}
-.intro-actions .button.button--primary {
-  flex: 0 0 205px;
-}
-.intro-actions .button.button--outline {
+.intro-actions > * {
   flex: 1;
+  min-width: 0;
 }
 
+/* ─── Legal text ────────────────────────────────────────────── */
 .intro-legal {
-  margin-top: 16px;
-  font-size: 10px;
+  position: relative;
+  z-index: 1;
+  padding: 12px 16px 24px;
+  font-size: 12px;
+  line-height: 1.4;
   text-align: center;
-  color: #727481;
-}
-.intro-legal span {
-  color: #000215;
-  font-weight: 500;
+  color: var(--color-gray-700, #a5a7bb);
 }
 
-@media (min-width: 600px) {
-  .intro-hero {
-    padding-bottom: 120px;
-  }
+.intro-legal span {
+  color: #a5a7bb;
+  text-decoration: underline;
+  cursor: pointer;
 }
