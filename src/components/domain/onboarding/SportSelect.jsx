@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import SelectionCard from "./UI/SelectionCard";
-import FootballIcon from "../../../assets/icons/football.svg";
-import BasketballIcon from "../../../assets/icons/basketball.svg";
+import { SoccerBall, Basketball } from "@phosphor-icons/react";
 import { supabase } from "../../../lib/supabase";
 
 export default function SportsSelect({
@@ -31,14 +30,14 @@ export default function SportsSelect({
               name: "Football",
               description:
                 "Show your talent and connect with the global football network.",
-              icon: FootballIcon,
+              icon: SoccerBall,
             },
             {
               id: "basketball",
               name: "Basketball",
               description:
                 "Play hard, get noticed, and take your game to the next level.",
-              icon: BasketballIcon,
+              icon: Basketball,
             },
           ]);
         } else {
@@ -49,13 +48,13 @@ export default function SportsSelect({
               description: r.description ||
                 "Show your talent and connect with the global network.",
               // prefer remote icon URL when present, otherwise fall back to
-              // our local SVG React components for common sports
+              // Phosphor icons for common sports
               icon: r.icon_url
                 ? r.icon_url
                 : (r.id === "football" || (r.name || "").toLowerCase() === "football")
-                ? FootballIcon
+                ? SoccerBall
                 : (r.id === "basketball" || (r.name || "").toLowerCase() === "basketball")
-                ? BasketballIcon
+                ? Basketball
                 : null,
             }))
           );
@@ -68,12 +67,14 @@ export default function SportsSelect({
               name: "Football",
               description:
                 "Show your talent and connect with the global football network. Play hard, get noticed, and take your game to the next level.",
+              icon: SoccerBall,
             },
             {
               id: "basketball",
               name: "Basketball",
               description:
                 "Show your talent and connect with the global basketball network. Play hard, get noticed, and take your game to the next level.",
+              icon: Basketball,
             },
           ]);
         }

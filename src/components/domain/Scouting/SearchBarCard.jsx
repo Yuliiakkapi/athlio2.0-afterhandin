@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './SearchBarCard.css';
-import profilePlaceholder from '../../../assets/icons/profile.png';
 import defaultTeamLogo from '../../../assets/logos/main-logo.svg';
-import { SealCheck } from '@phosphor-icons/react';
+import { SealCheck, UserCircle } from '@phosphor-icons/react';
 import { supabase } from '../../../lib/supabase';
 
 const SearchBarCard = ({
@@ -10,7 +9,7 @@ const SearchBarCard = ({
   playerName: fallbackName = 'Player',
   teamName: fallbackTeam = '—',
   nationality: fallbackCountry = '—',
-  avatar: fallbackAvatar = profilePlaceholder,
+  avatar: fallbackAvatar = null,
   teamLogo: fallbackTeamLogo = defaultTeamLogo,
   flag: fallbackFlag = SealCheck,
   onSelect,
@@ -78,16 +77,15 @@ const SearchBarCard = ({
   return (
     <button className="search-card-item" onClick={() => onSelect?.(profileId)}>
       <div className="avatar-wrap" aria-hidden>
-        <img
-          src={avatar || profilePlaceholder}
-          alt={`${name} avatar`}
-          className="avatar-img"
-          onError={(event) => {
-            if (event.currentTarget.src !== profilePlaceholder) {
-              event.currentTarget.src = profilePlaceholder;
-            }
-          }}
-        />
+        {avatar ? (
+          <img
+            src={avatar}
+            alt={`${name} avatar`}
+            className="avatar-img"
+          />
+        ) : (
+          <UserCircle className="avatar-img avatar-img-fallback" aria-hidden="true" />
+        )}
       </div>
 
       <div className="info">

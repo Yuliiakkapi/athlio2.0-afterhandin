@@ -1,8 +1,7 @@
 import React from 'react';
 import './Availability.css';
-import profilePlaceholder from '../../../assets/icons/profile.png';
+import { UserCircle } from '@phosphor-icons/react';
 
-const FALLBACK_AVATAR = profilePlaceholder;
 const FALLBACK_ICON =
   'https://api.builder.io/api/v1/image/assets/e9cac1e18ae64186984fb4d639c633bc/feca78aec91a801ddc79124b791fa68faaee5023?placeholderIfAbsent=true';
 
@@ -99,16 +98,15 @@ export default function Availability({ players = [] }) {
           <div key={player.id} className="availability-card">
             <div className="availability-header">
               <div className="availability-player-info">
-                <img
-                  className="availability-avatar"
-                  src={player.avatar || FALLBACK_AVATAR}
-                  alt={player.name}
-                  onError={(event) => {
-                    if (event.currentTarget.src !== FALLBACK_AVATAR) {
-                      event.currentTarget.src = FALLBACK_AVATAR;
-                    }
-                  }}
-                />
+                {player.avatar ? (
+                  <img
+                    className="availability-avatar"
+                    src={player.avatar}
+                    alt={player.name}
+                  />
+                ) : (
+                  <UserCircle className="availability-avatar availability-avatar-fallback" aria-hidden="true" />
+                )}
                 <div className="availability-player-name">{player.name}</div>
               </div>
             </div>
