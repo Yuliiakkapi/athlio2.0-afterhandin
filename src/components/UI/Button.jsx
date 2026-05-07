@@ -1,10 +1,17 @@
 import "./Button.css";
-//size - medium or small
-//type - primary, outline or subtle
 
+/**
+ * Button component
+ *
+ * size   — "medium" (44px) | "small" (36px) | "xsmall" (32px) | "big" (44px full-width)
+ * type   — "primary" | "outline" | "outlined" | "secondary" | "subtle" | "gray" | "following"
+ * label  — button text
+ * Icon   — React component or image URL for a leading icon
+ * disabled, htmlType, onClick — standard
+ */
 export default function Button({
-  size = "",
-  type = "",
+  size = "medium",
+  type = "primary",
   label,
   onClick,
   Icon,
