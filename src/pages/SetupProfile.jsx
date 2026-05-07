@@ -300,7 +300,7 @@ export default function Setup() {
           </div>
         )}
 
-        {stepId === "role" && <RoleSelect role={role} onChange={setRole} />}
+        {stepId === "role" && <RoleSelect role={role} onChange={setRole} onNext={next} />}
 
         {stepId === "sport" && (
           <div>
@@ -367,7 +367,7 @@ export default function Setup() {
           </div>
         )}
 
-        {stepId === "club" && (role === "athlete" || role === "scout") && (
+        {stepId === "club" && (role === "athlete" || role === "scout" || role === "professional") && (
           <ClubPicker
             sport={form.primarySport || "football"}
             value={{
@@ -390,7 +390,7 @@ export default function Setup() {
           <GoalsField value={form.goals} onChange={(v) => set({ goals: v })} />
         )}
 
-        {stepId === "follow" && (role === "athlete" || role === "scout") && (
+        {stepId === "follow" && (role === "athlete" || role === "scout" || role === "professional") && (
           <FollowSuggestions
             role={role}
             sport={form.primarySport}
@@ -407,7 +407,7 @@ export default function Setup() {
           />
         )}
 
-        {stepId === "scout" && role === "scout" && (
+        {stepId === "scout" && (role === "scout" || role === "professional") && (
           <GoalsField
             value={form.talent_preferences}
             onChange={(v) => set({ talent_preferences: v })}
