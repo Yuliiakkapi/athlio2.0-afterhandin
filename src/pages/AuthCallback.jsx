@@ -14,6 +14,11 @@ export default function AuthCallback() {
         return;
       }
 
+      // Ensure a profile row exists for this user
+      await supabase
+        .from("profiles")
+        .upsert({ id: session.user.id }, { onConflict: "id" });
+
       // Check if this user already has a profile with a username set
       const { data: profile } = await supabase
         .from("profiles")

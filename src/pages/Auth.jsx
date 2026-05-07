@@ -172,6 +172,22 @@ export default function Auth() {
         </p>
       </div>
 
+      <div className="auth-actions auth-actions--top">
+        <Button
+          size="big"
+          type="outline"
+          label="Continue with Google"
+          Icon={() => <img src={GoogleIcon} alt="Google" />}
+          onClick={() => signInWithGoogle(setErr)}
+        />
+
+        <div className="auth-divider">
+          <div className="auth-divider-line" />
+          <span className="auth-divider-text">or</span>
+          <div className="auth-divider-line" />
+        </div>
+      </div>
+
       <form onSubmit={submit}>
         <div className="auth-inputs">
           <TextInput
@@ -206,20 +222,6 @@ export default function Auth() {
             }
             htmlType="submit"
             disabled={isSubmitting || signupBlocked}
-          />
-
-          <div className="auth-divider">
-            <div className="auth-divider-line" />
-            <span className="auth-divider-text">or</span>
-            <div className="auth-divider-line" />
-          </div>
-
-          <Button
-            size="big"
-            type="outline"
-            label="Continue with Google"
-            Icon={() => <img src={GoogleIcon} alt="Google" />}
-            onClick={() => signInWithGoogle(setErr)}
           />
         </div>
       </form>
