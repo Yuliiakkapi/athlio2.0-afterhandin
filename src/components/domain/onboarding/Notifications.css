@@ -40,6 +40,7 @@
 .notif-visual {
   position: relative;
   margin: 0 -16px;
+  padding-top: 20px;
 }
 
 /* ─── Phone frame ───────────────────────────────────────────────── */
@@ -116,6 +117,18 @@
   border-radius: 50%;
   object-fit: cover;
   flex-shrink: 0;
+}
+
+.notif-card-avatar--initials {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.02em;
+  user-select: none;
 }
 
 .notif-card-body {
