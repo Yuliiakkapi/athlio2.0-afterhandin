@@ -1,10 +1,11 @@
-import { ArrowLeft, ArrowRight, ArrowsLeftRight, SoccerBall } from "@phosphor-icons/react";
+import { ArrowLeft, ArrowRight, ArrowsLeftRight } from "@phosphor-icons/react";
+import footballSvg from "../../../assets/icons/football.svg";
 import "./PreferredLeg.css";
 
 const OPTIONS = [
-  { id: "left",  label: "Left",  icon: ArrowLeft,        pos: "left"  },
-  { id: "right", label: "Right", icon: ArrowRight,       pos: "right" },
-  { id: "both",  label: "Both",  icon: ArrowsLeftRight,  pos: "both"  },
+  { id: "left",  label: "Left",  icon: ArrowLeft,       pos: "left"  },
+  { id: "right", label: "Right", icon: ArrowRight,      pos: "right" },
+  { id: "both",  label: "Both",  icon: ArrowsLeftRight, pos: "both"  },
 ];
 
 export default function PreferredLeg({ value, onChange }) {
@@ -22,7 +23,7 @@ export default function PreferredLeg({ value, onChange }) {
       <div className="leg-visual">
         {/* Football circle */}
         <div className="leg-ball" aria-hidden="true">
-          <SoccerBall size={120} weight="duotone" color="var(--neutral-600, #555)" />
+          <img src={footballSvg} alt="" className="leg-ball-img" />
         </div>
 
         {/* Left / Right / Both buttons */}
