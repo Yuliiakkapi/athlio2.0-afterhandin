@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "../lib/supabase";
-import TextInput from "../components/inputs/TextInput";
 import Button from "../components/UI/Button";
 import GoogleIcon from "../assets/logos/Google.svg";
 import MainLogoSmall from "../assets/logos/main-logo-small.svg";
+import { validateEmail } from "../utils/validate";
 import "./auth.css";
 
 const OAUTH_REDIRECT = window.location.origin + "/auth/callback";
@@ -62,6 +62,8 @@ export default function Auth() {
   const [mode, setMode] = useState(location.state?.mode === "login" ? "login" : "signup");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [agreeTerms, setAgreeTerms] = useState(true);
   const [err, setErr] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [cooldownLeft, setCooldownLeft] = useState(0);
@@ -80,11 +82,26 @@ export default function Auth() {
     e.preventDefault();
     if (isSubmitting || signupBlocked) return;
     setErr("");
+
+    const cleanEmail = (email || "").trim();
+    if (!validateEmail(cleanEmail)) {
+      setErr("Please enter a valid email address.");
+      return;
+    }
+
+    if (mode === "signup" && !agreeTerms) {
+      setErr("Please accept the Terms and Conditions and Privacy Policy.");
+      return;
+    }
+
+    if (mode === "signup" && password !== confirmPassword) {
+      setErr("Passwords do not match.");
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
-      const cleanEmail = (email || "").trim();
-
       if (mode === "signup") {
         const { data, error } = await supabase.auth.signUp({
           email: cleanEmail,
@@ -157,6 +174,7 @@ export default function Auth() {
 
   return (
     <div className="auth-page">
+      <div className="auth-shell">
       <div className="auth-logo">
         <img src={MainLogoSmall} alt="Athlio" />
       </div>
@@ -172,44 +190,67 @@ export default function Auth() {
         </p>
       </div>
 
-      <div className="auth-actions auth-actions--top">
-        <Button
-          size="big"
-          type="outline"
-          label="Continue with Google"
-          Icon={() => <img src={GoogleIcon} alt="Google" />}
-          onClick={() => signInWithGoogle(setErr)}
-        />
-
-        <div className="auth-divider">
-          <div className="auth-divider-line" />
-          <span className="auth-divider-text">or</span>
-          <div className="auth-divider-line" />
-        </div>
-      </div>
-
       <form onSubmit={submit}>
         <div className="auth-inputs">
-          <TextInput
-            label="Email"
-            placeholder="Enter your email"
-            name="email"
-            value={email}
-            onChange={setEmail}
-          />
-          <TextInput
-            label="Password"
-            placeholder="Enter your password"
-            name="password"
-            type="password"
-            value={password}
-            onChange={setPassword}
-          />
-        </div>
+          <label className="auth-field">
+            <span className="auth-sr-only">Email</span>
+            <input
+              type="email"
+              name="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Email *"
+              autoComplete="email"
+              className="auth-field-input"
+              required
+            />
+          </label>
 
-        {err && <p className="auth-error">{err}</p>}
+          <label className="auth-field">
+            <span className="auth-sr-only">Password</span>
+            <input
+              type="password"
+              name="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Password *"
+              autoComplete={mode === "signup" ? "new-password" : "current-password"}
+              className="auth-field-input"
+              required
+            />
+          </label>
 
-        <div className="auth-actions">
+          {mode === "signup" && (
+            <label className="auth-field">
+              <span className="auth-sr-only">Confirm password</span>
+              <input
+                type="password"
+                name="confirmPassword"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="Confirm password *"
+                autoComplete="new-password"
+                className="auth-field-input"
+                required
+              />
+            </label>
+          )}
+
+          {mode === "signup" && (
+            <label className="auth-terms">
+              <input
+                type="checkbox"
+                checked={agreeTerms}
+                onChange={(e) => setAgreeTerms(e.target.checked)}
+              />
+              <span>
+                I agree to the <a href="#">Terms and Conditions</a> and <a href="#">Privacy Policy</a>
+              </span>
+            </label>
+          )}
+
+          {err && <p className="auth-error">{err}</p>}
+
           <Button
             size="big"
             type="primary"
@@ -217,27 +258,44 @@ export default function Auth() {
               signupBlocked
                 ? `Try again in ${cooldownLeft}s`
                 : mode === "signup"
-                  ? "Sign up"
+                  ? "Create an account"
                   : "Log in"
             }
             htmlType="submit"
             disabled={isSubmitting || signupBlocked}
           />
         </div>
+
+        <div className="auth-social-separator" aria-hidden="true">
+          <span />
+          <p>or sign up with</p>
+          <span />
+        </div>
+
+        <div className="auth-actions">
+          <div className="auth-social-row">
+            <button type="button" className="auth-social-button" onClick={() => signInWithGoogle(setErr)} aria-label="Continue with Google">
+              <img src={GoogleIcon} alt="Google" />
+            </button>
+            <button type="button" className="auth-social-button" aria-label="Continue with Apple">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M16.365 1.43c0 1.14-.43 2.23-1.12 3.05-.75.87-1.98 1.54-3.13 1.45-.14-1.1.4-2.26 1.07-3.02.74-.83 2.03-1.46 3.18-1.48Z" fill="currentColor"/>
+                <path d="M20.32 16.63c-.68 1.58-1.01 2.28-1.89 3.62-1.23 1.88-2.96 4.22-5.09 4.24-1.88.02-2.37-1.23-4.94-1.21-2.57.01-3.12 1.23-5 .99-2.12-.28-3.76-2.34-4.99-4.22C.47 17.01-.53 12.5 1.09 9.48c1.18-2.2 3.3-3.59 5.59-3.61 1.76-.02 3.42 1.28 4.49 1.28 1.07 0 3.08-1.59 5.21-1.35.89.04 3.4.35 5 2.7-.13.08-2.99 1.74-2.96 5.13.04 4.04 3.54 5.35 3.58 5.36-.03.09-.55 1.9-1.68 3.66Z" fill="currentColor"/>
+              </svg>
+            </button>
+          </div>
+        </div>
       </form>
 
       <div className="auth-toggle">
-        <p>
-          {mode === "signup"
-            ? "Already have an account?"
-            : "Don't have an account?"}
-        </p>
+        <p>{mode === "signup" ? "Already have an account?" : "Don't have an account?"}</p>
         <Button
           type="subtle"
           size="medium"
           label={mode === "signup" ? "Log in" : "Sign up"}
           onClick={() => setMode((m) => (m === "signup" ? "login" : "signup"))}
         />
+      </div>
       </div>
     </div>
   );
