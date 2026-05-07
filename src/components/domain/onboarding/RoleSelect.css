@@ -73,13 +73,12 @@
   background: rgba(10, 12, 40, 0.45);
 }
 
-/* ─── Label — top-left corner, reads top-to-bottom ─────────────── */
+/* ─── Label — top-right corner, reads top-to-bottom ────────────── */
 .role-photo-card-label-wrap {
   position: absolute;
   top: 16px;
-  left: 16px;
+  right: 16px;
   pointer-events: none;
-  /* Clip overflowing text within the card */
   max-height: calc(100% - 80px);
   overflow: hidden;
 }

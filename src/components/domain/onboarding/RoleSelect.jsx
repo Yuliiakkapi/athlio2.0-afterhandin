@@ -34,7 +34,6 @@ function ChevronRight() {
 export default function RoleSelect({ role, onChange, onNext }) {
   function select(id) {
     onChange(id);
-    if (onNext) setTimeout(onNext, 340);
   }
 
   return (
