@@ -273,9 +273,14 @@
 
 /* Slow horizontal drift to simulate rotation of a flat image */
 @keyframes globe-drift {
-  0%   { object-position: 0%   50%; }
-  50%  { object-position: 30%  50%; }
-  100% { object-position: 0%   50%; }
+  0%   { object-position: 0%  50%; }
+  50%  { object-position: 30% 50%; }
+  100% { object-position: 0%  50%; }
+}
+
+/* When a city is pinned, stop the drift — JS takes over object-position */
+.loc-globe-img--pinned {
+  animation: globe-float 4s ease-in-out infinite !important;
 }
 
 /* Gentle vertical float */
@@ -284,18 +289,25 @@
   50%        { transform: translateY(-12px); }
 }
 
-/* Location pin that drops onto the globe when city is selected */
-.loc-pin {
+/* ── Pin anchor — positions the pin at the right lat/lon ──────────
+   JS sets transform: translateX(-50%) translateY(Ypx) via inline style.
+   The anchor floats in sync with the globe so the pin stays planted. */
+.loc-pin-anchor {
   position: absolute;
-  z-index: 3;
-  top: calc(50% - 36px);
   left: 50%;
-  transform: translateX(-50%);
+  top: 50%;
+  z-index: 3;
+  pointer-events: none;
+  animation: globe-float 4s ease-in-out infinite;
+}
+
+/* ── Pin itself — the drop animation runs on re-mount ────────────── */
+.loc-pin {
   display: flex;
   flex-direction: column;
   align-items: center;
-  animation: pin-drop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-  pointer-events: none;
+  transform: translateX(-50%);
+  animation: pin-drop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
 
 .loc-pin-dot {
@@ -304,36 +316,30 @@
   background: var(--primary-default, #4051fd);
   border: 2.5px solid #fff;
   border-radius: 50%;
-  box-shadow: 0 2px 8px rgba(64, 81, 253, 0.5);
+  box-shadow: 0 2px 10px rgba(64, 81, 253, 0.6);
 }
 
 .loc-pin-line {
   width: 2px;
   height: 18px;
-  background: linear-gradient(to bottom, var(--primary-default, #4051fd), transparent);
+  background: linear-gradient(to bottom, var(--primary-default, #4051fd), rgba(64,81,253,0.2));
 }
 
 .loc-pin-shadow {
   width: 10px;
   height: 4px;
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(0, 0, 0, 0.25);
   border-radius: 50%;
   margin-top: 2px;
   animation: pin-shadow-pulse 4s ease-in-out infinite;
 }
 
 @keyframes pin-drop {
-  from { opacity: 0; transform: translateX(-50%) translateY(-30px); }
+  from { opacity: 0; transform: translateX(-50%) translateY(-24px); }
   to   { opacity: 1; transform: translateX(-50%) translateY(0); }
 }
 
 @keyframes pin-shadow-pulse {
-  0%, 100% { transform: scaleX(1);    opacity: 0.3; }
-  50%        { transform: scaleX(0.7);  opacity: 0.15; }
-}
-
-/* Sync pin movement with globe float */
-.loc-pin {
-  animation: pin-drop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
-             globe-float 4s ease-in-out infinite;
+  0%, 100% { transform: scaleX(1);   opacity: 0.3;  }
+  50%       { transform: scaleX(0.7); opacity: 0.15; }
 }

@@ -9,14 +9,14 @@ async function searchCities(query) {
   const url = `${NOMINATIM}/search?q=${encodeURIComponent(query)}&format=json&limit=6&addressdetails=1`;
   const res  = await fetch(url, { headers: { "Accept-Language": "en" } });
   const data = await res.json();
-  // Keep only populated places with a usable city/town name
   return data
     .filter(r => r.address && (r.address.city || r.address.town || r.address.village || r.address.municipality))
     .map(r => ({
       id:      r.place_id,
       city:    r.address.city || r.address.town || r.address.village || r.address.municipality,
       country: r.address.country || "",
-      display: r.display_name,
+      lat:     parseFloat(r.lat),
+      lon:     parseFloat(r.lon),
     }))
     .filter((r, i, arr) => arr.findIndex(x => x.city === r.city && x.country === r.country) === i)
     .slice(0, 5);
@@ -30,15 +30,29 @@ async function reverseGeocode(lat, lon) {
   return {
     city:    data.address.city || data.address.town || data.address.village || data.address.municipality || "",
     country: data.address.country || "",
+    lat:     parseFloat(data.lat),
+    lon:     parseFloat(data.lon),
   };
+}
+
+// Map longitude → object-position-x so that longitude is centred in the globe
+function lonToObjX(lon) {
+  return `${((lon + 180) / 360 * 100).toFixed(2)}%`;
+}
+
+// Calculate how far (px) above/below globe centre the pin should sit for a given latitude.
+// Negative = above centre (northern hemisphere).
+function latToPinY(lat) {
+  const r = Math.min(window.innerWidth * 0.33, 150); // globe radius in px
+  return -Math.sin(lat * Math.PI / 180) * r * 0.72;
 }
 
 export default function LocationFields({ country, city, onChange }) {
   const [query,       setQuery]       = useState(city || "");
   const [suggestions, setSuggestions] = useState([]);
   const [searching,   setSearching]   = useState(false);
-  const [locating,    setLocating]    = useState(false);
   const [open,        setOpen]        = useState(false);
+  const [pinCoords,   setPinCoords]   = useState(null); // { lat, lon }
   const deb     = useRef(null);
   const inputRef = useRef(null);
 
@@ -49,11 +63,7 @@ export default function LocationFields({ country, city, onChange }) {
     if (deb.current) clearTimeout(deb.current);
     const term = query.trim();
 
-    if (term.length < 2) {
-      setSuggestions([]);
-      setOpen(false);
-      return;
-    }
+    if (term.length < 2) { setSuggestions([]); setOpen(false); return; }
 
     setSearching(true);
     deb.current = setTimeout(async () => {
@@ -67,33 +77,48 @@ export default function LocationFields({ country, city, onChange }) {
   }, [query]);
 
   function pickSuggestion(s) {
-    setQuery("");
-    setSuggestions([]);
-    setOpen(false);
+    setQuery(""); setSuggestions([]); setOpen(false);
     onChange({ city: s.city, country: s.country });
+    setPinCoords({ lat: s.lat, lon: s.lon });
   }
 
   function clearSelection() {
     onChange({ city: "", country: "" });
+    setPinCoords(null);
     setQuery("");
     setTimeout(() => inputRef.current?.focus(), 50);
   }
 
   async function useGPSLocation() {
     if (!navigator.geolocation) return;
-    setLocating(true);
     navigator.geolocation.getCurrentPosition(
       async pos => {
         try {
           const result = await reverseGeocode(pos.coords.latitude, pos.coords.longitude);
-          if (result) onChange(result);
+          if (result) {
+            onChange(result);
+            setPinCoords({ lat: result.lat, lon: result.lon });
+          }
         } catch { /* silent */ }
-        finally { setLocating(false); }
       },
-      () => setLocating(false),
+      () => {},
       { timeout: 10000 }
     );
   }
+
+  /* ── Globe positioning ──────────────────────────────────────── */
+  const globeStyle = pinCoords ? {
+    objectPosition: `${lonToObjX(pinCoords.lon)} 50%`,
+    animation:  "globe-float 4s ease-in-out infinite", // keep float, stop drift
+    transition: "object-position 1.4s cubic-bezier(0.4, 0, 0.2, 1)",
+  } : undefined;
+
+  // Pin anchor: top:50% left:50% on .loc-visual = globe centre
+  // translateY moves it to the right latitude; -32px raises it so the
+  // shadow (bottom of pin) sits at that point rather than the dot.
+  const pinAnchorStyle = pinCoords ? {
+    transform: `translateX(-50%) translateY(${latToPinY(pinCoords.lat) - 32}px)`,
+  } : {};
 
   return (
     <div className="loc-step">
@@ -137,17 +162,11 @@ export default function LocationFields({ country, city, onChange }) {
             )}
           </div>
 
-          {/* Suggestions dropdown */}
           {open && (
             <div className="loc-suggestions">
               {searching && <p className="loc-searching">Searching…</p>}
               {suggestions.map(s => (
-                <button
-                  key={s.id}
-                  className="loc-suggestion-item"
-                  onClick={() => pickSuggestion(s)}
-                  type="button"
-                >
+                <button key={s.id} className="loc-suggestion-item" onClick={() => pickSuggestion(s)} type="button">
                   <MapPin size={16} weight="fill" className="loc-suggestion-pin" />
                   <div className="loc-suggestion-text">
                     <span className="loc-suggestion-city">{s.city}</span>
@@ -162,25 +181,29 @@ export default function LocationFields({ country, city, onChange }) {
 
       {/* ── Globe visual ─────────────────────────────────────────── */}
       <div className="loc-visual" aria-hidden="true">
-        {/* Atmospheric glow */}
         <div className="loc-glow" />
-
-        {/* Pulsing radar rings (3 staggered) */}
         <div className="loc-ring" />
         <div className="loc-ring" />
         <div className="loc-ring" />
 
-        {/* Earth globe */}
         <div className="loc-globe-wrap">
-          <img src={earthImg} alt="Earth" className="loc-globe-img" />
+          <img
+            src={earthImg}
+            alt="Earth"
+            className={`loc-globe-img${pinCoords ? " loc-globe-img--pinned" : ""}`}
+            style={globeStyle}
+          />
         </div>
 
-        {/* Location pin — shown when a city is selected */}
-        {hasSelection && (
-          <div className="loc-pin">
-            <div className="loc-pin-dot" />
-            <div className="loc-pin-line" />
-            <div className="loc-pin-shadow" />
+        {/* Pin anchored to correct lat/lon position on the globe */}
+        {hasSelection && pinCoords && (
+          <div className="loc-pin-anchor" style={pinAnchorStyle}>
+            {/* key forces re-mount → re-runs the drop animation on new city */}
+            <div className="loc-pin" key={`${pinCoords.lat.toFixed(2)}-${pinCoords.lon.toFixed(2)}`}>
+              <div className="loc-pin-dot" />
+              <div className="loc-pin-line" />
+              <div className="loc-pin-shadow" />
+            </div>
           </div>
         )}
       </div>
