@@ -27,7 +27,7 @@ function formatAuthError(err) {
   const lower = message.toLowerCase();
 
   if (err?.status === 429 || lower.includes("rate") || lower.includes("too many")) {
-    return "Too many attempts right now. Please wait a minute and try again.";
+    return "Email rate limit reached. If you already signed up, switch to Log in or use Google sign-in.";
   }
   if (lower.includes("password") && message.match(/\d+/)) {
     return "Password must be at least 6 characters";
@@ -90,19 +90,49 @@ export default function Auth() {
           email: cleanEmail,
           password,
         });
+
         if (error && isAuthRateLimitError(error)) {
+          // Supabase free tier rate-limits email signups (3/hour).
+          // The account may have been created in a previous attempt — try
+          // logging in silently so the user can continue without waiting.
+          const { data: fallbackLogin, error: fallbackErr } =
+            await supabase.auth.signInWithPassword({
+              email: cleanEmail,
+              password,
+            });
+
+          if (!fallbackErr && fallbackLogin?.user?.id) {
+            await supabase
+              .from("profiles")
+              .upsert({ id: fallbackLogin.user.id }, { onConflict: "id" });
+            return navigate("/setup-profile", { replace: true });
+          }
+
+          // Fallback login failed — account doesn't exist yet or needs
+          // confirmation. Switch to login mode and tell the user clearly.
+          setMode("login");
           setCooldownLeft(getRetrySeconds(error));
+          return setErr(
+            "Signup limit reached. If you already signed up, log in below. Otherwise wait a moment and try again."
+          );
         }
+
         if (error) return setErr(formatAuthError(error));
 
+        // signUp succeeded — user may be auto-confirmed (if email confirm is
+        // disabled in Supabase) or session will be null until confirmed.
         const uid =
           data?.user?.id || (await supabase.auth.getUser()).data?.user?.id;
         if (uid) {
           await supabase
             .from("profiles")
             .upsert({ id: uid }, { onConflict: "id" });
+          return navigate("/setup-profile", { replace: true });
         }
-        return navigate("/setup-profile", { replace: true });
+
+        // No session yet — email confirmation is enabled in Supabase.
+        // Tell the user to check their inbox.
+        return setErr("Check your email to confirm your account, then log in.");
       }
 
       const { data: loginData, error: loginErr } =
