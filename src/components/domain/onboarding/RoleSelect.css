@@ -2,8 +2,6 @@
 .role-select {
   display: flex;
   flex-direction: column;
-  /* Fills the full content area between topbar and bottom bar */
-  min-height: calc(100dvh - 52px - 96px); /* 52px topbar, 96px bottom bar */
 }
 
 /* ─── Heading ──────────────────────────────────────────────────── */
@@ -17,11 +15,18 @@
 .role-cards {
   display: flex;
   gap: 10px;
-  flex: 1; /* Grows to fill all remaining vertical space */
-  /* Minimum so cards are always tall on very small screens */
-  min-height: 420px;
-  /* Maximum so they don't grow absurdly large on tablets */
-  max-height: 640px;
+  /*
+   * StepContainer wraps children in two plain <div>s with no height set,
+   * which breaks flex:1 inheritance. Use a direct calc() instead:
+   *   100dvh
+   *   - 68px  setup-profile-page padding-top (52px topbar + 16px gap)
+   *   - 92px  heading area (h1 ~48px + subtitle ~24px + margin 20px)
+   *   - 108px setup-profile-page padding-bottom (bottom navbar clearance)
+   *   = ~268px → rounded to 275px for a small breathing gap
+   */
+  height: calc(100dvh - 275px);
+  min-height: 380px; /* never collapses on very short screens */
+  max-height: 640px; /* prevents absurd height on tablets */
 }
 
 /* ─── Individual card ──────────────────────────────────────────── */
@@ -35,11 +40,11 @@
   border: 3px solid transparent;
   padding: 0;
   background: #0d1020;
+  /* Fill the full height of the .role-cards row */
+  height: 100%;
   transition:
     border-color 150ms ease,
     box-shadow 150ms ease;
-  /* Make the button element fill the row height */
-  align-self: stretch;
 }
 
 .role-card--selected {
