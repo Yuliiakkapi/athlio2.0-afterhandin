@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import stadiumImg from "../../../assets/images/stadium-notif.jpg";
 import avatar1 from "../../../assets/images/notif-avatar-1.jpg";
 import avatar2 from "../../../assets/images/notif-avatar-2.jpg";
@@ -47,11 +47,8 @@ const NOTIFICATIONS = [
   },
 ];
 
-// Group into pairs [[0,1],[2,3],[4,5]]
-const PAIRS = Array.from({ length: NOTIFICATIONS.length / 2 }, (_, i) => [
-  NOTIFICATIONS[i * 2],
-  NOTIFICATIONS[i * 2 + 1],
-]);
+// Card height (78) + gap (8) = one slot
+const SLOT = 86;
 
 function NotifAvatar({ card }) {
   if (card.avatar) {
@@ -80,24 +77,33 @@ function NotifCard({ card, secondary }) {
 }
 
 export default function Notifications() {
-  const [pairIdx, setPairIdx] = useState(0);
-  const [visible, setVisible] = useState(true);
+  // Stable id counter and notif index pointer — no stale closures
+  const nextId    = useRef(3);
+  const nextNotif = useRef(3); // initial cards use indices 0-2
+
+  const [cards, setCards] = useState(() =>
+    NOTIFICATIONS.slice(0, 3).map((notif, i) => ({ id: i, notif }))
+  );
+  const [animating, setAnimating] = useState(false);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      // Fade out
-      setVisible(false);
+    const timer = setInterval(() => {
+      setAnimating(true);
+
       setTimeout(() => {
-        // Swap cards then fade in
-        setPairIdx((i) => (i + 1) % PAIRS.length);
-        setVisible(true);
-      }, 500);
-    }, 3200);
+        setCards(prev => [
+          ...prev.slice(1),
+          {
+            id: nextId.current++,
+            notif: NOTIFICATIONS[nextNotif.current++ % NOTIFICATIONS.length],
+          },
+        ]);
+        setAnimating(false);
+      }, 900);
+    }, 3800);
 
-    return () => clearInterval(interval);
+    return () => clearInterval(timer);
   }, []);
-
-  const [top, bottom] = PAIRS[pairIdx];
 
   return (
     <div className="notif-step">
@@ -116,15 +122,23 @@ export default function Notifications() {
           <div className="notif-timer" aria-hidden="true">6:07</div>
         </div>
 
-        {/* Animated notification cards */}
-        <div
-          className="notif-cards"
-          style={{ opacity: visible ? 1 : 0, transition: "opacity 0.5s ease" }}
-          aria-live="polite"
-          aria-atomic="true"
-        >
-          <NotifCard card={top} secondary={false} />
-          <NotifCard card={bottom} secondary={true} />
+        {/* Ticker cards — overflow hidden clips exiting top card and incoming bottom card */}
+        <div className="notif-cards" aria-live="polite" aria-atomic="true">
+          {cards.map((item, i) => (
+            <div
+              key={item.id}
+              className="notif-card-slot"
+              style={{
+                transform: `translateY(${(animating ? i - 1 : i) * SLOT}px)`,
+                opacity: i === 0 && animating ? 0 : 1,
+                transition: animating
+                  ? "transform 0.9s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.7s ease"
+                  : "none",
+              }}
+            >
+              <NotifCard card={item.notif} secondary={i === 1} />
+            </div>
+          ))}
         </div>
 
         {/* Bottom fade */}
