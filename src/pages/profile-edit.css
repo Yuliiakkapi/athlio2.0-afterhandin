@@ -1,0 +1,41 @@
+.profile-edit-page {
+  padding: 16px;
+}
+
+.profile-edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.profile-edit-avatar {
+  display: flex;
+  justify-content: center;
+  padding: 8px 0 4px;
+}
+
+.profile-edit-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.profile-edit-error {
+  color: var(--color-red, #e53e3e);
+  font-size: var(--text-sm, 14px);
+  margin: 0;
+}
+
+.profile-edit-success {
+  color: #38a169;
+  font-size: var(--text-sm, 14px);
+  font-weight: 600;
+  margin: 0;
+}
+
+.profile-edit-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-bottom: 40px;
+}
