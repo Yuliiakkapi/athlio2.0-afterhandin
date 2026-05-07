@@ -118,10 +118,19 @@ export default function SetupProfile() {
   }
 
   return (
-    <div className="page onboarding">
+    <div style={{
+      minHeight: "100vh",
+      display: "flex",
+      flexDirection: "column",
+      padding: "0 16px 100px",
+      maxWidth: 520,
+      margin: "0 auto",
+      width: "100%",
+      boxSizing: "border-box",
+    }}>
       <ProgressBar currentStep={stepIndex + 1} totalSteps={steps.length} />
 
-      <div className="onboarding-step-content">
+      <div style={{ flex: 1 }}>
         {currentStep === "role" && (
           <RoleSelect role={form.role} onChange={(v) => patch({ role: v })} />
         )}
