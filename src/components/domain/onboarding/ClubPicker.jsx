@@ -13,24 +13,33 @@ const FEATURED_LEAGUES = [
   "French Ligue 1",
 ];
 
+function isSoccer(t) {
+  const s = (t.strSport || "").toLowerCase();
+  return s === "soccer" || s === "football";
+}
+
 async function fetchFeatured() {
-  const all = [];
-  for (const league of FEATURED_LEAGUES) {
-    try {
-      const res = await fetch(`${BASE}/search_all_teams.php?l=${encodeURIComponent(league)}&s=Soccer`);
-      const json = await res.json();
-      const teams = (json.teams || []).filter(t => t.strSport === "Soccer");
-      // Take 3-4 teams per league so total ≈ 20
-      all.push(...teams.slice(0, 4));
-    } catch { /* skip league on network error */ }
-  }
-  return all;
+  const perLeague = await Promise.all(
+    FEATURED_LEAGUES.map(league =>
+      fetch(`${BASE}/search_all_teams.php?l=${encodeURIComponent(league)}`)
+        .then(r => r.json())
+        .then(json => (json.teams || []).filter(isSoccer).slice(0, 4))
+        .catch(() => [])
+    )
+  );
+  // Flatten and deduplicate
+  const seen = new Set();
+  return perLeague.flat().filter(t => {
+    if (seen.has(t.idTeam)) return false;
+    seen.add(t.idTeam);
+    return true;
+  });
 }
 
 async function searchTeams(query) {
   const res = await fetch(`${BASE}/searchteams.php?t=${encodeURIComponent(query)}`);
   const json = await res.json();
-  return (json.teams || []).filter(t => t.strSport === "Soccer").slice(0, 20);
+  return (json.teams || []).filter(isSoccer).slice(0, 20);
 }
 
 export default function ClubPicker({ value, onChange }) {
