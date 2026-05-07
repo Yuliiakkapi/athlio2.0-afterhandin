@@ -17,13 +17,13 @@ export default function ClubPicker({ sport, value, onChange }) {
 
     deb.current = setTimeout(async () => {
       const term = query.trim();
-      const q = supabase
+      let q = supabase
         .from("clubs")
         .select("id, name, city, country, logo_url, league")
-        .limit(term.length >= 2 ? 15 : 8)
-        .order("name", { ascending: true });
+        .order("name", { ascending: true })
+        .limit(term.length >= 2 ? 15 : 8);
 
-      if (term.length >= 2) q.ilike("name", `%${term}%`);
+      if (term.length >= 2) q = q.ilike("name", `%${term}%`);
 
       const { data, error } = await q;
       if (!error) setResults(data || []);
