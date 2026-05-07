@@ -1,4 +1,4 @@
-/* ─── Onboarding bottom bar ───────────────────────────────────────
+﻿/* ─── Onboarding bottom bar ───────────────────────────────────────
    Fixed at the bottom, full viewport width.
    Contains only the full-width Continue / Finish button.
 ──────────────────────────────────────────────────────────────────── */
@@ -17,7 +17,7 @@
   display: block;
   width: 100%;
   height: 44px;
-  background: var(--color-accent, #4051fd);
+  background: var(--primary-default, #4051fd);
   color: #ffffff;
   border: none;
   border-radius: 8px;
@@ -37,4 +37,9 @@
 .onboarding-continue-btn:disabled {
   opacity: 0.3;
   cursor: not-allowed;
+}
+
+/* ─── Dark variant (position step, etc.) ─────────────────────── */
+.onboarding-navbar--dark {
+  background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.65) 40%);
 }

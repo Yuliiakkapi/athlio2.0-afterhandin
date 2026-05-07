@@ -1,4 +1,4 @@
-/* ─── Onboarding Topbar ───────────────────────────────────────────
+﻿/* ─── Onboarding Topbar ───────────────────────────────────────────
    Replaces the old ProgressBar + Skip button combo inside SetupProfile.
    Fixed at the top of the screen, full viewport width.
    Layout: [← back btn]  [progress bar fills rest]
@@ -14,7 +14,7 @@
   align-items: center;
   gap: 12px;
   padding: 0 16px;
-  background: var(--color-background, #f6f6f7);
+  background: var(--neutral-50-bg, #f6f6f7);
 }
 
 /* ─── Back button ─────────────────────────────────────────────── */
@@ -28,12 +28,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--color-text, #151622);
+  color: var(--black, #151622);
   transition: background 120ms ease;
 }
 
 .ob-topbar-back-btn:hover {
-  background: var(--color-gray-100, #f0f0f3);
+  background: var(--neutral-100, #f6f6f7);
 }
 
 .ob-topbar-back-icon {
@@ -50,14 +50,39 @@
 .ob-topbar-track {
   width: 100%;
   height: 8px;
-  background: var(--color-gray-300, #dfe0e7);
+  background: var(--neutral-300, #e1e1e4);
   border-radius: 8px;
   overflow: hidden;
 }
 
 .ob-topbar-fill {
   height: 100%;
-  background: var(--color-accent, #4051fd);
+  background: var(--primary-default, #4051fd);
   border-radius: 8px;
   transition: width 250ms ease;
+}
+
+/* ─── Dark variant (used on dark-background steps e.g. position) ── */
+.ob-topbar--dark {
+  background: transparent;
+}
+
+.ob-topbar--dark .ob-topbar-back-btn {
+  color: #ffffff;
+}
+
+.ob-topbar--dark .ob-topbar-back-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.ob-topbar--dark .ob-topbar-back-icon {
+  filter: brightness(0) invert(1); /* SVG becomes white */
+}
+
+.ob-topbar--dark .ob-topbar-track {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.ob-topbar--dark .ob-topbar-fill {
+  background: rgba(255, 255, 255, 0.9);
 }

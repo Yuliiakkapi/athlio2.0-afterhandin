@@ -1,0 +1,134 @@
+/* ──────────────────────────────────────────────────────────────────
+   PositionSelect — full-screen football pitch with position buttons.
+   Escapes SetupProfile's 68px/16px/108px padding via negative margins.
+────────────────────────────────────────────────────────────────── */
+.pos-step {
+  /* Break out of SetupProfile padding */
+  margin: -68px -16px -108px;
+  min-height: 100dvh;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ─── Background image ─────────────────────────────────────────── */
+.pos-bg-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ─── Gradient overlay — dark top + dark bottom ────────────────── */
+.pos-gradient {
+  position: absolute;
+  inset: 0;
+  /* Figma gradient: dark top (0.72→0 over 40%) + dark bottom (0→0.5 at 100%) */
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0) 40%),
+    linear-gradient(0deg, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0) 25%);
+  pointer-events: none;
+}
+
+/* ─── Header text ──────────────────────────────────────────────── */
+.pos-header {
+  position: absolute;
+  top: 108px; /* below status bar + topbar */
+  left: 20px;
+  right: 20px;
+  z-index: 10;
+}
+
+.pos-title {
+  font-family: var(--font-condensed, "Barlow Condensed", sans-serif);
+  font-size: 44px;
+  font-weight: 700;
+  font-style: italic;
+  text-transform: uppercase;
+  line-height: 1.1;
+  letter-spacing: 0;
+  color: #ffffff;
+  margin: 0 0 2px;
+}
+
+.pos-subtitle {
+  font-family: var(--font-sans, "Barlow", sans-serif);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: rgba(184, 185, 193, 0.9); /* --neutral-400 */
+  margin: 0;
+}
+
+/* ─── Position button ──────────────────────────────────────────── */
+.pos-btn {
+  position: absolute;
+  transform: translateX(-50%); /* centre at given left% */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  z-index: 10;
+  /* unselected: white jersey */
+  color: var(--primary-default, #4051fd);
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.4));
+  transition: transform 120ms ease, filter 120ms ease;
+}
+
+.pos-btn:active {
+  transform: translateX(-50%) scale(0.92);
+}
+
+/* ─── Position abbreviation label ────────────────────────────────
+   White text above the circle, Barlow SemiBold Italic 18px
+────────────────────────────────────────────────────────────────── */
+.pos-btn-label {
+  font-family: var(--font-condensed, "Barlow Condensed", sans-serif);
+  font-size: 18px;
+  font-weight: 600;
+  font-style: italic;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  line-height: 1;
+  color: #ffffff;
+  display: block;
+  text-align: center;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+}
+
+/* ─── Jersey circle ────────────────────────────────────────────── */
+.pos-btn-circle {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  box-sizing: border-box;
+  transition: background 150ms ease;
+}
+
+.pos-btn-jersey {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* ─── Selected state: blue circle + white jersey ──────────────── */
+.pos-btn--selected .pos-btn-circle {
+  background: var(--primary-default, #4051fd);
+}
+
+.pos-btn--selected {
+  color: #ffffff; /* jersey becomes white via currentColor */
+}

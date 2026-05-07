@@ -6,6 +6,7 @@ export default function OnboardingNavbar({
   showNext = true,
   showFinish = false,
   canContinue = true,
+  dark = false,
   // legacy props (ignored — back is now in OnboardingTopbar)
   onBack: _onBack,
   showBack: _showBack,
@@ -17,7 +18,7 @@ export default function OnboardingNavbar({
   }
 
   return (
-    <div className="onboarding-navbar">
+    <div className={`onboarding-navbar${dark ? " onboarding-navbar--dark" : ""}`}>
       <button
         type="button"
         className={`onboarding-continue-btn${canContinue ? "" : " onboarding-continue-btn--disabled"}`}

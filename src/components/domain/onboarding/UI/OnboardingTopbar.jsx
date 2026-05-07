@@ -6,13 +6,14 @@ export default function OnboardingTopbar({
   currentStep = 1,
   totalSteps = 1,
   showBack = true,
+  dark = false,
 }) {
   const total = Math.max(1, totalSteps);
   const step = Math.min(Math.max(currentStep, 0), total);
   const percent = Math.round((step / total) * 100);
 
   return (
-    <div className="ob-topbar">
+    <div className={`ob-topbar${dark ? " ob-topbar--dark" : ""}`}>
       <button
         type="button"
         className="ob-topbar-back-btn"

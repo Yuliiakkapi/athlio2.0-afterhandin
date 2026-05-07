@@ -6,6 +6,8 @@ import TextInput from "../components/inputs/TextInput";
 import UnitInput from "../components/inputs/UnitInput";
 import RoleSelect from "../components/domain/onboarding/RoleSelect";
 import NameAndPhoto from "../components/domain/onboarding/NameAndPhoto";
+import DateOfBirth from "../components/domain/onboarding/DateOfBirth";
+import PositionSelect from "../components/domain/onboarding/PositionSelect";
 import SportsSelect from "../components/domain/onboarding/SportSelect";
 import PositionPage from "../components/domain/onboarding/PositionPage";
 import ClubPicker from "../components/domain/onboarding/ClubPicker";
@@ -46,6 +48,7 @@ export default function Setup() {
     country: "",
     region: "",
     city: "",
+    dob: "",
     goals: "",
     talent_preferences: "",
     org_name: "",
@@ -206,6 +209,8 @@ export default function Setup() {
           return Boolean(role); // disabled until user taps a card
         case "name":
           return (form.full_name || "").toString().trim() !== "";
+        case "dob":
+          return true; // pre-selected by default
         case "basic":
           return (
             (form.full_name || "").toString().trim() !== "" &&
@@ -240,6 +245,7 @@ export default function Setup() {
         currentStep={idx + 1}
         totalSteps={Math.max(steps.length, 1)}
         showBack={true}
+        dark={stepId === "position"}
       />
 
       <StepContainer
@@ -315,6 +321,13 @@ export default function Setup() {
           />
         )}
 
+        {stepId === "dob" && (
+          <DateOfBirth
+            value={form.dob}
+            onChange={(v) => set({ dob: v })}
+          />
+        )}
+
         {stepId === "sport" && (
           <div>
             <SportsSelect
@@ -329,8 +342,7 @@ export default function Setup() {
         )}
 
         {stepId === "position" && role === "athlete" && (
-          <PositionPage
-            sport={form.primarySport}
+          <PositionSelect
             value={form.position}
             onChange={(v) => set({ position: v })}
           />
@@ -472,6 +484,7 @@ export default function Setup() {
         showNext={idx < steps.length - 1}
         showFinish={idx === steps.length - 1}
         canContinue={canContinue}
+        dark={stepId === "position"}
       />
     </div>
   );
