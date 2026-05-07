@@ -1,160 +1,159 @@
 import { useEffect, useRef, useState } from "react";
 import { supabase } from "../../../lib/supabase.js";
-import TextInput from "../../inputs/TextInput";
+import { MagnifyingGlass, Plus, X } from "@phosphor-icons/react";
 import "./ClubPicker.css";
-import FootballIcon from "../../../assets/icons/football.svg";
-import BasketballIcon from "../../../assets/icons/basketball.svg";
-import SearchBar from "../../UI/SearchBar";
 
 export default function ClubPicker({ sport, value, onChange }) {
-  const [query, setQuery] = useState("");
-  const [results, setResults] = useState([]);
-  const [useOther, setUseOther] = useState(Boolean(value?.club_other_name));
-  const deb = useRef();
+  const [query, setQuery]           = useState("");
+  const [results, setResults]       = useState([]);
+  const [showManual, setShowManual] = useState(false);
+  const [manualName, setManualName] = useState(value?.club_other_name || "");
+  const inputRef = useRef(null);
+  const deb      = useRef(null);
 
+  /* ── Fetch clubs (debounced) ──────────────────────────────────── */
   useEffect(() => {
     if (deb.current) clearTimeout(deb.current);
 
     deb.current = setTimeout(async () => {
-      if (!query || query.length < 2) {
-        const { data, error } = await supabase
-          .from("clubs")
-          .select("id, name, city, country, logo_url")
-          .order("name", { ascending: true })
-          .limit(6);
-        if (!error) setResults(data || []);
-        return;
-      }
-
-      const { data, error } = await supabase
+      const term = query.trim();
+      const q = supabase
         .from("clubs")
-        .select("id, name, city, country, logo_url")
-        .ilike("name", `%${query}%`)
-        .limit(15);
+        .select("id, name, city, country, logo_url, league")
+        .limit(term.length >= 2 ? 15 : 8)
+        .order("name", { ascending: true });
 
+      if (term.length >= 2) q.ilike("name", `%${term}%`);
+
+      const { data, error } = await q;
       if (!error) setResults(data || []);
     }, 250);
   }, [query, sport]);
 
+  /* ── Helpers ──────────────────────────────────────────────────── */
   function pickClub(id) {
-    setUseOther(false);
+    setShowManual(false);
     onChange({ club_id: id, club_other_name: null });
   }
 
-  function chooseOther() {
-    setUseOther(true);
-    onChange({ club_id: null, club_other_name: "" });
-  }
-
-  async function addNewClub(name) {
-    const clean = (name || "").trim();
+  async function commitManual() {
+    const clean = manualName.trim();
     if (!clean) return;
 
+    // Try to insert into clubs table; fall back to club_other_name if it fails
     const { data, error } = await supabase
       .from("clubs")
       .insert([{ name: clean, sport }])
       .select("id")
-      .single();
+      .maybeSingle();
 
-    if (!error && data) {
+    if (!error && data?.id) {
       onChange({ club_id: data.id, club_other_name: null });
-      setUseOther(false);
+    } else {
+      onChange({ club_id: null, club_other_name: clean });
     }
+    setShowManual(false);
   }
 
-  // --- Render ---
+  const isListLabel = query.trim().length >= 2 ? "Search results" : "Recommended clubs";
+
   return (
-    <div>
-      <div
-        className="role-header"
-        style={{ display: "inline-flex", flexDirection: "column", gap: 8 }}
-      >
-        <h1 className="role-header-title">Add the team you play for</h1>
-        <p className="role-header-subtitle">
-          This will help you post match results and stats
-        </p>
+    <div className="team-step">
+      {/* ── Header ─────────────────────────────────────────────── */}
+      <div className="team-header">
+        <h1 className="team-title">Your Team</h1>
+        <p className="team-subtitle">Which team are you currently playing for?</p>
       </div>
 
-      {/* Use the visual SearchBar; when clicked show a real input for typing */}
-      <div style={{ maxWidth: 520 }}>
-        <SearchBar
+      {/* ── Search bar ─────────────────────────────────────────── */}
+      <div className="team-search-wrap">
+        <MagnifyingGlass size={18} weight="regular" className="team-search-icon" aria-hidden="true" />
+        <input
+          ref={inputRef}
+          type="text"
+          className="team-search-input"
+          placeholder="Search for your club..."
           value={query}
-          onChange={(v) => {
-            setUseOther(false);
-            setQuery(v);
-          }}
-          placeholder="Search club"
-          onClear={() => setQuery("")}
+          onChange={(e) => { setQuery(e.target.value); setShowManual(false); }}
+          autoComplete="off"
         />
+        {query.length > 0 && (
+          <button
+            type="button"
+            className="team-search-clear"
+            onClick={() => { setQuery(""); inputRef.current?.focus(); }}
+            aria-label="Clear search"
+          >
+            <X size={16} weight="bold" />
+          </button>
+        )}
+      </div>
 
-        <ul className="club-list" style={{ marginTop: 8 }}>
-          {query && query.trim().length > 0 && (
-            <li key="use-typed">
+      {/* ── Manual entry form ──────────────────────────────────── */}
+      {showManual && (
+        <div className="team-manual-wrap">
+          <input
+            type="text"
+            className="team-manual-input"
+            placeholder="Enter your team name"
+            value={manualName}
+            onChange={(e) => {
+              setManualName(e.target.value);
+              onChange({ club_id: null, club_other_name: e.target.value });
+            }}
+            autoFocus
+          />
+        </div>
+      )}
+
+      {/* ── Club list ──────────────────────────────────────────── */}
+      <div className="team-list-wrap">
+        <p className="team-list-label">{isListLabel}</p>
+
+        <div className="team-list">
+          {results.map((club) => {
+            const selected = value?.club_id === club.id;
+            const sub = club.league || club.city || club.country || "";
+            return (
               <button
+                key={club.id}
                 type="button"
-                className="club-item-btn club-item-use"
-                onClick={() => addNewClub(query)}
-                aria-label={`Use ${query} instead`}
+                className={`team-club-btn${selected ? " team-club-btn--selected" : ""}`}
+                onClick={() => pickClub(club.id)}
               >
-                {/* sport-specific icon inside placeholder area */}
-                {sport === "football" ? (
-                  <FootballIcon className="club-logo-svg" aria-hidden />
-                ) : sport === "basketball" ? (
-                  <BasketballIcon className="club-logo-svg" aria-hidden />
+                {club.logo_url ? (
+                  <img
+                    src={club.logo_url}
+                    alt={`${club.name} logo`}
+                    className="team-club-logo"
+                  />
                 ) : (
-                  <div className="club-logo-placeholder" aria-hidden />
+                  <div className="team-club-logo-placeholder" aria-hidden="true" />
                 )}
-                <div className="club-meta">
-                  <div className="club-name">Use "{query}" instead</div>
+                <div className="team-club-meta">
+                  <span className="team-club-name">{club.name}</span>
+                  {sub ? <span className="team-club-sub">{sub}</span> : null}
                 </div>
               </button>
-            </li>
-          )}
-
-          {results.map((c) => {
-            const selected = value?.club_id === c.id;
-            return (
-              <li key={c.id}>
-                <button
-                  type="button"
-                  className={`club-item-btn${selected ? " selected" : ""}`}
-                  onClick={() => pickClub(c.id)}
-                >
-                  {c.logo_url ? (
-                    <img
-                      src={c.logo_url}
-                      alt={`${c.name} logo`}
-                      className="club-logo"
-                    />
-                  ) : (
-                    <img src={FootballIcon} alt="" className="club-logo-svg" aria-hidden="true" />
-                  )}
-
-                  <div className="club-meta">
-                    <div className="club-name">{c.name}</div>
-                    {c.city ? <div className="club-city">{c.city}</div> : null}
-                  </div>
-                </button>
-              </li>
             );
           })}
-        </ul>
 
-        {useOther && (
-          <div>
-            <TextInput
-              placeholder="Enter club name"
-              value={value?.club_other_name || ""}
-              onChange={(v) => onChange({ club_id: null, club_other_name: v })}
-            />
-            <button
-              type="button"
-              onClick={() => addNewClub(value?.club_other_name)}
-            >
-              Add new club
-            </button>
-          </div>
-        )}
+          {results.length === 0 && query.trim().length >= 2 && (
+            <p className="team-empty">No clubs found for "{query}"</p>
+          )}
+
+          {/* Add manually */}
+          <button
+            type="button"
+            className="team-add-btn"
+            onClick={() => { setShowManual(true); setQuery(""); }}
+          >
+            <div className="team-add-icon" aria-hidden="true">
+              <Plus size={20} weight="regular" />
+            </div>
+            <span className="team-add-label">Add your team manually</span>
+          </button>
+        </div>
       </div>
     </div>
   );

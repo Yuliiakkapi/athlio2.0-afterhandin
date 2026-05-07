@@ -87,7 +87,8 @@ export default function ScoutingSearch() {
   function pick(id) {
     saveRecent(id);
     setRecents(loadRecents());
-    navigate(`/scouting?add=${encodeURIComponent(id)}`);
+    // Navigate to the player's public profile page
+    navigate(`/profile/${encodeURIComponent(id)}`);
   }
 
   const displayList =

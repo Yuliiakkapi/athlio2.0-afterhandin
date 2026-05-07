@@ -7,6 +7,9 @@ export default function OnboardingNavbar({
   showFinish = false,
   canContinue = true,
   dark = false,
+  // Optional secondary (ghost) button — e.g. "I'm not in a club"
+  secondaryLabel = null,
+  onSecondary = null,
   // legacy props (ignored — back is now in OnboardingTopbar)
   onBack: _onBack,
   showBack: _showBack,
@@ -17,11 +20,32 @@ export default function OnboardingNavbar({
     if (typeof onNext === "function") return onNext();
   }
 
+  const hasSplit = Boolean(secondaryLabel && onSecondary);
+
   return (
-    <div className={`onboarding-navbar${dark ? " onboarding-navbar--dark" : ""}`}>
+    <div className={[
+      "onboarding-navbar",
+      dark      ? "onboarding-navbar--dark"  : "",
+      hasSplit  ? "onboarding-navbar--split" : "",
+    ].filter(Boolean).join(" ")}>
+
+      {hasSplit && (
+        <button
+          type="button"
+          className="onboarding-secondary-btn"
+          onClick={onSecondary}
+        >
+          {secondaryLabel}
+        </button>
+      )}
+
       <button
         type="button"
-        className={`onboarding-continue-btn${canContinue ? "" : " onboarding-continue-btn--disabled"}`}
+        className={[
+          "onboarding-continue-btn",
+          !canContinue ? "onboarding-continue-btn--disabled" : "",
+          hasSplit     ? "onboarding-continue-btn--half"     : "",
+        ].filter(Boolean).join(" ")}
         onClick={handleContinue}
         disabled={!canContinue}
         aria-disabled={!canContinue}

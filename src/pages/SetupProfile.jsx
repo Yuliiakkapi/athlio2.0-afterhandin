@@ -508,6 +508,12 @@ export default function Setup() {
         showFinish={idx === steps.length - 1}
         canContinue={canContinue}
         dark={stepId === "position"}
+        /* Club step: secondary "I'm not in a club" skips club selection */
+        secondaryLabel={stepId === "club" ? "I'm not in a club" : null}
+        onSecondary={stepId === "club" ? () => {
+          set({ club_id: null, club_other_name: null });
+          next();
+        } : null}
       />
     </div>
   );

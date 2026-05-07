@@ -38,6 +38,8 @@ export default function App() {
         <Route path="add-post" element={<AddPost />} />
         <Route path="chat" element={<Chat />} />
         <Route path="scouting" element={<Scouting />} />
+        {/* /search is the same page — Navbar links here */}
+        <Route path="search" element={<Scouting />} />
 
         <Route path="*" element={<NotFound />} />
       </Route>

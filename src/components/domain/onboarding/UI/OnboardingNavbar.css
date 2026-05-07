@@ -43,3 +43,36 @@
 .onboarding-navbar--dark {
   background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.65) 40%);
 }
+
+/* ─── Split layout: secondary text button + primary side-by-side ─ */
+.onboarding-navbar--split {
+  display: flex;
+  gap: 8px;
+}
+
+/* Ghost / text secondary button */
+.onboarding-secondary-btn {
+  flex: 1 0 0;
+  height: 44px;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+
+  font-family: var(--font-sans, "Barlow", sans-serif);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--primary-default, #4051fd);
+  line-height: 1;
+  border-radius: 8px;
+  transition: opacity 150ms ease;
+}
+
+.onboarding-secondary-btn:hover {
+  opacity: 0.75;
+}
+
+/* When split, the primary Continue button takes equal width */
+.onboarding-continue-btn--half {
+  flex: 1 0 0;
+}
