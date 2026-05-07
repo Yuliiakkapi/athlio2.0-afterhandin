@@ -4,40 +4,36 @@ import "./ClubPicker.css";
 
 const BASE = "https://www.thesportsdb.com/api/v1/json/3";
 
-// Featured leagues shown when no query is entered
-const FEATURED_LEAGUES = [
-  "English Premier League",
-  "Spanish La Liga",
-  "German Bundesliga",
-  "Italian Serie A",
-  "French Ligue 1",
-];
+// 4 seed clubs shown before the user types anything
+const FEATURED_SEEDS = ["Real Madrid", "FC Barcelona", "Manchester City", "Bayern Munich"];
 
 function isSoccer(t) {
   const s = (t.strSport || "").toLowerCase();
-  return s === "soccer" || s === "football";
+  // Accept Soccer, Football, or no sport set (some clubs omit it)
+  return !s || s === "soccer" || s === "football";
+}
+
+async function fetchOneSeed(name) {
+  const res  = await fetch(`${BASE}/searchteams.php?t=${encodeURIComponent(name)}`);
+  const json = await res.json();
+  const teams = (json.teams || []).filter(isSoccer);
+  // Prefer an exact name match, fall back to first result
+  return (
+    teams.find(t => t.strTeam.toLowerCase() === name.toLowerCase()) ||
+    teams[0] ||
+    null
+  );
 }
 
 async function fetchFeatured() {
-  const perLeague = await Promise.all(
-    FEATURED_LEAGUES.map(league =>
-      fetch(`${BASE}/search_all_teams.php?l=${encodeURIComponent(league)}`)
-        .then(r => r.json())
-        .then(json => (json.teams || []).filter(isSoccer).slice(0, 4))
-        .catch(() => [])
-    )
-  );
-  // Flatten and deduplicate
-  const seen = new Set();
-  return perLeague.flat().filter(t => {
-    if (seen.has(t.idTeam)) return false;
-    seen.add(t.idTeam);
-    return true;
-  });
+  const results = await Promise.all(FEATURED_SEEDS.map(name =>
+    fetchOneSeed(name).catch(() => null)
+  ));
+  return results.filter(Boolean);
 }
 
 async function searchTeams(query) {
-  const res = await fetch(`${BASE}/searchteams.php?t=${encodeURIComponent(query)}`);
+  const res  = await fetch(`${BASE}/searchteams.php?t=${encodeURIComponent(query)}`);
   const json = await res.json();
   return (json.teams || []).filter(isSoccer).slice(0, 20);
 }
