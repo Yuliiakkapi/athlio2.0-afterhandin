@@ -484,7 +484,6 @@ export default function Setup() {
         showNext={idx < steps.length - 1}
         showFinish={idx === steps.length - 1}
         canContinue={canContinue}
-        dark={stepId === "position"}
       />
     </div>
   );

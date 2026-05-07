@@ -5,7 +5,7 @@
 .pos-step {
   /* Break out of SetupProfile padding */
   margin: -68px -16px -108px;
-  min-height: 100dvh;
+  height: 100dvh; /* explicit height so absolute children have something to fill */
   position: relative;
   overflow: hidden;
 }
@@ -87,17 +87,17 @@
   transform: translateX(-50%) scale(0.92);
 }
 
-/* ─── Position abbreviation label ────────────────────────────────
-   White text above the circle, Barlow SemiBold Italic 18px
+/* ─── Position abbreviation label — Heading/xl.italic ─────────────
+   Figma: Barlow SemiBold Italic, 18px, lineHeight 24, tracking -1px
 ────────────────────────────────────────────────────────────────── */
 .pos-btn-label {
-  font-family: var(--font-condensed, "Barlow Condensed", sans-serif);
+  font-family: var(--font-sans, "Barlow", sans-serif);
   font-size: 18px;
   font-weight: 600;
   font-style: italic;
   text-transform: uppercase;
-  letter-spacing: -0.01em;
-  line-height: 1;
+  letter-spacing: -1px;
+  line-height: 24px;
   color: #ffffff;
   display: block;
   text-align: center;
