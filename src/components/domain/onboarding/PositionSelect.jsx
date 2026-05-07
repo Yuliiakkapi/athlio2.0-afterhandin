@@ -1,5 +1,5 @@
 import "./PositionSelect.css";
-import PitchBg from "../../../assets/images/position-bg.jpg";
+import PitchBg from "../../../assets/images/position-bg.png";
 
 /* ──────────────────────────────────────────────────────────────────
    Jersey icon — inline SVG, `color` prop controls fill via
