@@ -9,6 +9,7 @@ import NameAndPhoto from "../components/domain/onboarding/NameAndPhoto";
 import DateOfBirth from "../components/domain/onboarding/DateOfBirth";
 import PositionSelect from "../components/domain/onboarding/PositionSelect";
 import PlayingStyle from "../components/domain/onboarding/PlayingStyle";
+import PreferredLeg from "../components/domain/onboarding/PreferredLeg";
 import SportsSelect from "../components/domain/onboarding/SportSelect";
 import PositionPage from "../components/domain/onboarding/PositionPage";
 import ClubPicker from "../components/domain/onboarding/ClubPicker";
@@ -52,6 +53,7 @@ export default function Setup() {
     dob: "",
     goals: "",
     playingStyle: "",
+    preferredLeg: "",
     talent_preferences: "",
     org_name: "",
     org_founded_year: "",
@@ -226,6 +228,8 @@ export default function Setup() {
           return true; // position is optional
         case "style":
           return true; // first style is pre-selected
+        case "leg":
+          return Boolean(form.preferredLeg);
         case "club":
           return (
             Boolean(form.club_id) ||
@@ -357,6 +361,13 @@ export default function Setup() {
             value={form.playingStyle}
             onChange={(v) => set({ playingStyle: v })}
             positions={form.position}
+          />
+        )}
+
+        {stepId === "leg" && role === "athlete" && (
+          <PreferredLeg
+            value={form.preferredLeg}
+            onChange={(v) => set({ preferredLeg: v })}
           />
         )}
 

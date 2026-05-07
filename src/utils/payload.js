@@ -25,6 +25,7 @@ export function buildProfilePayload({ role, form, heightUnit, weightUnit }) {
     city: form.city || null,
     goals: form.goals || null,
     playing_style: form.playingStyle || null,
+    preferred_leg: form.preferredLeg || null,
     talent_preferences: form.talent_preferences || null,
   };
 
