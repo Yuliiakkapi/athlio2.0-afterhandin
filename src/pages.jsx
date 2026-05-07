@@ -2,6 +2,10 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { useUser } from "./context/UserContext";
 import { useState } from "react";
 
+// Import real onboarding pages
+export { default as Intro } from "./pages/Intro";
+export { default as SetupProfile } from "./pages/SetupProfile";
+
 // ============================================================================
 // LANDING - Entry point, checks auth state
 // ============================================================================
@@ -40,72 +44,47 @@ export function Landing() {
 }
 
 // ============================================================================
-// INTRO - Onboarding intro screen
-// ============================================================================
-export function Intro() {
-  const navigate = useNavigate();
-
-  const handleStart = () => {
-    localStorage.setItem("introSeen", "true");
-    navigate("/auth");
-  };
-
-  return (
-    <div className="page">
-      <div className="page-card">
-        <h1>Welcome to Athlio</h1>
-        <p>
-          Learn how to track your athletic journey and connect with
-          opportunities.
-        </p>
-        <button onClick={handleStart} className="button">
-          Continue
-        </button>
-      </div>
-    </div>
-  );
-}
-
-// ============================================================================
 // AUTH - Login / Signup
 // ============================================================================
 export function Auth() {
-  const [mode, setMode] = useState("signup"); // 'signup' or 'login'
+  const [mode, setMode] = useState("signup");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [err, setErr] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     setErr("");
-
-    try {
-      // TODO: Connect to your actual auth backend (Supabase, Firebase, etc)
-      // Example:
-      // if (mode === 'signup') {
-      //   await supabase.auth.signUp({ email, password })
-      //   navigate('/setup-profile')
-      // } else {
-      //   await supabase.auth.signInWithPassword({ email, password })
-      //   navigate('/home')
-      // }
-
-      // For now, just navigate (placeholder)
-      if (mode === "signup") {
-        navigate("/setup-profile");
-      } else {
-        navigate("/home");
-      }
-    } catch (error) {
-      setErr(error.message || "An error occurred");
+    
+    if (!email || !password) {
+      setErr("Please fill in all fields");
+      return;
     }
+
+    setIsLoading(true);
+    
+    // Simulate auth delay
+    setTimeout(() => {
+      try {
+        if (mode === "signup") {
+          // Set temporary onboarding flag for SetupProfile
+          sessionStorage.setItem("athlio_onboarding", "true");
+          navigate("/setup-profile", { replace: false });
+        } else {
+          navigate("/home", { replace: false });
+        }
+      } catch (error) {
+        setErr(error.message || "An error occurred");
+        setIsLoading(false);
+      }
+    }, 300);
   };
 
   return (
     <div className="page">
-      <form
-        onSubmit={handleSubmit}
+      <div
         className="page-card"
         style={{ maxWidth: "500px" }}
       >
@@ -122,7 +101,7 @@ export function Auth() {
             placeholder="you@example.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            required
+            disabled={isLoading}
             style={{
               width: "100%",
               padding: "0.75rem",
@@ -131,6 +110,7 @@ export function Auth() {
               background: "rgba(0,0,0,0.2)",
               color: "white",
               fontFamily: "inherit",
+              opacity: isLoading ? 0.6 : 1,
             }}
           />
         </div>
@@ -144,7 +124,7 @@ export function Auth() {
             placeholder="••••••••"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            required
+            disabled={isLoading}
             style={{
               width: "100%",
               padding: "0.75rem",
@@ -153,12 +133,18 @@ export function Auth() {
               background: "rgba(0,0,0,0.2)",
               color: "white",
               fontFamily: "inherit",
+              opacity: isLoading ? 0.6 : 1,
             }}
           />
         </div>
 
-        <button type="submit" className="button" style={{ width: "100%" }}>
-          {mode === "signup" ? "Create Account" : "Sign In"}
+        <button 
+          onClick={handleSubmit}
+          disabled={isLoading}
+          className="button" 
+          style={{ width: "100%", opacity: isLoading ? 0.6 : 1 }}
+        >
+          {isLoading ? "Loading..." : (mode === "signup" ? "Create Account" : "Sign In")}
         </button>
 
         <p
@@ -168,72 +154,21 @@ export function Auth() {
           <button
             type="button"
             onClick={() => setMode(mode === "signup" ? "login" : "signup")}
+            disabled={isLoading}
             style={{
               background: "none",
               border: "none",
               color: "#5e7bff",
-              cursor: "pointer",
+              cursor: isLoading ? "not-allowed" : "pointer",
               textDecoration: "underline",
               font: "inherit",
+              opacity: isLoading ? 0.6 : 1,
             }}
           >
             {mode === "signup" ? "Sign In" : "Sign Up"}
           </button>
         </p>
-      </form>
-    </div>
-  );
-}
-
-// ============================================================================
-// SETUP PROFILE - Complete profile during onboarding
-// ============================================================================
-export function SetupProfile() {
-  const navigate = useNavigate();
-  const [fullName, setFullName] = useState("");
-
-  const handleComplete = async (e) => {
-    e.preventDefault();
-    // TODO: Save profile to backend
-    navigate("/home");
-  };
-
-  return (
-    <div className="page">
-      <form
-        onSubmit={handleComplete}
-        className="page-card"
-        style={{ maxWidth: "500px" }}
-      >
-        <h1>Set Up Your Profile</h1>
-        <p>Tell us about yourself so scouts can find you.</p>
-
-        <div style={{ marginBottom: "1.5rem" }}>
-          <label style={{ display: "block", marginBottom: "0.5rem" }}>
-            Full Name
-          </label>
-          <input
-            type="text"
-            placeholder="Your full name"
-            value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
-            required
-            style={{
-              width: "100%",
-              padding: "0.75rem",
-              border: "1px solid rgba(255,255,255,0.2)",
-              borderRadius: "8px",
-              background: "rgba(0,0,0,0.2)",
-              color: "white",
-              fontFamily: "inherit",
-            }}
-          />
-        </div>
-
-        <button type="submit" className="button" style={{ width: "100%" }}>
-          Complete Setup
-        </button>
-      </form>
+      </div>
     </div>
   );
 }
@@ -310,7 +245,6 @@ export function ProfileEdit() {
 
   const handleSave = (e) => {
     e.preventDefault();
-    // TODO: Save changes to backend
     navigate("/profile/me");
   };
 
@@ -410,7 +344,6 @@ export function AddPost() {
 
   const handlePublish = (e) => {
     e.preventDefault();
-    // TODO: Publish post
     navigate("/home");
   };
 

@@ -32,7 +32,7 @@
   color: var(--color-text);
   cursor: pointer;
   font-size: 16px; /* List Item size */
-  font-weight: 500; /* Geist Medium */
+  font-weight: 500;
   line-height: 1.2;
   transition: background 0.12s ease, box-shadow 0.12s ease;
   text-align: left;

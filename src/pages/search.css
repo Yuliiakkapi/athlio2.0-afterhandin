@@ -1,0 +1,86 @@
+.search-page {
+  min-height: 100vh;
+  padding-top: 56px;
+  padding-bottom: 120px;
+}
+
+.search-header {
+  backdrop-filter: blur(4px);
+  padding: 16px;
+  margin-bottom: 24px;
+}
+
+.search-input-wrapper {
+  position: relative;
+  width: 100%;
+  background: rgba(223, 224, 231, 1);
+  border-radius: 100px;
+  display: flex;
+  align-items: center;
+  padding: 10px 16px;
+  gap: 8px;
+}
+
+.search-input-icon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  object-fit: contain;
+}
+
+.search-input-field {
+  flex: 1;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-family: "Barlow", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 18px;
+  color: var(--color-text, #000215);
+}
+
+.search-input-field::placeholder {
+  color: var(--color-gray-900, #727481);
+}
+
+.recently-saved-title {
+  font-family: "Barlow", sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: #000;
+  margin-top: 20px;
+  margin-bottom: 0;
+}
+
+.search-results {
+  padding: 0 16px;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.player-cards-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 360px;
+  margin: 0 auto;
+}
+
+.search-loading,
+.no-results {
+  text-align: center;
+  color: var(--color-gray-900, #727481);
+  font-size: 14px;
+  padding: 24px 16px;
+}
+
+@media (min-width: 768px) {
+  .search-header {
+    padding: 24px 32px;
+  }
+
+  .search-results {
+    padding: 0 32px;
+  }
+}

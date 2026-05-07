@@ -1,52 +1,465 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "../lib/supabase";
+import StepContainer from "../components/wizard/StepContainer";
+import TextInput from "../components/inputs/TextInput";
+import UnitInput from "../components/inputs/UnitInput";
+import RoleSelect from "../components/domain/onboarding/RoleSelect";
+import SportsSelect from "../components/domain/onboarding/SportSelect";
+import PositionPage from "../components/domain/onboarding/PositionPage";
+import ClubPicker from "../components/domain/onboarding/ClubPicker";
+import AvatarPicker from "../components/domain/onboarding/AvatarPicker";
+import LocationFields from "../components/domain/onboarding/LocationFields";
+import GoalsField from "../components/domain/onboarding/GoalsField";
+import Bio from "../components/domain/onboarding/Bio";
+import FollowSuggestions from "../components/domain/onboarding/FollowSuggestions";
+import Premium from "../components/domain/onboarding/Premium";
+import { getSteps } from "../utils/steps";
+import { buildProfilePayload } from "../utils/payload";
+import Textarea from "../components/inputs/TextArea";
+import ProgressBar from "../components/domain/onboarding/UI/ProgressBar";
+import OnboardingNavbar from "../components/domain/onboarding/UI/OnboardingNavbar";
+import Button from "../components/UI/Button";
+import "./setup-profile.css";
 
-export default function SetupProfile() {
+export default function Setup() {
   const navigate = useNavigate();
-  const [fullName, setFullName] = useState("");
 
-  const handleComplete = async (e) => {
-    e.preventDefault();
-    // TODO: Save profile to backend
+  const [role, setRole] = useState("athlete");
+  const [heightUnit, setHeightUnit] = useState("cm");
+  const [weightUnit, setWeightUnit] = useState("kg");
+
+  const [form, setForm] = useState({
+    full_name: "",
+    username: "",
+    avatar_url: "",
+    age: "",
+    sports: [],
+    primarySport: "",
+    gender: "",
+    height: "",
+    weight: "",
+    position: [],
+    bio: "",
+    club_id: null,
+    club_other_name: "",
+    country: "",
+    region: "",
+    city: "",
+    goals: "",
+    talent_preferences: "",
+    org_name: "",
+    org_founded_year: "",
+    org_team_size: "",
+    org_description: "",
+  });
+  const [userId, setUserId] = useState(null);
+  const [usernameErr, setUsernameErr] = useState("");
+  const [isCheckingUsername, setIsCheckingUsername] = useState(false);
+
+  const steps = useMemo(() => getSteps(role), [role]);
+  const [idx, setIdx] = useState(0);
+  const stepId = steps[idx];
+
+  useEffect(() => {
+    (async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      // Allow onboarding flow without auth (for development/demo)
+      const isOnboarding = sessionStorage.getItem("athlio_onboarding") === "true";
+      if (!user && !isOnboarding) return navigate("/auth", { replace: true });
+      if (!user) return; // Skip profile loading during onboarding demo
+      setUserId(user.id);
+      const { data: profile, error: readErr } = await supabase
+        .from("profiles")
+        .select("*")
+        .match({ id: user.id })
+        .maybeSingle();
+      if (!profile) {
+        const { error: insertErr } = await supabase
+          .from("profiles")
+          .insert({ id: user.id });
+      }
+
+      if (profile) {
+        const sports = Array.isArray(profile.sports) ? profile.sports : [];
+        setRole(profile.role || "athlete");
+        setForm((f) => ({
+          ...f,
+          full_name: profile.full_name || "",
+          username: profile.username || "",
+          avatar_url: profile.avatar_url || "",
+          age: profile.age ?? "",
+          sports,
+          primarySport: profile.primary_sport || sports[0] || "",
+          gender: profile.gender || "",
+          height: profile.height_cm ?? "",
+          weight: profile.weight_kg ?? "",
+          position: profile.position
+            ? Array.isArray(profile.position)
+              ? profile.position
+              : [profile.position]
+            : [],
+          bio: profile.bio || profile.description || "",
+          club_id: profile.club_id || null,
+          club_other_name: profile.club_other_name || "",
+          country: profile.country || "",
+          region: profile.region || "",
+          city: profile.city || "",
+          goals: profile.goals || "",
+          talent_preferences: profile.talent_preferences
+            ? JSON.stringify(profile.talent_preferences)
+            : "",
+          org_name: profile.org_name || "",
+          org_founded_year: profile.org_founded_year ?? "",
+          org_team_size: profile.org_team_size ?? "",
+          org_description: profile.org_description || "",
+        }));
+      }
+    })();
+  }, [navigate]);
+
+  useEffect(() => {
+    const trimmed = (form.username || "").trim();
+    if (!trimmed || !userId) {
+      setUsernameErr("");
+      setIsCheckingUsername(false);
+      return;
+    }
+
+    let ignore = false;
+    setIsCheckingUsername(true);
+
+    const timer = setTimeout(async () => {
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("id")
+        .ilike("username", trimmed)
+        .maybeSingle();
+
+      if (ignore) return;
+
+      if (error) {
+        if (error.code === "PGRST116") {
+          setUsernameErr("username already used");
+        } else {
+          console.error("USERNAME CHECK ERROR", error);
+          setUsernameErr("");
+        }
+      } else if (data && data.id && data.id !== userId) {
+        setUsernameErr("username already used");
+      } else {
+        setUsernameErr("");
+      }
+
+      setIsCheckingUsername(false);
+    }, 300);
+
+    return () => {
+      ignore = true;
+      clearTimeout(timer);
+    };
+  }, [form.username, userId]);
+
+  function set(v) {
+    setForm((f) => ({ ...f, ...v }));
+  }
+  function next() {
+    setIdx((i) => Math.min(i + 1, steps.length - 1));
+  }
+  function back() {
+    setIdx((i) => Math.max(i - 1, 0));
+  }
+
+  async function finish() {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    const payload = buildProfilePayload({ role, form, heightUnit, weightUnit });
+    console.log("Submitting profile payload:", payload);
+    const { error: upsertErr } = await supabase
+      .from("profiles")
+      .upsert({ id: user.id, ...payload }, { onConflict: "id" });
+
+    // log any errors
+    if (upsertErr) {
+      console.error("PROFILE UPSERT ERROR", upsertErr);
+    }
+
     navigate("/home");
-  };
+  }
+
+  // Determine whether the Continue button should be enabled for the current
+  // step. Default to true for steps without specific rules.
+  const canContinue = (() => {
+    try {
+      switch (stepId) {
+        case "basic":
+          return (
+            (form.full_name || "").toString().trim() !== "" &&
+            (form.username || "").toString().trim() !== "" &&
+            !usernameErr &&
+            !isCheckingUsername
+          );
+        case "role":
+          return Boolean(role);
+        case "sport":
+          return Array.isArray(form.sports) && form.sports.length > 0;
+        case "position":
+          return role !== "athlete"
+            ? true
+            : Array.isArray(form.position) && form.position.length > 0;
+        case "club":
+          return (
+            Boolean(form.club_id) ||
+            (form.club_other_name || "").toString().trim() !== ""
+          );
+        case "bio":
+          return (form.bio || "").toString().trim() !== "";
+        default:
+          return true;
+      }
+    } catch (e) {
+      return true;
+    }
+  })();
 
   return (
-    <div className="page">
-      <form
-        onSubmit={handleComplete}
-        className="page-card"
-        style={{ maxWidth: "500px" }}
+    <div className="setup-profile-page">
+      {/* Step list (Stepper) hidden per request */}
+      <div style={{ marginTop: 0 }}>
+        <ProgressBar currentStep={idx + 1} totalSteps={steps.length} />
+      </div>
+
+      {/* Skip button (subtle, medium) aligned right under the progress bar */}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "flex-end",
+          padding: "0 16px",
+        }}
       >
-        <h1>Set Up Your Profile</h1>
-        <p>Tell us about yourself so scouts can find you.</p>
+        <Button
+          size="medium"
+          type="subtle"
+          label="Skip"
+          onClick={() => (idx < steps.length - 1 ? next() : finish())}
+        />
+      </div>
+      <StepContainer
+        onBack={back}
+        onNext={next}
+        onFinish={finish}
+        /* hide the built-in StepContainer buttons - we'll render our
+           OnboardingNavbar below which uses the same callbacks */
+        showBack={false}
+        showNext={false}
+        showFinish={false}
+      >
+        {stepId === "basic" && (
+          <div>
+            <div
+              className="role-header"
+              style={{
+                display: "inline-flex",
+                flexDirection: "column",
+                gap: 8,
+              }}
+            >
+              <h1 className="role-header-title">Profile setup</h1>
+              <p className="role-header-subtitle">tell us about yourself</p>
+            </div>
+            {/* Avatar picker and input fields grouped together */}
+            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+              <AvatarPicker
+                value={form.avatar_url}
+                onChange={(v) => set({ avatar_url: v })}
+              />
 
-        <div style={{ marginBottom: "1.5rem" }}>
-          <label style={{ display: "block", marginBottom: "0.5rem" }}>
-            Full Name
-          </label>
-          <input
-            type="text"
-            placeholder="Your full name"
-            value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
-            required
-            style={{
-              width: "100%",
-              padding: "0.75rem",
-              border: "1px solid rgba(255,255,255,0.2)",
-              borderRadius: "8px",
-              background: "rgba(0,0,0,0.2)",
-              color: "white",
-              fontFamily: "inherit",
-            }}
+              <TextInput
+                label="Full name"
+                value={form.full_name}
+                onChange={(v) => set({ full_name: v })}
+              />
+              <TextInput
+                label="Username"
+                value={form.username}
+                onChange={(v) => set({ username: v })}
+              />
+              {usernameErr && (
+                <p className="text-red-600 text-sm">{usernameErr}</p>
+              )}
+              <TextInput
+                label="Age"
+                value={form.age}
+                onChange={(v) => set({ age: v })}
+              />
+            </div>
+          </div>
+        )}
+
+        {stepId === "role" && <RoleSelect role={role} onChange={setRole} />}
+
+        {stepId === "sport" && (
+          <div>
+            <SportsSelect
+              sports={form.sports}
+              onChange={(arr) =>
+                set({ sports: arr, primarySport: arr[0] || "", position: [] })
+              }
+              primarySport={form.primarySport}
+              onPrimaryChange={(v) => set({ primarySport: v, position: [] })}
+            />
+          </div>
+        )}
+
+        {stepId === "position" && role === "athlete" && (
+          <PositionPage
+            sport={form.primarySport}
+            value={form.position}
+            onChange={(v) => set({ position: v })}
           />
-        </div>
+        )}
 
-        <button type="submit" className="button" style={{ width: "100%" }}>
-          Complete Setup
-        </button>
-      </form>
+        {stepId === "bio" && (
+          <Bio
+            value={form.bio}
+            onChange={(v) => set({ bio: v })}
+            sport={form.primarySport}
+            position={form.position}
+            clubId={form.club_id}
+            clubOtherName={form.club_other_name}
+            country={form.country}
+          />
+        )}
+
+        {stepId === "premium" && <Premium onContinue={() => next()} />}
+
+        {stepId === "measure" && role === "athlete" && (
+          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+            <UnitInput
+              label="Height"
+              value={form.height}
+              onChange={(v) => set({ height: v })}
+              unit={heightUnit}
+              setUnit={setHeightUnit}
+              unitOptions={["cm", "ft"]}
+              placeholderCm="Height (cm)"
+              placeholderAlt="Height (e.g. 5'11)"
+            />
+            <UnitInput
+              label="Weight"
+              value={form.weight}
+              onChange={(v) => set({ weight: v })}
+              unit={weightUnit}
+              setUnit={setWeightUnit}
+              unitOptions={["kg", "lb"]}
+              placeholderCm="Weight (kg)"
+              placeholderAlt="Weight (lb)"
+            />
+            <TextInput
+              label="Gender"
+              value={form.gender}
+              onChange={(v) => set({ gender: v })}
+            />
+          </div>
+        )}
+
+        {stepId === "club" && (role === "athlete" || role === "scout") && (
+          <ClubPicker
+            sport={form.primarySport || "football"}
+            value={{
+              club_id: form.club_id,
+              club_other_name: form.club_other_name,
+            }}
+            onChange={(v) => set(v)}
+          />
+        )}
+
+        {stepId === "location" && (
+          <LocationFields
+            country={form.country}
+            city={form.city}
+            onChange={(v) => set(v)}
+          />
+        )}
+
+        {stepId === "goals" && role === "athlete" && (
+          <GoalsField value={form.goals} onChange={(v) => set({ goals: v })} />
+        )}
+
+        {stepId === "follow" && (role === "athlete" || role === "scout") && (
+          <FollowSuggestions
+            role={role}
+            sport={form.primarySport}
+            position={form.position}
+            clubId={form.club_id}
+            country={form.country}
+            goals={
+              role === "athlete"
+                ? form.goals
+                : typeof form.talent_preferences === "string"
+                  ? form.talent_preferences
+                  : ""
+            }
+          />
+        )}
+
+        {stepId === "scout" && role === "scout" && (
+          <GoalsField
+            value={form.talent_preferences}
+            onChange={(v) => set({ talent_preferences: v })}
+            items={[
+              "Discover new talent",
+              "Expand your scouting network",
+              "Find new players",
+              "Build a strong team",
+              "Post tryouts or events",
+              "Build partnerships",
+              "Collaborate with scouts and coaches",
+            ]}
+            title="Select your scouting goals"
+            subtitle="Choose the goals that reflect what you want to accomplish on Athlio. Pick multiple."
+          />
+        )}
+
+        {stepId === "org" && role === "organization" && (
+          <div>
+            <TextInput
+              label="Organization name"
+              value={form.org_name}
+              onChange={(v) => set({ org_name: v })}
+            />
+            <TextInput
+              label="Founded year"
+              value={form.org_founded_year}
+              onChange={(v) => set({ org_founded_year: v })}
+            />
+            <TextInput
+              label="Team size"
+              value={form.org_team_size}
+              onChange={(v) => set({ org_team_size: v })}
+            />
+            <Textarea
+              label="Organization description"
+              value={form.org_description}
+              onChange={(v) => set({ org_description: v })}
+            />
+          </div>
+        )}
+
+        {/* Removed final 'review' step per request (auto-finish after last configured step) */}
+      </StepContainer>
+      <OnboardingNavbar
+        onBack={back}
+        onNext={next}
+        onFinish={finish}
+        showBack={idx > 0}
+        showNext={idx < steps.length - 1}
+        showFinish={idx === steps.length - 1}
+        canContinue={canContinue}
+      />
     </div>
   );
 }

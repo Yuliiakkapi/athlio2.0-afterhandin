@@ -79,8 +79,8 @@ export default function PostActions({
         await like(postId);
         if (postAuthorId && profile?.id && postAuthorId !== profile.id) {
           await supabase.from("notifications").insert({
-            recipient_id: postAuthorId, // post owner
-            actor_id: profile.id, // who liked
+            user_id: postAuthorId,
+            actor_id: profile.id,
             post_id: postId,
             type: "like",
           });

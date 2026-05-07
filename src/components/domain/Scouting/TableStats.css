@@ -4,7 +4,7 @@
     border-radius: 8px;
     background: var(--background, #fbfbfb);
     overflow: hidden;
-    font-family: Geist, sans-serif;
+    font-family: "Barlow", sans-serif;
     font-size: 12px;
     color: var(--text, #000215);
     --row-height: 32px
@@ -12,7 +12,7 @@
 
 .table-stats-header {
     padding: 10px 16px;
-    font-family: Geist, sans-serif;
+    font-family: "Barlow", sans-serif;
     font-weight: 500;
     font-size: 12px;
     color: var(--text, #000215)
@@ -42,7 +42,7 @@
 }
 
 .label {
-    font-family: Geist, sans-serif;
+    font-family: "Barlow", sans-serif;
     font-size: 12px;
     color: var(--text, #000215)
 }

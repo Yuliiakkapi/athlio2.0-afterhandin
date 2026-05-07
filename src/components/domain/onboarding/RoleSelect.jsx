@@ -1,27 +1,27 @@
 import "./RoleSelect.css";
 import SelectionCard from "./UI/SelectionCard";
-import AthleteIcon from "../../../assets/icons/athlete.svg?react";
-import ScoutIcon from "../../../assets/icons/scout.svg?react";
-import OrgIcon from "../../../assets/icons/organisation.svg?react";
+import AthleteIcon from "../../../assets/icons/athlete.svg";
+import ScoutIcon from "../../../assets/icons/scout.svg";
+import OrgIcon from "../../../assets/icons/organisation.svg";
 
 const ROLES = [
   {
     id: "athlete",
     title: "Athlete",
     description: "Create and manage your athlete profile, showcase stats and video.",
-    icon: <AthleteIcon />,
+    icon: AthleteIcon,
   },
   {
     id: "scout",
     title: "Scout",
     description: "Discover talent, save profiles and contact athletes.",
-    icon: <ScoutIcon />,
+    icon: ScoutIcon,
   },
   {
     id: "organization",
     title: "Organization",
     description: "Manage club or organization accounts and post opportunities.",
-    icon: <OrgIcon />,
+    icon: OrgIcon,
   },
 ];
 

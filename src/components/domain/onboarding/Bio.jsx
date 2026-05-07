@@ -106,7 +106,7 @@ export default function Bio({ value, onChange, sport, position, clubId, clubOthe
   <Textarea placeholder="Bio" value={value || ""} onChange={onChange} />
 
       <div style={{ marginTop: 8, display: "flex", justifyContent: "flex-end" }}>
-        <span style={{ fontSize: 8, color: "#000", fontWeight: 500, fontStyle: "normal", fontFamily: "Geist" }}>
+        <span style={{ fontSize: 8, color: "#000", fontWeight: 500, fontStyle: "normal", fontFamily: "Barlow, sans-serif" }}>
           150 characters max
         </span>
       </div>

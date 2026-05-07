@@ -2,8 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { supabase } from "../../../lib/supabase.js";
 import TextInput from "../../inputs/TextInput";
 import "./ClubPicker.css";
-import FootballIcon from "../../../assets/icons/football.svg?react";
-import BasketballIcon from "../../../assets/icons/basketball.svg?react";
+import FootballIcon from "../../../assets/icons/football.svg";
+import BasketballIcon from "../../../assets/icons/basketball.svg";
 import SearchBar from "../../UI/SearchBar";
 
 export default function ClubPicker({ sport, value, onChange }) {
@@ -131,7 +131,7 @@ export default function ClubPicker({ sport, value, onChange }) {
                       className="club-logo"
                     />
                   ) : (
-                    <FootballIcon className="club-logo-svg" aria-hidden />
+                    <img src={FootballIcon} alt="" className="club-logo-svg" aria-hidden="true" />
                   )}
 
                   <div className="club-meta">

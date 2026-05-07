@@ -1,0 +1,10 @@
+.main-content:has(.setup-profile-page) {
+  padding: 12px 16px 40px;
+}
+.setup-profile-page {
+  display: flex;
+  flex-direction: column;
+}
+.setup-profile-page .progressWrapper + div[style] {
+  margin-top: 4px;
+}

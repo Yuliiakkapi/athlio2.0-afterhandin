@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "../../../../lib/supabase";
 import CardInfoSingle from "../../../UI/InfoCards";
 import EditIcon from "../../../../assets/icons/edit.svg?react";
@@ -7,6 +8,7 @@ import "./InfoTab.css";
 import ExperienceList from "../../Scouting/ExperienceList";
 
 export default function InfoTab({ profile, isMe = false }) {
+  const navigate = useNavigate();
   const [experiences, setExperiences] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -76,7 +78,7 @@ export default function InfoTab({ profile, isMe = false }) {
               type="outline"
               Icon={EditIcon}
               className="edit-info-btn"
-              onClick={() => (window.location.href = "/edit-profile")}
+              onClick={() => navigate("/profile/me/edit")}
             />
           )}
         </div>

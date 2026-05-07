@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
+import "./profile.css";
 import { supabase } from "../lib/supabase";
 import ProfileHeader from "../components/domain/Profile/ProfileHeader";
 import NavigationTabs from "../components/UI/NavTabs";
