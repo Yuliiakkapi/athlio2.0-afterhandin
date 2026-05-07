@@ -16,6 +16,7 @@ import AddPost from "./pages/AddPost";
 import Chat from "./pages/Chat";
 import Scouting from "./pages/Scouting";
 import NotFound from "./pages/NotFound";
+import DesignSystem from "./pages/DesignSystem";
 
 export default function App() {
   return (
@@ -39,6 +40,7 @@ export default function App() {
         <Route path="chat" element={<Chat />} />
         <Route path="scouting" element={<Scouting />} />
 
+        <Route path="design-system" element={<DesignSystem />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
