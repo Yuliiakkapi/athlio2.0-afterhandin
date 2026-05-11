@@ -2,11 +2,11 @@ import { Link, useLocation, useNavigate } from "react-router";
 import { useState } from "react";
 import { useUser } from "../context/UserContext";
 import {
+  Binoculars,
   House,
   MagnifyingGlass,
   Plus,
-  Trophy,
-  UsersThree,
+  Target,
 } from "@phosphor-icons/react";
 import PostTypePicker from "./domain/MakeAPost/PostTypePicker";
 import AddPostModal from "./domain/MakeAPost/AddPostModal";
@@ -16,110 +16,106 @@ export default function Navbar() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const [showPicker, setShowPicker] = useState(false);
-
-  function handleChoose(type) {
-    setShowPicker(false);
-    navigate(`/add-post?type=${type}`);
-  }
-
   const { profile, loading } = useUser();
 
   const isActive = (path) => pathname === path;
+  const role = profile?.role || "athlete";
 
   if (loading) {
     return (
       <nav className="navbar">
-        <Link to="/home" className={isActive("/home") ? "active" : ""}>
-          <House
-            size={24}
-            weight={isActive("/home") ? "fill" : "regular"}
-            aria-label="Home"
-          />
-        </Link>
-        <span>Loading...</span>
-        <Link to="/profile" className={isActive("/profile") ? "active" : ""}>
-          <div className="profile-placeholder" />
-        </Link>
+        <span className="navbar-item">
+          <House size={24} weight="regular" aria-hidden="true" />
+        </span>
+        <span className="navbar-item navbar-item--placeholder" />
+        <span className="navbar-item">
+          <div className="navbar-avatar-placeholder" />
+        </span>
       </nav>
     );
   }
 
-  const role = profile?.role || "athlete";
-
   return (
     <>
       <nav className="navbar">
-        <Link to="/home" className={isActive("/home") ? "active" : ""}>
-          <House
-            size={24}
-            weight={isActive("/home") ? "fill" : "regular"}
-            aria-label="Home"
-          />
+
+        {/* Home */}
+        <Link
+          to="/home"
+          className={`navbar-item${isActive("/home") ? " navbar-item--active" : ""}`}
+          aria-label="Home"
+        >
+          <House size={24} weight={isActive("/home") ? "fill" : "regular"} />
         </Link>
-        <Link to="/search" className={isActive("/search") ? "active" : ""}>
+
+        {/* Search */}
+        <Link
+          to="/search"
+          className={`navbar-item${isActive("/search") ? " navbar-item--active" : ""}`}
+          aria-label="Search"
+        >
           <MagnifyingGlass
             size={24}
             weight={isActive("/search") ? "fill" : "regular"}
-            aria-label="Search"
           />
         </Link>
+
+        {/* Create */}
         <button
           type="button"
-          className={`navbar-plus ${isActive("/add-post") ? "active" : ""}`}
+          className={`navbar-item${showPicker ? " navbar-item--active" : ""}`}
           onClick={() => setShowPicker((prev) => !prev)}
-          aria-label="Create new post"
-          style={{
-            background: "transparent",
-            border: 0,
-            padding: 0,
-            cursor: "pointer",
-          }}
+          aria-label="Create"
         >
-          <Plus size={24} aria-label="Add Post" />
+          <Plus size={24} weight={showPicker ? "bold" : "regular"} />
         </button>
+
+        {/* Challenges / Scouting */}
         {role === "scout" ? (
           <Link
             to="/scouting"
-            className={isActive("/scouting") ? "active" : ""}
+            className={`navbar-item${isActive("/scouting") ? " navbar-item--active" : ""}`}
+            aria-label="Scouting"
           >
-            <UsersThree
+            <Binoculars
               size={24}
               weight={isActive("/scouting") ? "fill" : "regular"}
-              aria-label="Scouting"
             />
           </Link>
         ) : (
           <Link
             to="/challenges"
-            className={isActive("/challenges") ? "active" : ""}
+            className={`navbar-item${isActive("/challenges") ? " navbar-item--active" : ""}`}
+            aria-label="Challenges"
           >
-            <Trophy
+            <Target
               size={24}
               weight={isActive("/challenges") ? "fill" : "regular"}
-              aria-label="Challenges"
             />
           </Link>
         )}
+
+        {/* Profile */}
         <Link
           to="/profile/me"
-          className={isActive("/profile/me") ? "active" : ""}
+          className={`navbar-item navbar-profile${isActive("/profile/me") ? " navbar-item--active" : ""}`}
+          aria-label="Profile"
         >
-          <div>
-            {profile?.avatar_url ? (
-              <img
-                src={profile.avatar_url}
-                alt="Profile"
-                className="profile-avatar"
-              />
-            ) : (
-              <div className="profile-placeholder" />
-            )}
-            {isActive("/profile/me") && <div className="circle"></div>}
-          </div>
+          {profile?.avatar_url ? (
+            <img
+              src={profile.avatar_url}
+              alt="Profile"
+              className="navbar-avatar"
+            />
+          ) : (
+            <div className="navbar-avatar-placeholder" />
+          )}
         </Link>
+
       </nav>
+
       <AddPostModal open={showPicker} onClose={() => setShowPicker(false)}>
-        <PostTypePicker onChoose={handleChoose} />
+        <PostTypePicker onChoose={(type) => { setShowPicker(false); navigate(`/add-post?type=${type}`); }} />
       </AddPostModal>
     </>
   );

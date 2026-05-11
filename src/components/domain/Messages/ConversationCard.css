@@ -1,0 +1,106 @@
+/* ──────────────────────────────────────────────────────────────────
+   ConversationCard — messaging list item
+────────────────────────────────────────────────────────────────── */
+
+.conv-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: var(--white, #fff);
+  border: none;
+  border-radius: 8px;
+  padding: 12px 12px 12px 8px;
+  cursor: pointer;
+  text-align: left;
+  transition: background 120ms ease;
+  box-sizing: border-box;
+}
+
+.conv-card:hover,
+.conv-card:focus-visible {
+  background: var(--neutral-50-bg, #f6f6f7);
+  outline: none;
+}
+
+/* ─── Left side: [dot] + avatar + text ──────────────────────────── */
+.conv-card-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+/* Offset when no unread dot (dot 8px + gap 8px = 16px) */
+.conv-card-left--read {
+  padding-left: 16px;
+}
+
+/* Unread indicator dot */
+.conv-unread-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--primary-default, #4051fd);
+  flex-shrink: 0;
+}
+
+/* ─── Text meta ──────────────────────────────────────────────────── */
+.conv-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  padding-top: 2px;
+  flex: 1;
+}
+
+.conv-name-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.conv-name {
+  font-family: var(--font-sans);
+  font-size: var(--text-sm); /* 14px */
+  font-weight: 500;
+  color: var(--black, #151622);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.2;
+  /* shrink so the badge stays visible */
+  min-width: 0;
+  flex-shrink: 1;
+}
+
+.conv-preview {
+  font-family: var(--font-sans);
+  font-size: var(--text-sm); /* 14px */
+  font-weight: 500;
+  color: var(--neutral-500, #a5a5af);
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0;
+}
+
+/* Slightly darker for unread */
+.conv-preview--unread {
+  color: #60616c;
+}
+
+/* ─── Timestamp ──────────────────────────────────────────────────── */
+.conv-time {
+  font-family: var(--font-sans);
+  font-size: var(--text-2xs); /* 10px */
+  font-weight: 500;
+  color: var(--neutral-400, #b8b9c1);
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-left: 8px;
+}

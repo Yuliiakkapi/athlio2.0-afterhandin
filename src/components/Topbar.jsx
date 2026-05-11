@@ -5,6 +5,7 @@ import {
   Bell,
   ChatsCircle,
   List,
+  MagnifyingGlass,
   ShareNetwork,
   X,
 } from "@phosphor-icons/react";
@@ -41,7 +42,10 @@ const TOPBAR_CONFIG = {
       <IconButton size="large" type="subtle" icon={ArrowLeft} onClick={() => nav(-1)} />
     ),
     center: () => (
-      <input placeholder="Search messages" className="topbar-search" />
+      <div className="topbar-search-wrap">
+        <MagnifyingGlass size={18} className="topbar-search-icon" aria-hidden="true" />
+        <input placeholder="Search for message" className="topbar-search" />
+      </div>
     ),
   },
   "/notifications": {

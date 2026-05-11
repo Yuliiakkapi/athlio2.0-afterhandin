@@ -94,6 +94,40 @@
   box-shadow: none;
 }
 
+/* ─── Chat search bar ─────────────────────────────────────────────── */
+.topbar-search-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--neutral-100, #eeeff1);
+  border-radius: 9999px;
+  padding: 0 16px;
+  height: 40px;
+  margin: 0 8px;
+}
+
+.topbar-search-icon {
+  flex-shrink: 0;
+  color: var(--neutral-700, #7d7c86);
+}
+
+.topbar-search {
+  flex: 1;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-weight: 500;
+  color: var(--black);
+  min-width: 0;
+}
+
+.topbar-search::placeholder {
+  color: var(--neutral-700, #7d7c86);
+}
+
 .placeholder {
   width: 32px;
   height: 32px;
