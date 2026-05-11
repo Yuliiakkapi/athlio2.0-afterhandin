@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "./ProfileHeader.css";
 
@@ -11,8 +12,10 @@ export default function ProfileHeader({
   isFollowing,
   toggleFollow,
   busy,
+  onAvatarChange,
 }) {
   const navigate = useNavigate();
+  const fileRef = useRef();
 
   if (!profile) return null;
 
@@ -23,6 +26,29 @@ export default function ProfileHeader({
     : [];
 
   const clubName = profile.club_other_name || null;
+
+  function handleAvatarFileChange(e) {
+    const f = e.target.files && e.target.files[0];
+    if (!f) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      const dataUrl = reader.result;
+      if (typeof onAvatarChange === "function") {
+        onAvatarChange(dataUrl);
+      }
+    };
+    reader.readAsDataURL(f);
+  }
+
+  function handleAvatarClick() {
+    if (isMe && !profile.avatar_url) {
+      // If blank picture, open gallery
+      fileRef.current?.click();
+    } else if (isMe && profile.avatar_url) {
+      // If has picture, go to edit to change it
+      navigate("/profile/me/edit");
+    }
+  }
 
   return (
     <section className="ph-root">
@@ -50,13 +76,30 @@ export default function ProfileHeader({
 
       {/* Main content: avatar LEFT + info RIGHT */}
       <div className="ph-content">
-        <div className="ph-avatar-wrap">
+        <div 
+          className="ph-avatar-wrap"
+          onClick={handleAvatarClick}
+          style={isMe ? { cursor: "pointer", opacity: 0.9, transition: "opacity 0.2s" } : {}}
+          onMouseEnter={(e) => isMe && (e.currentTarget.style.opacity = "1")}
+          onMouseLeave={(e) => isMe && (e.currentTarget.style.opacity = "0.9")}
+          title={isMe && !profile.avatar_url ? "Click to add picture" : isMe ? "Click to change picture" : ""}
+          role={isMe ? "button" : undefined}
+          tabIndex={isMe ? 0 : undefined}
+        >
           {profile.avatar_url ? (
             <img className="ph-avatar" src={profile.avatar_url} alt={profile.full_name || "Avatar"} />
           ) : (
             <div className="ph-avatar ph-avatar--placeholder" />
           )}
         </div>
+
+        <input
+          ref={fileRef}
+          type="file"
+          accept="image/*"
+          style={{ display: "none" }}
+          onChange={handleAvatarFileChange}
+        />
 
         <div className="ph-info">
           <h1 className="ph-name">{profile.full_name || profile.username || "Athlete"}</h1>

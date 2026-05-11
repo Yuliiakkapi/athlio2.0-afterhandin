@@ -12,6 +12,7 @@ export default function MyProfile() {
   const [state, setState] = useState("loading");
   const [profile, setProfile] = useState(null);
   const [activeTab, setActiveTab] = useState("posts");
+  const [userId, setUserId] = useState(null);
 
   useEffect(() => {
     let ignore = false;
@@ -24,6 +25,8 @@ export default function MyProfile() {
         if (!ignore) setState("unauth");
         return;
       }
+
+      setUserId(user.id);
 
       const { data, error } = await supabase
         .from("profiles")
@@ -45,6 +48,25 @@ export default function MyProfile() {
     };
   }, []);
 
+  async function handleAvatarChange(dataUrl) {
+    if (!userId || !profile) return;
+
+    try {
+      const { error } = await supabase
+        .from("profiles")
+        .update({ avatar_url: dataUrl })
+        .eq("id", userId);
+
+      if (!error) {
+        setProfile({ ...profile, avatar_url: dataUrl });
+      } else {
+        console.error("Failed to update avatar:", error);
+      }
+    } catch (err) {
+      console.error("Error updating avatar:", err);
+    }
+  }
+
   if (state === "unauth") return <Navigate to="/auth" replace />;
   if (state === "loading") return <div className="page profile-loading">Loading…</div>;
   if (state === "notfound") return <div className="page profile-loading">Your profile isn't set up yet.</div>;
@@ -53,7 +75,7 @@ export default function MyProfile() {
 
   return (
     <div className="page profile self">
-      <ProfileHeader profile={profile} isMe={true} />
+      <ProfileHeader profile={profile} isMe={true} onAvatarChange={handleAvatarChange} />
       <NavigationTabs
         variant="pill"
         tabs={[
