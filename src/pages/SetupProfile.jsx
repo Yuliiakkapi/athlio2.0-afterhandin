@@ -11,6 +11,8 @@ import ClubPicker from "../components/domain/onboarding/ClubPicker";
 import AvatarPicker from "../components/domain/onboarding/AvatarPicker";
 import LocationFields from "../components/domain/onboarding/LocationFields";
 import GoalsField from "../components/domain/onboarding/GoalsField";
+import AddHighlight from "../components/domain/onboarding/AddHighlight";
+import Notifications from "../components/domain/onboarding/Notifications";
 import Bio from "../components/domain/onboarding/Bio";
 import FollowSuggestions from "../components/domain/onboarding/FollowSuggestions";
 import Premium from "../components/domain/onboarding/Premium";
@@ -47,6 +49,10 @@ export default function Setup() {
     region: "",
     city: "",
     goals: "",
+    highlightUrl: "",
+    highlightType: "",
+    highlightText: "",
+    highlightMatch: "",
     talent_preferences: "",
     org_name: "",
     org_founded_year: "",
@@ -165,7 +171,10 @@ export default function Setup() {
   function set(v) {
     setForm((f) => ({ ...f, ...v }));
   }
-  function next() {
+  async function next() {
+    if (stepId === "notifications" && "Notification" in window) {
+      await Notification.requestPermission().catch(() => {});
+    }
     setIdx((i) => Math.min(i + 1, steps.length - 1));
   }
   function back() {
@@ -218,6 +227,10 @@ export default function Setup() {
           );
         case "bio":
           return true; // bio is optional
+        case "highlight":
+          return true; // highlight is optional — Post or Skip both advance
+        case "notifications":
+          return true; // always enabled — user can skip or turn on
         default:
           return true;
       }
@@ -390,6 +403,27 @@ export default function Setup() {
           <GoalsField value={form.goals} onChange={(v) => set({ goals: v })} />
         )}
 
+        {stepId === "highlight" && role === "athlete" && (
+          <AddHighlight
+            mediaUrl={form.highlightUrl}
+            mediaType={form.highlightType}
+            text={form.highlightText}
+            match={form.highlightMatch}
+            onMediaChange={(v) =>
+              set(v
+                ? { highlightUrl: v.url, highlightType: v.type }
+                : { highlightUrl: "", highlightType: "" }
+              )
+            }
+            onTextChange={(v) => set({ highlightText: v })}
+            onMatchChange={(v) => set({ highlightMatch: v })}
+          />
+        )}
+
+        {stepId === "notifications" && (
+          <Notifications />
+        )}
+
         {stepId === "follow" && (role === "athlete" || role === "scout") && (
           <FollowSuggestions
             role={role}
@@ -460,6 +494,21 @@ export default function Setup() {
         showNext={idx < steps.length - 1}
         showFinish={idx === steps.length - 1}
         canContinue={canContinue}
+        primaryLabel={
+          stepId === "highlight" ? "Post" :
+          stepId === "notifications" ? "Turn on notifications" :
+          "Continue"
+        }
+        secondaryLabel={
+          stepId === "highlight" ? "Skip" :
+          stepId === "notifications" ? "Skip" :
+          null
+        }
+        onSecondary={
+          stepId === "highlight" || stepId === "notifications"
+            ? () => next()
+            : null
+        }
       />
     </div>
   );

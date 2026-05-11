@@ -14,7 +14,8 @@ import Notifications from "./pages/Notifications";
 import PostDetails from "./pages/PostDetails";
 import AddPost from "./pages/AddPost";
 import Chat from "./pages/Chat";
-import Scouting from "./pages/Scouting";
+import ScoutingSearch from "./pages/Scouting";
+import ScoutTools from "./pages/ScoutTools";
 import NotFound from "./pages/NotFound";
 
 export default function App() {
@@ -37,7 +38,8 @@ export default function App() {
         <Route path="post/:id" element={<PostDetails />} />
         <Route path="add-post" element={<AddPost />} />
         <Route path="chat" element={<Chat />} />
-        <Route path="scouting" element={<Scouting />} />
+        <Route path="scouting" element={<ScoutTools />} />
+        <Route path="scouting/search" element={<ScoutingSearch />} />
 
         <Route path="*" element={<NotFound />} />
       </Route>

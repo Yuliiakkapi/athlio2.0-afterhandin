@@ -26,7 +26,12 @@ export default function OnboardingNavbar({
   showNext = true,
   showFinish = false,
   canContinue = true,
+  secondaryLabel = null,
+  onSecondary = null,
+  primaryLabel = "Continue",
 }) {
+  const hasSplit = Boolean(secondaryLabel && onSecondary);
+
   const handleContinue = () => {
     if (showNext && typeof onNext === "function") return onNext();
     if (showFinish && typeof onFinish === "function") return onFinish();
@@ -42,9 +47,20 @@ export default function OnboardingNavbar({
         )}
       </div>
 
-      <div className={`onboarding-right ${!canContinue ? "continue-disabled" : ""}`}>
-        <Button size="medium" type="primary" label="Continue" onClick={canContinue ? handleContinue : undefined} />
-      </div>
+      {hasSplit ? (
+        <div className="onboarding-split">
+          <button type="button" className="onboarding-secondary-btn" onClick={onSecondary}>
+            {secondaryLabel}
+          </button>
+          <div className={`onboarding-split-primary${!canContinue ? " continue-disabled" : ""}`}>
+            <Button size="medium" type="primary" label={primaryLabel} onClick={canContinue ? handleContinue : undefined} />
+          </div>
+        </div>
+      ) : (
+        <div className={`onboarding-right${!canContinue ? " continue-disabled" : ""}`}>
+          <Button size="medium" type="primary" label={primaryLabel} onClick={canContinue ? handleContinue : undefined} />
+        </div>
+      )}
     </div>
   );
 }

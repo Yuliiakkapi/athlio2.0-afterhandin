@@ -82,31 +82,17 @@ export default function Navbar() {
         >
           <img src={PlusIcon} alt="Add Post" width="24" height="24" />
         </button>
-        {role === "scout" ? (
-          <Link
-            to="/scouting"
-            className={isActive("/scouting") ? "active" : ""}
-          >
-            <img
-              src={isActive("/scouting") ? ComparisonActive : ComparisonIcon}
-              alt="Home"
-              width="24"
-              height="24"
-            />
-          </Link>
-        ) : (
-          <Link
-            to="/challenges"
-            className={isActive("/challenges") ? "active" : ""}
-          >
-            <img
-              src={isActive("/challenges") ? ChallengesActive : ChallengesIcon}
-              alt="Home"
-              width="24"
-              height="24"
-            />
-          </Link>
-        )}
+        <Link
+          to="/scouting"
+          className={isActive("/scouting") ? "active" : ""}
+        >
+          <img
+            src={isActive("/scouting") ? ChallengesActive : ChallengesIcon}
+            alt="Scout Tools"
+            width="24"
+            height="24"
+          />
+        </Link>
         <Link
           to="/profile/me"
           className={isActive("/profile/me") ? "active" : ""}
