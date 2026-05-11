@@ -180,7 +180,10 @@ export default function Setup() {
   function set(v) {
     setForm((f) => ({ ...f, ...v }));
   }
-  function next() {
+  async function next() {
+    if (stepId === "notifications" && "Notification" in window) {
+      await Notification.requestPermission().catch(() => {});
+    }
     setIdx((i) => Math.min(i + 1, steps.length - 1));
   }
   function back() {
@@ -242,6 +245,10 @@ export default function Setup() {
           );
         case "bio":
           return true; // bio is optional
+        case "highlight":
+          return true; // highlight is optional — Post or Skip both advance
+        case "notifications":
+          return true; // always enabled — user can skip or turn on
         default:
           return true;
       }

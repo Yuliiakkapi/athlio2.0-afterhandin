@@ -137,28 +137,16 @@ export default function Navbar() {
           <PlusIcon />
         </button>
 
-        {/* Challenges / Scouting */}
-        {isScout ? (
-          <Link
-            to="/scouting"
-            className={`navbar-item${isActive("/scouting") ? " navbar-item--active" : ""}`}
-            aria-label="Scouting"
-            aria-current={isActive("/scouting") ? "page" : undefined}
-          >
-            <ScoutIcon />
-          </Link>
-        ) : (
-          <Link
-            to="/challenges"
-            className={`navbar-item${isActive("/challenges") ? " navbar-item--active" : ""}`}
-            aria-label="Challenges"
-            aria-current={isActive("/challenges") ? "page" : undefined}
-          >
-            <ChallengesIcon />
-          </Link>
-        )}
+        {/* Scout Tools */}
+        <Link
+          to="/scouting"
+          className={`navbar-item${isActive("/scouting") ? " navbar-item--active" : ""}`}
+          aria-label="Scout Tools"
+          aria-current={isActive("/scouting") ? "page" : undefined}
+        >
+          <ScoutIcon />
+        </Link>
 
-        {/* Profile */}
         <Link
           to="/profile/me"
           className={`navbar-item navbar-profile${isActive("/profile/me") ? " navbar-item--active" : ""}`}

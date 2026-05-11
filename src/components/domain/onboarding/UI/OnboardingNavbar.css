@@ -76,3 +76,34 @@
 .onboarding-continue-btn--half {
   flex: 1 0 0;
 }
+
+/* Split layout: secondary ghost + primary side by side */
+.onboarding-split {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  justify-content: flex-end;
+}
+
+.onboarding-secondary-btn {
+  height: 44px;
+  padding: 0 20px;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--primary-default, #4051fd);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.onboarding-secondary-btn:hover {
+  background: var(--primary-50, #f0f4ff);
+}
+
+.onboarding-split-primary {
+  flex-shrink: 0;
+}
