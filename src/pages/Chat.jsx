@@ -1,11 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router";
 import ConversationCard from "../components/domain/Messages/ConversationCard";
 import "./Chat.css";
 
 /* ── Mock data ─────────────────────────────────────────────────────
    Replace with real Supabase data when the messages table is ready.
 ────────────────────────────────────────────────────────────────── */
-const MOCK_CONVERSATIONS = [
+const MOCK_CONVERSATIONS_INITIAL = [
   {
     id: "1",
     name: "Kylian Mbappe",
@@ -64,12 +65,39 @@ const TABS = [
 ];
 
 export default function Chat() {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("recent");
+  
+  // Initialize conversations from localStorage or mock data
+  const [conversations, setConversations] = useState(() => {
+    try {
+      const stored = localStorage.getItem("conversations");
+      return stored ? JSON.parse(stored) : MOCK_CONVERSATIONS_INITIAL;
+    } catch {
+      return MOCK_CONVERSATIONS_INITIAL;
+    }
+  });
 
-  const conversations =
+  // Save conversations to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem("conversations", JSON.stringify(conversations));
+  }, [conversations]);
+
+  const handleConversationClick = (convId) => {
+    // Mark as read
+    setConversations((prevConvs) =>
+      prevConvs.map((conv) =>
+        conv.id === convId ? { ...conv, unread: false } : conv
+      )
+    );
+    // Navigate to conversation
+    navigate(`/chat/${convId}`);
+  };
+
+  const displayedConversations =
     activeTab === "unread"
-      ? MOCK_CONVERSATIONS.filter((c) => c.unread)
-      : MOCK_CONVERSATIONS;
+      ? conversations.filter((c) => c.unread)
+      : conversations;
 
   return (
     <div className="chat-page">
@@ -93,10 +121,10 @@ export default function Chat() {
 
       {/* ── Conversation list ─────────────────────────────────────── */}
       <div className="chat-list">
-        {conversations.length === 0 ? (
+        {displayedConversations.length === 0 ? (
           <p className="chat-empty">No unread messages</p>
         ) : (
-          conversations.map((conv) => (
+          displayedConversations.map((conv) => (
             <ConversationCard
               key={conv.id}
               name={conv.name}
@@ -106,7 +134,7 @@ export default function Chat() {
               time={conv.time}
               unread={conv.unread}
               verified={conv.verified}
-              onClick={() => {/* navigate to /chat/:id */}}
+              onClick={() => handleConversationClick(conv.id)}
             />
           ))
         )}

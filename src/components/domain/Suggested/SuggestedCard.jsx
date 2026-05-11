@@ -1,8 +1,7 @@
 import { useEffect, useState, useTransition } from "react";
 import { Link } from "react-router";
-import ProfilePicture from "../../UI/ProfilePicture";
-import Button from "../../UI/Button";
-import { Check, Plus } from "@phosphor-icons/react";
+import { Plus, Check } from "@phosphor-icons/react";
+import IconButton from "../../UI/IconButton";
 import {
   isFollowing as fetchIsFollowing,
   follow,
@@ -50,24 +49,45 @@ export default function SuggestedCard({ profile }) {
 
   const loading = isFollowing === null || isPending;
   const profileHref = `/profile/${profile.id}`;
+  const position = profile.position?.[0];
+  const [firstName, lastName] = (profile.full_name || profile.username || "").split(" ");
 
   return (
-    <div className="suggested-card">
-      <Link to={profileHref} className="suggested-card-top">
-        <ProfilePicture size="large" imgUrl={profile.avatar_url} />
-        <p className="suggested-card-name">
-          {profile.full_name || profile.username}
-        </p>
-      </Link>
+    <Link to={profileHref} className="suggested-card">
+      {/* Background image with overlay */}
+      <div className="suggested-card-bg" style={{ backgroundImage: `url(${profile.avatar_url})` }} />
+      <div className="suggested-card-overlay" />
 
-      <Button
-        size="small"
-        type={isFollowing ? "following" : "primary"}
-        label={loading ? "..." : isFollowing ? "" : "Follow"}
-        Icon={loading ? undefined : isFollowing ? Check : Plus}
-        onClick={onToggle}
-        disabled={loading}
-      />
-    </div>
+      {/* Top-right button */}
+      <div className="suggested-card-btn-wrap">
+        <button
+          type="button"
+          className="suggested-card-add-btn"
+          onClick={(e) => {
+            e.preventDefault();
+            onToggle();
+          }}
+          disabled={loading}
+          title={isFollowing ? "Following" : "Follow"}
+        >
+          <Plus size={18} weight="bold" />
+        </button>
+      </div>
+
+      {/* Bottom content: name and position */}
+      <div className="suggested-card-content">
+        <div className="suggested-card-name-wrap">
+          <p className="suggested-card-name">
+            {firstName && <span className="suggested-card-first-name">{firstName}</span>}
+            {lastName && <span className="suggested-card-last-name">{lastName}</span>}
+          </p>
+        </div>
+        {position && (
+          <div className="suggested-card-position-badge">
+            {position.toUpperCase()}
+          </div>
+        )}
+      </div>
+    </Link>
   );
 }

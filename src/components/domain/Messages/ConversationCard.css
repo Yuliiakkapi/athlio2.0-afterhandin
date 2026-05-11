@@ -13,8 +13,13 @@
   padding: 12px 12px 12px 8px;
   cursor: pointer;
   text-align: left;
-  transition: background 120ms ease;
+  transition: all 120ms ease;
   box-sizing: border-box;
+}
+
+/* Unread styling — stronger background */
+.conv-card:has(.conv-unread-dot) {
+  background: var(--neutral-50-bg, #f6f6f7);
 }
 
 .conv-card:hover,
@@ -44,6 +49,7 @@
   border-radius: 50%;
   background: var(--primary-default, #4051fd);
   flex-shrink: 0;
+  box-shadow: 0 0 6px rgba(64, 81, 253, 0.4);
 }
 
 /* ─── Text meta ──────────────────────────────────────────────────── */
@@ -66,7 +72,7 @@
 .conv-name {
   font-family: var(--font-sans);
   font-size: var(--text-sm); /* 14px */
-  font-weight: 500;
+  font-weight: 600;
   color: var(--black, #151622);
   white-space: nowrap;
   overflow: hidden;
@@ -77,11 +83,17 @@
   flex-shrink: 1;
 }
 
+/* Read state — lighter text */
+.conv-card-left--read .conv-name {
+  font-weight: 500;
+  color: #7f7f8a;
+}
+
 .conv-preview {
   font-family: var(--font-sans);
   font-size: var(--text-sm); /* 14px */
   font-weight: 500;
-  color: var(--neutral-500, #a5a5af);
+  color: #2c2c33;
   line-height: 1.2;
   white-space: nowrap;
   overflow: hidden;
@@ -89,9 +101,13 @@
   margin: 0;
 }
 
-/* Slightly darker for unread */
+/* Lighter for read */
 .conv-preview--unread {
-  color: #60616c;
+  color: #2c2c33;
+}
+
+.conv-card-left--read .conv-preview {
+  color: var(--neutral-500, #a5a5af);
 }
 
 /* ─── Timestamp ──────────────────────────────────────────────────── */
