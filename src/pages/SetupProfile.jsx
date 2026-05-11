@@ -198,6 +198,7 @@ export default function Setup() {
 
     const payload = buildProfilePayload({ role, form, heightUnit, weightUnit });
     console.log("Submitting profile payload:", payload);
+    console.log("Full name in form:", form.full_name);
 
     if (user) {
       const { error: upsertErr } = await supabase
@@ -206,6 +207,9 @@ export default function Setup() {
 
       if (upsertErr) {
         console.error("PROFILE UPSERT ERROR", upsertErr);
+        alert("Error saving profile: " + upsertErr.message);
+      } else {
+        console.log("Profile saved successfully!");
       }
     }
 

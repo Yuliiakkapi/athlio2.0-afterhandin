@@ -2,12 +2,18 @@
  * Build profile payload for Supabase upsert
  */
 export function buildProfilePayload({ role, form, heightUnit, weightUnit }) {
+  // Generate username from full_name if not provided
+  let username = form.username;
+  if (!username && form.full_name) {
+    // Create a simple username from first + last name
+    username = form.full_name.toLowerCase().replace(/\s+/g, "");
+  }
+
   const payload = {
     role: role === "professional" && form.professionalType ? form.professionalType : role,
     full_name: form.full_name,
-    username: form.username,
+    username: username || undefined,
     avatar_url: form.avatar_url?.startsWith("data:") ? undefined : (form.avatar_url || undefined),
-    dob: form.dob || null,
     age: form.dob
       ? Math.floor((Date.now() - new Date(form.dob)) / (365.25 * 24 * 3600 * 1000))
       : (form.age ? parseInt(form.age) : null),
@@ -24,13 +30,7 @@ export function buildProfilePayload({ role, form, heightUnit, weightUnit }) {
     region: form.region || null,
     city: form.city || null,
     goals: form.goals || null,
-    playing_style: form.playingStyle || null,
-    preferred_leg: form.preferredLeg || null,
     talent_preferences: form.talent_preferences || null,
-    highlight_url: form.highlightUrl || null,
-    highlight_type: form.highlightType || null,
-    highlight_text: form.highlightText || null,
-    highlight_match: form.highlightMatch || null,
   };
 
   // Add organization-specific fields
