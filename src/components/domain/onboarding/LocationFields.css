@@ -200,12 +200,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  /* bleed past 16px page padding so globe can be larger */
   margin: 0 -16px;
   min-height: 260px;
 }
 
-/* Atmospheric glow — soft blue halo behind the globe */
+/* Atmospheric glow */
 .loc-glow {
   position: absolute;
   width: 68vw;
@@ -244,7 +243,7 @@
   100% { transform: scale(1.9);  opacity: 0;   }
 }
 
-/* Globe image — circular crop + float animation */
+/* ─── Globe image — circular crop + float + drag ────────────────── */
 .loc-globe-wrap {
   position: relative;
   width: 66vw;
@@ -254,12 +253,18 @@
   border-radius: 50%;
   overflow: hidden;
   animation: globe-float 4s ease-in-out infinite;
-  /* Subtle edge shadow to reinforce the sphere illusion */
   box-shadow:
     inset -18px -10px 40px rgba(0, 0, 30, 0.35),
     inset  8px  8px 20px rgba(255, 255, 255, 0.08),
     0 20px 60px rgba(0, 0, 0, 0.18);
   z-index: 2;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+
+.loc-globe-wrap:active {
+  cursor: grabbing;
 }
 
 .loc-globe-img {
@@ -268,30 +273,15 @@
   object-fit: cover;
   pointer-events: none;
   user-select: none;
-  animation: globe-drift 40s linear infinite;
+  /* object-position is controlled by JS — no CSS animation */
 }
 
-/* Slow horizontal drift to simulate rotation of a flat image */
-@keyframes globe-drift {
-  0%   { object-position: 0%  50%; }
-  50%  { object-position: 30% 50%; }
-  100% { object-position: 0%  50%; }
-}
-
-/* When a city is pinned, stop the drift — JS takes over object-position */
-.loc-globe-img--pinned {
-  animation: globe-float 4s ease-in-out infinite !important;
-}
-
-/* Gentle vertical float */
 @keyframes globe-float {
   0%,  100% { transform: translateY(0);    }
   50%        { transform: translateY(-12px); }
 }
 
-/* ── Pin anchor — positions the pin at the right lat/lon ──────────
-   JS sets transform: translateX(-50%) translateY(Ypx) via inline style.
-   The anchor floats in sync with the globe so the pin stays planted. */
+/* ── Pin anchor ──────────────────────────────────────────────────── */
 .loc-pin-anchor {
   position: absolute;
   left: 50%;
@@ -301,7 +291,6 @@
   animation: globe-float 4s ease-in-out infinite;
 }
 
-/* ── Pin itself — the drop animation runs on re-mount ────────────── */
 .loc-pin {
   display: flex;
   flex-direction: column;

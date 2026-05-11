@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { MapPin, MagnifyingGlass, X } from "@phosphor-icons/react";
-import earthImg from "../../../assets/images/earth-globe.png";
+import Globe from "./Globe";
 import "./LocationFields.css";
 
 const NOMINATIM = "https://nominatim.openstreetmap.org";
@@ -22,49 +22,21 @@ async function searchCities(query) {
     .slice(0, 5);
 }
 
-async function reverseGeocode(lat, lon) {
-  const url = `${NOMINATIM}/reverse?lat=${lat}&lon=${lon}&format=json&addressdetails=1`;
-  const res  = await fetch(url, { headers: { "Accept-Language": "en" } });
-  const data = await res.json();
-  if (!data.address) return null;
-  return {
-    city:    data.address.city || data.address.town || data.address.village || data.address.municipality || "",
-    country: data.address.country || "",
-    lat:     parseFloat(data.lat),
-    lon:     parseFloat(data.lon),
-  };
-}
-
-// Map longitude → object-position-x so that longitude is centred in the globe
-function lonToObjX(lon) {
-  return `${((lon + 180) / 360 * 100).toFixed(2)}%`;
-}
-
-// Calculate how far (px) above/below globe centre the pin should sit for a given latitude.
-// Negative = above centre (northern hemisphere).
-function latToPinY(lat) {
-  const r = Math.min(window.innerWidth * 0.33, 150); // globe radius in px
-  return -Math.sin(lat * Math.PI / 180) * r * 0.72;
-}
-
 export default function LocationFields({ country, city, onChange }) {
   const [query,       setQuery]       = useState(city || "");
   const [suggestions, setSuggestions] = useState([]);
   const [searching,   setSearching]   = useState(false);
   const [open,        setOpen]        = useState(false);
-  const [pinCoords,   setPinCoords]   = useState(null); // { lat, lon }
+  const [pinCoords,   setPinCoords]   = useState(null);
   const deb     = useRef(null);
   const inputRef = useRef(null);
 
   const hasSelection = !!(city && country);
 
-  /* ── Debounced city search ──────────────────────────────────── */
   useEffect(() => {
     if (deb.current) clearTimeout(deb.current);
     const term = query.trim();
-
     if (term.length < 2) { setSuggestions([]); setOpen(false); return; }
-
     setSearching(true);
     deb.current = setTimeout(async () => {
       try {
@@ -89,40 +61,10 @@ export default function LocationFields({ country, city, onChange }) {
     setTimeout(() => inputRef.current?.focus(), 50);
   }
 
-  async function useGPSLocation() {
-    if (!navigator.geolocation) return;
-    navigator.geolocation.getCurrentPosition(
-      async pos => {
-        try {
-          const result = await reverseGeocode(pos.coords.latitude, pos.coords.longitude);
-          if (result) {
-            onChange(result);
-            setPinCoords({ lat: result.lat, lon: result.lon });
-          }
-        } catch { /* silent */ }
-      },
-      () => {},
-      { timeout: 10000 }
-    );
-  }
-
-  /* ── Globe positioning ──────────────────────────────────────── */
-  const globeStyle = pinCoords ? {
-    objectPosition: `${lonToObjX(pinCoords.lon)} 50%`,
-    animation:  "globe-float 4s ease-in-out infinite", // keep float, stop drift
-    transition: "object-position 1.4s cubic-bezier(0.4, 0, 0.2, 1)",
-  } : undefined;
-
-  // Pin anchor: top:50% left:50% on .loc-visual = globe centre
-  // translateY moves it to the right latitude; -32px raises it so the
-  // shadow (bottom of pin) sits at that point rather than the dot.
-  const pinAnchorStyle = pinCoords ? {
-    transform: `translateX(-50%) translateY(${latToPinY(pinCoords.lat) - 32}px)`,
-  } : {};
+  const globeSize = Math.min(Math.round(window.innerWidth * 0.78), 300);
 
   return (
     <div className="loc-step">
-      {/* ── Header ──────────────────────────────────────────────── */}
       <div className="loc-header">
         <h1 className="loc-title">Your Location</h1>
         <p className="loc-subtitle">
@@ -130,7 +72,6 @@ export default function LocationFields({ country, city, onChange }) {
         </p>
       </div>
 
-      {/* ── Search / selected city ───────────────────────────────── */}
       {hasSelection ? (
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <div className="loc-selected-chip">
@@ -156,7 +97,11 @@ export default function LocationFields({ country, city, onChange }) {
               autoComplete="off"
             />
             {query.length > 0 && (
-              <button className="loc-search-clear" onClick={() => { setQuery(""); setSuggestions([]); setOpen(false); }} aria-label="Clear">
+              <button
+                className="loc-search-clear"
+                onClick={() => { setQuery(""); setSuggestions([]); setOpen(false); }}
+                aria-label="Clear"
+              >
                 <X size={16} weight="bold" />
               </button>
             )}
@@ -179,33 +124,12 @@ export default function LocationFields({ country, city, onChange }) {
         </div>
       )}
 
-      {/* ── Globe visual ─────────────────────────────────────────── */}
       <div className="loc-visual" aria-hidden="true">
         <div className="loc-glow" />
         <div className="loc-ring" />
         <div className="loc-ring" />
         <div className="loc-ring" />
-
-        <div className="loc-globe-wrap">
-          <img
-            src={earthImg}
-            alt="Earth"
-            className={`loc-globe-img${pinCoords ? " loc-globe-img--pinned" : ""}`}
-            style={globeStyle}
-          />
-        </div>
-
-        {/* Pin anchored to correct lat/lon position on the globe */}
-        {hasSelection && pinCoords && (
-          <div className="loc-pin-anchor" style={pinAnchorStyle}>
-            {/* key forces re-mount → re-runs the drop animation on new city */}
-            <div className="loc-pin" key={`${pinCoords.lat.toFixed(2)}-${pinCoords.lon.toFixed(2)}`}>
-              <div className="loc-pin-dot" />
-              <div className="loc-pin-line" />
-              <div className="loc-pin-shadow" />
-            </div>
-          </div>
-        )}
+        <Globe pinCoords={pinCoords} size={globeSize} />
       </div>
     </div>
   );
