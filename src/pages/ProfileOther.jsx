@@ -6,7 +6,6 @@ import ProfileHeader from "../components/domain/Profile/ProfileHeader";
 import { isFollowing, follow, unfollow } from "../lib/follows";
 import NavigationTabs from "../components/UI/NavTabs";
 import PostsTab from "../components/domain/Profile/ProfileTabs/PostsTab";
-import StatsTab from "../components/domain/Profile/ProfileTabs/StatsTab";
 import InfoTab from "../components/domain/Profile/ProfileTabs/InfoTab";
 import MatchesTab from "../components/domain/Profile/ProfileTabs/MatchesTab";
 
@@ -100,11 +99,9 @@ export default function OtherProfile() {
     }
   }
 
-  if (state === "loading") return <div className="page">Loading…</div>;
-  if (state === "notfound")
-    return <div className="page">Profile not found.</div>;
-  if (state === "error")
-    return <div className="page">Couldn't load profile.</div>;
+  if (state === "loading") return <div className="page profile-loading">Loading…</div>;
+  if (state === "notfound") return <div className="page profile-loading">Profile not found.</div>;
+  if (state === "error") return <div className="page profile-loading">Couldn't load profile.</div>;
   if (!profile) return null;
 
   return (
@@ -114,12 +111,13 @@ export default function OtherProfile() {
         isMe={false}
         isFollowing={isFollowingState}
         toggleFollow={toggleFollow}
+        busy={busy}
       />
       <NavigationTabs
+        variant="pill"
         tabs={[
           { id: "posts", label: "Posts" },
           { id: "info", label: "Info" },
-          { id: "stats", label: "Stats" },
           { id: "matches", label: "Matches" },
         ]}
         activeTab={activeTab}
@@ -127,11 +125,8 @@ export default function OtherProfile() {
       />
       <div className="profile-tab-content">
         {activeTab === "posts" && <PostsTab profile={profile} isMe={false} />}
-        {activeTab === "stats" && <StatsTab profile={profile} isMe={false} />}
         {activeTab === "info" && <InfoTab profile={profile} isMe={false} />}
-        {activeTab === "matches" && (
-          <MatchesTab profile={profile} isMe={false} />
-        )}
+        {activeTab === "matches" && <MatchesTab profile={profile} isMe={false} />}
       </div>
     </div>
   );

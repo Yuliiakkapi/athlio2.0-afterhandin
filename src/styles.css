@@ -1,5 +1,6 @@
 body {
   font-family: "Barlow", sans-serif;
+  background-color: var(--neutral-50-bg, #f6f6f7);
 }
 
 * {

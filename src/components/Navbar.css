@@ -1,6 +1,6 @@
 /* ──────────────────────────────────────────────────────────────────
    Navbar — floating pill bottom navigation
-   Figma node 9138-4392
+   Figma node 7439-51451  (345 × 56 px pill)
 ────────────────────────────────────────────────────────────────── */
 
 .navbar {
@@ -10,26 +10,26 @@
   transform: translateX(-50%);
   width: 345px;
   height: 56px;
+
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 32px;
+
   background: rgba(251, 251, 251, 0.9);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   border-radius: 100px;
+  box-shadow: 0 2px 24px rgba(21, 22, 34, 0.10);
   z-index: 1000;
-  /* subtle lift shadow */
-  box-shadow: 0 2px 20px rgba(21, 22, 34, 0.08);
 }
 
-/* ─── Nav item (icon button / link) ─────────────────────────────── */
+/* ─── Nav item (link / button) ──────────────────────────────────── */
 .navbar-item {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  /* visible tap area matches icon size */
   width: 32px;
   height: 32px;
   border-radius: 50%;
@@ -41,50 +41,61 @@
   padding: 4px;
   box-sizing: border-box;
   flex-shrink: 0;
-  transition: color 120ms ease;
+  transition: color 150ms ease;
+  -webkit-tap-highlight-color: transparent;
 }
 
+/* Make SVG fill its container */
 .navbar-item svg {
   width: 24px;
   height: 24px;
   display: block;
+  flex-shrink: 0;
 }
 
-/* Active state — icon turns primary-default */
+/* ─── Active colour ──────────────────────────────────────────────── */
 .navbar-item--active {
   color: var(--primary-default, #4051fd);
 }
 
-/* Active circle highlight — expands to 44px centered behind the 32px tap area */
+/* ─── Active circle indicator (44 px, centered behind the icon) ─── */
 .navbar-item--active:not(.navbar-profile)::before {
   content: "";
   position: absolute;
-  inset: -6px; /* 32px + 2×6px = 44px */
+  inset: -6px;          /* 32px + 2 × 6px = 44px */
   border-radius: 50%;
   background: var(--neutral-100, #eeeff1);
   z-index: -1;
 }
 
-/* ─── Profile slot ───────────────────────────────────────────────── */
-.navbar-avatar {
+/* ─── Profile avatar button ─────────────────────────────────────── */
+.navbar-profile {
   width: 32px;
   height: 32px;
+  padding: 0;
   border-radius: 50%;
+  overflow: hidden;
+  background: var(--neutral-100, #f0f1f4);
+}
+
+.navbar-avatar {
+  width: 32px;
+  height: 40px;           /* 125 % of 32 px — matches Figma crop */
+  margin-top: -1px;       /* slight upward offset like Figma */
   object-fit: cover;
+  object-position: center top;
   display: block;
-  transition: box-shadow 120ms ease;
 }
 
 .navbar-avatar-placeholder {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: var(--neutral-300, #cecfd4);
+  background: var(--neutral-200, #d5d6dc);
 }
 
-/* Profile active state: primary-default border ring */
-.navbar-profile.navbar-item--active .navbar-avatar,
-.navbar-profile.navbar-item--active .navbar-avatar-placeholder {
+/* Profile active state: primary ring */
+.navbar-profile.navbar-item--active {
   outline: 1.5px solid var(--primary-default, #4051fd);
-  outline-offset: 1.5px;
+  outline-offset: 2px;
 }

@@ -3,7 +3,7 @@
   flex-direction: column;
   gap: 12px;
   padding: 16px 8px 80px 8px;
-  background-color: var(--neutral-100);
+  background-color: var(--neutral-50-bg);
 }
 
 main:has(.posts-feed) {

@@ -1,94 +1,229 @@
-﻿.profile-header {
+/* ──────────────────────────────────────────────────────────────────
+   ProfileHeader — Figma node 9153-4315
+   #222f8d bg, 283px, rounded bottom 24px
+   Layout: avatar left + info column right
+────────────────────────────────────────────────────────────────── */
+
+.ph-root {
+  position: relative;
+  width: 100%;
+  min-height: 283px;
+  background: #222f8d;
+  border-radius: 0 0 24px 24px;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  padding: 24px 16px;
+  padding: 0 16px 20px;
 }
 
-.profile-header-row {
-  margin-bottom: 12px;
+/* ─── Decorative vector background images ────────────────────────── */
+.ph-deco {
+  position: absolute;
+  pointer-events: none;
+  display: block;
 }
 
-/* 1️⃣ Top row: avatar + name + tags */
-.profile-header-top {
+.ph-deco-1 {
+  left: -41px;
+  top: 0;
+  width: 354px;
+  height: 312px;
+}
+
+.ph-deco-2 {
+  left: 11px;
+  top: -16px;
+  width: 354px;
+  height: 312px;
+}
+
+.ph-deco-3 {
+  left: 136px;
+  top: -53px;
+  width: 314px;
+  height: 263px;
+}
+
+/* ─── Top bar: back + share ────────────────────────────────────── */
+.ph-topbar {
+  position: relative;
+  z-index: 2;
   display: flex;
   align-items: center;
-  gap: 16px;
+  justify-content: space-between;
+  padding-top: 16px;
+  padding-bottom: 12px;
 }
 
-.profile-top-text {
+.ph-icon-btn {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  padding: 0;
+}
+
+/* ─── Main content row: avatar LEFT + info RIGHT ─────────────────── */
+.ph-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 17px;
+  flex: 1;
+  padding-top: 8px;
+  width: 100%;
+}
+
+/* ─── Avatar ────────────────────────────────────────────────────── */
+.ph-avatar-wrap {
+  flex-shrink: 0;
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.ph-avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+}
+
+.ph-avatar--placeholder {
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* ─── Info column ───────────────────────────────────────────────── */
+.ph-info {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  flex: 1;
+  min-width: 0;
 }
 
-.profile-name-row {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.profile-name {
-  font-size: var(--text-l);
-  font-weight: 500;
-  color: var(--black);
-}
-
-.profile-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-/* 2️⃣ Bio + followers + location */
-.profile-info {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.profile-bio {
-  font-size: var(--text-sm);
-  font-weight: 400;
-  color: var(--black);
+/* Name */
+.ph-name {
+  font-family: var(--font-condensed, "Barlow Condensed", sans-serif);
+  font-size: 32px;
+  font-weight: 700;
+  font-style: italic;
+  text-transform: uppercase;
+  line-height: 1;
+  color: #ffffff;
+  white-space: pre-wrap;
   margin: 0;
 }
 
-/* Updated meta layout */
-.profile-meta {
+/* Followers */
+.ph-followers {
+  font-family: var(--font-sans, "Barlow", sans-serif);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1;
+  color: var(--neutral-300, #cecfd4);
+  margin: 0;
+}
+
+/* Row: position badges + dot + club */
+.ph-meta-row {
   display: flex;
   align-items: center;
+  gap: 8px;
   flex-wrap: wrap;
-  gap: 4px;
-  font-size: var(--text-sm);
-  color: var(--neutral-900);
-  max-width: 80%;
 }
 
-/* Followers + Following line */
-.profile-follow-line {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-right: 8px;
-}
-
-.profile-followers strong,
-.profile-following strong {
-  color: var(--black);
+/* Position badge — light blue pill */
+.ph-badge {
+  font-family: var(--font-condensed, "Barlow Condensed", sans-serif);
+  font-size: 14px;
   font-weight: 600;
+  font-style: italic;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  color: var(--primary-800, #1f2cb4);
+  background: var(--primary-100, #dbe9ff);
+  border-radius: 9999px;
+  padding: 2px 8px;
+  white-space: nowrap;
 }
 
-/* Location (always below follow line) */
-.profile-location {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-size: var(--text-sm);
-  color: var(--neutral-900);
+/* Dot separator */
+.ph-dot {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--neutral-300, #cecfd4);
+  flex-shrink: 0;
 }
 
-/* 3️⃣ Buttons */
-.profile-buttons {
+/* Club name */
+.ph-club {
+  font-family: var(--font-sans, "Barlow", sans-serif);
+  font-size: 14px;
+  font-weight: 500;
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ─── Action buttons ─────────────────────────────────────────────── */
+.ph-actions {
+  position: relative;
+  z-index: 2;
   display: flex;
   gap: 10px;
+  margin-top: 16px;
+}
+
+.ph-btn {
+  flex: 1;
+  height: 36px;
+  padding: 0 12px;
+  border-radius: 8px;
+  font-family: var(--font-sans, "Barlow", sans-serif);
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: opacity 150ms ease;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ph-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Secondary — neutral/100 bg + border, primary text */
+.ph-btn--secondary {
+  background: var(--neutral-100, #eeeff1);
+  border: 1px solid var(--neutral-200, #e1e1e4);
+  color: var(--primary-700, #2230e0);
+}
+
+/* Ghost — white/20% bg, white text */
+.ph-btn--ghost {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  border: none;
 }

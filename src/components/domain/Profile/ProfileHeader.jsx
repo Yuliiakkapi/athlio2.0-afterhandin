@@ -1,19 +1,9 @@
 import { useNavigate } from "react-router-dom";
-import Button from "../../UI/Button";
-import ProfilePicture from "../../UI/ProfilePicture";
-import Tag from "../../UI/Tag";
-import VerifiedBadge from "../../UI/VerifiedBadge";
-import Player from "../../../assets/images/player.jpg";
-import {
-  Check,
-  MapPin,
-  PencilSimpleLine,
-  Plus,
-  SealCheck,
-  ShareNetwork,
-} from "@phosphor-icons/react";
-
 import "./ProfileHeader.css";
+
+const DECO_1 = "https://www.figma.com/api/mcp/asset/52ded45f-c755-40dc-9c51-9ee493f1728d";
+const DECO_2 = "https://www.figma.com/api/mcp/asset/12ed800c-7121-4de6-914e-0fac6f2ccb2a";
+const DECO_3 = "https://www.figma.com/api/mcp/asset/502d28dc-b1c8-4892-acd5-2d324bbebfd0";
 
 export default function ProfileHeader({
   profile,
@@ -26,97 +16,81 @@ export default function ProfileHeader({
 
   if (!profile) return null;
 
-  const locationText =
-    profile.city && profile.country
-      ? `${profile.city}, ${profile.country}`
-      : profile.city || profile.country || null;
+  const positions = Array.isArray(profile.position)
+    ? profile.position
+    : profile.position
+    ? [profile.position]
+    : [];
+
+  const clubName = profile.club_other_name || null;
 
   return (
-    <section className="profile-header">
-      <div className="profile-header-row profile-header-top">
-        <ProfilePicture
-          size="large"
-          verified={profile.verified}
-          imgUrl={profile.avatar_url || Player}
-        />
+    <section className="ph-root">
+      {/* Decorative background shapes from Figma */}
+      <img className="ph-deco ph-deco-1" src={DECO_1} alt="" aria-hidden="true" />
+      <img className="ph-deco ph-deco-2" src={DECO_2} alt="" aria-hidden="true" />
+      <img className="ph-deco ph-deco-3" src={DECO_3} alt="" aria-hidden="true" />
 
-        <div className="profile-top-text">
-          <div className="profile-name-row">
-            <h2 className="profile-name">{profile.full_name}</h2>
-            {profile.verified && (
-              <VerifiedBadge
-                containerSize="container-small"
-                iconSize="icon-small"
-              />
-            )}
-          </div>
-          <div className="profile-tags">
-            {profile.role && <Tag label={profile.role} />}
-            {profile.position && (
-              <Tag label={String(profile.position).replace(/[[\]"]/g, "")} />
-            )}
-          </div>
-        </div>
+      {/* Top bar: back arrow + share */}
+      <div className="ph-topbar">
+        <button className="ph-icon-btn" onClick={() => navigate(-1)} aria-label="Go back">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M15 19l-7-7 7-7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </button>
+        <button className="ph-icon-btn" aria-label="Share profile">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <circle cx="18" cy="5" r="2.5" stroke="currentColor" strokeWidth="1.75" />
+            <circle cx="6" cy="12" r="2.5" stroke="currentColor" strokeWidth="1.75" />
+            <circle cx="18" cy="19" r="2.5" stroke="currentColor" strokeWidth="1.75" />
+            <path d="M8.3 10.7l7.4-4.4M8.3 13.3l7.4 4.4" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" />
+          </svg>
+        </button>
       </div>
 
-      <div className="profile-header-row profile-info">
-        {profile.bio && <p className="profile-bio">{profile.bio}</p>}
-
-        <div className="profile-meta">
-          <div className="profile-follow-line">
-            <span className="profile-followers">
-              <strong>{profile.follower_count ?? 0}</strong> followers
-            </span>
-
-            {isMe && (
-              <span
-                className="profile-following"
-                style={{ cursor: "pointer" }}
-                onClick={() => navigate("/profile/me/following")}
-              >
-                <strong>{profile.following_count ?? 0}</strong> following
-              </span>
-            )}
-          </div>
-
-          {locationText && (
-            <div className="profile-location">
-              <MapPin />
-              <span>{locationText}</span>
-            </div>
+      {/* Main content: avatar LEFT + info RIGHT */}
+      <div className="ph-content">
+        <div className="ph-avatar-wrap">
+          {profile.avatar_url ? (
+            <img className="ph-avatar" src={profile.avatar_url} alt={profile.full_name || "Avatar"} />
+          ) : (
+            <div className="ph-avatar ph-avatar--placeholder" />
           )}
         </div>
+
+        <div className="ph-info">
+          <h1 className="ph-name">{profile.full_name || profile.username || "Athlete"}</h1>
+          <p className="ph-followers">
+            {(profile.follower_count ?? 0).toLocaleString()} followers
+          </p>
+          <div className="ph-meta-row">
+            {positions.slice(0, 3).map((pos) => (
+              <span key={pos} className="ph-badge">{pos}</span>
+            ))}
+            {(positions.length > 0 || true) && clubName && (
+              <span className="ph-dot" aria-hidden="true" />
+            )}
+            {clubName && <span className="ph-club">{clubName}</span>}
+          </div>
+        </div>
       </div>
 
-      <div className="profile-header-row profile-buttons">
+      {/* Action buttons */}
+      <div className="ph-actions">
         {isMe ? (
-          <>
-            <Button
-              size="medium"
-              type="outline"
-              label="Edit Profile"
-              Icon={PencilSimpleLine}
-              onClick={() => navigate("/profile/me/edit")}
-            />
-            <Button size="medium" type="outline" label="Verify" Icon={SealCheck} />
-            <Button size="medium" type="outline" Icon={ShareNetwork} />
-          </>
+          <button className="ph-btn ph-btn--secondary" onClick={() => navigate("/profile/me/edit")}>
+            Edit Profile
+          </button>
         ) : (
           <>
-            <Button
-              size="medium"
-              type={isFollowing ? "outline" : "primary"}
-              label={isFollowing ? "Following" : "Follow"}
+            <button
+              className="ph-btn ph-btn--secondary"
               onClick={toggleFollow}
               disabled={busy}
-              Icon={isFollowing ? Check : Plus}
-            />
-            <Button
-              size="medium"
-              type="outline"
-              label="Message"
-              onClick={() => console.log("Message clicked")}
-            />
+            >
+              {isFollowing ? "Following" : "+ Follow"}
+            </button>
+            <button className="ph-btn ph-btn--ghost">Message</button>
           </>
         )}
       </div>
