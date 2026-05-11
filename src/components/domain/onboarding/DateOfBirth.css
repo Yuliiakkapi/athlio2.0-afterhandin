@@ -2,7 +2,9 @@
 .dob-step {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   gap: 40px;
+  min-height: calc(100dvh - 176px);
 }
 
 /* ─── Heading ──────────────────────────────────────────────────── */

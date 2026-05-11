@@ -44,7 +44,7 @@
 .pos-header {
   position: relative;
   z-index: 20;    /* above fixed pitch bg (z:5) */
-  margin-top: -20px; /* pull up closer to topbar */
+  margin-top: 0;
   margin-bottom: 0;
 }
 

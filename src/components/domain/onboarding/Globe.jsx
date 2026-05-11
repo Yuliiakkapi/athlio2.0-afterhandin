@@ -1,138 +1,124 @@
-import createGlobe from "cobe";
-import { useEffect, useRef } from "react";
+import { useMemo } from "react";
 import "./Globe.css";
 
-const AUTO_ROTATE = 0.003;
-const FRICTION    = 0.92;
-const DRAG_SENS   = 0.005;
-
-function lonToPhi(lon) {
-  return -((lon * Math.PI) / 180) - Math.PI / 2;
-}
+const TILT = 0.28;
 
 export default function Globe({ pinCoords, size = 300 }) {
-  const containerRef = useRef(null);
-  const globeRef     = useRef(null);
-  const phi          = useRef(0);
-  const theta        = useRef(0.3);
-  const dragging     = useRef(false);
-  const lastX        = useRef(0);
-  const lastY        = useRef(0);
-  const velX         = useRef(0);
-  const velY         = useRef(0);
-  const targetPhi    = useRef(null);
-  const targetTheta  = useRef(null);
+  const r  = (size - 4) / 2;
+  const cx = size / 2;
+  const cy = size / 2;
 
-  useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
-
-    // Create canvas imperatively — avoids React StrictMode re-mount
-    // leaving a stale cobe-wrapped canvas that won't re-initialize.
-    const canvas = document.createElement("canvas");
-    canvas.style.cssText = `width:${size}px;height:${size}px;display:block;touch-action:none;cursor:grab;`;
-    container.appendChild(canvas);
-
-    const globe = createGlobe(canvas, {
-      devicePixelRatio: 2,
-      width:  size * 2,
-      height: size * 2,
-      phi:    phi.current,
-      theta:  theta.current,
-      dark:   1,
-      diffuse: 1.2,
-      mapSamples:    16000,
-      mapBrightness: 6,
-      baseColor:   [0.3, 0.3, 0.3],
-      markerColor: [1.0, 0.6, 0.1],
-      glowColor:   [1.0, 1.0, 1.0],
-      markers: pinCoords
-        ? [{ location: [pinCoords.lat, pinCoords.lon], size: 0.07 }]
-        : [],
-      onRender(state) {
-        if (dragging.current) {
-          phi.current   += velX.current;
-          theta.current += velY.current;
-        } else if (targetPhi.current !== null) {
-          const dPhi   = targetPhi.current - phi.current;
-          const dTheta = (targetTheta.current ?? theta.current) - theta.current;
-          phi.current   += dPhi   * 0.06;
-          theta.current += dTheta * 0.06;
-          if (Math.abs(dPhi) < 0.003 && Math.abs(dTheta) < 0.003) {
-            targetPhi.current   = null;
-            targetTheta.current = null;
-          }
-        } else {
-          velX.current *= FRICTION;
-          velY.current *= FRICTION;
-          phi.current   += velX.current;
-          theta.current += velY.current;
-          if (Math.abs(velX.current) < 0.0003) { velX.current = 0; phi.current += AUTO_ROTATE; }
-          if (Math.abs(velY.current) < 0.0003)   velY.current = 0;
-        }
-        theta.current = Math.max(-0.52, Math.min(0.52, theta.current));
-        state.phi   = phi.current;
-        state.theta = theta.current;
-      },
-    });
-
-    globeRef.current = globe;
-
-    function down(e) {
-      dragging.current  = true;
-      lastX.current     = e.clientX;
-      lastY.current     = e.clientY;
-      velX.current      = 0;
-      velY.current      = 0;
-      targetPhi.current = null;
-      canvas.setPointerCapture(e.pointerId);
-      canvas.style.cursor = "grabbing";
+  // Vertical ellipses for meridians at 30° intervals
+  const meridianRx = useMemo(() => {
+    const out = [];
+    for (let lon = 30; lon <= 150; lon += 30) {
+      const rx = r * Math.sin((lon * Math.PI) / 180);
+      if (rx > 0.5) out.push(rx);
     }
-    function move(e) {
-      if (!dragging.current) return;
-      velX.current  = (e.clientX - lastX.current) * DRAG_SENS;
-      velY.current  = (e.clientY - lastY.current) * DRAG_SENS * 0.4;
-      phi.current   += velX.current;
-      theta.current += velY.current;
-      lastX.current = e.clientX;
-      lastY.current = e.clientY;
-    }
-    function up() {
-      dragging.current    = false;
-      canvas.style.cursor = "grab";
-    }
+    return out;
+  }, [r]);
 
-    canvas.addEventListener("pointerdown",   down);
-    canvas.addEventListener("pointermove",   move);
-    canvas.addEventListener("pointerup",     up);
-    canvas.addEventListener("pointercancel", up);
-
-    return () => {
-      globe.destroy();
-      globeRef.current = null;
-      canvas.remove();
-    };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [size]);
-
-  useEffect(() => {
-    if (!globeRef.current) return;
-    globeRef.current.update({
-      markers: pinCoords
-        ? [{ location: [pinCoords.lat, pinCoords.lon], size: 0.07 }]
-        : [],
-    });
-    if (pinCoords) {
-      targetPhi.current   = lonToPhi(pinCoords.lon);
-      targetTheta.current = -(pinCoords.lat * Math.PI) / 180 * 0.52;
+  // Horizontal ellipses for parallels at 30° intervals
+  const parallels = useMemo(() => {
+    const out = [];
+    for (let lat = -60; lat <= 60; lat += 30) {
+      const latR = (lat * Math.PI) / 180;
+      out.push({
+        rx: r * Math.cos(latR),
+        ry: r * Math.cos(latR) * TILT,
+        py: cy - r * Math.sin(latR),
+        isEquator: lat === 0,
+      });
     }
-  }, [pinCoords]);
+    return out;
+  }, [r, cy]);
+
+  // Orthographic projection of pin
+  let pinX = null;
+  let pinY = null;
+  if (pinCoords) {
+    const latR = (pinCoords.lat * Math.PI) / 180;
+    const lonR = (pinCoords.lon * Math.PI) / 180;
+    const z    = Math.cos(latR) * Math.cos(lonR);
+    if (z >= -0.15) {
+      pinX = cx + r * Math.cos(latR) * Math.sin(lonR);
+      pinY = cy - r * Math.sin(latR);
+    } else {
+      // Back hemisphere — clamp to edge
+      const sign = lonR > 0 ? 1 : -1;
+      pinX = cx + r * 0.82 * sign;
+      pinY = cy - r * 0.65 * Math.sin(latR);
+    }
+  }
 
   return (
-    <div
-      ref={containerRef}
-      className="globe-outer"
-      style={{ width: size, height: size }}
-    />
+    <div className="globe-outer" style={{ width: size, height: size }}>
+      <svg
+        width={size}
+        height={size}
+        style={{ display: "block" }}
+        aria-hidden="true"
+      >
+        <defs>
+          <clipPath id="globe-clip">
+            <circle cx={cx} cy={cy} r={r} />
+          </clipPath>
+          <radialGradient id="globe-bg" cx="38%" cy="35%" r="65%">
+            <stop offset="0%"   stopColor="#eef2ff" />
+            <stop offset="60%"  stopColor="#dbe4ff" />
+            <stop offset="100%" stopColor="#bfcbff" />
+          </radialGradient>
+        </defs>
+
+        {/* Background fill */}
+        <circle cx={cx} cy={cy} r={r} fill="url(#globe-bg)" />
+
+        {/* Grid lines (clipped to globe circle) */}
+        <g
+          clipPath="url(#globe-clip)"
+          stroke="rgba(64,81,253,0.18)"
+          strokeWidth="0.9"
+          fill="none"
+        >
+          {/* Prime meridian */}
+          <line x1={cx} y1={cy - r} x2={cx} y2={cy + r} />
+          {/* Other meridians */}
+          {meridianRx.map((rx, i) => (
+            <ellipse key={i} cx={cx} cy={cy} rx={rx} ry={r} />
+          ))}
+          {/* Parallels */}
+          {parallels.map((p, i) => (
+            <ellipse
+              key={i}
+              cx={cx}
+              cy={p.py}
+              rx={p.rx}
+              ry={p.ry}
+              strokeWidth={p.isEquator ? 1.4 : 0.9}
+            />
+          ))}
+        </g>
+
+        {/* Outer ring */}
+        <circle
+          cx={cx}
+          cy={cy}
+          r={r}
+          fill="none"
+          stroke="rgba(64,81,253,0.28)"
+          strokeWidth="1.5"
+        />
+
+        {/* Location pin */}
+        {pinX !== null && (
+          <g>
+            <circle cx={pinX} cy={pinY} r={11} fill="rgba(64,81,253,0.12)" />
+            <circle cx={pinX} cy={pinY} r={6}  fill="rgba(64,81,253,0.28)" />
+            <circle cx={pinX} cy={pinY} r={3.5} fill="#4051fd" />
+            <circle cx={pinX} cy={pinY} r={1.5} fill="#fff" opacity="0.8" />
+          </g>
+        )}
+      </svg>
+    </div>
   );
 }

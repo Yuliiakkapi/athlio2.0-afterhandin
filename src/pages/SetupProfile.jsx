@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "../lib/supabase";
 import StepContainer from "../components/wizard/StepContainer";
 import TextInput from "../components/inputs/TextInput";
-import UnitInput from "../components/inputs/UnitInput";
 import RoleSelect from "../components/domain/onboarding/RoleSelect";
 import NameAndPhoto from "../components/domain/onboarding/NameAndPhoto";
 import DateOfBirth from "../components/domain/onboarding/DateOfBirth";
@@ -317,36 +316,6 @@ export default function Setup() {
         )}
 
         {stepId === "premium" && <Premium onContinue={() => next()} />}
-
-        {stepId === "measure" && role === "athlete" && (
-          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-            <UnitInput
-              label="Height"
-              value={form.height}
-              onChange={(v) => set({ height: v })}
-              unit={heightUnit}
-              setUnit={setHeightUnit}
-              unitOptions={["cm", "ft"]}
-              placeholderCm="Height (cm)"
-              placeholderAlt="Height (e.g. 5'11)"
-            />
-            <UnitInput
-              label="Weight"
-              value={form.weight}
-              onChange={(v) => set({ weight: v })}
-              unit={weightUnit}
-              setUnit={setWeightUnit}
-              unitOptions={["kg", "lb"]}
-              placeholderCm="Weight (kg)"
-              placeholderAlt="Weight (lb)"
-            />
-            <TextInput
-              label="Gender"
-              value={form.gender}
-              onChange={(v) => set({ gender: v })}
-            />
-          </div>
-        )}
 
         {stepId === "club" && (role === "athlete" || role === "scout" || role === "professional") && (
           <ClubPicker

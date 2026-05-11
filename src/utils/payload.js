@@ -27,6 +27,10 @@ export function buildProfilePayload({ role, form, heightUnit, weightUnit }) {
     playing_style: form.playingStyle || null,
     preferred_leg: form.preferredLeg || null,
     talent_preferences: form.talent_preferences || null,
+    highlight_url: form.highlightUrl || null,
+    highlight_type: form.highlightType || null,
+    highlight_text: form.highlightText || null,
+    highlight_match: form.highlightMatch || null,
   };
 
   // Add organization-specific fields
