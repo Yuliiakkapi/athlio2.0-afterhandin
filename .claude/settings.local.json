@@ -7,7 +7,8 @@
       "PowerShell(Get-Command gh -ErrorAction SilentlyContinue)",
       "PowerShell(Get-Content \"$env:APPDATA\\\\GitHub CLI\\\\hosts.yml\" -ErrorAction SilentlyContinue; Get-Content \"$env:LOCALAPPDATA\\\\gh\\\\hosts.yml\" -ErrorAction SilentlyContinue)",
       "Bash(git commit *)",
-      "Bash(git push *)"
+      "Bash(git push *)",
+      "mcp__claude_ai_Figma__get_design_context"
     ]
   }
 }

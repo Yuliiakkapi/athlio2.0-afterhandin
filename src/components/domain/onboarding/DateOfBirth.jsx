@@ -125,33 +125,35 @@ export default function DateOfBirth({ value, onChange }) {
         <p className="dob-subtitle">We use this to show you relevant comparisons and opportunities.</p>
       </div>
 
-      <div className="dob-picker" role="group" aria-label="Date of birth picker">
-        {/* Day — remount key when daysCount changes to re-sync scroll */}
-        <Drum
-          key={`day-${daysCount}`}
-          items={days}
-          initialIdx={clampedDay}
-          onSelect={(i) => { setDayIdx(i); emit(i, monthIdx, yearIdx); }}
-          format={(d) => String(d).padStart(2, "0")}
-          label="Day"
-        />
+      <div className="dob-picker-shell">
+        <div className="dob-picker" role="group" aria-label="Date of birth picker">
+          {/* Day — remount key when daysCount changes to re-sync scroll */}
+          <Drum
+            key={`day-${daysCount}`}
+            items={days}
+            initialIdx={clampedDay}
+            onSelect={(i) => { setDayIdx(i); emit(i, monthIdx, yearIdx); }}
+            format={(d) => String(d).padStart(2, "0")}
+            label="Day"
+          />
 
-        <Drum
-          key="month"
-          items={MONTHS}
-          initialIdx={monthIdx}
-          onSelect={(i) => { setMonthIdx(i); emit(clampedDay, i, yearIdx); }}
-          label="Month"
-        />
+          <Drum
+            key="month"
+            items={MONTHS}
+            initialIdx={monthIdx}
+            onSelect={(i) => { setMonthIdx(i); emit(clampedDay, i, yearIdx); }}
+            label="Month"
+          />
 
-        <Drum
-          key="year"
-          items={YEARS}
-          initialIdx={yearIdx}
-          onSelect={(i) => { setYearIdx(i); emit(clampedDay, monthIdx, i); }}
-          format={(y) => String(y)}
-          label="Year"
-        />
+          <Drum
+            key="year"
+            items={YEARS}
+            initialIdx={yearIdx}
+            onSelect={(i) => { setYearIdx(i); emit(clampedDay, monthIdx, i); }}
+            format={(y) => String(y)}
+            label="Year"
+          />
+        </div>
       </div>
     </div>
   );

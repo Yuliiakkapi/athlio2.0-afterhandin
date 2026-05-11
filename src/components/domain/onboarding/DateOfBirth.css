@@ -2,9 +2,19 @@
 .dob-step {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  gap: 40px;
+  justify-content: flex-start;
+  gap: 24px;
   min-height: calc(100dvh - 176px);
+}
+
+.dob-header {
+  padding-top: 8px;
+}
+
+.dob-picker-shell {
+  flex: 1;
+  display: flex;
+  align-items: center;
 }
 
 /* ─── Heading ──────────────────────────────────────────────────── */
@@ -35,6 +45,7 @@
   gap: 16px;
   justify-content: center;
   align-items: flex-start;
+  width: 100%;
 }
 
 /* ─── One drum column ──────────────────────────────────────────── */

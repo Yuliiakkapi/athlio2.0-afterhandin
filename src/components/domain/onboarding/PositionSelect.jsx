@@ -61,9 +61,9 @@ export default function PositionSelect({ value = [], onChange }) {
       </div>
 
       {/* ── Header — same flow & position as every other step ────── */}
-      <div className="pos-header">
-        <h1 className="pos-title">Select your position</h1>
-        <p className="pos-subtitle">You can choose multiple</p>
+      <div className="pos-header role-select-header">
+        <h1 className="pos-title role-header-title">Choose your position</h1>
+        <p className="pos-subtitle role-header-subtitle">You can select multiple</p>
       </div>
 
       {/* ── Position buttons — fixed overlay, viewport coordinates ─ */}

@@ -3,7 +3,7 @@
  */
 export function buildProfilePayload({ role, form, heightUnit, weightUnit }) {
   const payload = {
-    role,
+    role: role === "professional" && form.professionalType ? form.professionalType : role,
     full_name: form.full_name,
     username: form.username,
     avatar_url: form.avatar_url,

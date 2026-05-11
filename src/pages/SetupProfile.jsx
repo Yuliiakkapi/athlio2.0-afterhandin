@@ -4,6 +4,7 @@ import { supabase } from "../lib/supabase";
 import StepContainer from "../components/wizard/StepContainer";
 import TextInput from "../components/inputs/TextInput";
 import RoleSelect from "../components/domain/onboarding/RoleSelect";
+import ProfessionalRole from "../components/domain/onboarding/ProfessionalRole";
 import NameAndPhoto from "../components/domain/onboarding/NameAndPhoto";
 import DateOfBirth from "../components/domain/onboarding/DateOfBirth";
 import PositionSelect from "../components/domain/onboarding/PositionSelect";
@@ -58,6 +59,7 @@ export default function Setup() {
     highlightType: "",
     highlightText: "",
     highlightMatch: "",
+    professionalType: "",
     playingStyle: "",
     preferredLeg: "",
     talent_preferences: "",
@@ -216,7 +218,9 @@ export default function Setup() {
     try {
       switch (stepId) {
         case "role":
-          return Boolean(role); // disabled until user taps a card
+          return Boolean(role);
+        case "profession":
+          return Boolean(form.professionalType);
         case "name":
           return (form.full_name || "").toString().trim() !== "";
         case "dob":
@@ -264,6 +268,13 @@ export default function Setup() {
         showFinish={false}
       >
         {stepId === "role" && <RoleSelect role={role} onChange={setRole} onNext={next} />}
+
+        {stepId === "profession" && role === "professional" && (
+          <ProfessionalRole
+            value={form.professionalType}
+            onChange={(v) => set({ professionalType: v })}
+          />
+        )}
 
         {stepId === "name" && (
           <NameAndPhoto
