@@ -14,7 +14,8 @@ export default function AppShell() {
   const hideTopbar =
     pathname.startsWith("/auth") ||
     pathname.startsWith("/intro") ||
-    pathname.startsWith("/setup-profile");
+    pathname.startsWith("/setup-profile") ||
+    pathname.startsWith("/profile");
 
   return (
     <div className="app-shell">

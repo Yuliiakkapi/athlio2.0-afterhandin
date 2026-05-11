@@ -181,7 +181,7 @@ export default function Auth() {
 
       <div className="role-header">
         <h1 className="role-header-title">
-          {mode === "signup" ? "Create account" : "Log in"}
+          {mode === "signup" ? "Create account" : "Welcome back"}
         </h1>
         <p className="role-header-subtitle">
           {mode === "signup"

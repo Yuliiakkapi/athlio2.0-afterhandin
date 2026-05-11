@@ -93,3 +93,44 @@
     font-size: var(--text-xs);
   }
 }
+
+/* ─── Pill variant ─────────────────────────────────────────────── */
+.navtabs-pill-wrap {
+  position: sticky;
+  top: 56px; /* below fixed topbar */
+  z-index: 100;
+  padding: 8px;
+  background: var(--white, #fff);
+}
+
+.navtabs-pill {
+  display: flex;
+  gap: 3px;
+  padding: 4px;
+  border-radius: 100px;
+  background: var(--white, #fff);
+}
+
+.navtabs-pill-tab {
+  flex: 1;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  border-radius: 100px;
+  font-family: var(--font-sans);
+  font-size: var(--text-base); /* 16px */
+  font-weight: 600;
+  color: var(--muted, #91909b);
+  letter-spacing: -0.02em;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 150ms ease, color 150ms ease;
+}
+
+.navtabs-pill-tab--active {
+  background: #f0f4ff;
+  color: var(--black, #151622);
+}

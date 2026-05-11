@@ -1,12 +1,23 @@
-﻿.match-post {
+/* ──────────────────────────────────────────────────────────────────
+   MatchPost — post containing a match result card
+   Figma node 1476-10061
+────────────────────────────────────────────────────────────────── */
+
+.match-post {
   display: flex;
   flex-direction: column;
-  justify-content: start;
+  gap: 16px;
   align-items: flex-start;
-  background-color: var(--neutral-50-bg);
+  background: var(--white, #fff);
   padding: 8px;
   border-radius: 8px;
-  gap: 16px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ─── Text content ───────────────────────────────────────────────── */
+.match-post-content-container {
+  width: 100%;
 }
 
 .match-post-content {
@@ -14,7 +25,11 @@
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  font-weight: 400;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm); /* 14px */
+  font-weight: 500;
+  color: var(--neutral-950, #323135);
+  line-height: normal;
 }
 
 .match-post-content.expanded {
@@ -26,6 +41,9 @@
   border: none;
   color: var(--primary-default);
   cursor: pointer;
+  font-family: var(--font-sans);
   font-size: var(--text-sm);
+  font-weight: 500;
   margin-top: 4px;
+  padding: 0;
 }

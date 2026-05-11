@@ -116,6 +116,7 @@ export default function PostHeader({
                 ? `${String(position).replace(/[[\]"]/g, "")} at @${club}`
                 : String(position)?.replace(/[[\]"]/g, "") || club || ""}
             </p>
+            <span className="subheader-dot" aria-hidden="true" />
             <p className="date">{date}</p>
           </div>
         </div>

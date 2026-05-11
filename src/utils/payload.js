@@ -6,7 +6,7 @@ export function buildProfilePayload({ role, form, heightUnit, weightUnit }) {
     role: role === "professional" && form.professionalType ? form.professionalType : role,
     full_name: form.full_name,
     username: form.username,
-    avatar_url: form.avatar_url,
+    avatar_url: form.avatar_url?.startsWith("data:") ? undefined : (form.avatar_url || undefined),
     dob: form.dob || null,
     age: form.dob
       ? Math.floor((Date.now() - new Date(form.dob)) / (365.25 * 24 * 3600 * 1000))

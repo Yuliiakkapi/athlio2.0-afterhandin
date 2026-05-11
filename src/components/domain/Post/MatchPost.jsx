@@ -25,6 +25,8 @@ export default function MatchPost({
   hideFollow = false,
   likesCount,
   commentsCount,
+  yellowCards = 0,
+  redCards = 0,
 }) {
   const isImage = !!imageUrl;
 
@@ -70,7 +72,6 @@ export default function MatchPost({
         </div>
       )}
       <MatchCard
-        isImage={isImage}
         imageUrl={imageUrl}
         yourTeam={yourTeam}
         yourScore={yourScore}
@@ -81,6 +82,8 @@ export default function MatchPost({
         goalsCount={goalsCount}
         assistsCount={assistsCount}
         minCount={minCount}
+        yellowCards={yellowCards}
+        redCards={redCards}
       />
       <PostActions
         postId={id}

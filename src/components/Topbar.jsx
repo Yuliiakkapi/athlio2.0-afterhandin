@@ -3,7 +3,7 @@ import { useUser } from "../context/UserContext";
 import {
   ArrowLeft,
   Bell,
-  ChatsCircle,
+  ChatCircle,
   List,
   MagnifyingGlass,
   ShareNetwork,
@@ -28,7 +28,7 @@ const TOPBAR_CONFIG = {
           )}
         </div>
         <div className="icon-with-badge" onClick={() => nav("/chat")}>
-          <ChatsCircle size={24} aria-label="Messages" />
+          <ChatCircle size={24} aria-label="Messages" />
           {counts.messages > 0 && (
             <span className="badge">{counts.messages}</span>
           )}
@@ -142,7 +142,7 @@ const TOPBAR_CONFIG = {
           )}
         </div>
         <div className="icon-with-badge" onClick={() => nav("/chat")}>
-          <ChatsCircle size={24} aria-label="Messages" />
+          <ChatCircle size={24} aria-label="Messages" />
           {counts.messages > 0 && (
             <span className="badge">{counts.messages}</span>
           )}
@@ -167,7 +167,7 @@ const TOPBAR_CONFIG = {
           )}
         </div>
         <div className="icon-with-badge" onClick={() => nav("/chat")}>
-          <ChatsCircle size={24} aria-label="Messages" />
+          <ChatCircle size={24} aria-label="Messages" />
           {counts.messages > 0 && (
             <span className="badge">{counts.messages}</span>
           )}

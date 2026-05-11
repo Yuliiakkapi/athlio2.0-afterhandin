@@ -1,11 +1,33 @@
+/* ──────────────────────────────────────────────────────────────────
+   MatchPostCount — single stat block (Goals / Ast / Min.)
+   Figma: label 12px Medium uppercase, count 44px Barlow Condensed Bold Italic
+────────────────────────────────────────────────────────────────── */
+
 .match-post-count {
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 0;
 }
 
 .match-post-count p {
-  font-size: 10px;
-  font-weight: 300;
+  font-family: var(--font-sans);
+  font-size: var(--text-xs); /* 12px */
+  font-weight: 500;
   text-transform: uppercase;
+  color: var(--black);
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.match-post-count h1 {
+  font-family: var(--font-condensed);
+  font-size: var(--heading-5xl); /* 44px */
+  font-weight: 700;
+  font-style: italic;
+  text-transform: uppercase;
+  line-height: 1.1;
+  color: var(--black);
+  /* override global h1 reset */
+  margin: 0;
 }

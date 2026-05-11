@@ -1,22 +1,25 @@
-﻿.verdict {
-  border-radius: 50%;
+/* ──────────────────────────────────────────────────────────────────
+   MatchVerdict — W / L / D result tag
+   Figma: 24×24px rounded-[12px] colored pill
+────────────────────────────────────────────────────────────────── */
+
+.verdict {
   width: 24px;
   height: 24px;
+  border-radius: 12px;
   display: flex;
-  justify-content: center;
   align-items: center;
-  color: var(--neutral-50-bg);
-  font-size: var(--text-secondary);
+  justify-content: center;
+  flex-shrink: 0;
+  font-family: var(--font-sans);
+  font-size: var(--text-xs); /* 12px */
+  font-weight: 500;
+  color: var(--white, #fff);
+  line-height: 1;
+  padding: 6px;
+  box-sizing: border-box;
 }
 
-.win {
-  background-color: var(--success-default);
-}
-
-.draw {
-  background-color: var(--warning-default);
-}
-
-.lose {
-  background-color: var(--negative-default);
-}
+.win  { background: var(--success-default, #00ab3d); }
+.draw { background: var(--warning-default, #ff983d); }
+.lose { background: var(--negative-default, #ff3d52); }
