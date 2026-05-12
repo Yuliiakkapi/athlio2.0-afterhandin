@@ -51,6 +51,7 @@
   height: 24px;
   display: block;
   flex-shrink: 0;
+  color: inherit;
 }
 
 /* Size image-based icons inside navbar items (exclude profile avatar) */
