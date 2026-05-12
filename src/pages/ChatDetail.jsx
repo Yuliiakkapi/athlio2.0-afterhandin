@@ -107,7 +107,7 @@ export default function ChatDetail() {
             verified={conversation.verified}
           />
           <div className="chat-detail-name-section">
-            <h2 className="chat-detail-name">{conversation.name}</h2>
+            <h2 className="chat-detail-name text-base-semibold">{conversation.name}</h2>
             <RoleBadge role={conversation.role} />
           </div>
         </div>
@@ -121,7 +121,7 @@ export default function ChatDetail() {
             className={`chat-message${msg.sender === "self" ? " chat-message--self" : " chat-message--other"}`}
           >
             <div className="chat-message-bubble">{msg.text}</div>
-            <span className="chat-message-time">{msg.time}</span>
+            <span className="chat-message-time text-xs-medium">{msg.time}</span>
           </div>
         ))}
       </div>
@@ -143,7 +143,7 @@ export default function ChatDetail() {
         />
         <button
           type="button"
-          className="chat-detail-send-btn"
+          className="chat-detail-send-btn text-sm-semibold"
           onClick={handleSendMessage}
           disabled={!messageText.trim()}
         >

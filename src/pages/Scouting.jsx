@@ -71,12 +71,12 @@ function PlayerAvatar({ initials, size = 32, highlighted = false, avatarUrl = nu
 }
 
 function PositionTag({ text }) {
-  return <span className="scout-position-tag">{text}</span>;
+  return <span className="scout-position-tag text-2xs-semibold">{text}</span>;
 }
 
 function FilterButton({ label }) {
   return (
-    <button className="scout-filter-btn">
+    <button className="scout-filter-btn text-sm-semibold">
       {label}
       <CaretDown size={18} />
     </button>
@@ -212,12 +212,12 @@ function SuggestedSection({ isPremium }) {
     <section className="scout-section">
       <div className="scout-section-header">
         <div>
-          <h2 className="scout-section-title">Suggested players</h2>
-          <p className="scout-section-subtitle">
+          <h2 className="scout-section-title text-lg-semibold">Suggested players</h2>
+          <p className="scout-section-subtitle text-sm-medium">
             {isPremium ? "based on your preferences" : "Test yourself with football stars"}
           </p>
         </div>
-        <button className="scout-link-btn">Find more players</button>
+        <button className="scout-link-btn text-sm-semibold">Find more players</button>
       </div>
       <div className="suggested-scroll">
         {MOCK_SUGGESTED.map((p) => (
@@ -235,8 +235,8 @@ function AiScoutSection() {
     <section className="scout-section">
       <div className="scout-section-header">
         <div>
-          <h2 className="scout-section-title">AI Scout</h2>
-          <p className="scout-section-subtitle">Ranking your position and age</p>
+          <h2 className="scout-section-title text-lg-semibold">AI Scout</h2>
+          <p className="scout-section-subtitle text-sm-medium">Ranking your position and age</p>
         </div>
       </div>
       <div className="ai-scout-card">
@@ -260,8 +260,8 @@ function LeaderboardSection() {
     <section className="scout-section">
       <div className="scout-section-header">
         <div>
-          <h2 className="scout-section-title">Overall Leaderboard</h2>
-          <p className="scout-section-subtitle">Ranking your position and age</p>
+          <h2 className="scout-section-title text-lg-semibold">Overall Leaderboard</h2>
+          <p className="scout-section-subtitle text-sm-medium">Ranking your position and age</p>
         </div>
         <FilterButton label="Division 3" />
       </div>
@@ -284,7 +284,7 @@ function LeaderboardSection() {
             <div className="lb-row-player">
               <PlayerAvatar initials={player.initials} />
               <div className="lb-row-names">
-                <span className="lb-player-name">{player.name}</span>
+                <span className="lb-player-name text-sm-semibold">{player.name}</span>
                 <span className="lb-player-club">{player.club}</span>
               </div>
             </div>
@@ -310,10 +310,10 @@ function YourTeamSection() {
     <section className="scout-section">
       <div className="scout-section-header">
         <div>
-          <h2 className="scout-section-title">Your team</h2>
-          <p className="scout-section-subtitle">Ranking your position and age</p>
+          <h2 className="scout-section-title text-lg-semibold">Your team</h2>
+          <p className="scout-section-subtitle text-sm-medium">Ranking your position and age</p>
         </div>
-        <button className="scout-link-btn" onClick={() => navigate("/scouting/team")}>
+        <button className="scout-link-btn text-sm-semibold" onClick={() => navigate("/scouting/team")}>
           View full team
         </button>
       </div>
@@ -326,7 +326,7 @@ function YourTeamSection() {
             className={`pos-btn${pos.hasPlayer ? " pos-btn--has-player" : ""}`}
             style={{ left: pos.cx, top: pos.cy }}
           >
-            <span className="pos-label">{pos.label}</span>
+            <span className="pos-label text-sm-semibold">{pos.label}</span>
             <div className="pos-circle">
               {pos.hasPlayer ? (
                 <PlayerAvatar initials="P" size={19} />
@@ -353,8 +353,8 @@ function PremiumUpsellCard({ onUnlock }) {
       <div className="premium-pro-badge">PRO</div>
 
       <div className="premium-upsell-content">
-        <h3 className="premium-upsell-title">Unlock pro features</h3>
-        <p className="premium-upsell-desc">
+        <h3 className="heading-4xl-italic">Unlock pro features</h3>
+        <p className="premium-upsell-desc text-sm-medium">
           Get AI insights, advanced analytics, and full scout visibility. Take your career to the next level.
         </p>
       </div>

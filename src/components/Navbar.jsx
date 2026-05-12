@@ -4,6 +4,8 @@ import { useUser } from "../context/UserContext";
 import PostTypePicker from "./domain/MakeAPost/PostTypePicker";
 import AddPostModal from "./domain/MakeAPost/AddPostModal";
 import "./Navbar.css";
+import TARGET from "../assets/images/target.svg";
+import TARGET_ACTIVE from "../assets/images/target-active.svg";
 
 /* ─── Custom SVG icons (paths from app's design system) ─────────── */
 
@@ -144,7 +146,15 @@ export default function Navbar() {
           aria-label={isScout ? "Scout Tools" : "Progress"}
           aria-current={(isActive("/scouting") || isActive("/progress")) ? "page" : undefined}
         >
-          <ScoutIcon />
+          {isScout ? (
+            <ScoutIcon />
+          ) : (
+            <img
+              src={isActive("/progress") ? TARGET_ACTIVE : TARGET}
+              alt=""
+              className="navbar-img-icon"
+            />
+          )}
         </Link>
 
         <Link

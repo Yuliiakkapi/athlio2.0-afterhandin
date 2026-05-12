@@ -33,9 +33,6 @@
 }
 
 .chat-detail-name {
-  font-family: var(--font-sans);
-  font-size: 16px;
-  font-weight: 600;
   color: var(--black);
   margin: 0;
 }
@@ -88,8 +85,6 @@
 }
 
 .chat-message-time {
-  font-family: var(--font-sans);
-  font-size: 12px;
   color: var(--neutral-700);
   padding: 0 4px;
 }
@@ -141,9 +136,6 @@
   border-radius: 8px;
   background: var(--primary-default);
   color: var(--white);
-  font-family: var(--font-sans);
-  font-size: 14px;
-  font-weight: 600;
   cursor: pointer;
   transition: background 150ms ease;
 }

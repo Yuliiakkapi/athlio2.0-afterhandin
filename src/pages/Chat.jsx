@@ -109,7 +109,7 @@ export default function Chat() {
             <button
               key={tab.id}
               type="button"
-              className={`chat-tab${activeTab === tab.id ? " chat-tab--active" : ""}`}
+              className={`chat-tab text-base-medium${activeTab === tab.id ? " chat-tab--active" : ""}`}
               onClick={() => setActiveTab(tab.id)}
             >
               {tab.label}
@@ -122,7 +122,7 @@ export default function Chat() {
       {/* ── Conversation list ─────────────────────────────────────── */}
       <div className="chat-list">
         {displayedConversations.length === 0 ? (
-          <p className="chat-empty">No unread messages</p>
+          <p className="chat-empty text-sm-medium">No unread messages</p>
         ) : (
           displayedConversations.map((conv) => (
             <ConversationCard

@@ -47,7 +47,7 @@ const TABS = [
 function TrendChip({ value }) {
   const up = value >= 0;
   return (
-    <div className={`wl-trend${up ? " wl-trend--up" : " wl-trend--down"}`}>
+    <div className={`wl-trend text-2xs-medium${up ? " wl-trend--up" : " wl-trend--down"}`}>
       <span className="wl-trend-arrow" aria-hidden="true" />
       <span>{Math.abs(value)}% this week</span>
     </div>
@@ -59,7 +59,7 @@ function TrendChip({ value }) {
 function StatBox({ label, value, trend }) {
   return (
     <div className="wl-stat-box">
-      <span className="wl-stat-label">{label}</span>
+      <span className="wl-stat-label text-2xs-medium">{label}</span>
       <span className="wl-stat-value">{value}</span>
       <TrendChip value={trend} />
     </div>
@@ -146,7 +146,7 @@ function PlayerCard({ player, onDelete }) {
 
           <div className="wl-card-info">
             <span className="wl-card-name">{player.name}</span>
-            <div className="wl-card-meta">
+            <div className="wl-card-meta text-sm-medium">
               <span>{player.club}</span>
               <span className="wl-meta-dot" aria-hidden="true" />
               <span>{player.age}y.o.</span>
@@ -185,7 +185,7 @@ export default function Watchlist() {
         <button className="wl-icon-btn" onClick={() => navigate(-1)} aria-label="Back">
           <CaretLeft size={24} weight="bold" />
         </button>
-        <h1 className="wl-title">Watchlist</h1>
+        <h1 className="wl-title heading-3xl-italic">Watchlist</h1>
         <button className="wl-icon-btn" aria-label="Filter">
           <SlidersHorizontal size={24} />
         </button>
@@ -210,7 +210,7 @@ export default function Watchlist() {
 
       {/* Compare FAB */}
       <div className="wl-compare-wrap">
-        <span className="wl-compare-label">Compare</span>
+        <span className="wl-compare-label text-sm-semibold">Compare</span>
         <button className="wl-compare-btn" aria-label="Compare players">
           <ArrowsLeftRight size={24} weight="bold" />
         </button>

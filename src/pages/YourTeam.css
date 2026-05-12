@@ -74,15 +74,8 @@
 .yt-title {
   flex: 1;
   margin: 0;
-  font-family: var(--font-condensed);
-  font-size: 28px;
-  font-weight: 700;
-  font-style: italic;
-  text-transform: uppercase;
   color: white;
   text-align: center;
-  line-height: 1.1;
-  letter-spacing: 0;
 }
 
 .yt-topbar-spacer {
@@ -124,9 +117,6 @@
 }
 
 .yt-ovr-label {
-  font-family: var(--font-sans);
-  font-size: 15px;
-  font-weight: 600;
   color: rgba(255, 255, 255, 0.75);
   line-height: 1;
   min-width: 52px;

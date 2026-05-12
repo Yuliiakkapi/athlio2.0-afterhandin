@@ -101,7 +101,7 @@ export default function Setup() {
 
       if (profile) {
         const sports = Array.isArray(profile.sports) ? profile.sports : [];
-        setRole(profile.role || "athlete");
+        setRole(profile.role || "");
         setForm((f) => ({
           ...f,
           full_name: profile.full_name || "",

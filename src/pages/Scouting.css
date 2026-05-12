@@ -829,7 +829,17 @@
   font-family: var(--font-sans);
   font-size: var(--text-base);
   font-weight: 600;
-  color: white;
+  color: var(--primary-700, #2230e0);
   cursor: pointer;
   margin-top: 12px;
+}
+
+/* Keep upsell description white */
+.premium-upsell-card .premium-upsell-desc {
+  color: var(--primary-300, #98baff);
+}
+
+/* Make upsell title white */
+.premium-upsell-card .heading-4xl-italic {
+  color: var(--white, #ffffff);
 }

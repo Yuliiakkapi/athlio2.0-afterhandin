@@ -1,0 +1,448 @@
+/* ──────────────────────────────────────────────────────────────────
+   PerformanceTab — professional view of athlete performance
+   Figma nodes 7638-26013 (basic) / 7622-26495 (pro)
+────────────────────────────────────────────────────────────────── */
+
+.perf-tab {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 14px 16px 32px;
+}
+
+/* ─── Shared card / section base ─────────────────────────────────── */
+
+.perf-chart-card,
+.perf-section {
+  background: var(--white, #fff);
+  border-radius: 12px;
+  box-shadow: 0 0 10.5px rgba(0, 0, 0, 0.08);
+  padding: 12px;
+}
+
+.perf-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.perf-section-title {
+  margin: 0 0 12px;
+  color: var(--black, #151622);
+}
+
+.perf-info-btn {
+  background: none;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  color: var(--muted, #91909b);
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+/* ─── AI Insight card ────────────────────────────────────────────── */
+
+.perf-ai-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--white, #fff);
+  border-radius: 12px;
+  padding: 12px;
+  box-shadow: 0 0 10.5px rgba(0, 0, 0, 0.08);
+  border-left: 3px solid #ff983d;
+}
+
+.perf-ai-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ff983d, #ff3d52);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.perf-ai-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.perf-ai-title {
+  color: var(--black, #151622);
+  margin: 0;
+}
+
+.perf-ai-sub {
+  color: var(--muted, #91909b);
+  margin: 0;
+}
+
+/* ─── Chart card ─────────────────────────────────────────────────── */
+
+.perf-chart-tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.perf-chart-tab {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 32px;
+  padding: 0 10px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  color: var(--muted, #91909b);
+  background: var(--neutral-50-bg, #f6f6f7);
+  transition: background 120ms ease, color 120ms ease;
+}
+
+.perf-chart-tab--active {
+  background: var(--primary-default, #4051fd);
+  color: var(--white, #fff);
+}
+
+/* ─── Predictions ────────────────────────────────────────────────── */
+
+.perf-pred-grid {
+  display: flex;
+  gap: 8px;
+}
+
+.perf-pred-box {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 10px 6px;
+  background: var(--neutral-50-bg, #f6f6f7);
+  border-radius: 10px;
+  text-align: center;
+}
+
+.perf-pred-value {
+  font-size: 28px;
+  color: var(--primary-default, #4051fd);
+  line-height: 1;
+}
+
+.perf-pred-label {
+  color: var(--black, #151622);
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.perf-pred-sub {
+  color: var(--muted, #91909b);
+}
+
+.perf-pred-trend {
+  margin-top: 2px;
+  font-size: 9px;
+  line-height: 1;
+}
+
+.perf-pred-trend--up {
+  color: #00ab3d;
+}
+
+.perf-pred-trend--down {
+  color: var(--negative-default, #ff3d52);
+}
+
+/* ─── Skill radar ────────────────────────────────────────────────── */
+
+.perf-radar-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.perf-radar-legend {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  justify-content: center;
+}
+
+.perf-radar-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--muted, #91909b);
+}
+
+.perf-radar-dot {
+  width: 20px;
+  height: 3px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.perf-radar-dot--this {
+  background: var(--primary-default, #4051fd);
+}
+
+.perf-radar-dot--last {
+  background: var(--primary-default, #4051fd);
+  opacity: 0.4;
+  background-image: repeating-linear-gradient(
+    to right,
+    #4051fd 0, #4051fd 4px,
+    transparent 4px, transparent 7px
+  );
+}
+
+/* ─── Training impact ────────────────────────────────────────────── */
+
+.perf-training-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.perf-training-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.perf-training-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: rgba(255, 152, 61, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.perf-training-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  flex: 1;
+  min-width: 0;
+}
+
+.perf-training-label {
+  color: var(--black, #151622);
+}
+
+.perf-training-sub {
+  color: var(--muted, #91909b);
+}
+
+.perf-training-pct {
+  flex-shrink: 0;
+}
+
+.perf-training-pct--up {
+  color: #00ab3d;
+}
+
+.perf-training-pct--down {
+  color: var(--negative-default, #ff3d52);
+}
+
+.perf-trainings-link {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  color: var(--primary-default, #4051fd);
+}
+
+/* ─── Leaderboard ────────────────────────────────────────────────── */
+
+.perf-lb-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.perf-lb-header .perf-section-title {
+  margin-bottom: 2px;
+}
+
+.perf-lb-sub {
+  color: var(--muted, #91909b);
+  margin: 0;
+}
+
+.perf-lb-scope {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--neutral-50-bg, #f6f6f7);
+  border: none;
+  border-radius: 8px;
+  padding: 6px 10px;
+  cursor: pointer;
+  color: var(--black, #151622);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.perf-lb-table {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.perf-lb-col-row {
+  display: flex;
+  align-items: center;
+  padding: 0 4px;
+  color: var(--muted, #91909b);
+  text-transform: uppercase;
+}
+
+.perf-lb-row {
+  display: flex;
+  align-items: center;
+  padding: 6px 4px;
+  border-radius: 8px;
+}
+
+.perf-lb-row:nth-child(even) {
+  background: var(--neutral-50-bg, #f6f6f7);
+}
+
+.perf-lb-player {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+.perf-lb-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(64, 81, 253, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary-default, #4051fd);
+  flex-shrink: 0;
+  text-transform: uppercase;
+}
+
+.perf-lb-player-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.perf-lb-name {
+  color: var(--black, #151622);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.perf-lb-club {
+  color: var(--muted, #91909b);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.perf-lb-col-a,
+.perf-lb-col-g {
+  width: 28px;
+  text-align: center;
+  color: var(--black, #151622);
+  flex-shrink: 0;
+}
+
+.perf-lb-col-rating {
+  width: 44px;
+  display: flex;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* ─── Unlock Pro card ────────────────────────────────────────────── */
+
+.perf-unlock-card {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  background-color: #222f8d;
+  background-size: cover;
+  background-position: center;
+  padding: 24px 16px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+}
+
+.perf-unlock-pro-badge {
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 2px 16px;
+  border-radius: 100px;
+  border: 2px solid white;
+  font-family: var(--font-condensed, "Barlow Condensed", sans-serif);
+  font-size: 22px;
+  font-weight: 700;
+  font-style: italic;
+  text-transform: uppercase;
+  color: white;
+  background: linear-gradient(7deg, #ff983d 0%, #ff3d52 100%);
+  line-height: 1.2;
+}
+
+.perf-unlock-title {
+  margin: 42px 0 0;
+  color: white;
+}
+
+.perf-unlock-desc {
+  color: rgba(255, 255, 255, 0.75);
+  margin: 0;
+  max-width: 280px;
+}
+
+.perf-unlock-btn {
+  width: 100%;
+  max-width: 320px;
+  height: 44px;
+  margin-top: 8px;
+  border-radius: 8px;
+  border: 1px solid var(--neutral-200, #e1e1e4);
+  background: var(--neutral-100, #eeeff1);
+  color: var(--primary-700, #2230e0);
+  cursor: pointer;
+  transition: opacity 150ms ease;
+}
+
+.perf-unlock-btn:hover {
+  opacity: 0.85;
+}

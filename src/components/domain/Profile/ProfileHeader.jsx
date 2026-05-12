@@ -102,8 +102,8 @@ export default function ProfileHeader({
         />
 
         <div className="ph-info">
-          <h1 className="ph-name">{profile.full_name || profile.username || "Athlete"}</h1>
-          <p className="ph-followers">
+          <h1 className="ph-name heading-4xl-italic">{profile.full_name || profile.username || "Athlete"}</h1>
+          <p className="ph-followers text-sm-medium">
             {(profile.follower_count ?? 0).toLocaleString()} followers
           </p>
           <div className="ph-meta-row">
@@ -113,7 +113,7 @@ export default function ProfileHeader({
             {(positions.length > 0 || true) && clubName && (
               <span className="ph-dot" aria-hidden="true" />
             )}
-            {clubName && <span className="ph-club">{clubName}</span>}
+            {clubName && <span className="ph-club text-sm-medium">{clubName}</span>}
           </div>
         </div>
       </div>
@@ -121,19 +121,19 @@ export default function ProfileHeader({
       {/* Action buttons */}
       <div className="ph-actions">
         {isMe ? (
-          <button className="ph-btn ph-btn--secondary" onClick={() => navigate("/profile/me/edit")}>
+          <button className="ph-btn ph-btn--secondary text-base-semibold" onClick={() => navigate("/profile/me/edit")}>
             Edit Profile
           </button>
         ) : (
           <>
             <button
-              className="ph-btn ph-btn--secondary"
+              className="ph-btn ph-btn--secondary text-base-semibold"
               onClick={toggleFollow}
               disabled={busy}
             >
               {isFollowing ? "Following" : "+ Follow"}
             </button>
-            <button className="ph-btn ph-btn--ghost">Message</button>
+            <button className="ph-btn ph-btn--ghost text-base-semibold">Message</button>
           </>
         )}
       </div>

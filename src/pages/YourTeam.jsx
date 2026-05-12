@@ -62,7 +62,7 @@ export default function YourTeam() {
         <button className="yt-back-btn" onClick={() => navigate(-1)} aria-label="Back">
           <CaretLeft size={20} weight="bold" />
         </button>
-        <h1 className="yt-title">YOUR TEAM</h1>
+        <h1 className="yt-title heading-3xl-italic">YOUR TEAM</h1>
         <div className="yt-topbar-spacer" />
       </div>
 
@@ -72,11 +72,11 @@ export default function YourTeam() {
         <div className="yt-ovr-divider" aria-hidden="true" />
         <div className="yt-ovr-metrics">
           <div className="yt-ovr-metric">
-            <span className="yt-ovr-label">Def</span>
+            <span className="yt-ovr-label text-base-semibold">Def</span>
             <OvrBadge value={DEF_OVR} size="sm" variant="gold" />
           </div>
           <div className="yt-ovr-metric">
-            <span className="yt-ovr-label">Offense</span>
+            <span className="yt-ovr-label text-base-semibold">Offense</span>
             <OvrBadge value={OFF_OVR} size="sm" variant="gold" />
           </div>
         </div>

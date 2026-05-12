@@ -36,15 +36,15 @@ export default function ConversationCard({
         <ProfilePicture imgUrl={avatarUrl} size="medium" verified={verified} />
         <div className="conv-meta">
           <div className="conv-name-row">
-            <span className="conv-name">{name}</span>
+            <span className="conv-name text-sm-semibold">{name}</span>
             <RoleBadge role={role} />
           </div>
-          <p className={`conv-preview${unread ? " conv-preview--unread" : ""}`}>
+          <p className={`conv-preview text-sm-medium${unread ? " conv-preview--unread" : ""}`}>
             {preview}
           </p>
         </div>
       </div>
-      <span className="conv-time">{time}</span>
+      <span className="conv-time text-2xs-medium">{time}</span>
     </button>
   );
 }

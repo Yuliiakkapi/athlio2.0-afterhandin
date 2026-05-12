@@ -2,17 +2,20 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import "./profile.css";
 import { supabase } from "../lib/supabase";
+import { useUser } from "../context/UserContext";
 import ProfileHeader from "../components/domain/Profile/ProfileHeader";
 import { isFollowing, follow, unfollow } from "../lib/follows";
 import NavigationTabs from "../components/UI/NavTabs";
 import PostsTab from "../components/domain/Profile/ProfileTabs/PostsTab";
 import InfoTab from "../components/domain/Profile/ProfileTabs/InfoTab";
 import MatchesTab from "../components/domain/Profile/ProfileTabs/MatchesTab";
+import PerformanceTab from "../components/domain/Profile/ProfileTabs/PerformanceTab";
 
 const PROFESSIONAL_ROLES = ["scout", "coach", "manager", "agent", "professional"];
 
 export default function OtherProfile() {
   const { id } = useParams();
+  const { profile: viewerProfile } = useUser();
   if (!id) return <div className="page">Invalid profile route.</div>;
 
   const [state, setState] = useState("loading");
@@ -106,10 +109,14 @@ export default function OtherProfile() {
   if (state === "error") return <div className="page profile-loading">Couldn't load profile.</div>;
   if (!profile) return null;
 
-  // Determine if profile belongs to a professional
+  // Determine if the viewed profile belongs to a professional
   const isProfessional = PROFESSIONAL_ROLES.includes(profile.role);
 
-  // Generate tabs based on role
+  // Determine if the current viewer is a professional
+  const viewerIsProfessional = PROFESSIONAL_ROLES.includes(viewerProfile?.role);
+  const viewerIsPro = Boolean(viewerProfile?.is_pro);
+
+  // Generate tabs: athletes get Matches + Performance (if viewer is a pro)
   const tabs = isProfessional
     ? [
         { id: "posts", label: "Posts" },
@@ -119,6 +126,7 @@ export default function OtherProfile() {
         { id: "posts", label: "Posts" },
         { id: "info", label: "Info" },
         { id: "matches", label: "Matches" },
+        ...(viewerIsProfessional ? [{ id: "performance", label: "Performance" }] : []),
       ];
 
   // Reset activeTab if it's not available for this role
@@ -144,6 +152,9 @@ export default function OtherProfile() {
         {currentTab === "posts" && <PostsTab profile={profile} isMe={false} />}
         {currentTab === "info" && <InfoTab profile={profile} isMe={false} />}
         {currentTab === "matches" && <MatchesTab profile={profile} isMe={false} />}
+        {currentTab === "performance" && (
+          <PerformanceTab profile={profile} viewerIsPro={viewerIsPro} />
+        )}
       </div>
     </div>
   );

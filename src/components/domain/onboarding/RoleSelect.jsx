@@ -1,18 +1,22 @@
 import "./RoleSelect.css";
 import AthleteImage from "../../../assets/images/role-athlete.jpg";
 import ProfessionalImage from "../../../assets/images/role-professional.jpg";
+import AthleteImageExpanded from "../../../assets/images/expoandedrole_athlete.png";
+import ProfessionalImageExpanded from "../../../assets/images/expoandedrole_proffessional.png";
 
 const ROLES = [
   {
     id: "athlete",
-    label: "Player",
+    label: "Athlete",
     image: AthleteImage,
+    imageExpanded: AthleteImageExpanded,
     description: "Showcase your skills, connect with scouts and clubs worldwide.",
   },
   {
     id: "professional",
     label: "Professional",
     image: ProfessionalImage,
+    imageExpanded: ProfessionalImageExpanded,
     description: "Discover talent, manage scouting and build your network.",
   },
 ];
@@ -55,8 +59,9 @@ export default function RoleSelect({ role, onChange, onNext }) {
               className={`role-photo-card${selected ? " role-photo-card--selected" : ""}`}
               onClick={() => select(r.id)}
             >
-              {/* Photo */}
-              <img src={r.image} alt="" className="role-photo-card-img" />
+              {/* Photo — B&W base, colorful on expand */}
+              <img src={r.image} alt="" className="role-photo-card-img role-photo-card-img--bw" />
+              <img src={r.imageExpanded} alt="" className="role-photo-card-img role-photo-card-img--color" />
 
               {/* Overlay — darker when selected */}
               <div className="role-photo-card-overlay" />

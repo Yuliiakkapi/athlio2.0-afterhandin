@@ -53,6 +53,15 @@
   flex-shrink: 0;
 }
 
+/* Size image-based icons inside navbar items (exclude profile avatar) */
+.navbar-item:not(.navbar-profile) img,
+.navbar-item .navbar-img-icon {
+  width: 24px;
+  height: 24px;
+  display: block;
+  object-fit: contain;
+}
+
 /* ─── Active colour ──────────────────────────────────────────────── */
 .navbar-item--active {
   color: var(--primary-default, #4051fd);

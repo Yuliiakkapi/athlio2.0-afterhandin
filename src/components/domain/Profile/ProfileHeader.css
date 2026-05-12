@@ -118,11 +118,6 @@
 
 /* Name */
 .ph-name {
-  font-family: var(--font-condensed, "Barlow Condensed", sans-serif);
-  font-size: 32px;
-  font-weight: 700;
-  font-style: italic;
-  text-transform: uppercase;
   line-height: 1;
   color: #ffffff;
   white-space: pre-wrap;
@@ -131,9 +126,6 @@
 
 /* Followers */
 .ph-followers {
-  font-family: var(--font-sans, "Barlow", sans-serif);
-  font-size: 14px;
-  font-weight: 500;
   line-height: 1;
   color: var(--neutral-300, #cecfd4);
   margin: 0;
@@ -173,9 +165,6 @@
 
 /* Club name */
 .ph-club {
-  font-family: var(--font-sans, "Barlow", sans-serif);
-  font-size: 14px;
-  font-weight: 500;
   color: #ffffff;
   white-space: nowrap;
   overflow: hidden;
@@ -196,9 +185,6 @@
   height: 36px;
   padding: 0 12px;
   border-radius: 8px;
-  font-family: var(--font-sans, "Barlow", sans-serif);
-  font-size: 16px;
-  font-weight: 600;
   border: none;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;

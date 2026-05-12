@@ -242,10 +242,4 @@ p {
   font-weight: 500;
 }
 
-.list-item {
-  font-family: var(--font-sans);
-  font-size: var(--list-item-value);
-  font-weight: 500;
-  line-height: 1.2;
-  font-style: normal;
-}
+

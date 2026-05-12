@@ -40,9 +40,6 @@
   background: none;
   border: none;
   cursor: pointer;
-  font-family: var(--font-sans);
-  font-size: var(--text-base); /* 16px */
-  font-weight: 500;
   color: var(--muted, #91909b);
   line-height: 1;
   min-width: 75px;
@@ -76,8 +73,6 @@
 }
 
 .chat-empty {
-  font-family: var(--font-sans);
-  font-size: var(--text-sm);
   color: var(--muted);
   text-align: center;
   padding: 40px 0;
