@@ -137,12 +137,12 @@ export default function Navbar() {
           <PlusIcon />
         </button>
 
-        {/* Scout Tools */}
+        {/* Scout Tools / Progress */}
         <Link
-          to="/scouting"
-          className={`navbar-item${isActive("/scouting") ? " navbar-item--active" : ""}`}
-          aria-label="Scout Tools"
-          aria-current={isActive("/scouting") ? "page" : undefined}
+          to={isScout ? "/scouting" : "/progress"}
+          className={`navbar-item${(isActive("/scouting") || isActive("/progress")) ? " navbar-item--active" : ""}`}
+          aria-label={isScout ? "Scout Tools" : "Progress"}
+          aria-current={(isActive("/scouting") || isActive("/progress")) ? "page" : undefined}
         >
           <ScoutIcon />
         </Link>

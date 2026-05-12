@@ -9,6 +9,8 @@ import PostsTab from "../components/domain/Profile/ProfileTabs/PostsTab";
 import InfoTab from "../components/domain/Profile/ProfileTabs/InfoTab";
 import MatchesTab from "../components/domain/Profile/ProfileTabs/MatchesTab";
 
+const PROFESSIONAL_ROLES = ["scout", "coach", "manager", "agent", "professional"];
+
 export default function OtherProfile() {
   const { id } = useParams();
   if (!id) return <div className="page">Invalid profile route.</div>;
@@ -104,6 +106,25 @@ export default function OtherProfile() {
   if (state === "error") return <div className="page profile-loading">Couldn't load profile.</div>;
   if (!profile) return null;
 
+  // Determine if profile belongs to a professional
+  const isProfessional = PROFESSIONAL_ROLES.includes(profile.role);
+
+  // Generate tabs based on role
+  const tabs = isProfessional
+    ? [
+        { id: "posts", label: "Posts" },
+        { id: "info", label: "Info" },
+      ]
+    : [
+        { id: "posts", label: "Posts" },
+        { id: "info", label: "Info" },
+        { id: "matches", label: "Matches" },
+      ];
+
+  // Reset activeTab if it's not available for this role
+  const availableTabIds = tabs.map((t) => t.id);
+  const currentTab = availableTabIds.includes(activeTab) ? activeTab : "posts";
+
   return (
     <div className="page profile other">
       <ProfileHeader
@@ -115,18 +136,14 @@ export default function OtherProfile() {
       />
       <NavigationTabs
         variant="pill"
-        tabs={[
-          { id: "posts", label: "Posts" },
-          { id: "info", label: "Info" },
-          { id: "matches", label: "Matches" },
-        ]}
-        activeTab={activeTab}
+        tabs={tabs}
+        activeTab={currentTab}
         onTabChange={setActiveTab}
       />
       <div className="profile-tab-content">
-        {activeTab === "posts" && <PostsTab profile={profile} isMe={false} />}
-        {activeTab === "info" && <InfoTab profile={profile} isMe={false} />}
-        {activeTab === "matches" && <MatchesTab profile={profile} isMe={false} />}
+        {currentTab === "posts" && <PostsTab profile={profile} isMe={false} />}
+        {currentTab === "info" && <InfoTab profile={profile} isMe={false} />}
+        {currentTab === "matches" && <MatchesTab profile={profile} isMe={false} />}
       </div>
     </div>
   );

@@ -1,6 +1,21 @@
 import { useState } from "react";
-import { ChevronDown, ChevronRight, Sparkle, Lock } from "@phosphor-icons/react";
+import { useNavigate } from "react-router-dom";
+import { CaretDown, CaretRight, Star, Sparkle as SparkleIcon } from "@phosphor-icons/react";
+import { useUser } from "../context/UserContext";
+import OvrBadge from "../components/ui/OvrBadge";
+// Use user-provided PNG background if present
+import WATCHLIST_BG from "../assets/images/watchlist-bg.png";
+// Upsell background provided by user
+import PROFEATURES_BG from "../assets/images/Profeatures.png";
 import "./Scouting.css";
+
+// Decorative Figma vectors removed — using user's image as background instead
+
+// Figma placeholder assets — replace with permanent CDN assets (expire in 7 days)
+const PLACEHOLDER_AVATAR   = "https://www.figma.com/api/mcp/asset/10a27e2c-0a1a-4a66-b8ba-67c014ea8c9f";
+const PLACEHOLDER_CLUB_LOGO = "https://www.figma.com/api/mcp/asset/071f4d1e-d339-4179-84f5-6f1dc145661c";
+
+
 
 /* ─── Mock data ─────────────────────────────────────────────────── */
 
@@ -19,9 +34,10 @@ const MOCK_LEADERBOARD = [
 ];
 
 const MOCK_SUGGESTED = [
-  { id: 1, nameLine1: "Emil Jonansen", nameLine2: "Bryld", club: "Real Madrid", age: "18y.o.", positions: ["ST", "LW"], gpm: "1.2", avgMin: "12", apm: "2", ovr: 72 },
-  { id: 2, nameLine1: "Emil Jonansen", nameLine2: "Bryld", club: "Real Madrid", age: "18y.o.", positions: ["ST", "LW"], gpm: "1.2", avgMin: "12", apm: "2", ovr: 72 },
-  { id: 3, nameLine1: "Emil Jonansen", nameLine2: "Bryld", club: "Real Madrid", age: "18y.o.", positions: ["ST", "LW"], gpm: "1.2", avgMin: "12", apm: "2", ovr: 72 },
+  { id: 1, nameLine1: "Emil Jonansen", nameLine2: "Bryld",   positions: ["ST", "LW"], gpm: 1.2,  avgMin: 72, apm: 0.82, initials: "EB", club: "Real Madrid",   clubLogo: PLACEHOLDER_CLUB_LOGO, age: 18, ovr: 72, avatarUrl: PLACEHOLDER_AVATAR },
+  { id: 2, nameLine1: "Omar",          nameLine2: "Diallo",  positions: ["CAM"],      gpm: 0.9,  avgMin: 68, apm: 0.71, initials: "OD", club: "FC Benfica",    clubLogo: null,                  age: 21, ovr: 68, avatarUrl: null },
+  { id: 3, nameLine1: "Tomáš",         nameLine2: "Dvořák",  positions: ["CM"],       gpm: 0.5,  avgMin: 81, apm: 0.56, initials: "TD", club: "Sparta Prague", clubLogo: null,                  age: 24, ovr: 65, avatarUrl: null },
+  { id: 4, nameLine1: "Pierre",        nameLine2: "Nkumu",   positions: ["CB"],       gpm: 0.2,  avgMin: 77, apm: 0.21, initials: "PN", club: "LOSC Lille",    clubLogo: null,                  age: 19, ovr: 61, avatarUrl: null },
 ];
 
 const AI_PROMPTS = [
@@ -54,24 +70,6 @@ function PlayerAvatar({ initials, size = 32, highlighted = false, avatarUrl = nu
   );
 }
 
-function OvrBadge({ value, locked, large = false }) {
-  return (
-    <div className={`ovr-badge${large ? " ovr-badge--large" : ""}`}>
-      {locked ? (
-        <>
-          <Lock size={large ? 12 : 9} weight="fill" />
-          <span className="ovr-label">PREMIUM</span>
-        </>
-      ) : (
-        <>
-          <span className="ovr-number">{value}</span>
-          <span className="ovr-label">OVR</span>
-        </>
-      )}
-    </div>
-  );
-}
-
 function PositionTag({ text }) {
   return <span className="scout-position-tag">{text}</span>;
 }
@@ -80,7 +78,7 @@ function FilterButton({ label }) {
   return (
     <button className="scout-filter-btn">
       {label}
-      <ChevronDown size={18} />
+      <CaretDown size={18} />
     </button>
   );
 }
@@ -88,15 +86,23 @@ function FilterButton({ label }) {
 /* ─── Watchlist card ─────────────────────────────────────────────── */
 
 function WatchlistSection() {
+  const { profile } = useUser();
+  const navigate = useNavigate();
+
+  // Prefer the local watchlist background SVG, then user avatar, then placeholder
+  const bgUrl = WATCHLIST_BG || profile?.avatar_url || PLACEHOLDER_AVATAR;
+
   return (
     <div className="watchlist-card">
-      <div className="watchlist-ring watchlist-ring--1" />
-      <div className="watchlist-ring watchlist-ring--2" />
-      <div className="watchlist-ring watchlist-ring--3" />
+      {/* Background image (user avatar or placeholder) */}
+      <div className="watchlist-bg" style={{ backgroundImage: `url(${bgUrl})` }} aria-hidden="true" />
+
+     
 
       <div className="watchlist-inner">
         <div className="watchlist-header-row">
           <span className="watchlist-title">Your watchlist</span>
+          <button className="watchlist-find-btn">Find more players</button>
         </div>
 
         <div className="watchlist-table">
@@ -125,16 +131,16 @@ function WatchlistSection() {
                 <span className="wt-stat-val">{player.assists}</span>
                 <span className="wt-stat-val">{player.goals}</span>
                 <span className="wt-stat-val wt-stat-val--wide">
-                  <OvrBadge value={player.ovr} locked={true} />
+                  <OvrBadge value={player.ovr} locked={false} />
                 </span>
               </div>
             </div>
           ))}
         </div>
 
-        <button className="watchlist-cta">
+        <button className="watchlist-cta" onClick={() => navigate("/scouting/watchlist")}>
           <span>See your whole watchlist</span>
-          <ChevronRight size={20} />
+          <CaretRight size={20} />
         </button>
       </div>
     </div>
@@ -143,44 +149,59 @@ function WatchlistSection() {
 
 /* ─── Suggested players ──────────────────────────────────────────── */
 
-function SuggestedCard({ player, isPremium }) {
+function SuggestedCard({ player }) {
   return (
-    <div className="suggested-card">
-      <div className="suggested-avatar-wrap">
-        <PlayerAvatar initials="EB" size={90} />
-        <div className="suggested-ovr-pos">
-          <OvrBadge value={player.ovr} locked={!isPremium} large />
-        </div>
-      </div>
-
-      <div className="suggested-positions">
-        {player.positions.map((p) => (
-          <PositionTag key={p} text={p} />
+    <div className="sug-card">
+      {/* Position tags — top left */}
+      <div className="sug-card-positions">
+        {player.positions.map((pos) => (
+          <PositionTag key={pos} text={pos} />
         ))}
       </div>
 
-      <div className="suggested-name">
-        <div>{player.nameLine1}</div>
-        <div>{player.nameLine2}</div>
+      {/* Avatar — top right */}
+      <div className="sug-card-avatar">
+        {player.avatarUrl ? (
+          <img src={player.avatarUrl} alt={player.nameLine2} />
+        ) : (
+          <span>{player.initials}</span>
+        )}
       </div>
 
-      <div className="suggested-meta">
-        <span>{player.club}</span>
-        <span className="suggested-dot">·</span>
-        <span>{player.age}</span>
+      {/* OVR badge — overlaid at avatar bottom-right */}
+      <div className="sug-card-ovr">
+        <OvrBadge value={player.ovr} size="md" variant="gold" />
       </div>
 
-      <div className="suggested-stats-row">
-        {[
-          { val: player.gpm,    lbl: "GPM"      },
-          { val: player.avgMin, lbl: "Avg.min."  },
-          { val: player.apm,    lbl: "APM"       },
-        ].map((s) => (
-          <div key={s.lbl} className="suggested-stat">
-            <span className="suggested-stat-val">{s.val}</span>
-            <span className="suggested-stat-lbl">{s.lbl}</span>
+      {/* Player name */}
+      <p className="sug-card-name">{player.nameLine1} {player.nameLine2}</p>
+
+      {/* Club + age meta row */}
+      <div className="sug-card-meta">
+        {player.clubLogo && (
+          <div className="sug-meta-club-logo-wrap">
+            <img src={player.clubLogo} alt="" className="sug-meta-club-logo" />
           </div>
-        ))}
+        )}
+        <span className="sug-meta-club">{player.club}</span>
+        <span className="sug-meta-dot" aria-hidden="true" />
+        <span className="sug-meta-age">{player.age}y.o.</span>
+      </div>
+
+      {/* Stats row — three grey boxes */}
+      <div className="sug-card-stats">
+        <div className="sug-stat-box">
+          <span className="sug-stat-value">{player.gpm}</span>
+          <span className="sug-stat-label">GPM</span>
+        </div>
+        <div className="sug-stat-box">
+          <span className="sug-stat-value">{player.apm}</span>
+          <span className="sug-stat-label">APM</span>
+        </div>
+        <div className="sug-stat-box">
+          <span className="sug-stat-value">{player.avgMin}</span>
+          <span className="sug-stat-label">Avg.min</span>
+        </div>
       </div>
     </div>
   );
@@ -200,7 +221,7 @@ function SuggestedSection({ isPremium }) {
       </div>
       <div className="suggested-scroll">
         {MOCK_SUGGESTED.map((p) => (
-          <SuggestedCard key={p.id} player={p} isPremium={isPremium} />
+          <SuggestedCard key={p.id} player={p} />
         ))}
       </div>
     </section>
@@ -220,7 +241,7 @@ function AiScoutSection() {
       </div>
       <div className="ai-scout-card">
         <div className="ai-scout-icon">
-          <Sparkle size={32} weight="fill" />
+          <SparkleIcon size={32} weight="fill" />
         </div>
         {AI_PROMPTS.map((prompt, i) => (
           <div key={i} className="ai-prompt-chip">
@@ -284,6 +305,7 @@ function LeaderboardSection() {
 /* ─── Your team (football pitch) ─────────────────────────────────── */
 
 function YourTeamSection() {
+  const navigate = useNavigate();
   return (
     <section className="scout-section">
       <div className="scout-section-header">
@@ -291,7 +313,9 @@ function YourTeamSection() {
           <h2 className="scout-section-title">Your team</h2>
           <p className="scout-section-subtitle">Ranking your position and age</p>
         </div>
-        <FilterButton label="All world" />
+        <button className="scout-link-btn" onClick={() => navigate("/scouting/team")}>
+          View full team
+        </button>
       </div>
 
       <div className="pitch-card">
@@ -325,13 +349,7 @@ function YourTeamSection() {
 
 function PremiumUpsellCard({ onUnlock }) {
   return (
-    <div className="premium-upsell-card">
-      <div className="premium-upsell-rings">
-        <div className="premium-upsell-ring premium-upsell-ring--1" />
-        <div className="premium-upsell-ring premium-upsell-ring--2" />
-        <div className="premium-upsell-ring premium-upsell-ring--3" />
-      </div>
-
+    <div className="premium-upsell-card" style={{ backgroundImage: `url(${PROFEATURES_BG})` }}>
       <div className="premium-pro-badge">PRO</div>
 
       <div className="premium-upsell-content">

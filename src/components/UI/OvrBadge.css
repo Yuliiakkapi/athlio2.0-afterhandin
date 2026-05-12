@@ -1,0 +1,103 @@
+/* ─── OVR Badge ────────────────────────────────────────────────────
+   Variants: default (navy) | gold | silver | bronze
+   Sizes:    sm (28×34) | md (34×42) | lg (43×52)
+   States:   unlocked (shows value) | locked (shows lock + PREMIUM)
+──────────────────────────────────────────────────────────────────── */
+
+.ovr-badge {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  clip-path: polygon(0 0, 100% 0, 100% 74%, 50% 100%, 0 74%);
+  flex-shrink: 0;
+  color: white;
+}
+
+/* Gloss sheen overlay */
+.ovr-badge::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0) 52%);
+  pointer-events: none;
+}
+
+/* ── Sizes ──────────────────────────────────────────────────────── */
+
+/* padding-bottom shifts content up into the pentagon's visible area */
+.ovr-badge--xs { width: 17px; height: 21px; gap: 1px; padding-bottom: 5px; }
+.ovr-badge--sm { width: 28px; height: 34px; gap: 1px; padding-bottom: 9px; }
+.ovr-badge--md { width: 34px; height: 42px; gap: 1px; padding-bottom: 11px; }
+.ovr-badge--lg { width: 43px; height: 52px; gap: 3px; padding-bottom: 14px; }
+
+/* ── Variants ───────────────────────────────────────────────────── */
+
+.ovr-badge--default { background: linear-gradient(180deg, #1d2144 0%, #080c1f 100%); }
+.ovr-badge--gold    { background: linear-gradient(180deg, #e4ab38 0%, #a0691a 100%); }
+.ovr-badge--silver  { background: linear-gradient(180deg, #babccc 0%, #7a7c8c 100%); }
+.ovr-badge--bronze  { background: linear-gradient(180deg, #c87838 0%, #8b4e1e 100%); }
+
+/* ── Locked state ───────────────────────────────────────────────── */
+
+.ovr-badge--locked.ovr-badge--xs { justify-content: flex-start; padding-top: 2px; padding-bottom: 0; gap: 1px; }
+.ovr-badge--locked.ovr-badge--sm { justify-content: flex-start; padding-top: 3px; padding-bottom: 0; gap: 2px; }
+.ovr-badge--locked.ovr-badge--md { justify-content: flex-start; padding-top: 4px; padding-bottom: 0; gap: 2px; }
+.ovr-badge--locked.ovr-badge--lg { justify-content: flex-start; padding-top: 5px; padding-bottom: 0; gap: 3px; }
+
+/* ── Content ────────────────────────────────────────────────────── */
+
+.ovr-badge__number {
+  font-family: var(--font-condensed);
+  font-style: italic;
+  font-weight: 700;
+  text-transform: uppercase;
+  line-height: 1;
+  color: white;
+  position: relative;
+  z-index: 1;
+}
+
+.ovr-badge--xs .ovr-badge__number { font-size: 8px; }
+.ovr-badge--sm .ovr-badge__number { font-size: 11px; }
+.ovr-badge--md .ovr-badge__number { font-size: 13px; }
+.ovr-badge--lg .ovr-badge__number { font-size: 32px; }
+
+.ovr-badge__label {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  text-transform: uppercase;
+  line-height: 1;
+  color: white;
+  position: relative;
+  z-index: 1;
+}
+
+.ovr-badge--xs .ovr-badge__label { font-size: 4px; }
+.ovr-badge--sm .ovr-badge__label { font-size: 5px; }
+.ovr-badge--md .ovr-badge__label { font-size: 6px; }
+.ovr-badge--lg .ovr-badge__label { font-size: 8px; }
+
+.ovr-badge__lock {
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.ovr-badge__premium {
+  font-family: var(--font-condensed);
+  font-style: italic;
+  font-weight: 700;
+  text-transform: uppercase;
+  line-height: 1;
+  color: white;
+  position: relative;
+  z-index: 1;
+  letter-spacing: 0.01em;
+}
+
+.ovr-badge--xs .ovr-badge__premium { font-size: 4px; }
+.ovr-badge--sm .ovr-badge__premium { font-size: 5px; }
+.ovr-badge--md .ovr-badge__premium { font-size: 6px; }
+.ovr-badge--lg .ovr-badge__premium { font-size: 10px; }

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../lib/supabase";
+import { useUser } from "../context/UserContext";
 import StepContainer from "../components/wizard/StepContainer";
 import TextInput from "../components/inputs/TextInput";
 import RoleSelect from "../components/domain/onboarding/RoleSelect";
@@ -31,6 +32,7 @@ import "./setup-profile.css";
 
 export default function Setup() {
   const navigate = useNavigate();
+  const { setProfile } = useUser();
 
   const [role, setRole] = useState(""); // empty until user picks on role step
   const [heightUnit, setHeightUnit] = useState("cm");
@@ -213,6 +215,7 @@ export default function Setup() {
         alert("Error saving profile: " + upsertErr.message);
       } else {
         console.log("Profile saved successfully!");
+        setProfile({ id: user.id, ...payload });
       }
     }
 
