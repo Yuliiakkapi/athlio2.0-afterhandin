@@ -1,17 +1,27 @@
 /* Remove default side padding from main-content when a profile .page is present
-   so the cover image + header can go full-width */
+   so the header can go full-width */
 .main-content:has(.page.profile) {
   padding-left: 0;
   padding-right: 0;
   padding-bottom: 0;
+  padding-top: 0; /* profile header is its own topbar */
 }
 
 .page {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  /* No padding-top — .main-content already clears the fixed topbar (56px) */
   padding-bottom: 90px; /* clear fixed navbar */
+}
+
+.profile-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  color: var(--neutral-500, #a5a5af);
 }
 
 .profile-tab-content {
@@ -20,7 +30,7 @@
   flex-direction: column;
 }
 
-/* Tabs render their own <main> — strip its extra padding since the tab containers manage their own */
+/* Tabs render their own <main> — strip its extra padding */
 .profile-tab-content > main {
   flex: 1;
   padding: 0;

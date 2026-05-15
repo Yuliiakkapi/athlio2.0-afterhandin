@@ -1,0 +1,122 @@
+/* ──────────────────────────────────────────────────────────────────
+   GoalsSelect — "Your Goals" onboarding step
+   Figma node 7322-15785
+────────────────────────────────────────────────────────────────── */
+
+.goals-step {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ─── Header ────────────────────────────────────────────────────── */
+.goals-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.goals-title {
+  font-family: var(--font-condensed);
+  font-size: var(--heading-5xl);   /* 44px */
+  font-weight: 700;
+  font-style: italic;
+  text-transform: uppercase;
+  line-height: 1.1;
+  color: var(--black);
+  margin: 0;
+}
+
+.goals-subtitle {
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--muted);
+  margin: 0;
+}
+
+/* ─── Badge ──────────────────────────────────────────────────────── */
+.goals-badge-wrap {
+  display: flex;
+}
+
+.goals-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  background: var(--primary-100, #dbe9ff);
+  border-radius: 9999px;
+
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  font-style: italic;
+  text-transform: uppercase;
+  letter-spacing: -0.14px;
+  line-height: 1;
+  color: var(--primary-800, #1f2cb4);
+  white-space: nowrap;
+}
+
+/* ─── Goal list ──────────────────────────────────────────────────── */
+.goals-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ─── Individual goal item ───────────────────────────────────────── */
+.goals-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  height: 56px;
+  padding: 10px 16px;
+  box-sizing: border-box;
+
+  background: var(--white, #fff);
+  border: 1px solid var(--neutral-200, #e1e1e4);
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: left;
+
+  transition: border-color 120ms ease, background 120ms ease;
+}
+
+.goals-item:hover {
+  border-color: var(--primary-200, #bfd6ff);
+  background: var(--primary-50, #f0f4ff);
+}
+
+.goals-item--selected {
+  border-color: var(--primary-default, #4051fd);
+  background: var(--white, #fff);
+}
+
+.goals-item--selected:hover {
+  background: var(--primary-50, #f0f4ff);
+}
+
+/* ─── Label ──────────────────────────────────────────────────────── */
+.goals-item-label {
+  flex: 1;
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-weight: 600;
+  line-height: 1;
+  color: var(--black);
+  min-width: 0;
+}
+
+/* ─── Checkbox icon ──────────────────────────────────────────────── */
+.goals-item-icon {
+  flex-shrink: 0;
+  color: var(--neutral-300, #c9cad4);
+  transition: color 120ms ease;
+}
+
+.goals-item-icon--checked {
+  color: var(--primary-default, #4051fd);
+}

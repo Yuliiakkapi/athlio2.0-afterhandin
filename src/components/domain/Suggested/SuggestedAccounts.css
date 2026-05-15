@@ -1,12 +1,18 @@
 .suggested-card-list {
   display: flex;
   flex-wrap: nowrap;
-  align-items: center;
+  align-items: stretch;
   justify-content: flex-start;
   gap: 8px;
   list-style: none;
   overflow-x: auto; /* horizontal scroll */
   overflow-y: hidden;
+}
+
+.suggested-card-list li {
+  flex-shrink: 0;
+  width: calc(50vw - 20px); /* ~half viewport for mobile */
+  max-width: 280px;
 }
 
 .suggested-card-list::-webkit-scrollbar {

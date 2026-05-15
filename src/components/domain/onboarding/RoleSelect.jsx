@@ -1,55 +1,89 @@
 import "./RoleSelect.css";
-import SelectionCard from "./UI/SelectionCard";
-import AthleteIcon from "../../../assets/icons/athlete.svg";
-import ScoutIcon from "../../../assets/icons/scout.svg";
-import OrgIcon from "../../../assets/icons/organisation.svg";
+import AthleteImage from "../../../assets/images/role-athlete.jpg";
+import ProfessionalImage from "../../../assets/images/role-professional.jpg";
+import AthleteImageExpanded from "../../../assets/images/expoandedrole_athlete.png";
+import ProfessionalImageExpanded from "../../../assets/images/expoandedrole_proffessional.png";
 
 const ROLES = [
   {
     id: "athlete",
-    title: "Athlete",
-    description: "Create and manage your athlete profile, showcase stats and video.",
-    icon: AthleteIcon,
+    label: "Athlete",
+    image: AthleteImage,
+    imageExpanded: AthleteImageExpanded,
+    description: "Showcase your skills, connect with scouts and clubs worldwide.",
   },
   {
-    id: "scout",
-    title: "Scout",
-    description: "Discover talent, save profiles and contact athletes.",
-    icon: ScoutIcon,
-  },
-  {
-    id: "organization",
-    title: "Organization",
-    description: "Manage club or organization accounts and post opportunities.",
-    icon: OrgIcon,
+    id: "professional",
+    label: "Professional",
+    image: ProfessionalImage,
+    imageExpanded: ProfessionalImageExpanded,
+    description: "Discover talent, manage scouting and build your network.",
   },
 ];
 
-export default function RoleSelect({ role, onChange }) {
+function ChevronRight() {
   return (
-    <div>
-      <div
-        className="role-header"
-        style={{ display: "inline-flex", flexDirection: "column", gap: 8 }}
-      >
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+      <path
+        d="M7.5 5L12.5 10L7.5 15"
+        stroke="white"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+export default function RoleSelect({ role, onChange, onNext }) {
+  function select(id) {
+    onChange(id);
+  }
+
+  return (
+    <div className="role-select">
+      <div className="role-select-header">
         <h1 className="role-header-title">Choose your role</h1>
-        <p className="role-header-subtitle">Select how you want to use athlio</p>
+        <p className="role-header-subtitle">Select how you want to use this app</p>
       </div>
 
-      <div className="role-grid" role="radiogroup" aria-label="Choose your role">
+      <div className="role-photo-cards" role="radiogroup" aria-label="Choose your role">
         {ROLES.map((r) => {
           const selected = role === r.id;
           return (
-            <SelectionCard
+            <button
               key={r.id}
-              name={r.title}
-              description={r.description}
-              icon={r.icon}
-              value={r.id}
-              groupName="role"
-              checked={selected}
-              onChange={onChange}
-            />
+              type="button"
+              role="radio"
+              aria-checked={selected}
+              className={`role-photo-card${selected ? " role-photo-card--selected" : ""}`}
+              onClick={() => select(r.id)}
+            >
+              {/* Photo — B&W base, colorful on expand */}
+              <img src={r.image} alt="" className="role-photo-card-img role-photo-card-img--bw" />
+              <img src={r.imageExpanded} alt="" className="role-photo-card-img role-photo-card-img--color" />
+
+              {/* Overlay — darker when selected */}
+              <div className="role-photo-card-overlay" />
+
+              {/* Label — top-left, vertical, warning color when selected */}
+              <div className="role-photo-card-label-wrap" aria-hidden="true">
+                <span className="role-photo-card-label">{r.label}</span>
+              </div>
+
+              {/* Description — fades in on expand */}
+              <div className="role-photo-card-desc" aria-hidden={!selected}>
+                <p>{r.description}</p>
+              </div>
+
+              {/* Chevron */}
+              <div
+                className={`role-photo-card-chevron${selected ? " role-photo-card-chevron--active" : ""}`}
+                aria-hidden="true"
+              >
+                <ChevronRight />
+              </div>
+            </button>
           );
         })}
       </div>

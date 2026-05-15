@@ -1,4 +1,4 @@
-.role-card {
+﻿.role-card {
   display: flex;
   width: 176px;
   height: 164px;
@@ -9,14 +9,14 @@
   gap: 4px;
   flex-shrink: 0;
   border-radius: 8px;
-  border: 1.5px solid var(--color-gray-100);
+  border: 1.5px solid var(--neutral-100);
   background: #FFF;
   cursor: pointer;
   outline: none;
 }
 
 .role-card.selected {
-  border: 1.5px solid var(--color-accent);
+  border: 1.5px solid var(--primary-default);
 }
 
 /* Flexbox for text area */
@@ -37,7 +37,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--color-accent);
+  color: var(--primary-default);
 }
 
 /* SVG icons (SVGR) will pick up currentColor when their paths use `currentColor` */
@@ -67,7 +67,7 @@
 .role-desc {
   
   margin: 0;
-  color: var(--color-gray-700, #A5A7BB);
+  color: var(--neutral-700, #a5a5af);
   font-family: "Barlow", sans-serif;
   font-size: 12px;
   font-style: normal;

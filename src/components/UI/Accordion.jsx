@@ -1,6 +1,6 @@
 import { useState, Children, isValidElement, cloneElement } from "react";
 import "./Accordion.css";
-import DownIcon from "../../assets/icons/down.svg?react"; // ✅ using your down.svg icon
+import { CaretDown } from "@phosphor-icons/react";
 
 export default function Accordion({
   title,
@@ -33,7 +33,7 @@ export default function Accordion({
         aria-expanded={open}
       >
         <span className="accordion-title">{title}</span>
-        <DownIcon className={`accordion-icon ${open ? "rotated" : ""}`} />
+        <CaretDown className={`accordion-icon ${open ? "rotated" : ""}`} />
       </button>
 
       {/* === Dropdown Content === */}

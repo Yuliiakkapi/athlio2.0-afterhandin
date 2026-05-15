@@ -3,7 +3,7 @@ import { useNavigate } from "react-router";
 import { supabase } from "../../../lib/supabase";
 import Button from "../../../components/UI/Button";
 import TextInput from "../../../components/inputs/TextInput";
-import VerifyIcon from "../../../assets/icons/verify.svg?react";
+import { SealCheck } from "@phosphor-icons/react";
 
 import "./EditProfile.css";
 import Select from "../../inputs/Select";
@@ -208,7 +208,7 @@ export default function EditProfile() {
           type="outline"
           size="medium"
           label="Verify my account"
-          Icon={VerifyIcon}
+          Icon={SealCheck}
           onClick={() => console.log("Verify clicked")}
         />
 

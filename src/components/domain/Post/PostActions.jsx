@@ -1,7 +1,5 @@
 import PostIcon from "../../UI/PostIcon";
-import AuraIcon from "../../../assets/icons/aura.svg?react";
-import CommentIcon from "../../../assets/icons/comment.svg?react";
-import RepostIcon from "../../../assets/icons/repost.svg?react";
+import { ChatCircle, FireSimple, Repeat } from "@phosphor-icons/react";
 import "./PostActions.css";
 import { useEffect, useState } from "react";
 import { supabase } from "../../../lib/supabase";
@@ -124,13 +122,13 @@ export default function PostActions({
     <>
       <div className="post-actions">
         <PostIcon
-          Icon={AuraIcon}
+          Icon={FireSimple}
           count={likes}
           onClick={handleAura}
           className={`postIcon ${liked ? "active" : ""}`}
         />
-        <PostIcon Icon={CommentIcon} count={comments} onClick={handleComment} />
-        <PostIcon Icon={RepostIcon} onClick={handleRepost} />
+        <PostIcon Icon={ChatCircle} count={comments} onClick={handleComment} />
+        <PostIcon Icon={Repeat} onClick={handleRepost} />
       </div>
 
       <CommentsOverlay

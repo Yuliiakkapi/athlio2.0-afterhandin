@@ -2,12 +2,21 @@
  * Build profile payload for Supabase upsert
  */
 export function buildProfilePayload({ role, form, heightUnit, weightUnit }) {
+  // Generate username from full_name if not provided
+  let username = form.username;
+  if (!username && form.full_name) {
+    // Create a simple username from first + last name
+    username = form.full_name.toLowerCase().replace(/\s+/g, "");
+  }
+
   const payload = {
-    role,
+    role: role === "professional" && form.professionalType ? form.professionalType : role,
     full_name: form.full_name,
-    username: form.username,
-    avatar_url: form.avatar_url,
-    age: form.age ? parseInt(form.age) : null,
+    username: username || undefined,
+    avatar_url: form.avatar_url?.startsWith("data:") ? undefined : (form.avatar_url || undefined),
+    age: form.dob
+      ? Math.floor((Date.now() - new Date(form.dob)) / (365.25 * 24 * 3600 * 1000))
+      : (form.age ? parseInt(form.age) : null),
     bio: form.bio || form.description,
     sports: Array.isArray(form.sports) ? form.sports : [],
     primary_sport: form.primarySport || null,

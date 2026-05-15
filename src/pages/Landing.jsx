@@ -8,13 +8,15 @@ export default function Landing() {
 
   useEffect(() => {
     if (loading) return;
+    
+    // If logged in, go to home
     if (user) {
       navigate("/home", { replace: true });
       return;
     }
 
-    const seen = localStorage.getItem("introSeen") === "true";
-    navigate(seen ? "/auth" : "/intro", { replace: true });
+    // If not logged in, go to intro
+    navigate("/intro", { replace: true });
   }, [loading, navigate, user]);
 
   return null;

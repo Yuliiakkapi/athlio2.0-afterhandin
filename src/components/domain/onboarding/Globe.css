@@ -1,0 +1,15 @@
+.globe-outer {
+  position: relative;        /* needed for reliable overflow:hidden clip */
+  border-radius: 50%;
+  overflow: hidden;
+  animation: globe-float 4s ease-in-out infinite;
+  box-shadow:
+    inset -16px -8px 36px rgba(30, 50, 200, 0.12),
+    0 16px 48px rgba(64, 81, 253, 0.14);
+  z-index: 2;
+}
+
+@keyframes globe-float {
+  0%,  100% { transform: translateY(0);     }
+  50%        { transform: translateY(-12px); }
+}

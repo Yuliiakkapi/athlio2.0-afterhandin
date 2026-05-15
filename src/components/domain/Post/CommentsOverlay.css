@@ -1,4 +1,4 @@
-.comments-backdrop {
+﻿.comments-backdrop {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.45);
@@ -41,14 +41,14 @@
   gap: 8px;
   overflow-y: auto;
   padding: 8px;
-  background-color: var(--color-gray-100);
+  background-color: var(--neutral-100);
 }
 
 .comments-form {
   display: flex;
   padding: 8px;
   gap: 8px;
-  background-color: var(--color-gray-100);
+  background-color: var(--neutral-100);
 }
 
 .comments-form input {
@@ -56,8 +56,8 @@
   border-radius: 999px;
   border: none;
   padding: 8px 12px;
-  background-color: var(--color-gray-300);
-  color: var(--color-gray-900);
+  background-color: var(--neutral-300);
+  color: var(--neutral-900);
 }
 
 .comments-form button {

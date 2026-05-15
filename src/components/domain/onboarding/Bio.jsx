@@ -1,4 +1,4 @@
-import Textarea from "../../inputs/TextArea";
+﻿import Textarea from "../../inputs/TextArea";
 import { useEffect, useState } from "react";
 import { supabase } from "../../../lib/supabase";
 import "./Bio.css";
@@ -113,7 +113,7 @@ export default function Bio({ value, onChange, sport, position, clubId, clubOthe
 
       {uniqueSuggestions.length > 0 && (
         <div style={{ marginTop: 12 }}>
-          <div style={{ fontSize: 13, color: "var(--color-gray-600)", marginBottom: 8 }}>Suggestions</div>
+          <div style={{ fontSize: 13, color: "var(--neutral-600)", marginBottom: 8 }}>Suggestions</div>
           <div className="bio-suggestions-wrap">
             {uniqueSuggestions.map((s, i) => (
               <button

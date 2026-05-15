@@ -1,19 +1,20 @@
 import { useLocation, useNavigate } from "react-router";
 import { useUser } from "../context/UserContext";
-import MessagesIcon from "../assets/icons/messages.svg";
-import BurgerMenuIcon from "../assets/icons/burger-menu.svg";
-import ShareIcon from "../assets/icons/share.svg";
-import NotificationsIcon from "../assets/icons/notifications.svg";
-import BackIcon from "../assets/icons/back.svg";
-import CloseIcon from "../assets/icons/close.svg";
+import {
+  ArrowLeft,
+  Bell,
+  ChatCircle,
+  List,
+  MagnifyingGlass,
+  ShareNetwork,
+  X,
+} from "@phosphor-icons/react";
 import MainLogo from "../assets/logos/main-logo.svg?react";
 import "./Topbar.css";
 import Button from "./UI/Button";
 import IconButton from "./UI/IconButton";
 import ProfilePicture from "./UI/ProfilePicture";
 
-//changes how the topbar looks based on what page the user is on
-//doing it this way instead of per-page to avoid code duplication and also its easier to maintain
 const TOPBAR_CONFIG = {
   "/home": {
     title: null,
@@ -21,13 +22,13 @@ const TOPBAR_CONFIG = {
     right: (nav, _profile, counts) => (
       <div className="topbar-icons">
         <div className="icon-with-badge" onClick={() => nav("/notifications")}>
-          <img src={NotificationsIcon} alt="Notifications" />
+          <Bell size={24} aria-label="Notifications" />
           {counts.notifications > 0 && (
             <span className="badge">+{counts.notifications}</span>
           )}
         </div>
         <div className="icon-with-badge" onClick={() => nav("/chat")}>
-          <img src={MessagesIcon} alt="Messages" />
+          <ChatCircle size={24} aria-label="Messages" />
           {counts.messages > 0 && (
             <span className="badge">{counts.messages}</span>
           )}
@@ -37,16 +38,21 @@ const TOPBAR_CONFIG = {
   },
   "/chat": {
     title: null,
-    left: (nav) => <img src={BackIcon} alt="Back" onClick={() => nav(-1)} />,
+    left: (nav) => (
+      <IconButton size="large" type="subtle" icon={ArrowLeft} onClick={() => nav(-1)} />
+    ),
     center: () => (
-      <input placeholder="Search messages" className="topbar-search" /> //it will be a component later
+      <div className="topbar-search-wrap">
+        <MagnifyingGlass size={18} className="topbar-search-icon" aria-hidden="true" />
+        <input placeholder="Search for message" className="topbar-search" />
+      </div>
     ),
   },
   "/notifications": {
     title: null,
     left: (nav) => (
       <div className="topbar-left-with-back">
-        <img src={BackIcon} alt="Back" onClick={() => nav(-1)} />
+        <IconButton size="large" type="subtle" icon={ArrowLeft} onClick={() => nav(-1)} />
         <MainLogo className="main-logo" aria-label="Logo" />
       </div>
     ),
@@ -55,7 +61,7 @@ const TOPBAR_CONFIG = {
     title: null,
     left: (nav) => (
       <div className="topbar-left-with-back">
-        <img src={BackIcon} alt="Back" onClick={() => nav(-1)} />
+        <IconButton size="large" type="subtle" icon={ArrowLeft} onClick={() => nav(-1)} />
         <MainLogo className="main-logo" aria-label="Logo" />
       </div>
     ),
@@ -64,12 +70,7 @@ const TOPBAR_CONFIG = {
     title: null,
     left: (nav, profile) => (
       <div className="button-avatar">
-        <IconButton
-          onClick={() => nav(-1)}
-          size="large"
-          type="subtle"
-          icon={CloseIcon}
-        />
+        <IconButton onClick={() => nav(-1)} size="large" type="subtle" icon={X} />
         <ProfilePicture imgUrl={profile?.avatar_url} size="medium" />
       </div>
     ),
@@ -84,25 +85,19 @@ const TOPBAR_CONFIG = {
   },
   "/profile/me": {
     title: null,
-    left: (nav, profile) => (
+    left: (nav) => (
       <div className="topbar-left-with-back">
-        <img
-          src={BackIcon}
-          alt="Back"
-          onClick={() => nav(-1)}
-          className="topbar-back"
-        />
+        <IconButton size="large" type="subtle" icon={ArrowLeft} onClick={() => nav(-1)} />
         <MainLogo className="main-logo" />
       </div>
     ),
-    right: (nav, profile) => (
+    right: () => (
       <div className="topbar-icons">
-        <img
-          src={BurgerMenuIcon}
-          alt="Menu"
+        <List
+          size={24}
           className="topbar-menu-icon"
+          aria-label="Menu"
           onClick={() => {
-            // TODO: open your menu later
             console.log("Menu clicked");
           }}
         />
@@ -113,12 +108,7 @@ const TOPBAR_CONFIG = {
     title: null,
     left: (nav) => (
       <div className="topbar-left-with-back">
-        <img
-          src={BackIcon}
-          alt="Back"
-          onClick={() => nav(-1)}
-          className="topbar-back"
-        />
+        <IconButton size="large" type="subtle" icon={ArrowLeft} onClick={() => nav(-1)} />
         <MainLogo className="main-logo" />
       </div>
     ),
@@ -129,19 +119,14 @@ const TOPBAR_CONFIG = {
         onClick={() => {
           console.log("Share clicked");
         }}
-        Icon={() => <img src={ShareIcon} alt="Share" />}
+        Icon={ShareNetwork}
       />
     ),
   },
   "/profile/me/edit": {
     title: "Edit profile",
     left: (nav) => (
-      <IconButton
-        size="large"
-        type="subtle"
-        icon={CloseIcon}
-        onClick={() => nav(-1)}
-      />
+      <IconButton size="large" type="subtle" icon={X} onClick={() => nav(-1)} />
     ),
     center: () => <h1 className="topbar-title">Edit profile</h1>,
   },
@@ -151,13 +136,13 @@ const TOPBAR_CONFIG = {
     right: (nav, _profile, counts) => (
       <div className="topbar-icons">
         <div className="icon-with-badge" onClick={() => nav("/notifications")}>
-          <img src={NotificationsIcon} alt="Notifications" />
+          <Bell size={24} aria-label="Notifications" />
           {counts.notifications > 0 && (
             <span className="badge">+{counts.notifications}</span>
           )}
         </div>
         <div className="icon-with-badge" onClick={() => nav("/chat")}>
-          <img src={MessagesIcon} alt="Messages" />
+          <ChatCircle size={24} aria-label="Messages" />
           {counts.messages > 0 && (
             <span className="badge">{counts.messages}</span>
           )}
@@ -169,25 +154,20 @@ const TOPBAR_CONFIG = {
     title: null,
     left: (nav) => (
       <div className="topbar-left-with-back">
-        <img
-          src={BackIcon}
-          alt="Back"
-          onClick={() => nav(-1)}
-          className="topbar-back"
-        />
+        <IconButton size="large" type="subtle" icon={ArrowLeft} onClick={() => nav(-1)} />
         <MainLogo className="main-logo" aria-label="Athlio" />
       </div>
     ),
     right: (nav, _profile, counts) => (
       <div className="topbar-icons">
         <div className="icon-with-badge" onClick={() => nav("/notifications")}>
-          <img src={NotificationsIcon} alt="Notifications" />
+          <Bell size={24} aria-label="Notifications" />
           {counts.notifications > 0 && (
             <span className="badge">+{counts.notifications}</span>
           )}
         </div>
         <div className="icon-with-badge" onClick={() => nav("/chat")}>
-          <img src={MessagesIcon} alt="Messages" />
+          <ChatCircle size={24} aria-label="Messages" />
           {counts.messages > 0 && (
             <span className="badge">{counts.messages}</span>
           )}
@@ -203,18 +183,10 @@ export default function Topbar() {
   const { profile, counts } = useUser();
 
   let config = TOPBAR_CONFIG[pathname];
-  // Use the add-post layout for all nested add-post routes
-  if (!config && pathname.startsWith("/add-post")) {
-    config = TOPBAR_CONFIG["/add-post"];
-  }
-  if (!config && pathname.startsWith("/post/")) {
-    config = TOPBAR_CONFIG["/post"];
-  }
-
+  if (!config && pathname.startsWith("/add-post")) config = TOPBAR_CONFIG["/add-post"];
+  if (!config && pathname.startsWith("/post/")) config = TOPBAR_CONFIG["/post"];
   if (!config && pathname.startsWith("/profile/")) {
-    if (!pathname.startsWith("/profile/me")) {
-      config = TOPBAR_CONFIG["/profile/other"];
-    }
+    if (!pathname.startsWith("/profile/me")) config = TOPBAR_CONFIG["/profile/other"];
   }
 
   if (!config) return null;

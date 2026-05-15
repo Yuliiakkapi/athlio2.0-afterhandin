@@ -1,4 +1,4 @@
-.match-section {
+﻿.match-section {
   margin-top: 30px;
   display: flex;
   flex-direction: column;
@@ -29,7 +29,7 @@
 }
 
 .score p {
-  color: var(--color-gray-900);
+  color: var(--neutral-900);
   font-weight: 300;
 }
 

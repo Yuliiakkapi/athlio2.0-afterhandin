@@ -1,0 +1,151 @@
+/* ─── Step layout ──────────────────────────────────────────────── */
+.dob-step {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 24px;
+  min-height: calc(100dvh - 176px);
+}
+
+.dob-header {
+  padding-top: 8px;
+}
+
+.dob-picker-shell {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+/* ─── Heading ──────────────────────────────────────────────────── */
+.dob-title {
+  font-family: var(--font-condensed, "Barlow Condensed", sans-serif);
+  font-size: 44px;
+  font-weight: 700;
+  font-style: italic;
+  text-transform: uppercase;
+  line-height: 1.1;
+  letter-spacing: 0;
+  color: var(--black, #151622);
+  margin: 0 0 4px;
+}
+
+.dob-subtitle {
+  font-family: var(--font-sans, "Barlow", sans-serif);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--muted, #91909b);
+  margin: 0;
+}
+
+/* ─── Three-column picker row ──────────────────────────────────── */
+.dob-picker {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+}
+
+/* ─── One drum column ──────────────────────────────────────────── */
+.dob-drum-wrap {
+  position: relative;
+  height: 270px;    /* 5 × 54px  */
+  flex: 1;
+  overflow: hidden; /* clip scrollbar + items outside the window */
+}
+
+/* Selected highlight — stays fixed at the vertical centre */
+.dob-drum-highlight {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 0;
+  right: 0;
+  height: 54px;
+  background: var(--primary-100, #dbe9ff);
+  border-radius: 8px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Scrollable drum list */
+.dob-drum-scroll {
+  position: absolute;
+  inset: 0;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+  overscroll-behavior-y: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  z-index: 2;
+}
+.dob-drum-scroll::-webkit-scrollbar { display: none; }
+
+/* Padding spacers: allow first/last items to snap to centre */
+.dob-drum-pad {
+  height: 108px; /* 2 × 54px */
+  flex-shrink: 0;
+}
+
+/* Each item */
+.dob-drum-item {
+  height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  scroll-snap-align: center;
+  cursor: pointer;
+
+  font-family: var(--font-condensed, "Barlow Condensed", sans-serif);
+  font-size: 28px;
+  font-weight: 700;
+  font-style: italic;
+  text-transform: uppercase;
+  letter-spacing: 0;
+  line-height: 1;
+
+  color: var(--neutral-300, #cecfd4);
+  user-select: none;
+  -webkit-user-select: none;
+  position: relative;
+  z-index: 2;
+  transition: color 120ms ease;
+}
+
+/* Centre (selected) item gets dark text */
+.dob-drum-item--sel {
+  color: var(--black, #151622);
+}
+
+/* ─── Gradient fades (top & bottom) ───────────────────────────── */
+.dob-drum-fade {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 108px;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.dob-drum-fade--top {
+  top: 0;
+  background: linear-gradient(
+    to bottom,
+    var(--neutral-50-bg, #f6f6f7) 0%,
+    rgba(246, 246, 247, 0.85) 35%,
+    transparent 100%
+  );
+}
+
+.dob-drum-fade--bot {
+  bottom: 0;
+  background: linear-gradient(
+    to top,
+    var(--neutral-50-bg, #f6f6f7) 0%,
+    rgba(246, 246, 247, 0.85) 35%,
+    transparent 100%
+  );
+}

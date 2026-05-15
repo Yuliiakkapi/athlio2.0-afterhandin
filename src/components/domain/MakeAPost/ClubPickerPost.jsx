@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import ClubPicker from "../onboarding/ClubPicker";
 import Button from "../../UI/Button";
-import CheckIcon from "../../../assets/icons/check.svg?react";
+import { Check } from "@phosphor-icons/react";
 import "./ClubPickerPost.css";
 
 function TeamPickerOverlay({
@@ -79,7 +79,7 @@ function TeamPickerOverlay({
             size="big"
             type="primary"
             label="Apply"
-            Icon={CheckIcon}
+            Icon={Check}
             onMouseDown={(e) => {
               e.preventDefault();
               e.stopPropagation();

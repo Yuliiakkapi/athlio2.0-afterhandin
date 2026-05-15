@@ -1,4 +1,4 @@
-/* ─── Page shell ────────────────────────────────────────────── */
+﻿/* ─── Page shell ────────────────────────────────────────────── */
 .intro-root {
   position: relative;
   display: flex;
@@ -7,7 +7,7 @@
   min-height: 100dvh;
   overflow: hidden;
   font-family: "Barlow", sans-serif;
-  background: #000;
+  background: var(--black);
 }
 
 /* Strip default main-content padding so the image bleeds edge-to-edge */
@@ -57,7 +57,7 @@
 .intro-logo {
   width: 53px;
   height: 53px;
-  background: var(--color-gray-100, #f0f0f3);
+  background: var(--neutral-100, #f6f6f7);
   border-radius: 12px;
   display: flex;
   align-items: center;
@@ -79,7 +79,7 @@
   line-height: 1.1;
   letter-spacing: 0;
   text-transform: uppercase;
-  color: #fff;
+  color: var(--white);
   margin: 0;
 }
 
@@ -102,11 +102,11 @@
   font-size: 12px;
   line-height: 1.4;
   text-align: center;
-  color: var(--color-gray-700, #a5a7bb);
+  color: var(--neutral-700);
 }
 
 .intro-legal span {
-  color: #a5a7bb;
+  color: var(--neutral-700);
   text-decoration: underline;
   cursor: pointer;
 }

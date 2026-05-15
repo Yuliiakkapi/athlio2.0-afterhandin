@@ -1,4 +1,4 @@
-/* Backdrop */
+﻿/* Backdrop */
 .addmodal-overlay {
   position: fixed;
   inset: 0;
@@ -13,8 +13,8 @@
 
 /* Panel */
 .addmodal-sheet {
-  background-color: var(--color-background);
-  color: var(--color-text, #fff);
+  background-color: var(--neutral-50-bg);
+  color: var(--black, #fff);
   border-radius: 8px;
   padding: 10px 18px 10px 10px;
   outline: none; /* allow focus without ugly outline if you style focus elsewhere */

@@ -9,12 +9,16 @@ export default function AppShell() {
     pathname.startsWith("/auth") ||
     pathname.startsWith("/intro") ||
     pathname.startsWith("/setup-profile") ||
-    pathname.startsWith("/add-post");
+    pathname.startsWith("/add-post") ||
+    pathname === "/scouting/team" ||
+    pathname === "/scouting/watchlist";
 
   const hideTopbar =
     pathname.startsWith("/auth") ||
     pathname.startsWith("/intro") ||
-    pathname.startsWith("/setup-profile");
+    pathname.startsWith("/setup-profile") ||
+    pathname.startsWith("/profile") ||
+    pathname === "/scouting/watchlist";
 
   return (
     <div className="app-shell">

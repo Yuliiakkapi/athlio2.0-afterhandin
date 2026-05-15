@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './SearchBarCard.css';
-import profilePlaceholder from '../../../assets/icons/profile.png';
 import defaultTeamLogo from '../../../assets/logos/main-logo.svg';
-import defaultFlag from '../../../assets/icons/verification.svg';
+import { SealCheck, UserCircle } from '@phosphor-icons/react';
 import { supabase } from '../../../lib/supabase';
 
 const SearchBarCard = ({
@@ -10,9 +9,9 @@ const SearchBarCard = ({
   playerName: fallbackName = 'Player',
   teamName: fallbackTeam = '—',
   nationality: fallbackCountry = '—',
-  avatar: fallbackAvatar = profilePlaceholder,
+  avatar: fallbackAvatar = null,
   teamLogo: fallbackTeamLogo = defaultTeamLogo,
-  flag: fallbackFlag = defaultFlag,
+  flag: fallbackFlag = SealCheck,
   onSelect,
 }) => {
   const [state, setState] = useState({
@@ -73,20 +72,20 @@ const SearchBarCard = ({
   }, [profileId]);
 
   const { name, team, country, avatar, teamLogo, flag } = state;
+  const FlagIcon = typeof flag === 'string' ? null : flag;
 
   return (
     <button className="search-card-item" onClick={() => onSelect?.(profileId)}>
       <div className="avatar-wrap" aria-hidden>
-        <img
-          src={avatar || profilePlaceholder}
-          alt={`${name} avatar`}
-          className="avatar-img"
-          onError={(event) => {
-            if (event.currentTarget.src !== profilePlaceholder) {
-              event.currentTarget.src = profilePlaceholder;
-            }
-          }}
-        />
+        {avatar ? (
+          <img
+            src={avatar}
+            alt={`${name} avatar`}
+            className="avatar-img"
+          />
+        ) : (
+          <UserCircle className="avatar-img avatar-img-fallback" aria-hidden="true" />
+        )}
       </div>
 
       <div className="info">
@@ -97,7 +96,12 @@ const SearchBarCard = ({
           {teamLogo && <img src={teamLogo} alt={`${team} logo`} className="team-logo" />}
           <span className="team-name">{team}</span>
 
-          {flag && <img src={flag} alt={country} className="flag" />}
+          {flag &&
+            (typeof flag === 'string' ? (
+              <img src={flag} alt={country} className="flag" />
+            ) : (
+              <FlagIcon className="flag" aria-hidden="true" />
+            ))}
           <span className="country">{country}</span>
         </div>
       </div>

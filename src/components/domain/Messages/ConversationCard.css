@@ -1,0 +1,112 @@
+/* ──────────────────────────────────────────────────────────────────
+   ConversationCard — messaging list item
+────────────────────────────────────────────────────────────────── */
+
+.conv-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: var(--white, #fff);
+  border: none;
+  border-radius: 8px;
+  padding: 12px 12px 12px 8px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 120ms ease;
+  box-sizing: border-box;
+}
+
+/* Unread styling — stronger background */
+.conv-card:has(.conv-unread-dot) {
+  background: var(--neutral-50-bg, #f6f6f7);
+}
+
+.conv-card:hover,
+.conv-card:focus-visible {
+  background: var(--neutral-50-bg, #f6f6f7);
+  outline: none;
+}
+
+/* ─── Left side: [dot] + avatar + text ──────────────────────────── */
+.conv-card-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+/* Offset when no unread dot (dot 8px + gap 8px = 16px) */
+.conv-card-left--read {
+  padding-left: 16px;
+}
+
+/* Unread indicator dot */
+.conv-unread-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--primary-default, #4051fd);
+  flex-shrink: 0;
+  box-shadow: 0 0 6px rgba(64, 81, 253, 0.4);
+}
+
+/* ─── Text meta ──────────────────────────────────────────────────── */
+.conv-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  padding-top: 2px;
+  flex: 1;
+}
+
+.conv-name-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.conv-name {
+  color: var(--black, #151622);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.2;
+  min-width: 0;
+  flex-shrink: 1;
+}
+
+/* Read state — lighter text */
+.conv-card-left--read .conv-name {
+  font-weight: 500;
+  color: #7f7f8a;
+}
+
+.conv-preview {
+  color: #2c2c33;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0;
+}
+
+/* Lighter for read */
+.conv-preview--unread {
+  color: #2c2c33;
+}
+
+.conv-card-left--read .conv-preview {
+  color: var(--neutral-500, #a5a5af);
+}
+
+/* ─── Timestamp ──────────────────────────────────────────────────── */
+.conv-time {
+  color: var(--neutral-400, #b8b9c1);
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-left: 8px;
+}

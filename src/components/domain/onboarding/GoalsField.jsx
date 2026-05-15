@@ -2,13 +2,12 @@ import { useEffect, useState } from "react";
 import "./GoalsField.css";
 
 const ATHLETE_GOALS = [
-  "Get exposure",
-  "Find a team",
-  "Professional Contract",
-  "College Scholarship",
-  "Find scout/agent",
-  "Build a network",
-  "Discover events near me",
+  "Get discovered by scouts and clubs",
+  "Find a new club or trial opportunity",
+  "Move to a higher level of football",
+  "Track my progress",
+  "Build my football profile",
+  "Showcase my highlights",
 ];
 
 export default function GoalsField({ value, onChange, items, title, subtitle }) {
@@ -41,9 +40,9 @@ export default function GoalsField({ value, onChange, items, title, subtitle }) 
         className="role-header"
         style={{ display: "inline-flex", flexDirection: "column", gap: 8 }}
       >
-        <h1 className="role-header-title">{title || "Choose your goals"}</h1>
+        <h1 className="role-header-title">{title || "Your Goals"}</h1>
         <p className="role-header-subtitle">
-          {subtitle || "What are you looking to achieve? This will help personalized your experience. Choose multiple."}
+          {subtitle || "What are you looking to achieve? This will help personalized your experience."}
         </p>
       </div>
 
@@ -58,7 +57,7 @@ export default function GoalsField({ value, onChange, items, title, subtitle }) 
               onClick={() => toggle(g)}
               className={`goal-card ${active ? "active" : ""}`}
             >
-              <span className="goal-radio" aria-hidden="true" />
+              <span className="goal-checkbox" aria-hidden="true" />
               <span className="goal-label list-item">{g}</span>
             </button>
           );

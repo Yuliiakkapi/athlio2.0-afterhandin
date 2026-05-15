@@ -14,7 +14,12 @@ import Notifications from "./pages/Notifications";
 import PostDetails from "./pages/PostDetails";
 import AddPost from "./pages/AddPost";
 import Chat from "./pages/Chat";
+import ChatDetail from "./pages/ChatDetail";
+import Progress from "./pages/Progress";
 import Scouting from "./pages/Scouting";
+import YourTeam from "./pages/YourTeam";
+import Watchlist from "./pages/Watchlist";
+import ProfileSearch from "./pages/ProfileSearch";
 import NotFound from "./pages/NotFound";
 
 export default function App() {
@@ -37,7 +42,13 @@ export default function App() {
         <Route path="post/:id" element={<PostDetails />} />
         <Route path="add-post" element={<AddPost />} />
         <Route path="chat" element={<Chat />} />
+        <Route path="chat/:id" element={<ChatDetail />} />
+        <Route path="progress" element={<Progress />} />
         <Route path="scouting" element={<Scouting />} />
+        <Route path="scouting/team" element={<YourTeam />} />
+        <Route path="scouting/watchlist" element={<Watchlist />} />
+        <Route path="scouting/search" element={<ProfileSearch />} />
+        <Route path="search" element={<ProfileSearch />} />
 
         <Route path="*" element={<NotFound />} />
       </Route>

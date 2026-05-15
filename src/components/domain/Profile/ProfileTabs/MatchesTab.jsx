@@ -4,7 +4,7 @@ import MatchCard from "../../Post/MatchCard";
 import Button from "../../../UI/Button";
 import Accordion from "../../../UI/Accordion";
 import IconButton from "../../../UI/IconButton";
-import PlusIcon from "../../../../assets/icons/plus.svg?react";
+import { Plus } from "@phosphor-icons/react";
 import "./MatchesTab.css";
 import { useNavigate } from "react-router-dom";
 
@@ -124,7 +124,7 @@ export default function MatchesTab({ profile, isMe = false }) {
             <IconButton
               size="medium"
               type="primary"
-              icon={PlusIcon}
+              icon={Plus}
               onClick={() => navigate("/add-post")}
             />
             <p className="empty-subtitle">Add a match.</p>

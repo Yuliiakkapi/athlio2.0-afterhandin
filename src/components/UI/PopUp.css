@@ -1,4 +1,4 @@
-.modal-overlay {
+﻿.modal-overlay {
   position: fixed;
   inset: 0;
   display: flex;
@@ -10,8 +10,8 @@
 }
 
 .modal-sheet {
-  background-color: var(--color-background, #fff);
-  color: var(--color-text, #111);
+  background-color: var(--neutral-50-bg, #fff);
+  color: var(--black, #151622);
   border-radius: 32px;
   padding: 24px 16px;
   width: 100%;

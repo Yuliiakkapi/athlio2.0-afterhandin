@@ -61,13 +61,20 @@ export default function SelectionCard({
       )}
       <div className="role-icon">
         {icon ? (
-          // if icon is a string, treat it as an image URL
           typeof icon === "string" ? (
+            // remote URL / local asset path
             <img src={icon} alt={`${name} icon`} />
-          ) : (
-            // otherwise assume it's a React node/component
+          ) : typeof icon === "object" && icon.$$typeof ? (
+            // component reference: forwardRef object or similar
+            // (Phosphor icons are forwardRef → typeof === "object" with $$typeof)
+            React.createElement(icon, { size: 28, weight: "bold" })
+          ) : typeof icon === "function" ? (
+            // component reference: plain function
+            React.createElement(icon, { size: 28, weight: "bold" })
+          ) : React.isValidElement(icon) ? (
+            // already a rendered React element — use as-is
             icon
-          )
+          ) : null
         ) : null}
       </div>
 

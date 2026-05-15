@@ -1,5 +1,6 @@
 body {
   font-family: "Barlow", sans-serif;
+  background-color: var(--neutral-50-bg, #f6f6f7);
 }
 
 * {
@@ -37,21 +38,190 @@ body {
   --text-secondary: var(--text-xs);
   --text-button: var(--text-sm);
 
-  /* Colors */
-  --color-background: #fbfbfb;
-  --color-text: #000215;
-  --color-accent: #4051fd;
-  --color-buttons: #2631a0;
-  --color-details: #c6cbfe;
-  --color-green: #00ab3d;
-  --color-red: #ff3d52;
-  --color-orange: #ff983d;
-  --color-gray-100: #f0f0f3;
-  --color-gray-300: #dfe0e7;
-  --color-gray-500: #cbccd8;
-  --color-gray-700: #a5a7bb;
-  --color-gray-900: #727481;
+  /* Design system color tokens (light and dark variants included) */
+  /* Light Mode */
+  /* color */
+  --black: #151622;
+  --muted: #91909b;
+  --white: #ffffff;
+  --negative-100: #ffe2e3;
+  --negative-200: #ffcace;
+  --negative-300: #ff9fa5;
+  --negative-400: #ff6976;
+  --negative-50: #fff0f0;
+  --negative-500: #ff3d52;
+  --negative-600: #ff3d52;
+  --negative-700: #c8082b;
+  --negative-800: #a8092b;
+  --negative-900: #8f0c2c;
+  --negative-950: #500112;
+  --negative-default: #ff3d52;
+  --neutral-100: #eeeff1;
+  --neutral-200: #e1e1e4;
+  --neutral-300: #cecfd4;
+  --neutral-400: #b8b9c1;
+  --neutral-500: #a5a5af;
+  --neutral-50-bg: #f6f6f7;
+  --neutral-600: #91909b;
+  --neutral-700: #7d7c86;
+  --neutral-800: #66656e;
+  --neutral-900: #55555a;
+  --neutral-950: #323135;
+  --pictures-1: #ffffff;
+  --primary-100: #dbe9ff;
+  --primary-200: #bfd6ff;
+  --primary-300: #98baff;
+  --primary-400: #6f92ff;
+  --primary-50: #ebf4ff;
+  --primary-500: #4e6cff;
+  --primary-600: #4051fd;
+  --primary-700: #2230e0;
+  --primary-800: #1f2cb4;
+  --primary-900: #222f8d;
+  --primary-950: #141952;
+  --primary-default: #4051fd;
+  --success-100: #d7ffe5;
+  --success-200: #b2ffcc;
+  --success-300: #76ffa5;
+  --success-400: #33f578;
+  --success-50: #eefff3;
+  --success-500: #09de54;
+  --success-600: #00ab3d;
+  --success-700: #049137;
+  --success-800: #0a7130;
+  --success-900: #0a5d2a;
+  --success-950: #003414;
+  --success-default: #00ab3d;
+  --warning-100: #ffeed4;
+  --warning-200: #ffd9a8;
+  --warning-300: #ffbd71;
+  --warning-400: #ff983d;
+  --warning-50: #fff7ed;
+  --warning-500: #fe7611;
+  --warning-600: #ef5b07;
+  --warning-700: #c64308;
+  --warning-800: #9d360f;
+  --warning-900: #7e2e10;
+  --warning-950: #441406;
+  --warning-default: #ff983d;
+  /* Dark Mode */
+  /* color */
+  --black-dark: #f9f9f9;
+  --muted-dark: #91909b;
+  --white-dark: #151622;
+  --negative-100-dark: #8f0c2c;
+  --negative-200-dark: #a8092b;
+  --negative-300-dark: #c8082b;
+  --negative-400-dark: #ff3d52;
+  --negative-50-dark: #500112;
+  --negative-500-dark: #ff3d52;
+  --negative-600-dark: #ff6976;
+  --negative-700-dark: #ff9fa5;
+  --negative-800-dark: #ffcace;
+  --negative-900-dark: #ffe2e3;
+  --negative-950-dark: #fff0f0;
+  --negative-default-dark: #ff3d52;
+  --neutral-100-dark: #55555a;
+  --neutral-200-dark: #66656e;
+  --neutral-300-dark: #7d7c86;
+  --neutral-400-dark: #91909b;
+  --neutral-500-dark: #a5a5af;
+  --neutral-50-bg-dark: #323135;
+  --neutral-600-dark: #b8b9c1;
+  --neutral-700-dark: #cecfd4;
+  --neutral-800-dark: #e1e1e4;
+  --neutral-900-dark: #eeeff1;
+  --neutral-950-dark: #f6f6f7;
+  --pictures-1-dark: #ffffff;
+  --primary-100-dark: #222f8d;
+  --primary-200-dark: #1f2cb4;
+  --primary-300-dark: #2230e0;
+  --primary-400-dark: #4051fd;
+  --primary-50-dark: #141952;
+  --primary-500-dark: #4e6cff;
+  --primary-600-dark: #6f92ff;
+  --primary-700-dark: #98baff;
+  --primary-800-dark: #bfd6ff;
+  --primary-900-dark: #dbe9ff;
+  --primary-950-dark: #ebf4ff;
+  --primary-default-dark: #4051fd;
+  --success-100-dark: #0a5d2a;
+  --success-200-dark: #0a7130;
+  --success-300-dark: #049137;
+  --success-400-dark: #00ab3d;
+  --success-50-dark: #003414;
+  --success-500-dark: #09de54;
+  --success-600-dark: #33f578;
+  --success-700-dark: #76ffa5;
+  --success-800-dark: #b2ffcc;
+  --success-900-dark: #d7ffe5;
+  --success-950-dark: #eefff3;
+  --success-default-dark: #00ab3d;
+  --warning-100-dark: #7e2e10;
+  --warning-200-dark: #9d360f;
+  --warning-300-dark: #c64308;
+  --warning-400-dark: #ef5b07;
+  --warning-50-dark: #441406;
+  --warning-500-dark: #fe7611;
+  --warning-600-dark: #ff983d;
+  --warning-700-dark: #ffbd71;
+  --warning-800-dark: #ffd9a8;
+  --warning-900-dark: #ffeed4;
+  --warning-950-dark: #fff7ed;
+  --warning-default-dark: #ff983d;
+
 }
+
+/* ─── Text style utility classes ────────────────────────────────────
+   Usage: className="text-sm-medium" etc.
+   Source: Figma design system tokens
+──────────────────────────────────────────────────────────────────── */
+
+/* Headings — Barlow Condensed Bold */
+.heading-6xl         { font-family: var(--font-condensed); font-size: 64px; font-weight: 700; letter-spacing: 0; line-height: 110%; }
+.heading-6xl-italic  { font-family: var(--font-condensed); font-size: 64px; font-weight: 700; font-style: italic; letter-spacing: 0; line-height: 110%; text-transform: uppercase; }
+.heading-5xl         { font-family: var(--font-condensed); font-size: 44px; font-weight: 700; letter-spacing: 0; }
+.heading-5xl-italic  { font-family: var(--font-condensed); font-size: 44px; font-weight: 700; font-style: italic; letter-spacing: 0; line-height: 110%; text-transform: uppercase; }
+.heading-4xl         { font-family: var(--font-condensed); font-size: 32px; font-weight: 700; letter-spacing: 0; }
+.heading-4xl-italic  { font-family: var(--font-condensed); font-size: 32px; font-weight: 700; font-style: italic; letter-spacing: 0; text-transform: uppercase; }
+.heading-3xl         { font-family: var(--font-condensed); font-size: 28px; font-weight: 700; letter-spacing: 0; }
+.heading-3xl-italic  { font-family: var(--font-condensed); font-size: 28px; font-weight: 700; font-style: italic; letter-spacing: 0; text-transform: uppercase; }
+
+/* Headings — Barlow SemiBold */
+.heading-2xl         { font-family: var(--font-sans); font-size: 22px; font-weight: 600; letter-spacing: 0; }
+.heading-2xl-italic  { font-family: var(--font-sans); font-size: 22px; font-weight: 600; font-style: italic; letter-spacing: 0; text-transform: uppercase; }
+.heading-xl          { font-family: var(--font-sans); font-size: 18px; font-weight: 600; letter-spacing: -0.01em; line-height: 24px; }
+.heading-xl-italic   { font-family: var(--font-sans); font-size: 18px; font-weight: 600; font-style: italic; letter-spacing: -0.01em; line-height: 24px; text-transform: uppercase; }
+
+/* text-lg — 18px */
+.text-lg-bold        { font-family: var(--font-sans); font-size: 18px; font-weight: 700; letter-spacing: 0; }
+.text-lg-semibold    { font-family: var(--font-sans); font-size: 18px; font-weight: 600; letter-spacing: 0; }
+.text-lg-medium      { font-family: var(--font-sans); font-size: 18px; font-weight: 500; letter-spacing: 0; }
+.text-lg-regular     { font-family: var(--font-sans); font-size: 18px; font-weight: 400; letter-spacing: 0; }
+
+/* text-base — 16px */
+.text-base-bold      { font-family: var(--font-sans); font-size: 16px; font-weight: 700; letter-spacing: 0; }
+.text-base-semibold  { font-family: var(--font-sans); font-size: 16px; font-weight: 600; letter-spacing: 0; }
+.text-base-medium    { font-family: var(--font-sans); font-size: 16px; font-weight: 500; letter-spacing: 0; }
+.text-base-regular   { font-family: var(--font-sans); font-size: 16px; font-weight: 400; letter-spacing: 0; }
+
+/* text-sm — 14px */
+.text-sm-bold        { font-family: var(--font-sans); font-size: 14px; font-weight: 700; letter-spacing: 0; }
+.text-sm-semibold    { font-family: var(--font-sans); font-size: 14px; font-weight: 600; letter-spacing: 0; }
+.text-sm-medium      { font-family: var(--font-sans); font-size: 14px; font-weight: 500; letter-spacing: 0; }
+.text-sm-regular     { font-family: var(--font-sans); font-size: 14px; font-weight: 400; letter-spacing: 0; }
+
+/* text-xs — 12px */
+.text-xs-bold        { font-family: var(--font-sans); font-size: 12px; font-weight: 700; letter-spacing: 0; }
+.text-xs-semibold    { font-family: var(--font-sans); font-size: 12px; font-weight: 600; letter-spacing: 0; }
+.text-xs-medium      { font-family: var(--font-sans); font-size: 12px; font-weight: 500; letter-spacing: 0; }
+.text-xs-regular     { font-family: var(--font-sans); font-size: 12px; font-weight: 400; letter-spacing: 0; }
+
+/* text-2xs — 10px */
+.text-2xs-bold       { font-family: var(--font-sans); font-size: 10px; font-weight: 700; letter-spacing: 0; }
+.text-2xs-semibold   { font-family: var(--font-sans); font-size: 10px; font-weight: 600; letter-spacing: 0; }
+.text-2xs-medium     { font-family: var(--font-sans); font-size: 10px; font-weight: 500; letter-spacing: 0; }
+.text-2xs-regular    { font-family: var(--font-sans); font-size: 10px; font-weight: 400; letter-spacing: 0; }
 
 .main-content {
   padding: 56px 16px;
@@ -72,10 +242,4 @@ p {
   font-weight: 500;
 }
 
-.list-item {
-  font-family: var(--font-sans);
-  font-size: var(--list-item-value);
-  font-weight: 500;
-  line-height: 1.2;
-  font-style: normal;
-}
+

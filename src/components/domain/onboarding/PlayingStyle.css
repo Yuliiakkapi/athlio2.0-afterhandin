@@ -1,0 +1,178 @@
+/* ──────────────────────────────────────────────────────────────────
+   PlayingStyle — "Your playing style" onboarding step
+   Horizontal scroll-snap carousel with player cards.
+────────────────────────────────────────────────────────────────── */
+
+.style-step {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* ─── Header ────────────────────────────────────────────────────── */
+.style-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 16px;
+}
+
+.style-title {
+  font-family: var(--font-condensed);
+  font-size: var(--heading-5xl);   /* 44px */
+  font-weight: 700;
+  font-style: italic;
+  text-transform: uppercase;
+  line-height: 1.1;
+  letter-spacing: 0;
+  color: var(--black);
+  margin: 0;
+}
+
+.style-subtitle {
+  font-family: var(--font-sans);
+  font-size: var(--text-base);     /* 16px */
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--muted);
+  margin: 0;
+}
+
+/* ─── Active-style badge ─────────────────────────────────────────── */
+.style-badge-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.style-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 10px;
+  background: var(--primary-100, #dbe9ff);
+  border-radius: 9999px;
+
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  font-style: italic;
+  text-transform: uppercase;
+  letter-spacing: -0.14px;
+  line-height: 1;
+  color: var(--primary-800, #1f2cb4);
+  white-space: nowrap;
+}
+
+/* ─── Carousel container ─────────────────────────────────────────── */
+/* Break out of the page's 16px horizontal padding */
+.style-carousel {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  overflow-x: scroll;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  /* Centre-pad so the first and last card snap to centre */
+  padding: 0 calc(50% - 145px);   /* 145 = 290 / 2 */
+
+  /* Bleed outside the page's 16px padding */
+  margin: 0 -16px;
+
+  margin-bottom: 16px;
+}
+
+.style-carousel::-webkit-scrollbar {
+  display: none;
+}
+
+/* ─── Individual player card ─────────────────────────────────────── */
+.style-card {
+  position: relative;
+  width: 290px;
+  height: 380px;
+  flex-shrink: 0;
+  scroll-snap-align: center;
+  overflow: hidden;
+  border-radius: 0;       /* images bleed edge-to-edge, no rounded box */
+  cursor: pointer;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding-bottom: 12px;
+
+  transition: opacity 200ms ease;
+}
+
+/* Dim non-active cards slightly so the centre one pops */
+.style-card:not(.style-card--active) {
+  opacity: 0.55;
+}
+
+/* ─── Player image (cut-out style) ──────────────────────────────── */
+.style-card-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ─── Gradient placeholder (for styles without a real image) ─────── */
+.style-card-placeholder {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* ─── Bottom fade overlay — merges card into page background ──────── */
+.style-card-fade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(246, 246, 247, 0) 45%,
+    var(--neutral-50-bg, #f6f6f7) 100%
+  );
+  pointer-events: none;
+}
+
+/* ─── Player name ────────────────────────────────────────────────── */
+.style-card-name {
+  position: relative;   /* above the fade overlay */
+  z-index: 2;
+  font-family: var(--font-condensed);
+  font-size: 28px;
+  font-weight: 700;
+  font-style: normal;
+  line-height: 1;
+  color: var(--black);
+  text-align: center;
+  margin: 0;
+  white-space: nowrap;
+}
+
+/* ─── Style description box ──────────────────────────────────────── */
+.style-desc {
+  background: var(--neutral-100, #eeeff1);
+  border-radius: 12px;
+  padding: 12px 16px;
+  text-align: center;
+}
+
+.style-desc p {
+  font-family: var(--font-sans);
+  font-size: var(--text-base);   /* 16px */
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--black);
+  margin: 0;
+}

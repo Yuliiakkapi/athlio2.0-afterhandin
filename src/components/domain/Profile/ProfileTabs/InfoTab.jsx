@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../../../../lib/supabase";
 import CardInfoSingle from "../../../UI/InfoCards";
-import EditIcon from "../../../../assets/icons/edit.svg?react";
+import { PencilSimpleLine } from "@phosphor-icons/react";
 import Button from "../../../UI/Button";
 import "./InfoTab.css";
 import ExperienceList from "../../Scouting/ExperienceList";
@@ -76,7 +76,7 @@ export default function InfoTab({ profile, isMe = false }) {
             <Button
               size="medium"
               type="outline"
-              Icon={EditIcon}
+              Icon={PencilSimpleLine}
               className="edit-info-btn"
               onClick={() => navigate("/profile/me/edit")}
             />

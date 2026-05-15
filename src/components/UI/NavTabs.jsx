@@ -9,8 +9,29 @@ const NavigationTabs = ({
     { id: 'availability', label: 'Availability' },
   ],
   activeTab,
-  onTabChange
+  onTabChange,
+  variant = 'underline', // 'underline' | 'pill'
 }) => {
+
+  if (variant === 'pill') {
+    return (
+      <div className="navtabs-pill-wrap">
+        <div className="navtabs-pill">
+          {tabs.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => onTabChange(tab.id)}
+              className={`navtabs-pill-tab ${activeTab === tab.id ? 'navtabs-pill-tab--active' : ''}`}
+              role="tab"
+              aria-selected={activeTab === tab.id}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <nav className="navbartabs">

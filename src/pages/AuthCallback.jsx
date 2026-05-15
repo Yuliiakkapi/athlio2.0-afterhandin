@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+﻿import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../lib/supabase";
 
@@ -42,7 +42,7 @@ export default function AuthCallback() {
         gap: 12,
       }}
     >
-      <p style={{ fontSize: 16, color: "#727481" }}>Signing you in…</p>
+      <p style={{ fontSize: 16, color: "var(--neutral-900)" }}>Signing you in…</p>
     </div>
   );
 }

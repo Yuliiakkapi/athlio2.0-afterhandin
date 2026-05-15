@@ -1,4 +1,4 @@
-.player-comparison-header {
+﻿.player-comparison-header {
   width: 100%;
   background: #fff;
   display: flex;
@@ -20,7 +20,7 @@
 .title {
   font-size: 20px;
   font-weight: 600;
-  color: #000215;
+  color: #151622;
 }
 .actions { display: flex; gap: 12px; }
 

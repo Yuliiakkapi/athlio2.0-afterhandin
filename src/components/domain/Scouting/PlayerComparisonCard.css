@@ -1,4 +1,4 @@
-.player-comparison-card {
+﻿.player-comparison-card {
   display: flex;
   width: 57px;
   height: 72px;
@@ -7,7 +7,7 @@
   gap: 10px;
   position: relative;
   border-radius: 8px;
-  background: var(--color-background);
+  background: var(--neutral-50-bg);
 }
 
 .player-comparison-card-content {
@@ -44,7 +44,7 @@
 .player-comparison-card-name {
   height: 24px;
   align-self: stretch;
-  color: var(--color-text);
+  color: var(--black);
   text-align: center;
   font-family: "Barlow", sans-serif;
   font-size: 10px;
@@ -69,15 +69,15 @@
   right: -6px;
   top: -6px;
   border-radius: 32px;
-  border: 1.5px solid var(--color-gray-300);
-  background: var(--color-gray-100);
+  border: 1.5px solid var(--neutral-300);
+  background: var(--neutral-100);
   cursor: pointer;
   transition: background-color 200ms ease, border-color 200ms ease;
 }
 
 .player-comparison-card-remove-btn:hover {
-  background-color: var(--color-gray-300);
-  border-color: var(--color-gray-500);
+  background-color: var(--neutral-300);
+  border-color: var(--neutral-50-bg0);
 }
 
 .player-comparison-card-remove-btn svg {

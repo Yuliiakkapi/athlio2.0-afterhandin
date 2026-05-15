@@ -1,0 +1,148 @@
+/* ──────────────────────────────────────────────────────────────────
+   PositionSelect — normal document flow, no negative margins.
+   Background and button overlay use position:fixed so they cover
+   the full viewport without adding any width to the layout.
+────────────────────────────────────────────────────────────────── */
+
+.pos-step {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-top: 8px;
+  /* No overflow, no extra width — completely normal flow */
+}
+
+/* ─── Full-viewport pitch background (behind everything) ───────── */
+.pos-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 5;          /* above page bg, below topbar/navbar (z:100) */
+  pointer-events: none;
+}
+
+.pos-bg-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  user-select: none;
+}
+
+/* Figma gradient: heavy dark top for header readability,
+   dark bottom so the navbar blends over the pitch            */
+.pos-gradient {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0) 38%),
+    linear-gradient(0deg, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0) 28%);
+}
+
+/* ─── Header — same layout as other onboarding steps ──────────── */
+.pos-header {
+  position: relative;
+  z-index: 20;    /* above fixed pitch bg (z:5) */
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+.pos-title {
+  font-family: var(--font-condensed);
+  font-size: var(--heading-5xl);   /* 44px */
+  font-weight: 700;
+  font-style: italic;
+  text-transform: uppercase;
+  line-height: 1.1;
+  letter-spacing: 0;
+  color: var(--white);
+  margin: 0 0 4px;
+}
+
+.pos-subtitle {
+  font-family: var(--font-sans);
+  font-size: var(--text-base);     /* 16px */
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--neutral-400);       /* #b8b9c1 */
+  margin: 0;
+}
+
+/* ─── Position buttons — fixed overlay at viewport coordinates ─── */
+.pos-buttons {
+  position: fixed;
+  inset: 0;
+  z-index: 15;           /* above bg (5), below topbar/navbar (100) */
+  pointer-events: none;  /* let clicks pass through the container */
+}
+
+/* ─── Individual position button ──────────────────────────────── */
+.pos-btn {
+  position: absolute;
+  transform: translateX(-50%);  /* centre on given left% */
+  pointer-events: auto;          /* restore click on the button itself */
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+
+  /* Unselected: blue jersey on white circle */
+  color: var(--primary-default);  /* jersey fill via currentColor */
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.4));
+  transition: transform 120ms ease;
+}
+
+.pos-btn:active {
+  transform: translateX(-50%) scale(0.9);
+}
+
+/* ─── Position label — Heading/xl.italic ──────────────────────── */
+.pos-btn-label {
+  font-family: var(--font-sans);
+  font-size: var(--heading-xl);    /* 18px */
+  font-weight: 600;
+  font-style: italic;
+  text-transform: uppercase;
+  letter-spacing: -1px;
+  line-height: 24px;
+  color: var(--white);
+  display: block;
+  text-align: center;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+}
+
+/* ─── Jersey circle ────────────────────────────────────────────── */
+.pos-btn-circle {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 11px;
+  box-sizing: border-box;
+  transition: background 150ms ease;
+}
+
+.pos-btn-jersey {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* ─── Selected: blue circle + white jersey ─────────────────────── */
+.pos-btn--selected {
+  color: var(--white);  /* jersey becomes white via currentColor */
+}
+
+.pos-btn--selected .pos-btn-circle {
+  background: var(--primary-default);
+}

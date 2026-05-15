@@ -2,16 +2,20 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import "./profile.css";
 import { supabase } from "../lib/supabase";
+import { useUser } from "../context/UserContext";
 import ProfileHeader from "../components/domain/Profile/ProfileHeader";
 import { isFollowing, follow, unfollow } from "../lib/follows";
 import NavigationTabs from "../components/UI/NavTabs";
 import PostsTab from "../components/domain/Profile/ProfileTabs/PostsTab";
-import StatsTab from "../components/domain/Profile/ProfileTabs/StatsTab";
 import InfoTab from "../components/domain/Profile/ProfileTabs/InfoTab";
 import MatchesTab from "../components/domain/Profile/ProfileTabs/MatchesTab";
+import PerformanceTab from "../components/domain/Profile/ProfileTabs/PerformanceTab";
+
+const PROFESSIONAL_ROLES = ["scout", "coach", "manager", "agent", "professional"];
 
 export default function OtherProfile() {
   const { id } = useParams();
+  const { profile: viewerProfile } = useUser();
   if (!id) return <div className="page">Invalid profile route.</div>;
 
   const [state, setState] = useState("loading");
@@ -100,12 +104,34 @@ export default function OtherProfile() {
     }
   }
 
-  if (state === "loading") return <div className="page">Loading…</div>;
-  if (state === "notfound")
-    return <div className="page">Profile not found.</div>;
-  if (state === "error")
-    return <div className="page">Couldn't load profile.</div>;
+  if (state === "loading") return <div className="page profile-loading">Loading…</div>;
+  if (state === "notfound") return <div className="page profile-loading">Profile not found.</div>;
+  if (state === "error") return <div className="page profile-loading">Couldn't load profile.</div>;
   if (!profile) return null;
+
+  // Determine if the viewed profile belongs to a professional
+  const isProfessional = PROFESSIONAL_ROLES.includes(profile.role);
+
+  // Determine if the current viewer is a professional
+  const viewerIsProfessional = PROFESSIONAL_ROLES.includes(viewerProfile?.role);
+  const viewerIsPro = Boolean(viewerProfile?.is_pro);
+
+  // Generate tabs: athletes get Matches + Performance (if viewer is a pro)
+  const tabs = isProfessional
+    ? [
+        { id: "posts", label: "Posts" },
+        { id: "info", label: "Info" },
+      ]
+    : [
+        { id: "posts", label: "Posts" },
+        { id: "info", label: "Info" },
+        { id: "matches", label: "Matches" },
+        ...(viewerIsProfessional ? [{ id: "performance", label: "Performance" }] : []),
+      ];
+
+  // Reset activeTab if it's not available for this role
+  const availableTabIds = tabs.map((t) => t.id);
+  const currentTab = availableTabIds.includes(activeTab) ? activeTab : "posts";
 
   return (
     <div className="page profile other">
@@ -114,23 +140,20 @@ export default function OtherProfile() {
         isMe={false}
         isFollowing={isFollowingState}
         toggleFollow={toggleFollow}
+        busy={busy}
       />
       <NavigationTabs
-        tabs={[
-          { id: "posts", label: "Posts" },
-          { id: "info", label: "Info" },
-          { id: "stats", label: "Stats" },
-          { id: "matches", label: "Matches" },
-        ]}
-        activeTab={activeTab}
+        variant="pill"
+        tabs={tabs}
+        activeTab={currentTab}
         onTabChange={setActiveTab}
       />
       <div className="profile-tab-content">
-        {activeTab === "posts" && <PostsTab profile={profile} isMe={false} />}
-        {activeTab === "stats" && <StatsTab profile={profile} isMe={false} />}
-        {activeTab === "info" && <InfoTab profile={profile} isMe={false} />}
-        {activeTab === "matches" && (
-          <MatchesTab profile={profile} isMe={false} />
+        {currentTab === "posts" && <PostsTab profile={profile} isMe={false} />}
+        {currentTab === "info" && <InfoTab profile={profile} isMe={false} />}
+        {currentTab === "matches" && <MatchesTab profile={profile} isMe={false} />}
+        {currentTab === "performance" && (
+          <PerformanceTab profile={profile} viewerIsPro={viewerIsPro} />
         )}
       </div>
     </div>

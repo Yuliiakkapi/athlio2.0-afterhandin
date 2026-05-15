@@ -6,8 +6,7 @@ import { supabase } from "../../../lib/supabase";
 import "./MatchPostForm.css";
 import { PopUp, PopUpActions } from "../../UI/PopUp";
 import Button from "../../UI/Button";
-import CheckIcon from "../../../assets/icons/check.svg?react";
-import CloseIcon from "../../../assets/icons/close.svg?react";
+import { Check, X } from "@phosphor-icons/react";
 import MatchComposer from "./MatchComposer";
 import DateInput from "../../inputs/DateInput";
 
@@ -317,14 +316,14 @@ export default function MatchPostForm({ onCreated }) {
               size="small"
               label="Yes"
               onClick={handleConfirmYes}
-              Icon={CheckIcon}
+              Icon={Check}
             />
             <Button
               type="outline"
               size="small"
               label="No"
               onClick={handleConfirmNo}
-              Icon={CloseIcon}
+              Icon={X}
             />
           </PopUpActions>
         </PopUp>
@@ -341,14 +340,14 @@ export default function MatchPostForm({ onCreated }) {
               size="small"
               label="Yes"
               onClick={handleAskMediaYes}
-              Icon={CheckIcon}
+              Icon={Check}
             />
             <Button
               type="outline"
               size="small"
               label="No"
               onClick={handleAskMediaNo}
-              Icon={CloseIcon}
+              Icon={X}
             />
           </PopUpActions>
         </PopUp>

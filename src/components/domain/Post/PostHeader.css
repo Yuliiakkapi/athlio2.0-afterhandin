@@ -1,3 +1,7 @@
+/* ──────────────────────────────────────────────────────────────────
+   PostHeader — author info row at the top of every post
+────────────────────────────────────────────────────────────────── */
+
 .post-header {
   display: flex;
   align-items: center;
@@ -8,37 +12,67 @@
 .header-left {
   display: flex;
   align-items: center;
-  justify-content: center;
   gap: 8px;
+  min-width: 0;
+  flex: 1;
 }
 
 .header-text {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 2px;
   align-items: flex-start;
+  min-width: 0;
 }
 
-.header-text p {
-  font-size: var(--text-base);
+.name {
+  font-family: var(--font-sans);
+  font-size: var(--text-base); /* 16px */
+  font-weight: 600;
+  color: var(--black);
+  line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .subheader-text {
   display: flex;
   align-items: center;
   gap: 8px;
-  color: var(--color-gray-700);
+  color: var(--muted, #91909b);
+  min-width: 0;
 }
 
 .subheader-text p {
-  font-size: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm); /* 14px */
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Dot separator between role and date */
+.subheader-dot {
+  display: inline-block;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--muted, #91909b);
+  flex-shrink: 0;
 }
 
 .role {
-  font-weight: 400;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+  flex-shrink: 1;
+}
+
+.date {
+  flex-shrink: 0;
 }
 
 .author-link {
   text-decoration: none;
-  color: var(--color-text);
+  color: var(--black);
 }

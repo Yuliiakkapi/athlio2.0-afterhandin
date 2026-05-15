@@ -1,6 +1,6 @@
-.composer-wrap {
+﻿.composer-wrap {
   height: 100%;
-  background-color: var(--color-gray-100);
+  background-color: var(--neutral-100);
   padding: 16px;
   height: 100vh;
   overflow: hidden;

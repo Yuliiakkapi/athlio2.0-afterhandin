@@ -1,17 +1,10 @@
-import { useNavigate } from "react-router-dom"; // 👈 import this
-import Button from "../../UI/Button";
-import ProfilePicture from "../../UI/ProfilePicture";
-import Tag from "../../UI/Tag";
-import VerifiedBadge from "../../UI/VerifiedBadge";
-import Player from "../../../assets/images/player.jpg";
-import PlusIcon from "../../../assets/icons/plus.svg?react";
-import CheckIcon from "../../../assets/icons/check.svg?react";
-import LocationIcon from "../../../assets/icons/location.svg?react";
-import EditIcon from "../../../assets/icons/edit.svg?react";
-import VerifyIcon from "../../../assets/icons/verify.svg?react";
-import ShareIcon from "../../../assets/icons/share.svg?react";
-
+import { useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import "./ProfileHeader.css";
+
+const DECO_1 = "https://www.figma.com/api/mcp/asset/52ded45f-c755-40dc-9c51-9ee493f1728d";
+const DECO_2 = "https://www.figma.com/api/mcp/asset/12ed800c-7121-4de6-914e-0fac6f2ccb2a";
+const DECO_3 = "https://www.figma.com/api/mcp/asset/502d28dc-b1c8-4892-acd5-2d324bbebfd0";
 
 export default function ProfileHeader({
   profile,
@@ -19,111 +12,128 @@ export default function ProfileHeader({
   isFollowing,
   toggleFollow,
   busy,
+  onAvatarChange,
 }) {
-  const navigate = useNavigate(); // ✅ create the navigate hook
+  const navigate = useNavigate();
+  const fileRef = useRef();
 
   if (!profile) return null;
 
-  const hasTags = profile.role || profile.position;
-  const locationText =
-    profile.city && profile.country
-      ? `${profile.city}, ${profile.country}`
-      : profile.city || profile.country || null;
+  const positions = Array.isArray(profile.position)
+    ? profile.position
+    : profile.position
+    ? [profile.position]
+    : [];
+
+  const clubName = profile.club_other_name || null;
+
+  function handleAvatarFileChange(e) {
+    const f = e.target.files && e.target.files[0];
+    if (!f) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      const dataUrl = reader.result;
+      if (typeof onAvatarChange === "function") {
+        onAvatarChange(dataUrl);
+      }
+    };
+    reader.readAsDataURL(f);
+  }
+
+  function handleAvatarClick() {
+    if (isMe && !profile.avatar_url) {
+      // If blank picture, open gallery
+      fileRef.current?.click();
+    } else if (isMe && profile.avatar_url) {
+      // If has picture, go to edit to change it
+      navigate("/profile/me/edit");
+    }
+  }
 
   return (
-    <section className="profile-header">
-      {/* === Top row: avatar, name, and tags === */}
-      <div className="profile-header-row profile-header-top">
-        <ProfilePicture
-          size="large"
-          verified={profile.verified}
-          imgUrl={profile.avatar_url || Player}
-        />
+    <section className="ph-root">
+      {/* Decorative background shapes from Figma */}
+      <img className="ph-deco ph-deco-1" src={DECO_1} alt="" aria-hidden="true" />
+      <img className="ph-deco ph-deco-2" src={DECO_2} alt="" aria-hidden="true" />
+      <img className="ph-deco ph-deco-3" src={DECO_3} alt="" aria-hidden="true" />
 
-        <div className="profile-top-text">
-          <div className="profile-name-row">
-            <h2 className="profile-name">{profile.full_name}</h2>
-            {profile.verified && (
-              <VerifiedBadge
-                containerSize="container-small"
-                iconSize="icon-small"
-              />
-            )}
-          </div>
-          <div className="profile-tags">
-            {profile.role && <Tag label={profile.role} />}
-            {profile.position && (
-              <Tag label={String(profile.position).replace(/[[\]"]/g, "")} />
-            )}
-          </div>
-        </div>
+      {/* Top bar: back arrow + share */}
+      <div className="ph-topbar">
+        <button className="ph-icon-btn" onClick={() => navigate(-1)} aria-label="Go back">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M15 19l-7-7 7-7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </button>
+        <button className="ph-icon-btn" aria-label="Share profile">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <circle cx="18" cy="5" r="2.5" stroke="currentColor" strokeWidth="1.75" />
+            <circle cx="6" cy="12" r="2.5" stroke="currentColor" strokeWidth="1.75" />
+            <circle cx="18" cy="19" r="2.5" stroke="currentColor" strokeWidth="1.75" />
+            <path d="M8.3 10.7l7.4-4.4M8.3 13.3l7.4 4.4" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" />
+          </svg>
+        </button>
       </div>
 
-      {/* === Middle section: bio and stats === */}
-      <div className="profile-header-row profile-info">
-        {profile.bio && <p className="profile-bio">{profile.bio}</p>}
-
-        <div className="profile-meta">
-          <div className="profile-follow-line">
-            <span className="profile-followers">
-              <strong>{profile.follower_count ?? 0}</strong> followers
-            </span>
-
-            {isMe && (
-              <span
-                className="profile-following"
-                style={{ cursor: "pointer" }}
-                onClick={() => navigate("/profile/me/following")}
-              >
-                <strong>{profile.following_count ?? 0}</strong> following
-              </span>
-            )}
-          </div>
-
-          {locationText && (
-            <div className="profile-location">
-              <LocationIcon />
-              <span>{locationText}</span>
-            </div>
+      {/* Main content: avatar LEFT + info RIGHT */}
+      <div className="ph-content">
+        <div 
+          className="ph-avatar-wrap"
+          onClick={handleAvatarClick}
+          style={isMe ? { cursor: "pointer", opacity: 0.9, transition: "opacity 0.2s" } : {}}
+          onMouseEnter={(e) => isMe && (e.currentTarget.style.opacity = "1")}
+          onMouseLeave={(e) => isMe && (e.currentTarget.style.opacity = "0.9")}
+          title={isMe && !profile.avatar_url ? "Click to add picture" : isMe ? "Click to change picture" : ""}
+          role={isMe ? "button" : undefined}
+          tabIndex={isMe ? 0 : undefined}
+        >
+          {profile.avatar_url ? (
+            <img className="ph-avatar" src={profile.avatar_url} alt={profile.full_name || "Avatar"} />
+          ) : (
+            <div className="ph-avatar ph-avatar--placeholder" />
           )}
         </div>
+
+        <input
+          ref={fileRef}
+          type="file"
+          accept="image/*"
+          style={{ display: "none" }}
+          onChange={handleAvatarFileChange}
+        />
+
+        <div className="ph-info">
+          <h1 className="ph-name heading-4xl-italic">{profile.full_name || profile.username || "Athlete"}</h1>
+          <p className="ph-followers text-sm-medium">
+            {(profile.follower_count ?? 0).toLocaleString()} followers
+          </p>
+          <div className="ph-meta-row">
+            {positions.slice(0, 3).map((pos) => (
+              <span key={pos} className="ph-badge">{pos}</span>
+            ))}
+            {(positions.length > 0 || true) && clubName && (
+              <span className="ph-dot" aria-hidden="true" />
+            )}
+            {clubName && <span className="ph-club text-sm-medium">{clubName}</span>}
+          </div>
+        </div>
       </div>
 
-      {/* === Bottom section: buttons === */}
-      <div className="profile-header-row profile-buttons">
+      {/* Action buttons */}
+      <div className="ph-actions">
         {isMe ? (
-          <>
-            <Button
-              size="medium"
-              type="outline"
-              label="Edit Profile"
-              Icon={EditIcon}
-              onClick={() => navigate("/profile/me/edit")} // ✅ navigate to edit page
-            />
-            <Button
-              size="medium"
-              type="outline"
-              label="Verify"
-              Icon={VerifyIcon}
-            />
-            <Button size="medium" type="outline" Icon={ShareIcon} />
-          </>
+          <button className="ph-btn ph-btn--secondary text-base-semibold" onClick={() => navigate("/profile/me/edit")}>
+            Edit Profile
+          </button>
         ) : (
           <>
-            <Button
-              size="medium"
-              type={isFollowing ? "outline" : "primary"}
-              label={isFollowing ? "Following" : "Follow"}
+            <button
+              className="ph-btn ph-btn--secondary text-base-semibold"
               onClick={toggleFollow}
               disabled={busy}
-              Icon={isFollowing ? CheckIcon : PlusIcon}
-            />
-            <Button
-              size="medium"
-              type="outline"
-              label="Message"
-              onClick={() => console.log("Message clicked")}
-            />
+            >
+              {isFollowing ? "Following" : "+ Follow"}
+            </button>
+            <button className="ph-btn ph-btn--ghost text-base-semibold">Message</button>
           </>
         )}
       </div>

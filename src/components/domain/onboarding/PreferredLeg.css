@@ -1,0 +1,154 @@
+/* ──────────────────────────────────────────────────────────────────
+   PreferredLeg — "Which is your stronger foot?" onboarding step
+   Figma node 7242-45959
+────────────────────────────────────────────────────────────────── */
+
+.leg-step {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100dvh - 176px);
+}
+
+/* ─── Header ────────────────────────────────────────────────────── */
+.leg-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 0;
+}
+
+.leg-title {
+  font-family: var(--font-condensed);
+  font-size: var(--heading-5xl);
+  font-weight: 700;
+  font-style: italic;
+  text-transform: uppercase;
+  line-height: 1.1;
+  color: var(--black);
+  margin: 0;
+}
+
+.leg-subtitle {
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--muted);
+  margin: 0;
+}
+
+/* ─── Visual container ───────────────────────────────────────────
+   Full viewport bleed, fills remaining height so the group can
+   be centred within it.
+────────────────────────────────────────────────────────────────── */
+.leg-visual {
+  position: relative;
+  margin: 0 -16px;
+  flex: 1;
+  min-height: 320px;
+}
+
+/* ─── Bounding group (361×280 px from Figma) ─────────────────────
+   Centred horizontally; shifted slightly below the mid-point to
+   match the Figma composition.
+────────────────────────────────────────────────────────────────── */
+.leg-group {
+  position: absolute;
+  width: 361px;
+  height: 280px;
+  left: 50%;
+  top: calc(50% + 67px);
+  transform: translate(-50%, -50%);
+}
+
+/* ─── Football circle ────────────────────────────────────────────
+   206×207 px, centred horizontally within the group, sits at the
+   top. Overflow hidden so the oversized ball image is cropped.
+────────────────────────────────────────────────────────────────── */
+.leg-ball {
+  position: absolute;
+  left: calc(50% - 103px); /* (361 - 206) / 2 = 77.5, but centre-based */
+  top: 0;
+  width: 206px;
+  height: 207px;
+  border-radius: 50%;
+  border: 11px solid var(--neutral-200, #e1e1e4);
+  background: var(--neutral-50-bg, #f6f6f7);
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* Oversized crop matching Figma image frame */
+.leg-ball-img {
+  position: absolute;
+  width: 128.64%;
+  height: 128.02%;
+  left: -15.05%;
+  top: -14.98%;
+  object-fit: cover;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ─── Leg-option buttons ─────────────────────────────────────────
+   106×106 px circles, semi-transparent white, subtle shadow.
+   Positioned absolutely within .leg-group using Figma coordinates.
+────────────────────────────────────────────────────────────────── */
+.leg-btn {
+  position: absolute;
+  width: 106px;
+  height: 106px;
+  border-radius: 50%;
+  border: 1px solid var(--neutral-200, #e1e1e4);
+  background: rgba(249, 249, 249, 0.9);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.10);
+  cursor: pointer;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  padding: 0;
+
+  transition: background 150ms ease, border-color 150ms ease, transform 120ms ease;
+}
+
+.leg-btn:active {
+  transform: scale(0.93);
+}
+
+/* Figma coords: left (0, 50), right (255, 47), both (127, 174) */
+.leg-btn--left  { left: 0;     top: 50px; }
+.leg-btn--right { left: 255px; top: 47px; }
+.leg-btn--both  { left: 127px; top: 174px; }
+
+/* ─── Selected state ─────────────────────────────────────────────── */
+.leg-btn--selected {
+  background: var(--primary-100, #dbe9ff);
+  border-color: var(--primary-default, #4051fd);
+}
+
+/* ─── Phosphor icon inside button ────────────────────────────────── */
+.leg-btn-icon-ph {
+  display: block;
+  flex-shrink: 0;
+  color: var(--neutral-600, #555);
+  transition: color 120ms ease;
+}
+
+.leg-btn--selected .leg-btn-icon-ph {
+  color: var(--primary-default, #4051fd);
+}
+
+/* ─── Button label ────────────────────────────────────────────────── */
+.leg-btn-label {
+  font-family: var(--font-condensed);
+  font-size: 32px;
+  font-weight: 700;
+  font-style: italic;
+  text-transform: uppercase;
+  line-height: 1;
+  color: var(--black);
+  white-space: nowrap;
+}

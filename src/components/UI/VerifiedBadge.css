@@ -1,5 +1,5 @@
-.verified-badge-container {
-  background-color: var(--color-accent);
+﻿.verified-badge-container {
+  background-color: var(--primary-default);
   border-radius: 50%;
   display: inline-flex;
   align-items: center;

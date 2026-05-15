@@ -1,7 +1,6 @@
 import React from "react";
 import "./SearchBar.css";
-import SearchIcon from "../../assets/icons/search.svg";
-import CloseIcon from "../../assets/icons/close.svg";
+import { MagnifyingGlass, X } from "@phosphor-icons/react";
 
 const SearchBar = ({
   label = "Search",
@@ -20,7 +19,7 @@ const SearchBar = ({
     >
       <div className="search-content">
         <span className="search-icon" aria-hidden>
-          <img src={SearchIcon} alt="" />
+          <MagnifyingGlass size={24} />
         </span>
 
         {editable ? (
@@ -45,7 +44,7 @@ const SearchBar = ({
             }}
             aria-label="Clear search"
           >
-            <img src={CloseIcon} alt="" />
+            <X size={16} />
           </button>
         )}
       </div>

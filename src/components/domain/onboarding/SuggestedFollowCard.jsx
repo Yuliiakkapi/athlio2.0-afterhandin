@@ -1,6 +1,6 @@
 import ProfilePicture from "../../UI/ProfilePicture";
 import Button from "../../UI/Button";
-import plusIcon from "../../../assets/icons/plus.svg";
+import { Plus } from "@phosphor-icons/react";
 import "./SuggestedFollowCard.css";
 
 // Contract
@@ -23,7 +23,7 @@ export default function SuggestedFollowCard({
         size="small"
         type={isFollowing ? "subtle" : "outline"}
         label={isFollowing ? "Following" : "Follow"}
-        Icon={!isFollowing ? plusIcon : undefined}
+        Icon={!isFollowing ? Plus : undefined}
         onClick={() => onToggle && onToggle(id)}
       />
     </div>

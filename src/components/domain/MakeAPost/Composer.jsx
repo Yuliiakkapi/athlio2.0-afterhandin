@@ -5,7 +5,7 @@ import GrowingTextArea from "../../inputs/GrowingTextArea";
 import PostPillBar from "./PostPillBar";
 import "./Composer.css";
 import IconButton from "../../UI/IconButton";
-import CloseIcon from "../../../assets/icons/close.svg?react";
+import { X } from "@phosphor-icons/react";
 
 export default function Composer({
   onSubmit /* UI-only: do not insert here */,
@@ -114,7 +114,7 @@ export default function Composer({
             <IconButton
               size="small"
               type="neutral"
-              icon={CloseIcon}
+              icon={X}
               onClick={handleRemoveImage}
             />
           </figcaption>

@@ -1,0 +1,307 @@
+/* ──────────────────────────────────────────────────────────────────
+   Watchlist — full-screen player list with swipe-to-delete
+   Figma node 7663-26169
+────────────────────────────────────────────────────────────────── */
+
+.main-content:has(.watchlist-page) {
+  padding: 0;
+}
+
+.watchlist-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  background: var(--neutral-50-bg, #f6f6f7);
+}
+
+/* ─── Top bar ────────────────────────────────────────────────── */
+
+.wl-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 4px 10px;
+  background: var(--neutral-50-bg, #f6f6f7);
+}
+
+.wl-icon-btn {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: var(--black, #151622);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.wl-title {
+  flex: 1;
+  margin: 0;
+  color: var(--black, #151622);
+  text-align: center;
+}
+
+/* ─── Tabs (NavTabs pill — remove its own padding, we control it) */
+
+.wl-tabs-wrap {
+  padding: 0 16px 2px;
+}
+
+.wl-tabs-wrap .navtabs-pill-wrap {
+  padding: 0;
+}
+
+/* ─── Player list ────────────────────────────────────────────── */
+
+.wl-list {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px 14px 120px;
+}
+
+/* ─── Card wrapper ───────────────────────────────────────────── */
+
+.wl-card-wrap {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 0 21px 0 rgba(0, 0, 0, 0.08);
+}
+
+/* Red delete zone — right-aligned, revealed when card slides left */
+.wl-delete-zone {
+  position: absolute;
+  inset: 0;
+  background: var(--negative-default, #ff3d52);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 20px;
+  border-radius: 12px;
+}
+
+.wl-delete-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  padding: 8px;
+}
+
+/* The card surface */
+.wl-card {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 10px 12px 14px;
+  background: white;
+  border-radius: 12px;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.wl-card--snap {
+  transition: transform 0.2s ease;
+}
+
+/* ─── OVR badge — absolute over the avatar ───────────────────── */
+
+.wl-card-ovr {
+  position: absolute;
+  left: 54px;
+  top: 48px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* ─── Top row ────────────────────────────────────────────────── */
+
+.wl-card-top {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.wl-card-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: rgba(64, 81, 253, 0.1);
+  overflow: hidden;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-condensed);
+  font-size: var(--heading-2xl);
+  font-weight: 700;
+  font-style: italic;
+  color: var(--primary-default, #4051fd);
+}
+
+.wl-card-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.wl-card-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.wl-card-name {
+  font-family: var(--font-condensed);
+  font-size: var(--heading-2xl);
+  font-style: italic;
+  font-weight: 600;
+  line-height: 110%;
+  text-transform: uppercase;
+  color: #000;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.wl-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--muted, #91909b);
+  flex-wrap: nowrap;
+}
+
+.wl-meta-dot {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--muted, #91909b);
+  flex-shrink: 0;
+}
+
+/* ─── Stats row ──────────────────────────────────────────────── */
+
+.wl-card-stats {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.wl-stat-box {
+  flex: 1;
+  height: 66px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 6px 8px;
+  background: var(--neutral-50-bg, #f6f6f7);
+  border-radius: 8px;
+}
+
+.wl-stat-label {
+  color: var(--muted, #91909b);
+  text-align: center;
+  line-height: 1;
+}
+
+.wl-stat-value {
+  font-family: var(--font-condensed);
+  font-size: var(--heading-2xl);
+  font-weight: 700;
+  font-style: italic;
+  text-transform: uppercase;
+  color: var(--black, #151622);
+  line-height: 1;
+  text-align: center;
+}
+
+/* ─── Trend chip ─────────────────────────────────────────────── */
+
+.wl-trend {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 4px;
+  border-radius: 100px;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.wl-trend--up {
+  background: #effff5;
+  color: #00ab3d;
+}
+
+.wl-trend--down {
+  background: rgba(255, 61, 82, 0.10);
+  color: var(--negative-default, #ff3d52);
+}
+
+/* Upward / downward triangle via CSS borders */
+.wl-trend-arrow {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  flex-shrink: 0;
+}
+
+.wl-trend--up .wl-trend-arrow {
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-bottom: 6px solid #00ab3d;
+}
+
+.wl-trend--down .wl-trend-arrow {
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 6px solid var(--negative-default, #ff3d52);
+}
+
+/* ─── Compare FAB ────────────────────────────────────────────── */
+
+.wl-compare-wrap {
+  position: fixed;
+  bottom: 28px;
+  right: 20px;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.wl-compare-label {
+  color: var(--black, #151622);
+  line-height: 1;
+}
+
+.wl-compare-btn {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--primary-default, #4051fd);
+  border: none;
+  color: white;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(64, 81, 253, 0.40);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

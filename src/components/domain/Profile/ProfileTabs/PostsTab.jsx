@@ -4,7 +4,7 @@ import BasicPost from "../../Post/BasicPost";
 import MatchPost from "../../Post/MatchPost";
 import "./PostsTab.css";
 import IconButton from "../../../UI/IconButton";
-import PlusIcon from "../../../../assets/icons/plus.svg?react";
+import { Plus } from "@phosphor-icons/react";
 import { useNavigate } from "react-router-dom";
 
 function PostSwitcher({ post }) {
@@ -142,7 +142,7 @@ export default function PostsTab({ profile, isMe = false }) {
             <IconButton
               size="medium"
               type="primary"
-              icon={PlusIcon}
+                icon={Plus}
               onClick={() => navigate("/add-post")}
             />
             <p className="empty-subtitle">Add a post.</p>

@@ -1,5 +1,5 @@
 import "./ExperienceList.css";
-import profilePlaceholder from "../../../assets/icons/profile.png";
+import { UserCircle } from "@phosphor-icons/react";
 
 const BAD_HOSTS = ["edgeone.app"]; // block busted cert proxy
 
@@ -69,11 +69,6 @@ export default function ExperienceList({ players = [] }) {
   const displayPlayers = players.slice(0, 3);
   if (!displayPlayers.length) return null;
   const hasAny = displayPlayers.some((player) => player.experiences?.length);
-  const handleImgError = (event) => {
-    if (event.currentTarget.src !== profilePlaceholder) {
-      event.currentTarget.src = profilePlaceholder;
-    }
-  };
 
   return (
     <div className="experience-list">
@@ -82,12 +77,15 @@ export default function ExperienceList({ players = [] }) {
         <div key={player.id} className="experience-container">
           <div className="experience-header">
             <div className="experience-header-inner">
-              <img
-                src={player.avatar || profilePlaceholder}
-                alt={player.name}
-                className="experience-avatar"
-                onError={handleImgError}
-              />
+              {player.avatar ? (
+                <img
+                  src={player.avatar}
+                  alt={player.name}
+                  className="experience-avatar"
+                />
+              ) : (
+                <UserCircle className="experience-avatar experience-avatar-fallback" aria-hidden="true" />
+              )}
               <div className="experience-header-name">
                 <div>{player.name}</div>
               </div>

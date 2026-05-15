@@ -1,4 +1,4 @@
-/* Backdrop (fade in) */
+﻿/* Backdrop (fade in) */
 .tp-backdrop {
   position: fixed;
   inset: 0;
@@ -77,11 +77,11 @@
   text-align: left;
   padding: 12px 14px;
   border-radius: 8px;
-  border: 1.5px solid var(--color-gray-100, #e6e9ff);
-  background: var(--color-gray-100);
+  border: 1.5px solid var(--neutral-100, #dbe9ff);
+  background: var(--neutral-100);
   font-size: 14px;
   line-height: 1.4;
-  color: var(--color-gray-900);
+  color: var(--neutral-900);
   font-family: inherit;
   cursor: pointer;
   transition:
@@ -91,11 +91,11 @@
   align-self: stretch;
 }
 .tp-field-btn:hover {
-  background: #f7f9ff;
+  background: #f6f6f7;
 }
 .tp-field-btn:focus-visible {
   outline: none;
-  border-color: var(--color-accent, #3b82f6);
+  border-color: var(--primary-default, #4051fd);
   box-shadow: 0 6px 18px rgba(59, 130, 246, 0.12);
 }
 
@@ -104,11 +104,11 @@
   font-weight: 500;
 }
 .tp-field-value.is-placeholder {
-  color: var(--color-gray-900);
+  color: var(--neutral-900);
   opacity: 1;
 }
 .tp-field-value.has-value {
-  color: var(--color-gray-900);
+  color: var(--neutral-900);
   opacity: 1;
 }
 

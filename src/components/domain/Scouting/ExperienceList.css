@@ -1,4 +1,4 @@
-.experience-list {
+﻿.experience-list {
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -19,7 +19,7 @@
   min-height: 48px;
   width: 100%;
   flex-direction: column;
-  color: var(--Text, #000215);
+  color: var(--Text, #151622);
   padding: 10px;
 }
 
@@ -46,7 +46,7 @@
   align-self: stretch;
   width: 194px;
   margin: auto 0;
-  color: var(--Text, #000215);
+  color: var(--Text, #151622);
 }
 
 .experience-item {
@@ -89,17 +89,17 @@
 }
 
 .experience-title {
-  color: var(--Text, #000215);
+  color: var(--Text, #151622);
 }
 
 .experience-subtitle {
-  color: var(--Gray-700, #A5A7BB);
+  color: var(--Gray-700, #a5a5af);
 }
 
 .experience-empty,
 .experience-empty-section {
   font-size: 12px;
-  color: var(--Gray-700, #A5A7BB);
+  color: var(--Gray-700, #a5a5af);
   margin: 0;
   padding: 16px 10px;
 }

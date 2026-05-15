@@ -1,4 +1,4 @@
-.profile-picture-container {
+﻿.profile-picture-container {
   position: relative;
   display: inline-block;
 }
@@ -37,8 +37,8 @@
 
 /* Placeholder appearance when no image URL is provided */
 .profile-picture--placeholder {
-  background: var(--color-gray-100, #f3f4f6);
-  color: var(--color-gray-700, #6b7280);
+  background: var(--neutral-100, #f3f4f6);
+  color: var(--neutral-700, #6b7280);
   display: inline-flex;
   align-items: center;
   justify-content: center;

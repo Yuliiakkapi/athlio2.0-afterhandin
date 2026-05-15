@@ -1,8 +1,8 @@
-.profile-posts-tab {
+﻿.profile-posts-tab {
   display: flex;
   flex-direction: column;
   gap: 8px; /* spacing between posts */
-  background-color: var(--color-gray-100);
+  background-color: var(--neutral-100);
   padding: 24px 8px;
 }
 
@@ -27,13 +27,13 @@ main:has(.profile-posts-tab) {
 .empty-title {
   font-size: var(--text-base);
   font-weight: 600;
-  color: var(--color-text);
+  color: var(--black);
   margin-bottom: 4px;
 }
 
 .empty-subtitle {
   font-size: var(--text-sm);
-  color: var(--color-gray-800);
+  color: var(--neutral-800);
 }
 
 .empty-icon-container {

@@ -1,31 +1,40 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../lib/supabase";
+import { useUser } from "../context/UserContext";
 import StepContainer from "../components/wizard/StepContainer";
 import TextInput from "../components/inputs/TextInput";
-import UnitInput from "../components/inputs/UnitInput";
 import RoleSelect from "../components/domain/onboarding/RoleSelect";
+import ProfessionalRole from "../components/domain/onboarding/ProfessionalRole";
+import NameAndPhoto from "../components/domain/onboarding/NameAndPhoto";
+import DateOfBirth from "../components/domain/onboarding/DateOfBirth";
+import PositionSelect from "../components/domain/onboarding/PositionSelect";
+import PlayingStyle from "../components/domain/onboarding/PlayingStyle";
+import PreferredLeg from "../components/domain/onboarding/PreferredLeg";
 import SportsSelect from "../components/domain/onboarding/SportSelect";
 import PositionPage from "../components/domain/onboarding/PositionPage";
 import ClubPicker from "../components/domain/onboarding/ClubPicker";
 import AvatarPicker from "../components/domain/onboarding/AvatarPicker";
 import LocationFields from "../components/domain/onboarding/LocationFields";
 import GoalsField from "../components/domain/onboarding/GoalsField";
+import GoalsSelect from "../components/domain/onboarding/GoalsSelect";
+import AddHighlight from "../components/domain/onboarding/AddHighlight";
+import Notifications from "../components/domain/onboarding/Notifications";
 import Bio from "../components/domain/onboarding/Bio";
 import FollowSuggestions from "../components/domain/onboarding/FollowSuggestions";
 import Premium from "../components/domain/onboarding/Premium";
 import { getSteps } from "../utils/steps";
 import { buildProfilePayload } from "../utils/payload";
 import Textarea from "../components/inputs/TextArea";
-import ProgressBar from "../components/domain/onboarding/UI/ProgressBar";
+import OnboardingTopbar from "../components/domain/onboarding/UI/OnboardingTopbar";
 import OnboardingNavbar from "../components/domain/onboarding/UI/OnboardingNavbar";
-import Button from "../components/UI/Button";
 import "./setup-profile.css";
 
 export default function Setup() {
   const navigate = useNavigate();
+  const { setProfile } = useUser();
 
-  const [role, setRole] = useState("athlete");
+  const [role, setRole] = useState(""); // empty until user picks on role step
   const [heightUnit, setHeightUnit] = useState("cm");
   const [weightUnit, setWeightUnit] = useState("kg");
 
@@ -35,7 +44,7 @@ export default function Setup() {
     avatar_url: "",
     age: "",
     sports: [],
-    primarySport: "",
+    primarySport: "football",
     gender: "",
     height: "",
     weight: "",
@@ -46,7 +55,15 @@ export default function Setup() {
     country: "",
     region: "",
     city: "",
+    dob: "",
     goals: "",
+    highlightUrl: "",
+    highlightType: "",
+    highlightText: "",
+    highlightMatch: "",
+    professionalType: "",
+    playingStyle: "",
+    preferredLeg: "",
     talent_preferences: "",
     org_name: "",
     org_founded_year: "",
@@ -84,7 +101,7 @@ export default function Setup() {
 
       if (profile) {
         const sports = Array.isArray(profile.sports) ? profile.sports : [];
-        setRole(profile.role || "athlete");
+        setRole(profile.role || "");
         setForm((f) => ({
           ...f,
           full_name: profile.full_name || "",
@@ -165,10 +182,17 @@ export default function Setup() {
   function set(v) {
     setForm((f) => ({ ...f, ...v }));
   }
-  function next() {
+  async function next() {
+    if (stepId === "notifications" && "Notification" in window) {
+      await Notification.requestPermission().catch(() => {});
+    }
     setIdx((i) => Math.min(i + 1, steps.length - 1));
   }
   function back() {
+    if (idx === 0) {
+      navigate(-1); // go back to wherever the user came from (auth/intro)
+      return;
+    }
     setIdx((i) => Math.max(i - 1, 0));
   }
 
@@ -179,6 +203,7 @@ export default function Setup() {
 
     const payload = buildProfilePayload({ role, form, heightUnit, weightUnit });
     console.log("Submitting profile payload:", payload);
+    console.log("Full name in form:", form.full_name);
 
     if (user) {
       const { error: upsertErr } = await supabase
@@ -187,6 +212,10 @@ export default function Setup() {
 
       if (upsertErr) {
         console.error("PROFILE UPSERT ERROR", upsertErr);
+        alert("Error saving profile: " + upsertErr.message);
+      } else {
+        console.log("Profile saved successfully!");
+        setProfile({ id: user.id, ...payload });
       }
     }
 
@@ -198,19 +227,20 @@ export default function Setup() {
   const canContinue = (() => {
     try {
       switch (stepId) {
-        case "basic":
-          return (
-            (form.full_name || "").toString().trim() !== "" &&
-            (form.username || "").toString().trim() !== "" &&
-            !usernameErr &&
-            !isCheckingUsername
-          );
         case "role":
           return Boolean(role);
-        case "sport":
-          return Array.isArray(form.sports) && form.sports.length > 0;
+        case "profession":
+          return Boolean(form.professionalType);
+        case "name":
+          return (form.full_name || "").toString().trim() !== "";
+        case "dob":
+          return true; // pre-selected by default
         case "position":
           return true; // position is optional
+        case "style":
+          return true; // first style is pre-selected
+        case "leg":
+          return Boolean(form.preferredLeg);
         case "club":
           return (
             Boolean(form.club_id) ||
@@ -218,6 +248,10 @@ export default function Setup() {
           );
         case "bio":
           return true; // bio is optional
+        case "highlight":
+          return true; // highlight is optional — Post or Skip both advance
+        case "notifications":
+          return true; // always enabled — user can skip or turn on
         default:
           return true;
       }
@@ -228,26 +262,15 @@ export default function Setup() {
 
   return (
     <div className="setup-profile-page">
-      {/* Step list (Stepper) hidden per request */}
-      <div style={{ marginTop: 0 }}>
-        <ProgressBar currentStep={idx + 1} totalSteps={steps.length} />
-      </div>
+      {/* Fixed topbar: back arrow + progress bar */}
+      <OnboardingTopbar
+        onBack={back}
+        currentStep={idx + 1}
+        totalSteps={Math.max(steps.length, 1)}
+        showBack={true}
+        dark={stepId === "position"}
+      />
 
-      {/* Skip button (subtle, medium) aligned right under the progress bar */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "flex-end",
-          padding: "0 16px",
-        }}
-      >
-        <Button
-          size="medium"
-          type="subtle"
-          label="Skip"
-          onClick={() => (idx < steps.length - 1 ? next() : finish())}
-        />
-      </div>
       <StepContainer
         onBack={back}
         onNext={next}
@@ -258,68 +281,50 @@ export default function Setup() {
         showNext={false}
         showFinish={false}
       >
-        {stepId === "basic" && (
-          <div>
-            <div
-              className="role-header"
-              style={{
-                display: "inline-flex",
-                flexDirection: "column",
-                gap: 8,
-              }}
-            >
-              <h1 className="role-header-title">Profile setup</h1>
-              <p className="role-header-subtitle">tell us about yourself</p>
-            </div>
-            {/* Avatar picker and input fields grouped together */}
-            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-              <AvatarPicker
-                value={form.avatar_url}
-                onChange={(v) => set({ avatar_url: v })}
-              />
+        {stepId === "role" && <RoleSelect role={role} onChange={setRole} onNext={next} />}
 
-              <TextInput
-                label="Full name"
-                value={form.full_name}
-                onChange={(v) => set({ full_name: v })}
-              />
-              <TextInput
-                label="Username"
-                value={form.username}
-                onChange={(v) => set({ username: v })}
-              />
-              {usernameErr && (
-                <p className="text-red-600 text-sm">{usernameErr}</p>
-              )}
-              <TextInput
-                label="Age"
-                value={form.age}
-                onChange={(v) => set({ age: v })}
-              />
-            </div>
-          </div>
+        {stepId === "profession" && role === "professional" && (
+          <ProfessionalRole
+            value={form.professionalType}
+            onChange={(v) => set({ professionalType: v })}
+          />
         )}
 
-        {stepId === "role" && <RoleSelect role={role} onChange={setRole} />}
+        {stepId === "name" && (
+          <NameAndPhoto
+            name={form.full_name}
+            avatarUrl={form.avatar_url}
+            onNameChange={(v) => set({ full_name: v })}
+            onAvatarChange={(v) => set({ avatar_url: v })}
+          />
+        )}
 
-        {stepId === "sport" && (
-          <div>
-            <SportsSelect
-              sports={form.sports}
-              onChange={(arr) =>
-                set({ sports: arr, primarySport: arr[0] || "", position: [] })
-              }
-              primarySport={form.primarySport}
-              onPrimaryChange={(v) => set({ primarySport: v, position: [] })}
-            />
-          </div>
+        {stepId === "dob" && (
+          <DateOfBirth
+            value={form.dob}
+            onChange={(v) => set({ dob: v })}
+          />
         )}
 
         {stepId === "position" && role === "athlete" && (
-          <PositionPage
-            sport={form.primarySport}
+          <PositionSelect
             value={form.position}
             onChange={(v) => set({ position: v })}
+          />
+        )}
+
+        {stepId === "style" && role === "athlete" && (
+          <PlayingStyle
+            value={form.playingStyle}
+            onChange={(v) => set({ playingStyle: v })}
+            positions={form.position}
+          />
+        )}
+
+        {stepId === "leg" && role === "athlete" && (
+          <PreferredLeg
+            value={form.preferredLeg}
+            onChange={(v) => set({ preferredLeg: v })}
           />
         )}
 
@@ -337,37 +342,7 @@ export default function Setup() {
 
         {stepId === "premium" && <Premium onContinue={() => next()} />}
 
-        {stepId === "measure" && role === "athlete" && (
-          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-            <UnitInput
-              label="Height"
-              value={form.height}
-              onChange={(v) => set({ height: v })}
-              unit={heightUnit}
-              setUnit={setHeightUnit}
-              unitOptions={["cm", "ft"]}
-              placeholderCm="Height (cm)"
-              placeholderAlt="Height (e.g. 5'11)"
-            />
-            <UnitInput
-              label="Weight"
-              value={form.weight}
-              onChange={(v) => set({ weight: v })}
-              unit={weightUnit}
-              setUnit={setWeightUnit}
-              unitOptions={["kg", "lb"]}
-              placeholderCm="Weight (kg)"
-              placeholderAlt="Weight (lb)"
-            />
-            <TextInput
-              label="Gender"
-              value={form.gender}
-              onChange={(v) => set({ gender: v })}
-            />
-          </div>
-        )}
-
-        {stepId === "club" && (role === "athlete" || role === "scout") && (
+        {stepId === "club" && (role === "athlete" || role === "scout" || role === "professional") && (
           <ClubPicker
             sport={form.primarySport || "football"}
             value={{
@@ -387,10 +362,31 @@ export default function Setup() {
         )}
 
         {stepId === "goals" && role === "athlete" && (
-          <GoalsField value={form.goals} onChange={(v) => set({ goals: v })} />
+          <GoalsSelect value={form.goals} onChange={(v) => set({ goals: v })} />
         )}
 
-        {stepId === "follow" && (role === "athlete" || role === "scout") && (
+        {stepId === "highlight" && role === "athlete" && (
+          <AddHighlight
+            mediaUrl={form.highlightUrl}
+            mediaType={form.highlightType}
+            text={form.highlightText}
+            match={form.highlightMatch}
+            onMediaChange={(v) =>
+              set(v
+                ? { highlightUrl: v.url, highlightType: v.type }
+                : { highlightUrl: "", highlightType: "" }
+              )
+            }
+            onTextChange={(v) => set({ highlightText: v })}
+            onMatchChange={(v) => set({ highlightMatch: v })}
+          />
+        )}
+
+        {stepId === "notifications" && (
+          <Notifications />
+        )}
+
+        {stepId === "follow" && (role === "athlete" || role === "scout" || role === "professional") && (
           <FollowSuggestions
             role={role}
             sport={form.primarySport}
@@ -407,7 +403,7 @@ export default function Setup() {
           />
         )}
 
-        {stepId === "scout" && role === "scout" && (
+        {stepId === "scout" && (role === "scout" || role === "professional") && (
           <GoalsField
             value={form.talent_preferences}
             onChange={(v) => set({ talent_preferences: v })}
@@ -454,12 +450,57 @@ export default function Setup() {
       </StepContainer>
       <OnboardingNavbar
         onBack={back}
-        onNext={next}
+        onNext={
+          stepId === "notifications"
+            ? async () => { if ("Notification" in window) await Notification.requestPermission().catch(() => {}); next(); }
+          : stepId === "location" && !form.city
+            ? async () => {
+                try {
+                  if (!navigator.geolocation) { next(); return; }
+                  const pos = await new Promise((res, rej) =>
+                    navigator.geolocation.getCurrentPosition(res, rej, { timeout: 9000 })
+                  );
+                  const data = await fetch(
+                    `https://nominatim.openstreetmap.org/reverse?lat=${pos.coords.latitude}&lon=${pos.coords.longitude}&format=json&addressdetails=1`,
+                    { headers: { "Accept-Language": "en" } }
+                  ).then(r => r.json());
+                  if (data.address) {
+                    set({
+                      city:    data.address.city || data.address.town || data.address.village || "",
+                      country: data.address.country || "",
+                    });
+                  }
+                } catch { /* permission denied — just advance */ }
+                next();
+              }
+          : next
+        }
         onFinish={finish}
-        showBack={idx > 0}
         showNext={idx < steps.length - 1}
         showFinish={idx === steps.length - 1}
         canContinue={canContinue}
+        dark={stepId === "position"}
+        primaryLabel={
+          stepId === "highlight"     ? "Post" :
+          stepId === "notifications" ? "Turn on notifications" :
+          stepId === "location" && !form.city ? "Give access to location" :
+          "Continue"
+        }
+        secondaryLabel={
+          stepId === "club"          ? "I'm not in a club" :
+          stepId === "goals"         ? "Skip" :
+          stepId === "highlight"     ? "Skip" :
+          stepId === "notifications" ? "Skip" :
+          stepId === "location"      ? "Skip" :
+          null
+        }
+        onSecondary={
+          stepId === "club"      ? () => { set({ club_id: null, club_other_name: null }); next(); } :
+          stepId === "goals"     ? () => next() :
+          stepId === "highlight" ? () => next() :
+          stepId === "notifications" ? () => next() :
+          null
+        }
       />
     </div>
   );

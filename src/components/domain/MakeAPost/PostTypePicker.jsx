@@ -2,31 +2,33 @@ import { useNavigate } from "react-router-dom";
 import { useUser } from "../../../context/UserContext";
 import "./PostTypePicer.css";
 import PostTypeButton from "../../UI/PostTypeButton";
-import PostIcon from "../../../assets/icons/post.svg?react";
-import StatsIcon from "../../../assets/icons/stats.svg?react";
-import ActivityIcon from "../../../assets/icons/activity.svg?react";
-import EventIcon from "../../../assets/icons/event.svg?react";
+import {
+  Article,
+  CalendarBlank,
+  ChartBar,
+  Sparkle,
+} from "@phosphor-icons/react";
 
 export default function PostTypePicker({ onChoose }) {
   const navigate = useNavigate();
   const { isScout, canPost } = useUser();
 
   const types = [
-    { key: "post", title: "Post", icon: PostIcon },
+    { key: "post", title: "Post", icon: Article },
     {
       key: "match",
       title: "Manual Match",
-      icon: StatsIcon,
+      icon: ChartBar,
     },
     {
       key: "activity",
       title: "Activity",
-      icon: ActivityIcon,
+      icon: Sparkle,
     },
     {
       key: "event",
       title: "Event",
-      icon: EventIcon,
+      icon: CalendarBlank,
     },
   ];
 

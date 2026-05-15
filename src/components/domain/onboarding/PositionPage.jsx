@@ -1,4 +1,4 @@
-import footballPitch from "../../../assets/graphics/football_pitch.svg";
+﻿import footballPitch from "../../../assets/graphics/football_pitch.svg";
 import basketballCourt from "../../../assets/graphics/basketball-court.svg";
 
 export default function PositionPage({ sport, value, onChange }) {
@@ -87,8 +87,8 @@ export default function PositionPage({ sport, value, onChange }) {
                 justifyContent: "center",
                 padding: 0,
                 borderRadius: 18,
-                border: `1px solid ${selected ? "var(--color-accent)" : "#E1E4FE"}`,
-                background: selected ? "var(--color-accent)" : "#E1E4FE",
+                border: `1px solid ${selected ? "var(--primary-default)" : "#E1E4FE"}`,
+                background: selected ? "var(--primary-default)" : "#E1E4FE",
                 color: selected ? "#ffffff" : "#000000",
                 cursor: "pointer",
                 boxShadow: selected ? "0 6px 18px rgba(59, 130, 246, 0.18)" : "none",
