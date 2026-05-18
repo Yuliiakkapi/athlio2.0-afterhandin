@@ -15,7 +15,7 @@ const FORM_STEPS = 3; // steps 1-3 show progress bar
 export default function ProOnboarding() {
   const navigate = useNavigate();
   const { setProfile } = useUser();
-  const [step, setStep] = useState(0);
+  const [step, setStep] = useState(1);
 
   function next() { setStep((s) => s + 1); }
   function back() {

@@ -255,6 +255,39 @@
   align-items: center;
 }
 
+/* ─── Pro transition overlay ───────────────────────────────────── */
+
+.upgrade-pro-overlay {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(135deg, #33f578 0%, #e7fc6f 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  animation: overlay-in 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.upgrade-pro-overlay-text {
+  font-family: var(--font-condensed);
+  font-size: var(--heading-6xl);
+  font-weight: 700;
+  font-style: italic;
+  color: var(--black);
+  text-transform: uppercase;
+  animation: pro-text-in 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.25s both;
+}
+
+@keyframes overlay-in {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes pro-text-in {
+  0%   { opacity: 0; transform: scale(0.85) translateY(8px); }
+  100% { opacity: 1; transform: scale(1.25) translateY(0); }
+}
+
 .upgrade-cta-footnote {
   font-family: var(--font-sans);
   font-size: var(--text-sm);

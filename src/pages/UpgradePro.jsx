@@ -50,6 +50,13 @@ const AVATARS = [user1, user2, user3, user4];
 export default function UpgradePro() {
   const navigate = useNavigate();
   const [plan, setPlan] = useState("annual");
+  const [confirming, setConfirming] = useState(false);
+
+  function handleStart() {
+    if (confirming) return;
+    setConfirming(true);
+    setTimeout(() => navigate("/pro-onboarding"), 2100);
+  }
 
   return (
     <div
@@ -168,12 +175,19 @@ export default function UpgradePro() {
           size="medium"
           fullWidth
           label="Start 7-day trial"
-          onClick={() => navigate("/pro-onboarding")}
+          onClick={handleStart}
         />
         <p className="upgrade-cta-footnote">
           Cancel anytime &nbsp;•&nbsp; No charge during trial
         </p>
       </div>
+
+      {/* Pro transition overlay */}
+      {confirming && (
+        <div className="upgrade-pro-overlay">
+          <span className="upgrade-pro-overlay-text">PRO</span>
+        </div>
+      )}
     </div>
   );
 }
