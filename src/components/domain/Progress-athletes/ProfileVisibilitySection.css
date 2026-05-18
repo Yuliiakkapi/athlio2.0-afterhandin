@@ -7,7 +7,7 @@
   background: var(--white);
   border-radius: 12px;
   box-shadow: 0 0 10.5px rgba(0, 0, 0, 0.08);
-  padding: 4px 8px 8px;
+  padding: 8px;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -17,18 +17,19 @@
 
 .prog-visit-label {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--text-sm);
   font-weight: 500;
-  color: var(--black, #151622);
+  color: var(--black);
+  text-transform: uppercase;
   line-height: 1.2;
 }
 
 .prog-visit-number {
-  font-family: var(--font-condensed, "Barlow Condensed", sans-serif);
-  font-size: 44px;
+  font-family: var(--font-condensed);
+  font-size: var(--heading-5xl);
   font-weight: 700;
   font-style: italic;
-  color: var(--black, #151622);
+  color: var(--black);
   line-height: 1.1;
   text-transform: uppercase;
 }
@@ -36,28 +37,36 @@
 .prog-visit-change {
   display: flex;
   align-items: center;
-  gap: 3px;
+  gap: 4px;
   background: var(--success-50);
   border-radius: 100px;
-  padding: 2px 4px;
+  padding: 2px 6px;
+}
+
+.prog-visit-arrow {
+  width: 8px;
+  height: 7px;
+  background: var(--success-600);
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  flex-shrink: 0;
 }
 
 .prog-visit-change span {
   font-family: var(--font-sans);
-  font-size: 10px;
+  font-size: var(--text-2xs);
   font-weight: 500;
   color: var(--success-600);
 }
 
 .prog-visit-week {
   font-family: var(--font-sans);
-  font-size: 10px;
+  font-size: var(--text-2xs);
   font-weight: 600;
-  color: var(--muted, #91909b);
+  color: var(--muted);
 }
 
 .prog-visitors-card {
-  background: white;
+  background: var(--white);
   border-radius: 12px;
   box-shadow: 0 0 10.5px rgba(0, 0, 0, 0.08);
   padding: 12px 16px;
@@ -68,7 +77,7 @@
 
 .prog-visitors-title {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--text-sm);
   font-weight: 600;
   color: var(--black);
   margin: 0;
@@ -92,14 +101,7 @@
   width: 44px;
   height: 44px;
   border-radius: 22px;
-  background: var(--neutral-200, #e1e1e4);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-sans);
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--muted, #91909b);
+  object-fit: cover;
   flex-shrink: 0;
 }
 
@@ -107,52 +109,18 @@
   width: 44px;
   height: 44px;
   border-radius: 22px;
-  background: var(--neutral-100, #eeeff1);
+  background: var(--neutral-100);
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: var(--font-sans);
-  font-size: 18px;
+  font-size: var(--text-lg);
   font-weight: 600;
-  color: var(--primary-default, #4051fd);
+  color: var(--primary-default);
   letter-spacing: -0.02em;
   flex-shrink: 0;
 }
 
-.prog-visitor-badge {
-  font-family: var(--font-sans);
-  font-size: 9px;
-  font-weight: 600;
-  font-style: italic;
-  color: var(--primary-800, #1f2cb4);
-  background: var(--primary-100, #dbe9ff);
-  border-radius: 100px;
-  padding: 2px 5px;
-  text-transform: uppercase;
-  letter-spacing: -0.01em;
-  white-space: nowrap;
-  width: 100%;
-  text-align: center;
-}
-
-.prog-visitor-badge--spacer {
-  visibility: hidden;
-}
-
-.prog-analytics-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  background: var(--neutral-100, #eeeff1);
-  border: 1px solid var(--neutral-200, #e1e1e4);
-  border-radius: 8px;
-  padding: 8px 12px;
-  height: 36px;
-  cursor: pointer;
-  font-family: var(--font-sans);
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--primary-700, #2230e0);
-  width: 100%;
+.prog-visitor-spacer {
+  height: 16px;
 }

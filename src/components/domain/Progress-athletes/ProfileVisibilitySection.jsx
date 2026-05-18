@@ -1,11 +1,17 @@
+import Badge from "../../UI/Badge";
+import Button from "../../UI/Button";
 import { CaretRight } from "@phosphor-icons/react";
+import scout1 from "../../../assets/images/scout1.jpg";
+import scout2 from "../../../assets/images/scout2.png";
+import coach1 from "../../../assets/images/coach1.png";
+import club1 from "../../../assets/images/club1.png";
 import "./ProfileVisibilitySection.css";
 
 const VISITORS = [
-  { id: 1, role: "Scout", initials: "JK" },
-  { id: 2, role: "Scout", initials: "MS" },
-  { id: 3, role: "Coach", initials: "AR" },
-  { id: 4, role: "Club",  initials: "FC" },
+  { id: 1, role: "Scout", image: scout1 },
+  { id: 2, role: "Scout", image: scout2 },
+  { id: 3, role: "Coach", image: coach1 },
+  { id: 4, role: "Club",  image: club1  },
 ];
 
 export default function ProfileVisibilitySection() {
@@ -23,9 +29,7 @@ export default function ProfileVisibilitySection() {
           <span className="prog-visit-label">Profile visits</span>
           <span className="prog-visit-number">128</span>
           <div className="prog-visit-change">
-            <svg width="12" height="12" viewBox="0 0 13 12" fill="none" aria-hidden="true">
-              <path d="M1.5 9.5L6.5 3.5L11.5 9.5" stroke="#00ab3d" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
+            <div className="prog-visit-arrow" aria-hidden="true" />
             <span>24% this week</span>
           </div>
         </div>
@@ -41,19 +45,22 @@ export default function ProfileVisibilitySection() {
         <div className="prog-visitors-row">
           {VISITORS.map((v) => (
             <div key={v.id} className="prog-visitor-item">
-              <div className="prog-visitor-avatar">{v.initials}</div>
-              <span className="prog-visitor-badge">{v.role}</span>
+              <img src={v.image} alt={v.role} className="prog-visitor-avatar" />
+              <Badge text={v.role} color="light" size="xs" />
             </div>
           ))}
           <div className="prog-visitor-item">
             <div className="prog-visitor-more">+2</div>
-            <span className="prog-visitor-badge prog-visitor-badge--spacer" aria-hidden="true">·</span>
+            <span className="prog-visitor-spacer" aria-hidden="true" />
           </div>
         </div>
-        <button className="prog-analytics-btn">
-          View full analytics
-          <CaretRight size={20} />
-        </button>
+        <Button
+          type="subtle"
+          size="small"
+          fullWidth
+          label="View full analytics"
+          trailingIcon={CaretRight}
+        />
       </div>
     </section>
   );
