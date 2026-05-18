@@ -12,7 +12,7 @@
   justify-content: center;
   clip-path: polygon(0 0, 100% 0, 100% 74%, 50% 100%, 0 74%);
   flex-shrink: 0;
-  color: white;
+  color: var(--white);
 }
 
 /* Gloss sheen overlay */
@@ -34,7 +34,11 @@
 
 /* ── Variants ───────────────────────────────────────────────────── */
 
-.ovr-badge--default { background: linear-gradient(180deg, #1d2144 0%, #080c1f 100%); }
+.ovr-badge--default {
+  background-image: url('../../assets/images/darkblue-stripes.png');
+  background-size: cover;
+  background-position: center;
+}
 .ovr-badge--gold    { background: linear-gradient(180deg, #e4ab38 0%, #a0691a 100%); }
 .ovr-badge--silver  { background: linear-gradient(180deg, #babccc 0%, #7a7c8c 100%); }
 .ovr-badge--bronze  { background: linear-gradient(180deg, #c87838 0%, #8b4e1e 100%); }
@@ -51,17 +55,18 @@
 .ovr-badge__number {
   font-family: var(--font-condensed);
   font-style: italic;
-  font-weight: 700;
+  font-weight: 600;
   text-transform: uppercase;
-  line-height: 1;
-  color: white;
+  text-align: center;
+  line-height: normal;
+  color: var(--white);
   position: relative;
   z-index: 1;
 }
 
-.ovr-badge--xs .ovr-badge__number { font-size: 8px; }
-.ovr-badge--sm .ovr-badge__number { font-size: 11px; }
-.ovr-badge--md .ovr-badge__number { font-size: 13px; }
+.ovr-badge--xs .ovr-badge__number { font-size: 10px; }
+.ovr-badge--sm .ovr-badge__number { font-size: 16px; }
+.ovr-badge--md .ovr-badge__number { font-size: 20px; }
 .ovr-badge--lg .ovr-badge__number { font-size: 32px; }
 
 .ovr-badge__label {
@@ -69,7 +74,7 @@
   font-weight: 600;
   text-transform: uppercase;
   line-height: 1;
-  color: white;
+  color: var(--white);
   position: relative;
   z-index: 1;
 }
@@ -91,7 +96,7 @@
   font-weight: 700;
   text-transform: uppercase;
   line-height: 1;
-  color: white;
+  color: var(--white);
   position: relative;
   z-index: 1;
   letter-spacing: 0.01em;

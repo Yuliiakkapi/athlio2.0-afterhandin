@@ -1,5 +1,5 @@
 .prog-lb-card {
-  background: white;
+  background: var(--white);
   border-radius: 12px;
   box-shadow: 0 0 21px rgba(0, 0, 0, 0.08);
   overflow: hidden;
@@ -7,17 +7,18 @@
 
 .prog-lb-thead {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  align-items: flex-start;
+  justify-content: center;
+  align-self: stretch;
   padding: 10px 12px;
-  border-bottom: 1px solid #dfe0e7;
+  border-bottom: 1px solid var(--neutral-200);
 }
 
 .prog-lb-col-player {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--text-sm);
   font-weight: 600;
-  color: var(--muted, #91909b);
+  color: var(--muted);
   flex: 1;
 }
 
@@ -28,16 +29,11 @@
 
 .prog-lb-col-stats span {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--text-sm);
   font-weight: 600;
-  color: var(--muted, #91909b);
-  width: 30px;
+  color: var(--muted);
+  width: 40px;
   text-align: center;
-}
-
-.prog-lb-col-rating {
-  width: 60px !important;
-  text-align: center !important;
 }
 
 .prog-lb-row {
@@ -46,7 +42,7 @@
   justify-content: space-between;
   padding: 10px 12px;
   height: 59px;
-  border-bottom: 1px solid #dfe0e7;
+  border-bottom: 1px solid var(--neutral-200);
 }
 
 .prog-lb-row--me {
@@ -67,24 +63,32 @@
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: var(--neutral-200, #e1e1e4);
+  background: var(--neutral-200);
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: var(--text-2xs);
   font-weight: 600;
-  color: var(--muted, #91909b);
+  color: var(--muted);
   flex-shrink: 0;
 }
 
 .prog-lb-avatar--me {
-  border: 2px solid var(--primary-default, #4051fd);
+  border: 2px solid var(--primary-default);
+}
+
+.prog-lb-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
 }
 
 .prog-lb-name {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--text-sm);
   font-weight: 600;
   color: var(--black);
   margin: 0;
@@ -93,9 +97,9 @@
 
 .prog-lb-club {
   font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: var(--text-xs);
   font-weight: 500;
-  color: var(--muted, #91909b);
+  color: var(--muted);
   margin: 3px 0 0;
   line-height: 1;
 }
@@ -107,24 +111,23 @@
 
 .prog-lb-stat {
   font-family: var(--font-sans);
-  font-size: 16px;
+  font-size: var(--text-base);
   font-weight: 700;
   font-style: italic;
-  color: var(--black, #151622);
-  width: 30px;
+  color: var(--black);
+  width: 40px;
   text-align: center;
-  line-height: 24px;
+  line-height: 1;
   letter-spacing: -0.01em;
-  text-transform: uppercase;
 }
 
 .prog-lb-stat--me {
-  color: var(--primary-default, #4051fd);
-  font-size: 18px;
+  color: var(--primary-default);
+  font-size: var(--text-lg);
 }
 
 .prog-lb-rating {
-  width: 60px;
+  width: 40px;
   display: flex;
   justify-content: center;
 }
