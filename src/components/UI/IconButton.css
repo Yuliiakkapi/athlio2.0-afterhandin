@@ -8,9 +8,7 @@
 }
 
 .icon-button svg {
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.5px;
+  display: block;
 }
 
 .large {

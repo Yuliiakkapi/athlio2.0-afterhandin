@@ -19,7 +19,7 @@
 
 /* ─── Size: XS — 10px, 6px 2px padding ─────────────────────────── */
 .badge--xs {
-  padding: 6px 2px;
+  padding: 10px 8px;
   height: 16px;
   font-size: var(--text-xs);
 }
@@ -32,7 +32,7 @@
 /* ─── Size: S / SM — 14px, 2px 8px padding ─────────────────────── */
 .badge--s,
 .badge--sm {
-  padding: 10px 8px;
+  padding: 12px 8px;
   height: 21px;
   font-size: var(--text-sm);
 }
@@ -45,7 +45,7 @@
 
 /* ─── Size: MD — 14px, 8px 4px padding ─────────────────────────── */
 .badge--md {
-  padding: 8px 4px;
+  padding: 10px 4px;
   height: 25px;
   font-size: var(--text-sm);
 }
