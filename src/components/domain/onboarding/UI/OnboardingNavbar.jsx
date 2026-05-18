@@ -1,3 +1,4 @@
+import Button from "../../../../components/UI/Button";
 import "./OnboardingNavbar.css";
 
 export default function OnboardingNavbar({
@@ -8,10 +9,8 @@ export default function OnboardingNavbar({
   canContinue = true,
   dark = false,
   primaryLabel = null,
-  // Optional secondary (ghost) button — e.g. "I'm not in a club"
   secondaryLabel = null,
   onSecondary = null,
-  // legacy props (ignored — back is now in OnboardingTopbar)
   onBack: _onBack,
   showBack: _showBack,
 }) {
@@ -26,33 +25,27 @@ export default function OnboardingNavbar({
   return (
     <div className={[
       "onboarding-navbar",
-      dark      ? "onboarding-navbar--dark"  : "",
-      hasSplit  ? "onboarding-navbar--split" : "",
+      dark     ? "onboarding-navbar--dark"  : "",
+      hasSplit ? "onboarding-navbar--split" : "",
     ].filter(Boolean).join(" ")}>
 
       {hasSplit && (
-        <button
-          type="button"
-          className="onboarding-secondary-btn"
+        <Button
+          type="subtle"
+          size="medium"
+          label={secondaryLabel}
           onClick={onSecondary}
-        >
-          {secondaryLabel}
-        </button>
+        />
       )}
 
-      <button
-        type="button"
-        className={[
-          "onboarding-continue-btn",
-          !canContinue ? "onboarding-continue-btn--disabled" : "",
-          hasSplit     ? "onboarding-continue-btn--half"     : "",
-        ].filter(Boolean).join(" ")}
+      <Button
+        type="primary"
+        size="medium"
+        fullWidth={!hasSplit}
+        label={primaryLabel || (showFinish ? "Finish" : "Continue")}
         onClick={handleContinue}
         disabled={!canContinue}
-        aria-disabled={!canContinue}
-      >
-        {primaryLabel || (showFinish ? "Finish" : "Continue")}
-      </button>
+      />
     </div>
   );
 }

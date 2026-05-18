@@ -1,0 +1,50 @@
+.tdc {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  background: var(--neutral-100);
+  border: 2px solid transparent;
+  border-radius: 12px;
+  cursor: pointer;
+  min-height: 80px;
+  gap: 4px;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.tdc--active {
+  border-color: var(--primary-default);
+  background: var(--white);
+}
+
+.tdc__icon {
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary-default);
+}
+
+.tdc__label {
+  font-family: "Barlow Semi Condensed", var(--font-condensed), sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--black);
+  line-height: 1;
+}
+
+.tdc__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--muted);
+  border: none;
+  transition: background 0.15s;
+}
+
+.tdc--active .tdc__dot {
+  background: var(--primary-default);
+}

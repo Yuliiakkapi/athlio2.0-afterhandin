@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Info } from "@phosphor-icons/react";
+import NumberPicker from "../../../../components/UI/NumberPicker";
 import "./PlayerProfile.css";
 
 const SKILLS = [
@@ -16,25 +17,7 @@ function SkillCard({ label, value, onChange }) {
     <div className="pp-skill-card">
       <button className="pp-skill-help" aria-label={`What is ${label}?`}>?</button>
       <span className="pp-skill-name">{label}</span>
-      <div className="pp-stepper">
-        <button
-          className="pp-stepper-btn"
-          onClick={() => onChange(Math.max(1, value - 1))}
-          type="button"
-          aria-label="Decrease"
-        >
-          −
-        </button>
-        <span className="pp-stepper-value">{value}</span>
-        <button
-          className="pp-stepper-btn"
-          onClick={() => onChange(Math.min(10, value + 1))}
-          type="button"
-          aria-label="Increase"
-        >
-          +
-        </button>
-      </div>
+      <NumberPicker value={value} onChange={onChange} min={1} max={10} />
     </div>
   );
 }
@@ -50,11 +33,13 @@ export default function PlayerProfile() {
 
   return (
     <div className="pp-content">
-      <h1 className="pp-title">Profile of Player</h1>
-      <p className="pp-subtitle">Rate your football abilities honestly</p>
+      <div className="pp-header">
+        <h1 className="pp-title">Profile of Player</h1>
+        <p className="pp-subtitle">Rate your football abilities honestly</p>
+      </div>
 
       <div className="pp-info-row">
-        <Info size={16} color="var(--primary-default, #4051fd)" weight="fill" />
+        <Info size={16} color="var(--primary-default)" weight="fill" />
         <span className="pp-info-text">This helps personalize your training suggestions</span>
       </div>
 

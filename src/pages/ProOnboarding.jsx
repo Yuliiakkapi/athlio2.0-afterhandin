@@ -16,8 +16,9 @@ export default function ProOnboarding() {
   const navigate = useNavigate();
   const { setProfile } = useUser();
   const [step, setStep] = useState(1);
+  const [canContinue, setCanContinue] = useState(false);
 
-  function next() { setStep((s) => s + 1); }
+  function next() { setCanContinue(true); setStep((s) => s + 1); }
   function back() {
     if (step === 1) navigate(-1);
     else setStep((s) => s - 1);
@@ -39,7 +40,7 @@ export default function ProOnboarding() {
             onBack={back}
             showBack
           />
-          {step === 1 && <TrainingSchedule />}
+          {step === 1 && <TrainingSchedule onSelectionChange={setCanContinue} />}
           {step === 2 && <PlayerProfile />}
           {step === 3 && (
             <ConnectApps />
@@ -49,6 +50,7 @@ export default function ProOnboarding() {
             secondaryLabel={step === FORM_STEPS ? "Skip" : null}
             onSecondary={step === FORM_STEPS ? next : null}
             primaryLabel={step === FORM_STEPS ? "Connect" : "Continue"}
+            canContinue={canContinue}
           />
         </>
       )}

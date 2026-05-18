@@ -1,5 +1,6 @@
-import "./OnboardingTopbar.css";
 import { ArrowLeft } from "@phosphor-icons/react";
+import IconButton from "../../../../components/UI/IconButton";
+import "./OnboardingTopbar.css";
 
 export default function OnboardingTopbar({
   onBack,
@@ -14,15 +15,14 @@ export default function OnboardingTopbar({
 
   return (
     <div className={`ob-topbar${dark ? " ob-topbar--dark" : ""}`}>
-      <button
-        type="button"
-        className="ob-topbar-back-btn"
-        onClick={onBack}
-        aria-label="Go back"
-        style={{ visibility: showBack ? "visible" : "hidden" }}
-      >
-        <ArrowLeft className="ob-topbar-back-icon" aria-hidden="true" />
-      </button>
+      <div style={{ visibility: showBack ? "visible" : "hidden" }}>
+        <IconButton
+          size="small"
+          type="subtle"
+          icon={ArrowLeft}
+          onClick={onBack}
+        />
+      </div>
 
       <div
         className="ob-topbar-progress"

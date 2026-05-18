@@ -1,12 +1,17 @@
+import { useEffect } from "react";
 import { X } from "@phosphor-icons/react";
+import Badge from "../../../../components/UI/Badge";
+import whiteStripes from "../../../../assets/images/background-whitestrpes.png";
 import "./ReadyScreen.css";
 
 export default function ReadyScreen({ onClose }) {
+  useEffect(() => {
+    const timer = setTimeout(onClose, 3000);
+    return () => clearTimeout(timer);
+  }, [onClose]);
+
   return (
-    <div className="ready-screen">
-      {/* Diagonal stripe decorations */}
-      <div className="ready-stripe ready-stripe-1" aria-hidden="true" />
-      <div className="ready-stripe ready-stripe-2" aria-hidden="true" />
+    <div className="ready-screen" style={{ backgroundImage: `url(${whiteStripes})` }}>
 
       <button className="ready-close" onClick={onClose} aria-label="Close">
         <X size={20} weight="bold" />
@@ -16,7 +21,7 @@ export default function ReadyScreen({ onClose }) {
         <h1 className="ready-title">
           You're ready to
           <br />
-          Go <span className="ready-pro-badge">PRO</span>
+          Go <Badge text="PRO" color="pro-athlete" size="md" />
         </h1>
       </div>
 

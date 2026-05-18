@@ -1,0 +1,52 @@
+.number-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.number-picker__label {
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.number-picker__control {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1.5px solid var(--neutral-200);
+  border-radius: 9999px;
+  padding: 8px 20px;
+  background: var(--white);
+}
+
+.number-picker__btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--primary-default);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 50%;
+  transition: opacity 0.15s;
+}
+
+.number-picker__btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.number-picker__value {
+  font-family: var(--font-condensed);
+  font-size: var(--heading-4xl);
+  font-weight: 700;
+  color: var(--black);
+  line-height: 1;
+  min-width: 2ch;
+  text-align: center;
+}
