@@ -1,0 +1,38 @@
+.tabs {
+  display: flex;
+  background: var(--neutral-100);
+  border-radius: 100px;
+  padding: 4px;
+}
+
+.tabs__item {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 8px;
+  border: none;
+  border-radius: 100px;
+  background: transparent;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  font-style: italic;
+  color: var(--neutral-500);
+  text-transform: uppercase;
+}
+
+.tabs__item--active {
+  background: var(--white);
+  color: var(--black);
+}
+
+.tabs__item--locked {
+  color: var(--neutral-400);
+}
+
+.tabs__lock {
+  margin-left: 4px;
+  flex-shrink: 0;
+}

@@ -119,7 +119,7 @@ const TOPBAR_CONFIG = {
         onClick={() => {
           console.log("Share clicked");
         }}
-        Icon={ShareNetwork}
+        leadingIcon={ShareNetwork}
       />
     ),
   },

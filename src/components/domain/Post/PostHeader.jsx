@@ -128,7 +128,7 @@ export default function PostHeader({
           type={isFollowing ? "following" : "primary"}
           label={loading ? "..." : isFollowing ? "" : "Follow"}
           aria-label={isFollowing ? "Unfollow user" : "Follow user"}
-          Icon={loading ? undefined : isFollowing ? Check : Plus}
+          leadingIcon={loading ? undefined : isFollowing ? Check : Plus}
           onClick={onToggle}
           disabled={loading}
         />

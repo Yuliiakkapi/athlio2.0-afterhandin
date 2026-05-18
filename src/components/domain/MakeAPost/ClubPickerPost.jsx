@@ -79,7 +79,7 @@ function TeamPickerOverlay({
             size="big"
             type="primary"
             label="Apply"
-            Icon={Check}
+            leadingIcon={Check}
             onMouseDown={(e) => {
               e.preventDefault();
               e.stopPropagation();

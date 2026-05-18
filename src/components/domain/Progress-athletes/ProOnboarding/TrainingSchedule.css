@@ -1,0 +1,95 @@
+.ts-content {
+  padding: 72px 16px 120px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.ts-title {
+  font-family: var(--font-condensed, "Barlow Condensed", sans-serif);
+  font-size: 40px;
+  font-weight: 700;
+  font-style: italic;
+  color: var(--black, #151622);
+  text-transform: uppercase;
+  line-height: 1;
+  margin: 0 0 4px;
+}
+
+.ts-subtitle {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--muted, #91909b);
+  margin: 0;
+  line-height: 1;
+}
+
+.ts-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ts-section-label {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--black, #151622);
+  margin: 0;
+}
+
+/* ─── Day picker ───────────────────────────────────────────────── */
+
+.ts-day-row {
+  display: flex;
+  gap: 4px;
+}
+
+.ts-day-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 12px 0;
+  background: var(--neutral-100, #eeeff1);
+  border: 2px solid transparent;
+  border-radius: 12px;
+  cursor: pointer;
+  min-height: 80px;
+  gap: 6px;
+  transition: border-color 0.15s;
+}
+
+.ts-day-btn--active {
+  border-color: #4ff777;
+  background: white;
+}
+
+.ts-day-label {
+  font-family: "Barlow Semi Condensed", var(--font-condensed, "Barlow Condensed"), sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--muted, #91909b);
+  text-transform: uppercase;
+  letter-spacing: -0.05em;
+  line-height: 1;
+}
+
+.ts-day-label--active {
+  color: var(--black, #151622);
+}
+
+.ts-day-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  border: 1.5px solid #c8c8ce;
+  background: transparent;
+}
+
+.ts-day-dot--active {
+  background: #4ff777;
+  border-color: #4ff777;
+}

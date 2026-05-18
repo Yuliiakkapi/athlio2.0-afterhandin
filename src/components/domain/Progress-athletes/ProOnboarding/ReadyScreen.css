@@ -1,0 +1,111 @@
+.ready-screen {
+  min-height: 100dvh;
+  background: #f8f9fa;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 32px 80px;
+}
+
+/* ─── Diagonal stripes ─────────────────────────────────────────── */
+
+.ready-stripe {
+  position: absolute;
+  width: 200%;
+  height: 180px;
+  pointer-events: none;
+}
+
+.ready-stripe-1 {
+  background: linear-gradient(
+    90deg,
+    rgba(79, 247, 119, 0.25) 0%,
+    rgba(206, 251, 113, 0.15) 100%
+  );
+  transform: rotate(-35deg) translateY(-60px);
+  top: 10%;
+  left: -50%;
+}
+
+.ready-stripe-2 {
+  background: linear-gradient(
+    90deg,
+    rgba(206, 251, 113, 0.2) 0%,
+    rgba(79, 247, 119, 0.1) 100%
+  );
+  transform: rotate(-35deg) translateY(80px);
+  top: 10%;
+  left: -50%;
+}
+
+/* ─── Close button ─────────────────────────────────────────────── */
+
+.ready-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--neutral-100, #eeeff1);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--black, #151622);
+  cursor: pointer;
+}
+
+/* ─── Content ──────────────────────────────────────────────────── */
+
+.ready-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+}
+
+.ready-title {
+  font-family: var(--font-condensed, "Barlow Condensed", sans-serif);
+  font-size: 44px;
+  font-weight: 700;
+  font-style: italic;
+  color: var(--black, #151622);
+  text-transform: uppercase;
+  line-height: 1.1;
+  margin: 0;
+}
+
+.ready-pro-badge {
+  display: inline-block;
+  background: linear-gradient(
+    67deg,
+    var(--success-400) 2%,
+    var(--success-300) 100%
+  );
+  border-radius: 100px;
+  padding: 2px 14px 4px;
+  font-size: 40px;
+  color: var(--black, #151622);
+  vertical-align: middle;
+  line-height: 1.1;
+}
+
+/* ─── Subtitle ─────────────────────────────────────────────────── */
+
+.ready-sub {
+  position: absolute;
+  bottom: 40px;
+  left: 0;
+  right: 0;
+  padding: 0 32px;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--muted, #91909b);
+  text-align: center;
+  margin: 0;
+  line-height: 1.5;
+}

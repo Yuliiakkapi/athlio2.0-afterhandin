@@ -76,7 +76,7 @@ export default function InfoTab({ profile, isMe = false }) {
             <Button
               size="medium"
               type="outline"
-              Icon={PencilSimpleLine}
+              leadingIcon={PencilSimpleLine}
               className="edit-info-btn"
               onClick={() => navigate("/profile/me/edit")}
             />

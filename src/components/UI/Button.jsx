@@ -1,12 +1,12 @@
 import "./Button.css";
 
 /**
- * Button component
- *
- * size   — "medium" (44px) | "small" (36px) | "xsmall" (32px) | "big" (44px full-width)
- * type   — "primary" | "outline" | "outlined" | "secondary" | "subtle" | "gray" | "following"
- * label  — button text
- * Icon   — React component or image URL for a leading icon
+ * size         — "medium" (44px) | "small" (36px) | "xsmall" (32px)
+ * type         — "primary" | "outline" | "outlined" | "secondary" | "subtle" | "gray" | "white" | "following"
+ * label        — button text
+ * leadingIcon  — React component or image URL, rendered before the label
+ * trailingIcon — React component, rendered after the label
+ * fullWidth    — stretch button to 100% width
  * disabled, htmlType, onClick — standard
  */
 export default function Button({
@@ -14,26 +14,38 @@ export default function Button({
   type = "primary",
   label,
   onClick,
-  Icon,
+  leadingIcon,
+  trailingIcon: TrailingIcon,
+  fullWidth = false,
   htmlType = "button",
   disabled = false,
 }) {
-  const isUrl = typeof Icon === "string";
-  const IconComp = isUrl ? null : Icon;
+  const isUrl = typeof leadingIcon === "string";
+  const LeadingIcon = isUrl ? null : leadingIcon;
+
+  const classes = [
+    "button",
+    `button--${size}`,
+    `button--${type}`,
+    fullWidth ? "button--full-width" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   return (
     <button
       type={htmlType}
-      className={`button button--${size} button--${type}`}
+      className={classes}
       onClick={onClick}
       disabled={disabled}
     >
-      {isUrl && Icon ? (
-        <img src={Icon} alt="" className="button-icon" aria-hidden="true" />
-      ) : IconComp ? (
-        <IconComp className="button-icon" />
+      {isUrl && leadingIcon ? (
+        <img src={leadingIcon} alt="" className="button-icon" aria-hidden="true" />
+      ) : LeadingIcon ? (
+        <LeadingIcon className="button-icon" />
       ) : null}
       <p>{label}</p>
+      {TrailingIcon && <TrailingIcon className="button-icon" />}
     </button>
   );
 }

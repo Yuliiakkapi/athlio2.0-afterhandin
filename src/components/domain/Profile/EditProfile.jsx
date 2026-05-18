@@ -208,7 +208,7 @@ export default function EditProfile() {
           type="outline"
           size="medium"
           label="Verify my account"
-          Icon={SealCheck}
+          leadingIcon={SealCheck}
           onClick={() => console.log("Verify clicked")}
         />
 

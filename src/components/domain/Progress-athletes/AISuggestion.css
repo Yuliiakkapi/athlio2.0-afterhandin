@@ -1,0 +1,42 @@
+.ai-suggestion {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  background: var(--success-50);
+  border-radius: 12px;
+  padding: 8px;
+}
+
+.ai-suggestion-icon {
+  background: linear-gradient(90deg, #33f578 0%, #e7fc6f 100%);
+  border: 2px solid var(--white);
+  border-radius: 12px;
+  padding: 12px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ai-suggestion-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ai-suggestion-title {
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--black);
+  line-height: 1.3;
+}
+
+.ai-suggestion-desc {
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--neutral-700);
+  line-height: 1.4;
+}

@@ -83,7 +83,7 @@ export default function PostPillBar({ onImageSelected }) {
         size="small"
         type="gray"
         label="Match"
-        Icon={ChartBar}
+        leadingIcon={ChartBar}
         className="pill-button"
         onClick={handleMatchClick}
       />
@@ -91,7 +91,7 @@ export default function PostPillBar({ onImageSelected }) {
         size="small"
         type="gray"
         label="Picture"
-        Icon={ImageSquare}
+        leadingIcon={ImageSquare}
         className="pill-button"
         onClick={handlePictureClick}
       />
@@ -99,7 +99,7 @@ export default function PostPillBar({ onImageSelected }) {
         size="small"
         type="gray"
         label="Event"
-        Icon={CalendarBlank}
+        leadingIcon={CalendarBlank}
         className="pill-button"
         onClick={handleEventClick}
       />

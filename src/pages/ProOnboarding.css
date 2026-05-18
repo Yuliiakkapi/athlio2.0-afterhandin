@@ -1,0 +1,14 @@
+/* ──────────────────────────────────────────────────────────────────
+   Pro Onboarding page
+   Reuses OnboardingTopbar + OnboardingNavbar with green progress bar
+────────────────────────────────────────────────────────────────── */
+
+.pro-onboarding-page {
+  min-height: 100dvh;
+  background: var(--neutral-50-bg, #f6f6f7);
+}
+
+/* Override progress bar fill to green gradient for pro context */
+.pro-onboarding-page .ob-topbar-fill {
+  background: linear-gradient(90deg, #4ff777 0%, #cefb71 100%);
+}

@@ -1,0 +1,130 @@
+.prog-lb-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 0 21px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+.prog-lb-thead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  border-bottom: 1px solid #dfe0e7;
+}
+
+.prog-lb-col-player {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--muted, #91909b);
+  flex: 1;
+}
+
+.prog-lb-col-stats {
+  display: flex;
+  align-items: center;
+}
+
+.prog-lb-col-stats span {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--muted, #91909b);
+  width: 30px;
+  text-align: center;
+}
+
+.prog-lb-col-rating {
+  width: 60px !important;
+  text-align: center !important;
+}
+
+.prog-lb-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  height: 59px;
+  border-bottom: 1px solid #dfe0e7;
+}
+
+.prog-lb-row--me {
+  background: var(--primary-50);
+}
+
+.prog-lb-row--last {
+  border-bottom: none;
+}
+
+.prog-lb-player {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.prog-lb-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--neutral-200, #e1e1e4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted, #91909b);
+  flex-shrink: 0;
+}
+
+.prog-lb-avatar--me {
+  border: 2px solid var(--primary-default, #4051fd);
+}
+
+.prog-lb-name {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--black);
+  margin: 0;
+  line-height: 1;
+}
+
+.prog-lb-club {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted, #91909b);
+  margin: 3px 0 0;
+  line-height: 1;
+}
+
+.prog-lb-stats {
+  display: flex;
+  align-items: center;
+}
+
+.prog-lb-stat {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: 700;
+  font-style: italic;
+  color: var(--black, #151622);
+  width: 30px;
+  text-align: center;
+  line-height: 24px;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+}
+
+.prog-lb-stat--me {
+  color: var(--primary-default, #4051fd);
+  font-size: 18px;
+}
+
+.prog-lb-rating {
+  width: 60px;
+  display: flex;
+  justify-content: center;
+}

@@ -8,7 +8,7 @@
   justify-content: center;
   gap: 2px;
   border-radius: 9999px;
-  font-family: var(--font-sans, 'Barlow'), sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
   font-style: italic;
   text-transform: uppercase;
@@ -19,75 +19,103 @@
 /* ─── Size: XS ──────────────────────────────────────────────────── */
 .badge--xs {
   padding: 2px 6px;
-  font-size: 10px;
-  letter-spacing: -0.1px;
+  font-size: var(--text-xs);
 }
 
 .badge--xs .badge-icon {
-  width: 12px;
-  height: 12px;
+  width: 10px;
+  height: 10px;
 }
 
 /* ─── Size: S ───────────────────────────────────────────────────── */
 .badge--s {
-  padding: 2px 8px;
-  font-size: 14px;
-  letter-spacing: -0.14px;
+  padding: 3px 8px;
+  font-size: var(--text-sm);
 }
 
 .badge--s .badge-icon {
-  width: 14px;
-  height: 14px;
+  width: 12px;
+  height: 12px;
 }
 
 /* ─── Size: M ───────────────────────────────────────────────────── */
 .badge--m {
-  padding: 4px 8px;
-  font-size: 14px;
-  letter-spacing: -0.14px;
+  padding: 6px 12px;
+  font-size: var(--text-sm);
 }
 
 .badge--m .badge-icon {
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
+}
+
+/* ─── Size: SM (pro badge) — 32px tall, 24px text ───────────────── */
+.badge--sm {
+  height: 32px;
+  padding: 0 12px;
+  font-size: 24px;
+}
+
+/* ─── Size: MD (pro badge) — 37px tall, 32px text ───────────────── */
+.badge--md {
+  height: 37px;
+  padding: 0 16px;
+  font-size: 32px;
 }
 
 /* ─── Color: Light (default) ────────────────────────────────────── */
 .badge--light {
-  background: var(--primary-100, #dbe9ff);
-  color: var(--primary-800, #1f2cb4);
+  background: var(--primary-100);
+  color: var(--primary-800);
 }
 
 /* ─── Color: Dark ──────────────────────────────────────────────── */
 .badge--dark {
-  background: var(--primary-950, #141952);
-  color: var(--primary-200, #bfd6ff);
+  background: var(--primary-950);
+  color: var(--primary-200);
 }
 
 /* ─── Color: Success ────────────────────────────────────────────── */
 .badge--success {
-  background: var(--success-default, #00ab3d);
-  color: var(--white, #fff);
+  background: var(--success-default);
+  color: var(--white);
 }
 
 /* ─── Color: Danger ────────────────────────────────────────────── */
 .badge--danger {
-  background: var(--negative-default, #ff3d52);
-  color: var(--white, #fff);
+  background: var(--negative-default);
+  color: var(--white);
 }
 
 /* ─── Color: Warning ───────────────────────────────────────────── */
 .badge--warning {
-  background: var(--warning-default, #ff983d);
-  color: var(--white, #fff);
+  background: var(--warning-default);
+  color: var(--white);
 }
 
 /* ─── Color: Transparent (frosted glass) ────────────────────────── */
 .badge--transparent {
   background: rgba(219, 233, 255, 0.2);
-  backdrop-filter: blur(4px);
-  border: 1px solid var(--primary-default, #4051fd);
-  color: var(--white, #fff);
+  border: 1px solid var(--primary-default);
+  color: var(--white);
+}
+
+/* ─── Color: Pro Athlete — green gradient ───────────────────────── */
+.badge--pro-athlete {
+  background: linear-gradient(90deg, #33f578 0%, #e7fc6f 100%);
+  color: var(--black);
+  border: 2px solid var(--white);
+  font-family: var(--font-condensed);
+  font-weight: 700;
+}
+
+/* ─── Color: Pro Scout — orange-red gradient ─────────────────────── */
+.badge--pro-scout {
+  background: linear-gradient(90deg, #ff983d 0%, #ff3d52 100%);
+  color: var(--white);
+  border: 2px solid var(--white);
+  font-family: var(--font-condensed);
+  font-weight: 700;
 }
 
 /* ─── Icon styling ────────────────────────────────────────────────── */

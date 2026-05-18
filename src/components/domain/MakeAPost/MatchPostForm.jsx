@@ -316,14 +316,14 @@ export default function MatchPostForm({ onCreated }) {
               size="small"
               label="Yes"
               onClick={handleConfirmYes}
-              Icon={Check}
+              leadingIcon={Check}
             />
             <Button
               type="outline"
               size="small"
               label="No"
               onClick={handleConfirmNo}
-              Icon={X}
+              leadingIcon={X}
             />
           </PopUpActions>
         </PopUp>
@@ -340,14 +340,14 @@ export default function MatchPostForm({ onCreated }) {
               size="small"
               label="Yes"
               onClick={handleAskMediaYes}
-              Icon={Check}
+              leadingIcon={Check}
             />
             <Button
               type="outline"
               size="small"
               label="No"
               onClick={handleAskMediaNo}
-              Icon={X}
+              leadingIcon={X}
             />
           </PopUpActions>
         </PopUp>

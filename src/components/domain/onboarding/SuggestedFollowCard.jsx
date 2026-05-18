@@ -23,7 +23,7 @@ export default function SuggestedFollowCard({
         size="small"
         type={isFollowing ? "subtle" : "outline"}
         label={isFollowing ? "Following" : "Follow"}
-        Icon={!isFollowing ? Plus : undefined}
+        leadingIcon={!isFollowing ? Plus : undefined}
         onClick={() => onToggle && onToggle(id)}
       />
     </div>

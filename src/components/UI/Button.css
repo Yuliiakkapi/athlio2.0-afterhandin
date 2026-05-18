@@ -1,4 +1,4 @@
-﻿/* ─── Base ────────────────────────────────────────────────────────── */
+/* ─── Base ────────────────────────────────────────────────────────── */
 .button {
   border: none;
   cursor: pointer;
@@ -12,11 +12,6 @@
   font-weight: 600;
   line-height: 1;
   white-space: nowrap;
-  transition:
-    background-color 150ms ease,
-    color 150ms ease,
-    border-color 150ms ease,
-    opacity 150ms ease;
 }
 
 .button:disabled {
@@ -24,9 +19,13 @@
   opacity: 0.3;
 }
 
+.button--full-width {
+  width: 100%;
+}
+
 /* ─── Sizes ───────────────────────────────────────────────────────── */
 
-/* Medium — 44px tall, 16px padding */
+/* Medium — 44px tall, 16px side padding, 24px icons */
 .button--medium {
   height: 44px;
   padding: 0 16px;
@@ -37,7 +36,7 @@
   height: 24px;
 }
 
-/* Small — 36px tall, 12px/8px padding */
+/* Small — 36px tall, 12px side padding, 20px icons */
 .button--small {
   height: 36px;
   padding: 0 12px;
@@ -48,7 +47,7 @@
   height: 20px;
 }
 
-/* Xsmall — 32px tall, 8px padding */
+/* Xsmall — 32px tall, 8px side padding, 18px icons */
 .button--xsmall {
   height: 32px;
   padding: 0 8px;
@@ -59,18 +58,6 @@
   height: 18px;
 }
 
-/* Big — same sizing as medium but full width */
-.button--big {
-  height: 44px;
-  padding: 0 16px;
-  font-size: 16px;
-  width: 100%;
-}
-.button--big .button-icon {
-  width: 24px;
-  height: 24px;
-}
-
 /* ─── Variants ────────────────────────────────────────────────────── */
 
 /* Primary — blue fill, white text */
@@ -78,10 +65,6 @@
   background-color: var(--primary-default, #4051fd);
   color: #ffffff;
 }
-.button--primary:hover:not(:disabled) {
-  background-color: #222f8d;
-}
-/* disabled handled by base .button:disabled (opacity 0.3) */
 
 /* Outlined — no fill, dark border, dark text */
 .button--outline,
@@ -89,10 +72,6 @@
   background-color: transparent;
   border: 2px solid #e1e1e4;
   color: #151622;
-}
-.button--outline:hover:not(:disabled),
-.button--outlined:hover:not(:disabled) {
-  border-color: #a5a5af;
 }
 .button--outline.selected,
 .button--outline:active,
@@ -109,28 +88,23 @@
   border: 1px solid #e1e1e4;
   color: #2230e0;
 }
-.button--secondary:hover:not(:disabled) {
-  background-color: #e4e5e8;
-}
 
 /* Subtle — no fill/border, blue text */
 .button--subtle {
   background-color: transparent;
   color: var(--primary-default, #4051fd);
 }
-.button--subtle:hover:not(:disabled) {
-  color: #222f8d;
-}
 
-/* ─── Legacy / extra variants (keep for existing usages) ──────────── */
+/* White — frosted glass for dark card backgrounds */
+.button--white {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
 
 /* Gray — neutral fill */
 .button--gray {
   background-color: var(--neutral-100);
   color: var(--black);
-}
-.button--gray:hover:not(:disabled) {
-  background-color: var(--neutral-300);
 }
 
 /* Following — animated state for follow button */
@@ -159,7 +133,6 @@
 
 @media (prefers-reduced-motion: reduce) {
   .button {
-    transition: none;
     animation: none;
   }
   .button .button-icon {

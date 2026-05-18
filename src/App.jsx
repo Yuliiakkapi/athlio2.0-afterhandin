@@ -21,10 +21,14 @@ import YourTeam from "./pages/YourTeam";
 import Watchlist from "./pages/Watchlist";
 import ProfileSearch from "./pages/ProfileSearch";
 import NotFound from "./pages/NotFound";
+import UpgradePro from "./pages/UpgradePro";
+import ProOnboarding from "./pages/ProOnboarding";
 
 export default function App() {
   return (
     <Routes>
+      <Route path="upgrade-pro" element={<UpgradePro />} />
+      <Route path="pro-onboarding" element={<ProOnboarding />} />
       <Route element={<AppShell />}>
         <Route index element={<Landing />} />
         <Route path="intro" element={<Intro />} />

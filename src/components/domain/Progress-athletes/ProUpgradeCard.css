@@ -1,0 +1,99 @@
+.pro-upgrade-card {
+  background: var(--primary-default, #4051fd);
+  border-radius: 20px;
+  position: relative;
+  overflow: hidden;
+  padding: 28px 24px 24px;
+}
+
+.pro-upgrade-blob {
+  position: absolute;
+  pointer-events: none;
+  border-radius: 50%;
+}
+
+.pro-upgrade-blob-1 {
+  width: 300px;
+  height: 260px;
+  right: -60px;
+  top: -60px;
+  background: radial-gradient(
+    ellipse at 50% 50%,
+    var(--primary-800) 0%,
+    transparent 70%
+  );
+}
+
+.pro-upgrade-blob-2 {
+  width: 260px;
+  height: 220px;
+  left: -40px;
+  bottom: -60px;
+  background: radial-gradient(
+    ellipse at 50% 50%,
+    var(--primary-700) 0%,
+    transparent 70%
+  );
+}
+
+.pro-upgrade-inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+}
+
+.pro-upgrade-badge {
+  background: linear-gradient(
+    67deg,
+    var(--success-400) 2%,
+    var(--success-300) 100%
+  );
+  border-radius: 100px;
+  padding: 3px 16px 5px;
+  font-family: var(--font-condensed, "Barlow Condensed", sans-serif);
+  font-size: 22px;
+  font-weight: 700;
+  font-style: italic;
+  color: var(--black, #151622);
+  text-transform: uppercase;
+  line-height: 1.1;
+}
+
+.pro-upgrade-title {
+  font-family: var(--font-condensed, "Barlow Condensed", sans-serif);
+  font-size: 32px;
+  font-weight: 700;
+  font-style: italic;
+  color: var(--white, #fff);
+  text-transform: uppercase;
+  line-height: 1;
+  margin: 0;
+}
+
+.pro-upgrade-desc {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--primary-100, #dbe9ff);
+  margin: 0;
+  line-height: 1.5;
+  max-width: 280px;
+}
+
+.pro-upgrade-btn {
+  width: 100%;
+  background: var(--white, #fff);
+  border: none;
+  border-radius: 10px;
+  padding: 12px;
+  margin-top: 4px;
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--primary-default, #4051fd);
+  cursor: pointer;
+}
