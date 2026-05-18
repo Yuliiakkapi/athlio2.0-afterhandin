@@ -48,3 +48,40 @@
 .tdc--active .tdc__dot {
   background: var(--primary-default);
 }
+
+/* ─── Week variant (TrainingsSection) ─────────────────────────── */
+
+.tdc--week {
+  background: var(--white);
+  box-shadow: 0 0 10.5px rgba(0, 0, 0, 0.08);
+}
+
+.tdc--week .tdc__icon {
+  color: var(--muted);
+}
+
+.tdc--week .tdc__label {
+  color: var(--muted);
+}
+
+.tdc--week.tdc--active .tdc__icon {
+  color: var(--black);
+}
+
+.tdc--week.tdc--active .tdc__label {
+  color: var(--black);
+}
+
+/* ─── Status dot colors ────────────────────────────────────────── */
+
+.tdc--logged .tdc__dot {
+  background: var(--success-default);
+}
+
+.tdc--missed .tdc__dot {
+  background: var(--negative-default);
+}
+
+.tdc--planned .tdc__dot {
+  background: var(--primary-default);
+}

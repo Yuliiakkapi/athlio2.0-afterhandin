@@ -1,69 +1,28 @@
 import { useState } from "react";
+import { UsersThree, SneakerMove, SoccerBall } from "@phosphor-icons/react";
+import RecoveryIcon from "../../UI/icons/RecoveryIcon";
+import TrainingDayCard from "../../UI/TrainingDayCard";
+import TrainingCard from "../../UI/TrainingCard";
+import Badge from "../../UI/Badge";
+import Button from "../../UI/Button";
 import "./TrainingsSection.css";
 
 const WEEK_DAYS = [
-  { key: "m",  label: "M",  icon: "individual" },
-  { key: "t",  label: "T",  icon: "team" },
-  { key: "w",  label: "W",  icon: null },
-  { key: "th", label: "TH", icon: null },
-  { key: "f",  label: "F",  icon: "team" },
-  { key: "sa", label: "SA", icon: "football" },
-  { key: "s",  label: "S",  icon: "recovery" },
+  { key: "m",  label: "M",  icon: SneakerMove, status: "logged",  cardType: "individual" },
+  { key: "t",  label: "T",  icon: UsersThree,  status: "missed",  cardType: "team"       },
+  { key: "w",  label: "W",  icon: null,        status: null,      cardType: "none"       },
+  { key: "th", label: "TH", icon: null,        status: null,      cardType: "none"       },
+  { key: "f",  label: "F",  icon: UsersThree,  status: "planned", cardType: "team"       },
+  { key: "sa", label: "SA", icon: SoccerBall,  status: "planned", cardType: "match"      },
+  { key: "s",  label: "S",  icon: RecoveryIcon, status: "planned", cardType: "recovery"   },
 ];
-
-function IndividualIcon({ color = "#91909b" }) {
-  return (
-    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
-      <circle cx="14" cy="8.5" r="4" stroke={color} strokeWidth="1.5" />
-      <path d="M6 24c0-4.418 3.582-8 8-8s8 3.582 8 8" stroke={color} strokeWidth="1.5" strokeLinecap="round" />
-    </svg>
-  );
-}
-
-function TeamIcon({ color = "#91909b" }) {
-  return (
-    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
-      <circle cx="10" cy="8" r="3" stroke={color} strokeWidth="1.5" />
-      <path d="M4 22c0-3.314 2.686-6 6-6s6 2.686 6 6" stroke={color} strokeWidth="1.5" strokeLinecap="round" />
-      <circle cx="19" cy="8" r="3" stroke={color} strokeWidth="1.5" />
-      <path d="M13 22c0-3.314 2.686-6 6-6s6 2.686 6 6" stroke={color} strokeWidth="1.5" strokeLinecap="round" />
-    </svg>
-  );
-}
-
-function FootballIconSvg({ color = "#91909b" }) {
-  return (
-    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
-      <circle cx="14" cy="14" r="11" stroke={color} strokeWidth="1.5" />
-      <path d="M14 7.5l2.5 3.5-2.5 3-2.5-3 2.5-3.5z" stroke={color} strokeWidth="1" />
-      <path d="M7 14l2.5-3 3 2.5-2.5 3L7 14z" stroke={color} strokeWidth="1" />
-      <path d="M21 14l-2.5-3-3 2.5 2.5 3L21 14z" stroke={color} strokeWidth="1" />
-      <path d="M14 15.5l2.5 3-2.5 2.5-2.5-2.5 2.5-3z" stroke={color} strokeWidth="1" />
-    </svg>
-  );
-}
-
-function RecoveryIcon({ color = "#91909b" }) {
-  return (
-    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
-      <rect x="3" y="13" width="22" height="3" rx="1.5" stroke={color} strokeWidth="1.5" />
-      <path d="M7 13V10M21 13V10" stroke={color} strokeWidth="1.5" strokeLinecap="round" />
-      <path d="M5 10h18" stroke={color} strokeWidth="1.5" strokeLinecap="round" />
-    </svg>
-  );
-}
-
-function DayIcon({ icon, active }) {
-  const color = active ? "#4051fd" : "#91909b";
-  if (icon === "individual") return <IndividualIcon color={color} />;
-  if (icon === "team")       return <TeamIcon color={color} />;
-  if (icon === "football")   return <FootballIconSvg color={color} />;
-  if (icon === "recovery")   return <RecoveryIcon color={color} />;
-  return null;
-}
 
 export default function TrainingsSection() {
   const [activeDay, setActiveDay] = useState("sa");
+  const activeEntry = WEEK_DAYS.find((d) => d.key === activeDay);
+  const activeCard = activeEntry?.cardType ?? "none";
+  const activeStatus = activeEntry?.status ?? null;
+
   return (
     <section className="prog-section">
       <div className="prog-section-header">
@@ -71,39 +30,24 @@ export default function TrainingsSection() {
           <h2 className="prog-section-title">Trainings</h2>
           <p className="prog-section-subtitle">Work on your goals and track them</p>
         </div>
-        <button className="prog-see-all-btn">See all</button>
+        <Button type="subtle" size="xsmall" label="See all" />
       </div>
 
       <div className="prog-day-picker">
-        {WEEK_DAYS.map((d) => {
-          const isActive = activeDay === d.key;
-          return (
-            <button
-              key={d.key}
-              className={`prog-day-btn${isActive ? " prog-day-btn--active" : ""}`}
-              onClick={() => setActiveDay(d.key)}
-            >
-              {d.icon && <DayIcon icon={d.icon} active={isActive} />}
-              <span className={`prog-day-label${isActive ? " prog-day-label--active" : ""}`}>{d.label}</span>
-              <div className={`prog-day-dot${isActive ? " prog-day-dot--active" : d.icon ? " prog-day-dot--filled" : ""}`} />
-            </button>
-          );
-        })}
+        {WEEK_DAYS.map((d) => (
+          <TrainingDayCard
+            key={d.key}
+            day={d.label}
+            active={activeDay === d.key}
+            onClick={() => setActiveDay(d.key)}
+            icon={d.icon}
+            status={d.status}
+            variant="week"
+          />
+        ))}
       </div>
 
-      <div className="prog-matchday-card">
-        <div className="prog-matchday-overlay" aria-hidden="true" />
-        <div className="prog-matchday-top">
-          <span className="prog-matchday-badge">match day</span>
-        </div>
-        <div className="prog-matchday-bottom">
-          <p className="prog-matchday-text">
-            Give your best.{" "}
-            <span className="prog-matchday-gradient">we will track the rest.</span>
-          </p>
-          <button className="prog-matchday-btn">Log your performance after game</button>
-        </div>
-      </div>
+      <TrainingCard type={activeCard} status={activeStatus} />
     </section>
   );
 }

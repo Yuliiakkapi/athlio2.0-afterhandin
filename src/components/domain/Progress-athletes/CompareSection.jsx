@@ -1,66 +1,90 @@
 import { CaretRight } from "@phosphor-icons/react";
 import { useUser } from "../../../context/UserContext";
+import Button from "../../UI/Button";
+import dembele from "../../../assets/images/dembele-comparison.png";
 import "./CompareSection.css";
 
 const COMPARE_STATS = [
-  { label: "GOALS",   mine: 14, theirs: 26 },
-  { label: "ASSISTS", mine: 10, theirs: 14 },
-  { label: "MATCHES", mine: 22, theirs: 42 },
+  { label: "Goals",   mine: 14, theirs: 26 },
+  { label: "Assists", mine: 10, theirs: 14 },
+  { label: "Matches", mine: 22, theirs: 42 },
 ];
+
+const PRO_NAME = "Dembélé";
+const PRO_AGE  = 21;
 
 export default function CompareSection() {
   const { profile } = useUser();
+
   return (
     <section className="prog-section">
       <div className="prog-section-header">
         <div>
           <h2 className="prog-section-title">Compare</h2>
-          <p className="prog-section-subtitle">Ranking your position and age</p>
+          <p className="prog-section-subtitle">Look how much do you have in common with stars</p>
         </div>
       </div>
-      <div className="prog-compare-card">
-        <div className="prog-compare-players">
-          <div className="prog-compare-player">
-            <div className="prog-compare-avatar">
-              {profile?.avatar_url
-                ? <img src={profile.avatar_url} alt="" className="prog-compare-avatar-img" />
-                : <span>{(profile?.full_name || profile?.username || "Y").charAt(0).toUpperCase()}</span>
-              }
-            </div>
-            <span className="prog-compare-name">YOU</span>
-            <div className="prog-compare-rating-badge">65%</div>
+
+      {/* ── Players row – sits above the card ─────────────────── */}
+      <div className="cmp-players">
+        <div className="cmp-player">
+          <div className="cmp-avatar">
+            {profile?.avatar_url
+              ? <img src={profile.avatar_url} alt="" className="cmp-avatar__img" />
+              : <span>{(profile?.full_name || profile?.username || "Y").charAt(0).toUpperCase()}</span>
+            }
           </div>
-          <span className="prog-compare-vs">VS</span>
-          <div className="prog-compare-player">
-            <div className="prog-compare-avatar prog-compare-avatar--other" />
-            <span className="prog-compare-name">DEMBELE</span>
-          </div>
+          <span className="cmp-player__name">You</span>
         </div>
 
-        <div className="prog-compare-stats">
+        <div className="cmp-match-badge">
+          <span className="cmp-match-badge__label">Career match at<br />the age {PRO_AGE}</span>
+          <span className="cmp-match-badge__pct">65%</span>
+        </div>
+
+        <div className="cmp-player">
+          <div className="cmp-avatar cmp-avatar--bare">
+            <img src={dembele} alt={PRO_NAME} className="cmp-avatar__img" />
+          </div>
+          <span className="cmp-player__name">{PRO_NAME}</span>
+        </div>
+      </div>
+
+      {/* ── Stats card – overlaps up behind the avatars ───────── */}
+      <div className="cmp-card">
+        <div className="cmp-stats">
+          <div className="cmp-stats__header">
+            <span className="cmp-stats__col-label">You</span>
+            <span className="cmp-stats__col-label">{PRO_NAME} at {PRO_AGE}</span>
+          </div>
+
           {COMPARE_STATS.map((s) => {
-            const total = s.mine + s.theirs;
-            const minePct = (s.mine / total) * 100;
+            const total    = s.mine + s.theirs;
+            const minePct  = Math.round((s.mine  / total) * 100);
+            const theirPct = 100 - minePct;
             return (
-              <div key={s.label} className="prog-compare-row">
-                <span className="prog-compare-mine">{s.mine}</span>
-                <div className="prog-compare-center">
-                  <span className="prog-compare-label">{s.label}</span>
-                  <div className="prog-compare-bars">
-                    <div className="prog-compare-bar-mine"  style={{ width: `${minePct}%` }} />
-                    <div className="prog-compare-bar-other" style={{ width: `${100 - minePct}%` }} />
+              <div key={s.label} className="cmp-row">
+                <span className="cmp-row__num cmp-row__num--mine">{s.mine}</span>
+                <div className="cmp-row__center">
+                  <span className="cmp-row__label">{s.label}</span>
+                  <div className="cmp-bars">
+                    <div className="cmp-bar cmp-bar--mine"   style={{ width: `${minePct}%` }} />
+                    <div className="cmp-bar cmp-bar--theirs" style={{ width: `${theirPct}%` }} />
                   </div>
                 </div>
-                <span className="prog-compare-theirs">{s.theirs}</span>
+                <span className="cmp-row__num cmp-row__num--theirs">{s.theirs}</span>
               </div>
             );
           })}
         </div>
 
-        <button className="prog-compare-cta">
-          Compare to other players
-          <CaretRight size={20} />
-        </button>
+        <Button
+          type="subtle"
+          size="small"
+          fullWidth
+          label="Compare to other players"
+          trailingIcon={CaretRight}
+        />
       </div>
     </section>
   );
