@@ -36,7 +36,7 @@ body {
   --text-xxs: var(--text-2xs);
   --list-item-value: var(--text-base);
   --text-secondary: var(--text-xs);
-  --text-button: var(--text-sm);
+  --text-button: var(--text-base);
 
   /* Design system color tokens (light and dark variants included) */
   /* Light Mode */

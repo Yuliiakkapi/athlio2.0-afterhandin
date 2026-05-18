@@ -44,7 +44,7 @@ export default function Button({
       ) : LeadingIcon ? (
         <LeadingIcon className="button-icon" />
       ) : null}
-      <p>{label}</p>
+      <span>{label}</span>
       {TrailingIcon && <TrailingIcon className="button-icon" />}
     </button>
   );

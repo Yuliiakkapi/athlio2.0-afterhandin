@@ -8,7 +8,7 @@
   gap: 4px;
   width: auto;
   border-radius: 8px;
-  font-family: "Barlow", sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
   line-height: 1;
   white-space: nowrap;
@@ -29,7 +29,7 @@
 .button--big {
   height: 44px;
   padding: 0 16px;
-  font-size: 16px;
+  font-size: var(--text-button);
   width: 100%;
 }
 .button--big .button-icon {
@@ -41,7 +41,7 @@
 .button--medium {
   height: 44px;
   padding: 0 16px;
-  font-size: 16px;
+  font-size: var(--text-button);
 }
 .button--medium .button-icon {
   width: 24px;
@@ -52,7 +52,7 @@
 .button--small {
   height: 36px;
   padding: 0 12px;
-  font-size: 16px;
+  font-size: var(--text-button);
 }
 .button--small .button-icon {
   width: 20px;
@@ -63,7 +63,7 @@
 .button--xsmall {
   height: 32px;
   padding: 0 8px;
-  font-size: 14px;
+  font-size: var(--text-sm);
 }
 .button--xsmall .button-icon {
   width: 18px;
@@ -82,8 +82,8 @@
 .button--outline,
 .button--outlined {
   background-color: transparent;
-  border: 2px solid #e1e1e4;
-  color: #151622;
+  border: 2px solid var(--neutral-200);
+  color: var(--black);
 }
 .button--outline.selected,
 .button--outline:active,
@@ -96,9 +96,9 @@
 
 /* Secondary — light gray fill + border, blue text */
 .button--secondary {
-  background-color: #eeeff1;
-  border: 1px solid #e1e1e4;
-  color: #2230e0;
+  background-color: var(--neutral-100);
+  border: 1px solid var(--neutral-200);
+  color: var(--primary-700);
 }
 
 /* Subtle — no fill/border, blue text */
@@ -110,7 +110,7 @@
 /* White — frosted glass for dark card backgrounds */
 .button--white {
   background-color: rgba(255, 255, 255, 0.2);
-  color: #ffffff;
+  color: var(--white);
 }
 
 /* Gray — neutral fill */

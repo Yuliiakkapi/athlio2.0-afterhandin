@@ -41,8 +41,7 @@
   display: block;
 }
 
-.badge {
-  position: absolute;
+.icon-with-badge .badge {
   top: 6px;
   right: 6px;
   background: var(--primary-default);

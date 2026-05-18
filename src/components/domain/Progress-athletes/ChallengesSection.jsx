@@ -2,7 +2,7 @@ import { Flame } from "@phosphor-icons/react";
 import Badge from "../../UI/Badge";
 import Button from "../../UI/Button";
 import haalandImg from "../../../assets/images/haalandchallenge.png";
-import virginImg from "../../../assets/images/virginchallenge.jpg";
+import virginImg from "../../../assets/images/virginchallenge.png";
 import "./ChallengesSection.css";
 
 const CHALLENGES = [
@@ -55,8 +55,12 @@ export default function ChallengesSection() {
                 size="sm"
                 leftIcon={<Flame size={14} weight="regular" />}
               />
-              {c.tags[0] && <Badge text={c.tags[0]} color="transparent" size="sm" />}
-              {c.tags[1] && <Badge text={c.tags[1]} color="transparent" size="sm" />}
+              {c.tags[0] && (
+                <Badge text={c.tags[0]} color="transparent" size="sm" />
+              )}
+              {c.tags[1] && (
+                <Badge text={c.tags[1]} color="transparent" size="sm" />
+              )}
             </div>
 
             <div className="prog-challenge-bottom">
