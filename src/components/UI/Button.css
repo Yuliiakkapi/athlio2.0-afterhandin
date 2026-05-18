@@ -25,6 +25,18 @@
 
 /* ─── Sizes ───────────────────────────────────────────────────────── */
 
+/* Big — alias for medium + full width (legacy size, use size="medium" fullWidth) */
+.button--big {
+  height: 44px;
+  padding: 0 16px;
+  font-size: 16px;
+  width: 100%;
+}
+.button--big .button-icon {
+  width: 24px;
+  height: 24px;
+}
+
 /* Medium — 44px tall, 16px side padding, 24px icons */
 .button--medium {
   height: 44px;

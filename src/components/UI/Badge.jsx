@@ -3,9 +3,9 @@ import "./Badge.css";
 /**
  * Badge
  *
- * size   "xs" | "s" | "m"  — 3 standard sizes (sm/md reserved for pro badges)
+ * size   "xs" | "sm" | "md"
  * color  "light" | "dark" | "success" | "danger" | "warning" | "transparent"
- *        | "pro-athlete" | "pro-scout"
+ *        | "pro-athlete" | "pro-scout"  (pro variants override size)
  */
 export default function Badge({
   text = "Scout",

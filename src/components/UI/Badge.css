@@ -4,6 +4,7 @@
 
 .badge {
   display: inline-flex;
+  width: fit-content;
   align-items: center;
   justify-content: center;
   gap: 2px;
@@ -16,51 +17,42 @@
   line-height: normal;
 }
 
-/* ─── Size: XS ──────────────────────────────────────────────────── */
+/* ─── Size: XS — 10px, 6px 2px padding ─────────────────────────── */
 .badge--xs {
-  padding: 2px 6px;
+  padding: 6px 2px;
+  height: 16px;
   font-size: var(--text-xs);
 }
 
 .badge--xs .badge-icon {
-  width: 10px;
-  height: 10px;
-}
-
-/* ─── Size: S ───────────────────────────────────────────────────── */
-.badge--s {
-  padding: 3px 8px;
-  font-size: var(--text-sm);
-}
-
-.badge--s .badge-icon {
   width: 12px;
   height: 12px;
 }
 
-/* ─── Size: M ───────────────────────────────────────────────────── */
-.badge--m {
-  padding: 6px 12px;
+/* ─── Size: S / SM — 14px, 2px 8px padding ─────────────────────── */
+.badge--s,
+.badge--sm {
+  padding: 10px 8px;
+  height: 21px;
   font-size: var(--text-sm);
 }
 
-.badge--m .badge-icon {
+.badge--s .badge-icon,
+.badge--sm .badge-icon {
   width: 14px;
   height: 14px;
 }
 
-/* ─── Size: SM (pro badge) — 32px tall, 24px text ───────────────── */
-.badge--sm {
-  height: 32px;
-  padding: 0 12px;
-  font-size: 24px;
+/* ─── Size: MD — 14px, 8px 4px padding ─────────────────────────── */
+.badge--md {
+  padding: 8px 4px;
+  height: 25px;
+  font-size: var(--text-sm);
 }
 
-/* ─── Size: MD (pro badge) — 37px tall, 32px text ───────────────── */
-.badge--md {
-  height: 37px;
-  padding: 0 16px;
-  font-size: 32px;
+.badge--md .badge-icon {
+  width: 16px;
+  height: 16px;
 }
 
 /* ─── Color: Light (default) ────────────────────────────────────── */
@@ -100,22 +92,28 @@
   color: var(--white);
 }
 
-/* ─── Color: Pro Athlete — green gradient ───────────────────────── */
+/* ─── Color: Pro Athlete — green gradient, fixed 32px tall ─────── */
 .badge--pro-athlete {
   background: linear-gradient(90deg, #33f578 0%, #e7fc6f 100%);
   color: var(--black);
   border: 2px solid var(--white);
   font-family: var(--font-condensed);
   font-weight: 700;
+  height: 32px;
+  padding: 0 12px;
+  font-size: 24px;
 }
 
-/* ─── Color: Pro Scout — orange-red gradient ─────────────────────── */
+/* ─── Color: Pro Scout — orange-red gradient, fixed 32px tall ───── */
 .badge--pro-scout {
   background: linear-gradient(90deg, #ff983d 0%, #ff3d52 100%);
   color: var(--white);
   border: 2px solid var(--white);
   font-family: var(--font-condensed);
   font-weight: 700;
+  height: 32px;
+  padding: 0 12px;
+  font-size: 24px;
 }
 
 /* ─── Icon styling ────────────────────────────────────────────────── */
