@@ -4,41 +4,10 @@ import { Target, Plus } from "@phosphor-icons/react";
 import Button from "../../UI/Button";
 import Tabs from "../../UI/Tabs";
 import AISuggestion from "./AISuggestion";
+import { useTargets } from "../../../context/TargetsContext";
 import "./TargetsSection.css";
 
 const TARGET_TABS = ["Season", "Month", "Week"];
-
-const TARGETS_BY_TAB = {
-  Season: [
-    {
-      id: 1,
-      label: "20 goals this season",
-      value: 14,
-      max: 20,
-      pct: 70,
-      color: "#ff983d",
-    },
-    {
-      id: 2,
-      label: "100 Minutes of playing",
-      value: 65,
-      max: 100,
-      pct: 65,
-      color: "#6f92ff",
-    },
-  ],
-  Month: [
-    {
-      id: 3,
-      label: "5 goals this month",
-      value: 3,
-      max: 5,
-      pct: 60,
-      color: "#ff983d",
-    },
-  ],
-  Week: [],
-};
 
 function EmptyState() {
   return (
@@ -106,8 +75,9 @@ function ProgressRing({ value, max, color }) {
 export default function TargetsSection({ isPro = false }) {
   const [tab, setTab] = useState("Season");
   const navigate = useNavigate();
+  const { targets: allTargets } = useTargets();
   const lockedTabs = isPro ? [] : ["Month", "Week"];
-  const targets = TARGETS_BY_TAB[tab] ?? [];
+  const targets = allTargets[tab] ?? [];
 
   return (
     <section className="prog-section">
@@ -146,7 +116,7 @@ export default function TargetsSection({ isPro = false }) {
                   <div
                     className="prog-target-fill"
                     style={{
-                      width: `${target.pct}%`,
+                      width: `${Math.round((target.value / target.max) * 100)}%`,
                       background: target.color,
                     }}
                   />
@@ -157,7 +127,7 @@ export default function TargetsSection({ isPro = false }) {
                     className="prog-target-pct"
                     style={{ color: target.color }}
                   >
-                    {target.pct}%
+                    {Math.round((target.value / target.max) * 100)}%
                   </span>
                 </div>
               </div>

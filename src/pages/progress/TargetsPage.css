@@ -1,0 +1,265 @@
+.tp-page {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 100dvh;
+}
+
+/* ── Banner ──────────────────────────────────────────────────── */
+
+.tp-banner {
+  background: var(--primary-default);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.tp-banner__text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.tp-banner__title {
+  font-family: var(--font-condensed);
+  font-size: var(--heading-3xl);
+  font-weight: 700;
+  font-style: italic;
+  color: var(--white);
+  text-transform: uppercase;
+  line-height: 1;
+  margin: 0;
+}
+
+.tp-banner__sub {
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.tp-banner__counter {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.tp-banner__num {
+  font-family: var(--font-condensed);
+  font-size: var(--heading-4xl);
+  font-weight: 700;
+  font-style: italic;
+  color: var(--white);
+  line-height: 1;
+}
+
+.tp-banner__total {
+  font-size: var(--text-base);
+  font-style: normal;
+  font-weight: 500;
+}
+
+.tp-banner__label {
+  font-family: var(--font-sans);
+  font-size: var(--text-2xs);
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* ── Target cards ─────────────────────────────────────────────── */
+
+.tp-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tp-card {
+  background: var(--white);
+  border-radius: 12px;
+  box-shadow: 0 0 10.5px rgba(0, 0, 0, 0.08);
+  padding: 14px 16px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.tp-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.tp-card__info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.tp-card__label {
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--black);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.tp-card__deadline {
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 400;
+  color: var(--muted);
+  margin: 0;
+}
+
+.tp-card__value {
+  display: flex;
+  align-items: baseline;
+  gap: 1px;
+  flex-shrink: 0;
+}
+
+.tp-card__num {
+  font-family: var(--font-condensed);
+  font-size: var(--heading-4xl);
+  font-weight: 700;
+  font-style: italic;
+  color: var(--black);
+  line-height: 1;
+}
+
+.tp-card__max {
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.tp-card__track {
+  height: 6px;
+  background: var(--neutral-200);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.tp-card__fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+/* ── Locked state ─────────────────────────────────────────────── */
+
+.tp-locked {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 40px 16px;
+  text-align: center;
+}
+
+.tp-locked__text {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tp-locked__title {
+  font-family: var(--font-sans);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--black);
+  margin: 0;
+}
+
+.tp-locked__desc {
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 400;
+  color: var(--muted);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ── FAB ──────────────────────────────────────────────────────── */
+
+.tp-fab {
+  position: fixed;
+  bottom: 32px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.tp-fab__label {
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--black);
+}
+
+/* ── Swipe to delete ──────────────────────────────────────────── */
+
+.tp-swipe-wrap {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  transition:
+    max-height 0.28s ease,
+    opacity 0.28s ease;
+  max-height: 200px;
+}
+
+.tp-swipe-wrap--out {
+  max-height: 0;
+  opacity: 0;
+}
+
+.tp-swipe-bg {
+  position: absolute;
+  inset: 0;
+  background: var(--neutral-50-bg);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 4px;
+  padding-right: 20px;
+  border-radius: 12px;
+  color: var(--negative-default);
+}
+
+.tp-swipe-bg span {
+  font-family: var(--font-sans);
+  font-size: var(--text-2xs);
+  font-weight: 700;
+  color: var(--negative-default);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.tp-swipe-wrap .tp-card {
+  touch-action: pan-y;
+  user-select: none;
+  cursor: grab;
+}

@@ -1,4 +1,5 @@
 import { Route, Routes } from "react-router-dom";
+import { TargetsProvider } from "./context/TargetsContext";
 import AppShell from "./layouts/AppShell";
 import Landing from "./pages/Landing";
 import Intro from "./pages/Intro";
@@ -33,6 +34,7 @@ import PerformancePage from "./pages/progress/PerformancePage";
 
 export default function App() {
   return (
+    <TargetsProvider>
     <Routes>
       <Route path="upgrade-pro" element={<UpgradePro />} />
       <Route path="pro-onboarding" element={<ProOnboarding />} />
@@ -71,5 +73,6 @@ export default function App() {
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
+    </TargetsProvider>
   );
 }
