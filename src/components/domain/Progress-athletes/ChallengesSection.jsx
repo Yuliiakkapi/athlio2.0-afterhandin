@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { Flame } from "@phosphor-icons/react";
 import Badge from "../../UI/Badge";
 import Button from "../../UI/Button";
@@ -27,6 +28,7 @@ const CHALLENGES = [
 ];
 
 export default function ChallengesSection() {
+  const navigate = useNavigate();
   return (
     <section className="prog-section">
       <div className="prog-section-header">
@@ -36,7 +38,7 @@ export default function ChallengesSection() {
             Test yourself with football stars
           </p>
         </div>
-        <Button type="subtle" size="xsmall" label="See all" />
+        <Button type="subtle" size="xsmall" label="See all" onClick={() => navigate("/progress/challenges")} />
       </div>
 
       <div className="prog-challenges-scroll">

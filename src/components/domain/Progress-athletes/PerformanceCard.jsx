@@ -105,6 +105,7 @@ export default function PerformanceCard({ isPro = false }) {
             fullWidth
             label="See performance analysis"
             trailingIcon={CaretRight}
+            onClick={() => navigate("/progress/performance")}
           />
         ) : (
           <Button

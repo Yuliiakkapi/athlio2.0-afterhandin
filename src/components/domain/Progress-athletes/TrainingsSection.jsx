@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { UsersThree, SneakerMove, SoccerBall } from "@phosphor-icons/react";
 import RecoveryIcon from "../../UI/icons/RecoveryIcon";
 import TrainingDayCard from "../../UI/TrainingDayCard";
@@ -19,6 +20,7 @@ const WEEK_DAYS = [
 
 export default function TrainingsSection() {
   const [activeDay, setActiveDay] = useState("sa");
+  const navigate = useNavigate();
   const activeEntry = WEEK_DAYS.find((d) => d.key === activeDay);
   const activeCard = activeEntry?.cardType ?? "none";
   const activeStatus = activeEntry?.status ?? null;
@@ -30,7 +32,7 @@ export default function TrainingsSection() {
           <h2 className="prog-section-title">Trainings</h2>
           <p className="prog-section-subtitle">Work on your goals and track them</p>
         </div>
-        <Button type="subtle" size="xsmall" label="See all" />
+        <Button type="subtle" size="xsmall" label="See all" onClick={() => navigate("/progress/trainings")} />
       </div>
 
       <div className="prog-day-picker">

@@ -1,4 +1,5 @@
 import { CaretDown } from "@phosphor-icons/react";
+import { useNavigate } from "react-router-dom";
 import OvrBadge from "../../UI/OvrBadge";
 import Button from "../../UI/Button";
 import { useUser } from "../../../context/UserContext";
@@ -29,6 +30,7 @@ const LEADERBOARD = [
 
 export default function LeaderboardSection() {
   const { profile } = useUser();
+  const navigate = useNavigate();
   const myAvatar = profile?.avatar_url;
   const myName  = profile?.full_name || profile?.username || "You";
   const myClub  = profile?.club_other_name || "";
@@ -48,7 +50,7 @@ export default function LeaderboardSection() {
         />
       </div>
 
-      <div className="prog-lb-card">
+      <div className="prog-lb-card" onClick={() => navigate("/progress/leaderboard")}>
         <div className="prog-lb-thead">
           <span className="prog-lb-col-player">Player</span>
           <div className="prog-lb-col-stats">

@@ -23,6 +23,13 @@ import ProfileSearch from "./pages/ProfileSearch";
 import NotFound from "./pages/NotFound";
 import UpgradePro from "./pages/UpgradePro";
 import ProOnboarding from "./pages/ProOnboarding";
+import TrainingsPage from "./pages/progress/TrainingsPage";
+import VisibilityPage from "./pages/progress/VisibilityPage";
+import ComparePage from "./pages/progress/ComparePage";
+import LeaderboardPage from "./pages/progress/LeaderboardPage";
+import TargetsPage from "./pages/progress/TargetsPage";
+import ChallengesPage from "./pages/progress/ChallengesPage";
+import PerformancePage from "./pages/progress/PerformancePage";
 
 export default function App() {
   return (
@@ -48,6 +55,13 @@ export default function App() {
         <Route path="chat" element={<Chat />} />
         <Route path="chat/:id" element={<ChatDetail />} />
         <Route path="progress" element={<Progress />} />
+        <Route path="progress/performance" element={<PerformancePage />} />
+        <Route path="progress/trainings" element={<TrainingsPage />} />
+        <Route path="progress/visibility" element={<VisibilityPage />} />
+        <Route path="progress/compare" element={<ComparePage />} />
+        <Route path="progress/leaderboard" element={<LeaderboardPage />} />
+        <Route path="progress/targets" element={<TargetsPage />} />
+        <Route path="progress/challenges" element={<ChallengesPage />} />
         <Route path="scouting" element={<Scouting />} />
         <Route path="scouting/team" element={<YourTeam />} />
         <Route path="scouting/watchlist" element={<Watchlist />} />

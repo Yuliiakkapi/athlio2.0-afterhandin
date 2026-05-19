@@ -1,4 +1,5 @@
 import { CaretRight } from "@phosphor-icons/react";
+import { useNavigate } from "react-router-dom";
 import { useUser } from "../../../context/UserContext";
 import Button from "../../UI/Button";
 import dembele from "../../../assets/images/dembele-comparison.png";
@@ -15,6 +16,7 @@ const PRO_AGE  = 21;
 
 export default function CompareSection() {
   const { profile } = useUser();
+  const navigate = useNavigate();
 
   return (
     <section className="prog-section">
@@ -83,6 +85,7 @@ export default function CompareSection() {
           size="small"
           fullWidth
           label="Compare to other players"
+          onClick={() => navigate("/progress/compare")}
           trailingIcon={CaretRight}
         />
       </div>

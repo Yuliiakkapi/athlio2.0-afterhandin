@@ -118,7 +118,7 @@ export default function TargetsSection({ isPro = false }) {
             Work on your goals and track them
           </p>
         </div>
-        <Button type="subtle" size="xsmall" label="See all" />
+        <Button type="subtle" size="xsmall" label="See all" onClick={() => navigate("/progress/targets")} />
       </div>
 
       <Tabs

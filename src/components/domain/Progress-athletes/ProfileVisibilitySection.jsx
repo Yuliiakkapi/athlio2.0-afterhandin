@@ -1,6 +1,7 @@
+import { useNavigate } from "react-router-dom";
+import { CaretRight } from "@phosphor-icons/react";
 import Badge from "../../UI/Badge";
 import Button from "../../UI/Button";
-import { CaretRight } from "@phosphor-icons/react";
 import scout1 from "../../../assets/images/scout1.jpg";
 import scout2 from "../../../assets/images/scout2.png";
 import coach1 from "../../../assets/images/coach1.png";
@@ -15,6 +16,7 @@ const VISITORS = [
 ];
 
 export default function ProfileVisibilitySection() {
+  const navigate = useNavigate();
   return (
     <section className="prog-section">
       <div className="prog-section-header">
@@ -60,6 +62,7 @@ export default function ProfileVisibilitySection() {
           fullWidth
           label="View full analytics"
           trailingIcon={CaretRight}
+          onClick={() => navigate("/progress/visibility")}
         />
       </div>
     </section>

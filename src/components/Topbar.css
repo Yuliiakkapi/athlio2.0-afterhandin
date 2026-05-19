@@ -11,6 +11,25 @@
   z-index: 1000;
 }
 
+.topbar--page {
+  display: grid;
+  grid-template-columns: 36px 1fr 36px;
+  gap: 8px;
+  align-items: center;
+}
+
+.topbar-page-title {
+  font-family: var(--font-condensed);
+  font-size: var(--heading-2half-xl);
+  font-weight: 700;
+  font-style: italic;
+  color: var(--black);
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 1;
+  margin: 0;
+}
+
 .topbar-icons {
   display: flex;
   gap: 4px;

@@ -15,7 +15,25 @@ import Button from "./UI/Button";
 import IconButton from "./UI/IconButton";
 import ProfilePicture from "./UI/ProfilePicture";
 
+function pageConfig(title, RightIcon) {
+  return {
+    variant: "page",
+    left: (nav) => <IconButton size="small" type="subtle" icon={ArrowLeft} onClick={() => nav(-1)} />,
+    center: () => <h1 className="topbar-page-title">{title}</h1>,
+    right: RightIcon
+      ? (nav) => <IconButton size="small" type="subtle" icon={RightIcon} onClick={() => {}} />
+      : () => <span aria-hidden="true" />,
+  };
+}
+
 const TOPBAR_CONFIG = {
+  "/progress/performance": pageConfig("Performance"),
+  "/progress/trainings":  pageConfig("Trainings"),
+  "/progress/visibility": pageConfig("Profile visibility"),
+  "/progress/compare":    pageConfig("Compare"),
+  "/progress/leaderboard":pageConfig("Leaderboard"),
+  "/progress/targets":    pageConfig("Targets"),
+  "/progress/challenges": pageConfig("Challenges"),
   "/home": {
     title: null,
     left: () => <MainLogo className="main-logo" aria-label="Logo" />,
@@ -192,7 +210,7 @@ export default function Topbar() {
   if (!config) return null;
 
   return (
-    <header className="topbar">
+    <header className={`topbar${config.variant === "page" ? " topbar--page" : ""}`}>
       <div>{config.left?.(navigate, profile, counts)}</div>
       {config.center?.(navigate, profile, counts) || (
         <h1 className="topbar-title">{config.title}</h1>
