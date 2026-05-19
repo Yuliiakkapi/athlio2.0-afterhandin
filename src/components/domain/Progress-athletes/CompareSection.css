@@ -124,8 +124,14 @@
 
 .cmp-row {
   display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cmp-row__top {
+  display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: space-between;
 }
 
 .cmp-row__num {
@@ -146,13 +152,6 @@
   text-align: right;
 }
 
-.cmp-row__center {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
 .cmp-row__label {
   font-family: var(--font-sans);
   font-size: var(--text-xs);
@@ -161,6 +160,7 @@
   text-transform: uppercase;
   text-align: center;
   letter-spacing: 0.03em;
+  flex: 1;
 }
 
 .cmp-bars {

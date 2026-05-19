@@ -66,15 +66,15 @@ export default function CompareSection() {
             const theirPct = 100 - minePct;
             return (
               <div key={s.label} className="cmp-row">
-                <span className="cmp-row__num cmp-row__num--mine">{s.mine}</span>
-                <div className="cmp-row__center">
+                <div className="cmp-row__top">
+                  <span className="cmp-row__num cmp-row__num--mine">{s.mine}</span>
                   <span className="cmp-row__label">{s.label}</span>
-                  <div className="cmp-bars">
-                    <div className="cmp-bar cmp-bar--mine"   style={{ width: `${minePct}%` }} />
-                    <div className="cmp-bar cmp-bar--theirs" style={{ width: `${theirPct}%` }} />
-                  </div>
+                  <span className="cmp-row__num cmp-row__num--theirs">{s.theirs}</span>
                 </div>
-                <span className="cmp-row__num cmp-row__num--theirs">{s.theirs}</span>
+                <div className="cmp-bars">
+                  <div className="cmp-bar cmp-bar--mine"   style={{ width: `${minePct}%` }} />
+                  <div className="cmp-bar cmp-bar--theirs" style={{ width: `${theirPct}%` }} />
+                </div>
               </div>
             );
           })}
