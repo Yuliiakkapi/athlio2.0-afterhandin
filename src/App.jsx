@@ -2,6 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import { TargetsProvider } from "./context/TargetsContext";
 import { ChallengesProvider } from "./context/ChallengesContext";
 import { SkillsProvider } from "./context/SkillsContext";
+import { ConnectedAppsProvider } from "./context/ConnectedAppsContext";
 import AppShell from "./layouts/AppShell";
 import Landing from "./pages/Landing";
 import Intro from "./pages/Intro";
@@ -36,6 +37,7 @@ import PerformancePage from "./pages/progress/PerformancePage";
 
 export default function App() {
   return (
+    <ConnectedAppsProvider>
     <SkillsProvider>
     <ChallengesProvider>
     <TargetsProvider>
@@ -80,5 +82,6 @@ export default function App() {
     </TargetsProvider>
     </ChallengesProvider>
     </SkillsProvider>
+    </ConnectedAppsProvider>
   );
 }

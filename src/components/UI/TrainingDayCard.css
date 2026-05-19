@@ -72,6 +72,51 @@
   color: var(--black);
 }
 
+/* ─── Date variant ─────────────────────────────────────────────── */
+
+.tdc--date {
+  background: var(--white);
+  box-shadow: 0 0 10.5px rgba(0, 0, 0, 0.08);
+  min-height: 64px;
+  padding: 8px 4px;
+  flex: 0 0 auto;
+  width: 48px;
+}
+
+.tdc__day-name {
+  font-family: var(--font-sans);
+  font-size: var(--text-2xs);
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  line-height: 1;
+}
+
+.tdc__date-num {
+  font-family: var(--font-condensed);
+  font-size: var(--heading-2xl);
+  font-weight: 700;
+  color: var(--black);
+  line-height: 1;
+}
+
+.tdc--date.tdc--active {
+  border-color: var(--primary-default);
+}
+
+.tdc--date .tdc__day-name {
+  color: var(--muted);
+}
+
+.tdc--date.tdc--active .tdc__day-name {
+  color: var(--primary-default);
+}
+
+.tdc--date.tdc--active .tdc__date-num {
+  color: var(--primary-default);
+}
+
 /* ─── Status dot colors ────────────────────────────────────────── */
 
 .tdc--logged .tdc__dot {

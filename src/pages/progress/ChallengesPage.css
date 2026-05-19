@@ -147,7 +147,7 @@
 .cp-card__progress-fill {
   height: 100%;
   border-radius: 3px;
-  background: linear-gradient(90deg, #33f578 0%, #e7fc6f 100%);
+  background: var(--primary-400);
   transition: width 0.3s ease;
 }
 

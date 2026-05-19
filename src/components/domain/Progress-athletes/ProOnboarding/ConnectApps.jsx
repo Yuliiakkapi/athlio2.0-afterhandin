@@ -1,7 +1,7 @@
-import { useState } from "react";
 import appleHealth from "../../../../assets/images/applehealth.png";
 import strava from "../../../../assets/images/strava.png";
 import googleFit from "../../../../assets/images/googlefit.png";
+import { useConnectedApps } from "../../../../context/ConnectedAppsContext";
 import "./ConnectApps.css";
 
 const APPS = [
@@ -26,15 +26,7 @@ const APPS = [
 ];
 
 export default function ConnectApps() {
-  const [selected, setSelected] = useState(new Set());
-
-  function toggle(key) {
-    setSelected((prev) => {
-      const next = new Set(prev);
-      next.has(key) ? next.delete(key) : next.add(key);
-      return next;
-    });
-  }
+  const { connectedApps, toggleApp } = useConnectedApps();
 
   return (
     <div className="ca-content">
@@ -45,12 +37,12 @@ export default function ConnectApps() {
 
       <div className="ca-list">
         {APPS.map((app, i) => {
-          const on = selected.has(app.key);
+          const on = connectedApps.has(app.key);
           return (
             <button
               key={app.key}
               className={`ca-item${i < APPS.length - 1 ? " ca-item--border" : ""}${on ? " ca-item--selected" : ""}`}
-              onClick={() => toggle(app.key)}
+              onClick={() => toggleApp(app.key)}
               type="button"
             >
               <img src={app.image} alt={app.name} className="ca-app-icon" />

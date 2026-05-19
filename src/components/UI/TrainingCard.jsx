@@ -67,7 +67,7 @@ function getButtonProps(status, config) {
   return { label: config.button, leadingIcon: undefined, disabled: false };
 }
 
-export default function TrainingCard({ type = "none", status, onAction }) {
+export default function TrainingCard({ type = "none", status, onAction, hideButton = false }) {
   const c = CONFIG[type] ?? CONFIG.none;
   const btnProps = getButtonProps(status, c);
 
@@ -92,15 +92,17 @@ export default function TrainingCard({ type = "none", status, onAction }) {
           </p>
           {c.subtitle && <p className="tc__subtitle">{c.subtitle}</p>}
         </div>
-        <Button
-          type={c.btnType}
-          size="small"
-          fullWidth
-          label={btnProps.label}
-          leadingIcon={btnProps.leadingIcon}
-          disabled={btnProps.disabled}
-          onClick={onAction}
-        />
+        {!hideButton && (
+          <Button
+            type={c.btnType}
+            size="small"
+            fullWidth
+            label={btnProps.label}
+            leadingIcon={btnProps.leadingIcon}
+            disabled={btnProps.disabled}
+            onClick={onAction}
+          />
+        )}
       </div>
     </div>
   );

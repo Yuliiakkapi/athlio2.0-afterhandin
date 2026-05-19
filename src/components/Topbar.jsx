@@ -6,6 +6,7 @@ import {
   ChatCircle,
   List,
   MagnifyingGlass,
+  Plus,
   ShareNetwork,
   X,
 } from "@phosphor-icons/react";
@@ -28,7 +29,7 @@ function pageConfig(title, RightIcon) {
 
 const TOPBAR_CONFIG = {
   "/progress/performance": pageConfig("Performance"),
-  "/progress/trainings":  pageConfig("Trainings"),
+  "/progress/trainings":  pageConfig("Trainings", Plus),
   "/progress/visibility": pageConfig("Profile visibility"),
   "/progress/compare":    pageConfig("Compare"),
   "/progress/leaderboard":pageConfig("Leaderboard"),
