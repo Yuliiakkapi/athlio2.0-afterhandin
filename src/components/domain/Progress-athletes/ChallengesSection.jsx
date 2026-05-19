@@ -1,34 +1,14 @@
 import { useNavigate } from "react-router-dom";
 import { Flame } from "@phosphor-icons/react";
+import { useChallenges } from "../../../context/ChallengesContext";
 import Badge from "../../UI/Badge";
 import Button from "../../UI/Button";
-import haalandImg from "../../../assets/images/haalandchallenge.png";
-import virginImg from "../../../assets/images/virginchallenge.png";
 import "./ChallengesSection.css";
-
-const CHALLENGES = [
-  {
-    id: 1,
-    title: "The Haaland Hunt",
-    goal: "10 goals in a season",
-    difficulty: "Hard",
-    diffColor: "danger",
-    tags: ["Striker"],
-    bg: haalandImg,
-  },
-  {
-    id: 2,
-    title: "The VVD Wall",
-    goal: "8 matches with zero goals",
-    difficulty: "Medium",
-    diffColor: "warning",
-    tags: ["Defenders", "GK"],
-    bg: virginImg,
-  },
-];
 
 export default function ChallengesSection() {
   const navigate = useNavigate();
+  const { challenges, joinChallenge } = useChallenges();
+  const newChallenges = challenges.filter((c) => c.status === "new");
   return (
     <section className="prog-section">
       <div className="prog-section-header">
@@ -42,7 +22,7 @@ export default function ChallengesSection() {
       </div>
 
       <div className="prog-challenges-scroll">
-        {CHALLENGES.map((c) => (
+        {newChallenges.map((c) => (
           <div
             key={c.id}
             className="prog-challenge-card"
@@ -70,7 +50,7 @@ export default function ChallengesSection() {
                 <p className="prog-challenge-title">{c.title}</p>
                 <p className="prog-challenge-goal">{c.goal}</p>
               </div>
-              <Button type="primary" size="xsmall" label="Join" />
+              <Button type="primary" size="xsmall" label="Join" onClick={() => joinChallenge(c.id)} />
             </div>
           </div>
         ))}

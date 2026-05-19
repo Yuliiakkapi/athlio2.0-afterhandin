@@ -1,0 +1,50 @@
+import haalandImg from "../assets/images/haalandchallenge.png";
+import virginImg   from "../assets/images/virginchallenge.png";
+
+export const ALL_CHALLENGES = [
+  {
+    id: 1,
+    title: "The Haaland Hunt",
+    goal: "10 goals in a season",
+    difficulty: "Hard",
+    diffColor: "danger",
+    tags: ["Striker"],
+    bg: haalandImg,
+    status: "new",
+    value: 0, max: 10,
+  },
+  {
+    id: 2,
+    title: "The VVD Wall",
+    goal: "8 matches with zero goals",
+    difficulty: "Medium",
+    diffColor: "warning",
+    tags: ["Defenders", "GK"],
+    bg: virginImg,
+    status: "new",
+    value: 0, max: 8,
+  },
+  {
+    id: 3,
+    title: "The Architect",
+    goal: "8 assists or key passes in a season",
+    difficulty: "Easy",
+    diffColor: "success",
+    tags: ["All positions"],
+    bg: virginImg,
+    status: "new",
+    value: 5, max: 8,
+  },
+  {
+    id: 4,
+    title: "The Striker",
+    goal: "20 goals in a year",
+    difficulty: "Hard",
+    diffColor: "danger",
+    tags: ["Striker"],
+    bg: haalandImg,
+    status: "done",
+    value: 20, max: 20,
+    completedOn: "May 10, 2026",
+  },
+];

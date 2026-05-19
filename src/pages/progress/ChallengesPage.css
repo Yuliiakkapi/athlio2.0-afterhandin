@@ -1,0 +1,172 @@
+.cp-page {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 100dvh;
+}
+
+/* ── List ─────────────────────────────────────────────────────── */
+
+.cp-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cp-empty {
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--muted);
+  text-align: center;
+  padding: 40px 0;
+  margin: 0;
+}
+
+/* ── Card ─────────────────────────────────────────────────────── */
+
+.cp-card {
+  position: relative;
+  width: 100%;
+  min-height: 200px;
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 12px;
+  background-size: cover;
+  background-position: center;
+}
+
+.cp-card__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0) 30%,
+    rgba(0, 0, 0, 0.82) 100%
+  );
+  pointer-events: none;
+}
+
+.cp-card__overlay--done {
+  background: rgba(0, 0, 0, 0.55);
+}
+
+/* ── Completed badge ──────────────────────────────────────────── */
+
+.cp-card__completed {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--primary-default);
+  border-radius: 20px;
+  padding: 6px 12px;
+  color: var(--white);
+  white-space: nowrap;
+  z-index: 2;
+}
+
+.cp-card__completed span {
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* ── Top row (badges) ─────────────────────────────────────────── */
+
+.cp-card__top {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+  z-index: 1;
+}
+
+/* ── Bottom row ───────────────────────────────────────────────── */
+
+.cp-card__bottom {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  z-index: 1;
+}
+
+.cp-card__info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cp-card__title {
+  font-family: var(--font-condensed);
+  font-size: var(--heading-3xl);
+  font-weight: 700;
+  font-style: italic;
+  color: var(--white);
+  text-transform: uppercase;
+  line-height: 1;
+  margin: 0;
+}
+
+.cp-card__goal {
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--neutral-300);
+  margin: 0;
+}
+
+/* ── Progress bar ─────────────────────────────────────────────── */
+
+.cp-card__progress {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  z-index: 1;
+  margin-top: 10px;
+}
+
+.cp-card__progress-track {
+  height: 6px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.cp-card__progress-fill {
+  height: 100%;
+  border-radius: 3px;
+  background: linear-gradient(90deg, #33f578 0%, #e7fc6f 100%);
+  transition: width 0.3s ease;
+}
+
+.cp-card__progress-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cp-card__progress-label {
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.cp-card__progress-value {
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--white);
+}
