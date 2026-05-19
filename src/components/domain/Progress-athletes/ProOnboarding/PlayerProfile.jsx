@@ -1,6 +1,6 @@
-import { useState } from "react";
 import { Info } from "@phosphor-icons/react";
 import NumberPicker from "../../../../components/UI/NumberPicker";
+import { useSkills } from "../../../../context/SkillsContext";
 import "./PlayerProfile.css";
 
 const SKILLS = [
@@ -23,9 +23,7 @@ function SkillCard({ label, value, onChange }) {
 }
 
 export default function PlayerProfile() {
-  const [skills, setSkills] = useState(
-    Object.fromEntries(SKILLS.map((s) => [s.key, 5]))
-  );
+  const { skills, setSkills } = useSkills();
 
   function update(key, val) {
     setSkills((prev) => ({ ...prev, [key]: val }));
