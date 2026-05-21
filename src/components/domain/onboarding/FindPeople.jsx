@@ -2,8 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { supabase } from "../../../lib/supabase";
 import { follow, unfollow, isFollowing } from "../../../lib/follows";
 import SearchBar from "../../UI/SearchBar";
-import Button from "../../UI/Button";
-import ProfilePicture from "../../UI/ProfilePicture";
+import PlayerCard from "../../UI/PlayerCard";
 import "./FindPeople.css";
 
 export default function FindPeople({ sport, position, playingStyle }) {
@@ -216,40 +215,19 @@ function PlayerCardItem({ profile, isFollowing, onToggleFollow }) {
     return () => { mounted = false; };
   }, [profile.club_id]);
 
-  const roleText = profile.role ? profile.role.charAt(0).toUpperCase() + profile.role.slice(1) : "";
-  const positions = Array.isArray(profile.position)
-    ? profile.position
-    : profile.position
-      ? [profile.position]
-      : [];
+  const isAthlete = !profile.role || profile.role === "athlete" || profile.role === "player";
+  const shaped = {
+    ...profile,
+    clubs: clubName ? { name: clubName } : null,
+    nationality: profile.country,
+  };
 
   return (
-    <div className="player-card-item">
-      <ProfilePicture imgUrl={profile.avatar_url || ""} size="large" verified={false} />
-      <div className="player-card-content">
-        <div className="player-card-header">
-          <div>
-            <h3 className="player-card-name">{profile.full_name || "Unnamed"}</h3>
-            <div className="player-card-badges">
-              {roleText && <span className="badge">{roleText}</span>}
-              {positions.map((pos) => (
-                <span key={pos} className="badge">{pos.toUpperCase()}</span>
-              ))}
-            </div>
-          </div>
-        </div>
-        <div className="player-card-info">
-          {clubName && <span className="player-card-club">{clubName}</span>}
-          {clubName && profile.country && <span className="player-card-separator">•</span>}
-          {profile.country && <span className="player-card-country">{profile.country}</span>}
-        </div>
-      </div>
-      <Button
-        size="small"
-        type={isFollowing ? "subtle" : "primary"}
-        label={isFollowing ? "Following" : "Follow"}
-        onClick={onToggleFollow}
-      />
-    </div>
+    <PlayerCard
+      profile={shaped}
+      infoType={isAthlete ? "club" : "professional"}
+      isFollowing={isFollowing}
+      onFollow={onToggleFollow}
+    />
   );
 }

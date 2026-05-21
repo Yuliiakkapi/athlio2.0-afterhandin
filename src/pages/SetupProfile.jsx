@@ -358,7 +358,10 @@ export default function Setup() {
               club_id: form.club_id,
               club_other_name: form.club_other_name,
             }}
+            userCity={form.city}
+            userCountry={form.country}
             onChange={(v) => set(v)}
+            onNext={next}
           />
         )}
 

@@ -1,25 +1,24 @@
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { CaretDown, MagnifyingGlass, Plus, X } from "@phosphor-icons/react";
-import CLUBS, { FEATURED_IDS } from "../../../data/clubs.js";
+import { supabase } from "../../../lib/supabase.js";
 import "./ClubPicker.css";
-
-const FEATURED = FEATURED_IDS.map(id => CLUBS.find(c => c.id === id)).filter(Boolean);
 
 const TEAM_TYPES = ["Main Team", "Reserve", "U-23", "U-21", "U-19", "Academy", "Youth"];
 
-function searchClubs(query) {
+function searchClubs(clubs, query) {
   const term = query.trim().toLowerCase();
   if (!term) return [];
-  return CLUBS.filter(c =>
+  return clubs.filter(c =>
     c.name.toLowerCase().includes(term) ||
-    c.league.toLowerCase().includes(term) ||
-    c.country.toLowerCase().includes(term)
+    (c.league && c.league.toLowerCase().includes(term)) ||
+    (c.country && c.country.toLowerCase().includes(term))
   ).slice(0, 20);
 }
 
 function ClubLogo({ club }) {
-  if (club.logo) {
-    return <img src={club.logo} alt={`${club.name} logo`} className="team-club-logo" />;
+  const logoSrc = club.logo_url || club.logo;
+  if (logoSrc) {
+    return <img src={logoSrc} alt={`${club.name} logo`} className="team-club-logo" />;
   }
   const initials = club.name
     .split(/\s+/)
@@ -109,28 +108,98 @@ function AddTeamSheet({ onClose, onSubmit }) {
   );
 }
 
-export default function ClubPicker({ value, onChange }) {
-  const [query, setQuery]             = useState("");
+function pickFeatured(clubs, userCity, userCountry) {
+  const city    = (userCity    || "").toLowerCase().trim();
+  const country = (userCountry || "").toLowerCase().trim();
+
+  if (!city && !country) return clubs.slice(0, 4);
+
+  const scored = clubs.map(c => {
+    let score = 0;
+    if (city    && c.city    && c.city.toLowerCase().includes(city))       score += 2;
+    if (country && c.country && c.country.toLowerCase().includes(country)) score += 1;
+    return { ...c, _score: score };
+  });
+
+  const nearby = scored.filter(c => c._score > 0).sort((a, b) => b._score - a._score);
+  if (nearby.length >= 4) return nearby.slice(0, 4);
+
+  const rest = scored.filter(c => c._score === 0).slice(0, 4 - nearby.length);
+  return [...nearby, ...rest];
+}
+
+export default function ClubPicker({ value, onChange, onNext, userCity, userCountry }) {
+  const [query, setQuery]               = useState("");
   const [showAddSheet, setShowAddSheet] = useState(false);
+  const [clubs, setClubs]               = useState([]);
+  const [featured, setFeatured]         = useState([]);
+  const [loading, setLoading]           = useState(true);
   const inputRef = useRef(null);
 
-  const results  = useMemo(() => searchClubs(query), [query]);
-  const showList = query.trim().length >= 2 ? results : FEATURED;
-  const listLabel = query.trim().length >= 2 ? "Search results" : "Featured clubs";
+  useEffect(() => {
+    async function fetchClubs() {
+      let city    = userCity    || "";
+      let country = userCountry || "";
+
+      // Fall back to browser geolocation if no location from the form
+      if (!city && !country && navigator.geolocation) {
+        try {
+          const pos = await new Promise((res, rej) =>
+            navigator.geolocation.getCurrentPosition(res, rej, { timeout: 5000 })
+          );
+          const geo = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?lat=${pos.coords.latitude}&lon=${pos.coords.longitude}&format=json`
+          ).then(r => r.json());
+          city    = geo.address?.city || geo.address?.town || geo.address?.village || "";
+          country = geo.address?.country || "";
+        } catch {
+          // geolocation unavailable or denied — proceed without
+        }
+      }
+
+      const { data, error } = await supabase
+        .from("clubs")
+        .select("id, name, league, country, city, logo_url")
+        .order("name", { ascending: true });
+
+      if (error) {
+        console.error("clubs fetch error:", error);
+      } else if (data) {
+        setClubs(data);
+        setFeatured(pickFeatured(data, city, country));
+      }
+      setLoading(false);
+    }
+    fetchClubs();
+  }, [userCity, userCountry]);
+
+  const results  = useMemo(() => searchClubs(clubs, query), [clubs, query]);
+  const showList = query.trim().length >= 2 ? results : featured;
+  const hasLocation = !!(userCity || userCountry);
+  const listLabel = query.trim().length >= 2 ? "Search results" : hasLocation ? "Nearby clubs" : "Featured clubs";
 
   function pickClub(club) {
-    onChange({ club_id: null, club_other_name: club.name });
+    onChange({ club_id: club.id, club_other_name: club.name });
   }
 
-  function handleAddTeam({ clubName, city, league, teamType }) {
+  async function handleAddTeam({ clubName, city, league, teamType }) {
+    const { data, error } = await supabase
+      .from("clubs")
+      .insert({ name: clubName, city: city || null, league: league || null, country: userCountry || null, sport: "football" })
+      .select("id")
+      .single();
+
+    const clubId = (!error && data) ? data.id : null;
+
     onChange({
-      club_id: null,
+      club_id: clubId,
       club_other_name: clubName,
       club_city: city || undefined,
       club_league: league || undefined,
       club_team_type: teamType,
     });
     setShowAddSheet(false);
+    onNext?.();
   }
 
   return (
@@ -170,8 +239,9 @@ export default function ClubPicker({ value, onChange }) {
         <p className="team-list-label">{listLabel}</p>
 
         <div className="team-list">
-          {showList.map(club => {
-            const selected = value?.club_other_name === club.name;
+          {loading && <p className="team-empty">Loading clubs…</p>}
+          {!loading && showList.map(club => {
+            const selected = value?.club_id === club.id || value?.club_other_name === club.name;
             return (
               <button
                 key={club.id}
@@ -188,7 +258,7 @@ export default function ClubPicker({ value, onChange }) {
             );
           })}
 
-          {query.trim().length >= 2 && results.length === 0 && (
+          {!loading && query.trim().length >= 2 && results.length === 0 && (
             <p className="team-empty">No clubs found for "{query}"</p>
           )}
 
