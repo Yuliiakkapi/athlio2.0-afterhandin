@@ -98,6 +98,7 @@
   overflow: hidden;
   border-radius: 0;       /* images bleed edge-to-edge, no rounded box */
   cursor: pointer;
+  font-size: 0;           /* eliminate line-height spacing gaps */
 
   display: flex;
   flex-direction: column;
