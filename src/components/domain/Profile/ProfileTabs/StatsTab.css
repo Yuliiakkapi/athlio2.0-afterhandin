@@ -3,7 +3,7 @@
   flex-direction: column;
   gap: 8px; /* spacing between posts */
   background-color: var(--neutral-100);
-  padding: 24px 8px;
+  padding: 24px 16px;
 }
 
 main:has(.profile-stats-tab) {

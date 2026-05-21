@@ -1,26 +1,36 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { supabase } from "../../../../lib/supabase";
-import CardInfoSingle from "../../../UI/InfoCards";
-import { PencilSimpleLine } from "@phosphor-icons/react";
-import Button from "../../../UI/Button";
+import ProfileInfoCard from "../../../UI/InfoCards";
+import CareerHistory from "../CareerHistory";
 import "./InfoTab.css";
-import ExperienceList from "../../Scouting/ExperienceList";
 
 export default function InfoTab({ profile, isMe = false }) {
-  const navigate = useNavigate();
+  const [infoRow, setInfoRow] = useState(null);
   const [experiences, setExperiences] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loadingExp, setLoadingExp] = useState(true);
 
   useEffect(() => {
     if (!profile?.id) return;
+
+    async function fetchInfo() {
+      const { data } = await supabase
+        .from("info")
+        .select(
+          "nationality, nationality_code, birth_date, height_cm, weight_kg, shirt_number, preferred_foot, injured, playing_style"
+        )
+        .eq("profile_id", profile.id)
+        .order("updated_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+
+      setInfoRow(data || null);
+    }
 
     function sanitizeLogo(url) {
       if (!url || typeof url !== "string") return null;
       try {
         const u = new URL(url);
-        if (u.protocol !== "https:") return null; // force https only
-        // hard-block known bad proxy hosts
+        if (u.protocol !== "https:") return null;
         if (u.hostname.includes("edgeone.app")) return null;
         return url;
       } catch {
@@ -29,72 +39,47 @@ export default function InfoTab({ profile, isMe = false }) {
     }
 
     async function fetchExperiences() {
-      setLoading(true);
-
+      setLoadingExp(true);
       const { data, error } = await supabase
         .from("experiences")
-        .select(
-          "team_name, org_name, logo_url, start_date, end_date, is_current",
-        )
+        .select("start_date, end_date, is_current, matches_played, goals_scored, club:club_id(name, logo_url, league)")
         .eq("profile_id", profile.id)
         .order("start_date", { ascending: false });
 
-      if (error) {
-        console.error("Error fetching experiences:", error);
-      } else {
+      if (!error) {
         const rows = Array.isArray(data) ? data : [];
-        const processed = rows.map((row) => {
-          const clean = sanitizeLogo(row.logo_url);
-          return {
-            ...row,
-            logo_url: clean, // ExperienceList uses this
-            logo: clean, // optional normalized key
-          };
-        });
-        setExperiences(processed);
+        setExperiences(
+          rows.map((row) => {
+            const clean = sanitizeLogo(row.logo_url);
+            return { ...row, logo_url: clean, logo: clean };
+          })
+        );
       }
-
-      setLoading(false);
+      setLoadingExp(false);
     }
 
+    fetchInfo();
     fetchExperiences();
   }, [profile?.id]);
 
-  const playersWithExperiences = [
-    {
-      id: profile.id,
-      experiences: experiences || [],
-    },
-  ];
+  const combinedInfo = {
+    birthDate: infoRow?.birth_date || null,
+    nationality: infoRow?.nationality || null,
+    nationalityCode: infoRow?.nationality_code || null,
+    location: profile.country || null,
+    heightCm: infoRow?.height_cm ?? profile.height_cm ?? null,
+    weightKg: infoRow?.weight_kg ?? profile.weight_kg ?? null,
+    injured: infoRow?.injured ?? null,
+    preferredFoot: infoRow?.preferred_foot || null,
+    playingStyle: infoRow?.playing_style || null,
+    shirtNumber: infoRow?.shirt_number ?? null,
+  };
 
   return (
     <main>
       <div className="profile-info-tab">
-        {/* === Header with edit button === */}
-        <div className="info-tab-header">
-          {isMe && (
-            <Button
-              size="medium"
-              type="outline"
-              leadingIcon={PencilSimpleLine}
-              className="edit-info-btn"
-              onClick={() => navigate("/profile/me/edit")}
-            />
-          )}
-        </div>
-
-        {/* === Info cards === */}
-        <CardInfoSingle profile={profile} />
-
-        {/* === Experiences section === */}
-        <section className="info-experience-section">
-          <h3 className="info-section-title">Career history</h3>
-          {loading ? (
-            <p>Loading experience...</p>
-          ) : (
-            <ExperienceList players={playersWithExperiences} />
-          )}
-        </section>
+        <ProfileInfoCard info={combinedInfo} isMe={isMe} />
+        <CareerHistory profile={profile} experiences={experiences} />
       </div>
     </main>
   );

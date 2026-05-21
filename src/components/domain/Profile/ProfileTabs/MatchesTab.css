@@ -1,10 +1,8 @@
-﻿.profile-matches-tab {
+.profile-matches-tab {
   display: flex;
   flex-direction: column;
   align-items: start;
   gap: 8px;
-  background-color: var(--neutral-100);
-  padding: 24px 16px;
 }
 
 main:has(.profile-matches-tab) {
@@ -12,34 +10,25 @@ main:has(.profile-matches-tab) {
   padding-right: 0;
 }
 
-.empty-state-box {
-  display: flex;
-  flex-direction: column;
-  align-items: start;
-  justify-content: center;
-  text-align: center;
-  background: white;
-  border-radius: 8px;
-  padding: 20px 16px;
-  width: 100%;
-}
-
-.empty-title {
-  font-size: var(--text-base);
-  font-weight: 600;
-  color: var(--black);
-  margin-bottom: 4px;
-}
-
-.empty-subtitle {
-  font-size: var(--text-sm);
-  color: var(--neutral-800);
-}
-
-.empty-icon-container {
+.matches-empty-state {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 16px;
-  gap: 4px;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+  gap: 8px;
+  padding: 32px 0;
+}
+
+.matches-empty-title {
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--black);
+}
+
+.matches-empty-subtitle {
+  font-size: var(--text-sm);
+  color: var(--neutral-700);
+  margin-bottom: 8px;
 }

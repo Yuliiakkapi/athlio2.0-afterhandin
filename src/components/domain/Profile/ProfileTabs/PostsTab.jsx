@@ -134,18 +134,15 @@ export default function PostsTab({ profile, isMe = false }) {
     return (
       <main>
         <div className="profile-posts-tab">
-          <div className="empty-state-box">
-            <p className="empty-title">You don’t have available posts yet.</p>
-            <p className="empty-subtitle">Add your post manually.</p>
-          </div>
-          <div className="empty-icon-container">
+          <div className="posts-empty-state">
+            <p className="posts-empty-title">Your feed is empty.</p>
+            <p className="posts-empty-subtitle">Add your first post.</p>
             <IconButton
               size="medium"
               type="primary"
-                icon={Plus}
+              icon={Plus}
               onClick={() => navigate("/add-post")}
             />
-            <p className="empty-subtitle">Add a post.</p>
           </div>
         </div>
       </main>
@@ -157,7 +154,9 @@ export default function PostsTab({ profile, isMe = false }) {
     return (
       <main>
         <div className="profile-posts-tab">
-          <p className="empty-subtitle">No posts yet.</p>
+          <div className="posts-empty-state">
+            <p className="posts-empty-title">No posts yet.</p>
+          </div>
         </div>
       </main>
     );

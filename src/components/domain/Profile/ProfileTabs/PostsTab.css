@@ -1,9 +1,8 @@
-﻿.profile-posts-tab {
+.profile-posts-tab {
   display: flex;
   flex-direction: column;
-  gap: 8px; /* spacing between posts */
-  background-color: var(--neutral-100);
-  padding: 24px 8px;
+  gap: 8px;
+  padding: 24px 16px;
 }
 
 main:has(.profile-posts-tab) {
@@ -11,42 +10,25 @@ main:has(.profile-posts-tab) {
   padding-right: 0;
 }
 
-/* === Empty state box (white box inside gray area) === */
-.empty-state-box {
+.posts-empty-state {
   display: flex;
   flex-direction: column;
-  align-items: start;
+  align-items: center;
   justify-content: center;
   text-align: center;
-  background: white; /* ✅ White background */
-  border-radius: 8px;
-  padding: 20px 16px;
   width: 100%;
+  gap: 8px;
+  padding: 32px 0;
 }
 
-.empty-title {
+.posts-empty-title {
   font-size: var(--text-base);
   font-weight: 600;
   color: var(--black);
-  margin-bottom: 4px;
 }
 
-.empty-subtitle {
+.posts-empty-subtitle {
   font-size: var(--text-sm);
-  color: var(--neutral-800);
-}
-
-.empty-icon-container {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  justify-content: center;
-  align-items: center;
-  margin-top: 16px;
-}
-
-/* Optional size or positioning control */
-.empty-icon-container .icon-button {
-  padding: 12px;
-  flex-shrink: 0;
+  color: var(--neutral-700);
+  margin-bottom: 8px;
 }

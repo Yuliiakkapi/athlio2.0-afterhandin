@@ -114,20 +114,16 @@ export default function MatchesTab({ profile, isMe = false }) {
   if (!matches.length && isMe) {
     return (
       <main>
-        <div className="profile-stats-tab">
-          <div className="empty-state-box">
-            <p className="empty-title">You don’t have available matches yet.</p>
-            <p className="empty-subtitle">Add your match manually.</p>
-          </div>
-
-          <div className="empty-icon-container">
+        <div className="profile-matches-tab">
+          <div className="matches-empty-state">
+            <p className="matches-empty-title">Your match history is empty.</p>
+            <p className="matches-empty-subtitle">Add your first match.</p>
             <IconButton
               size="medium"
               type="primary"
               icon={Plus}
               onClick={() => navigate("/add-post")}
             />
-            <p className="empty-subtitle">Add a match.</p>
           </div>
         </div>
       </main>
@@ -138,8 +134,10 @@ export default function MatchesTab({ profile, isMe = false }) {
   if (!matches.length)
     return (
       <main>
-        <div className="profile-stats-tab">
-          <p className="empty-subtitle">No match posts yet.</p>
+        <div className="profile-matches-tab">
+          <div className="matches-empty-state">
+            <p className="matches-empty-title">No match history yet.</p>
+          </div>
         </div>
       </main>
     );
