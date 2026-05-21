@@ -3,6 +3,7 @@
   flex-direction: column;
   align-items: start;
   gap: 8px;
+  padding: 0px 16px;
 }
 
 main:has(.profile-matches-tab) {

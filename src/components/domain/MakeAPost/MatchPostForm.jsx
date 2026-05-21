@@ -102,11 +102,11 @@ export default function MatchPostForm({ onCreated }) {
     opponent_team: { club_id: null, club_other_name: null },
 
     // score & stats
-    your_score: null,
-    opponent_score: null,
-    minutes_played: null,
-    goals: null,
-    assists: null,
+    your_score: "",
+    opponent_score: "",
+    minutes_played: "",
+    goals: "",
+    assists: "",
   });
 
   const navigate = useNavigate();
