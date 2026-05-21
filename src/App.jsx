@@ -1,39 +1,41 @@
+import { lazy, Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
 import { TargetsProvider } from "./context/TargetsContext";
 import { ChallengesProvider } from "./context/ChallengesContext";
 import { SkillsProvider } from "./context/SkillsContext";
 import { ConnectedAppsProvider } from "./context/ConnectedAppsContext";
 import AppShell from "./layouts/AppShell";
-import Landing from "./pages/Landing";
-import Intro from "./pages/Intro";
-import Auth from "./pages/Auth";
-import SetupProfile from "./pages/SetupProfile";
-import AuthCallback from "./pages/AuthCallback";
-import Home from "./pages/Home";
-import ProfileMe from "./pages/ProfileMe";
-import ProfileEdit from "./pages/ProfileEdit";
-import ProfileFollowing from "./pages/ProfileFollowing";
-import ProfileOther from "./pages/ProfileOther";
-import Notifications from "./pages/Notifications";
-import PostDetails from "./pages/PostDetails";
-import AddPost from "./pages/AddPost";
-import Chat from "./pages/Chat";
-import ChatDetail from "./pages/ChatDetail";
-import Progress from "./pages/Progress";
-import Scouting from "./pages/Scouting";
-import YourTeam from "./pages/YourTeam";
-import Watchlist from "./pages/Watchlist";
-import ProfileSearch from "./pages/ProfileSearch";
-import NotFound from "./pages/NotFound";
-import UpgradePro from "./pages/UpgradePro";
-import ProOnboarding from "./pages/ProOnboarding";
-import TrainingsPage from "./pages/progress/TrainingsPage";
-import VisibilityPage from "./pages/progress/VisibilityPage";
-import ComparePage from "./pages/progress/ComparePage";
-import LeaderboardPage from "./pages/progress/LeaderboardPage";
-import TargetsPage from "./pages/progress/TargetsPage";
-import ChallengesPage from "./pages/progress/ChallengesPage";
-import PerformancePage from "./pages/progress/PerformancePage";
+
+const Landing = lazy(() => import("./pages/Landing"));
+const Intro = lazy(() => import("./pages/Intro"));
+const Auth = lazy(() => import("./pages/Auth"));
+const SetupProfile = lazy(() => import("./pages/SetupProfile"));
+const AuthCallback = lazy(() => import("./pages/AuthCallback"));
+const Home = lazy(() => import("./pages/Home"));
+const ProfileMe = lazy(() => import("./pages/ProfileMe"));
+const ProfileEdit = lazy(() => import("./pages/ProfileEdit"));
+const ProfileFollowing = lazy(() => import("./pages/ProfileFollowing"));
+const ProfileOther = lazy(() => import("./pages/ProfileOther"));
+const Notifications = lazy(() => import("./pages/Notifications"));
+const PostDetails = lazy(() => import("./pages/PostDetails"));
+const AddPost = lazy(() => import("./pages/AddPost"));
+const Chat = lazy(() => import("./pages/Chat"));
+const ChatDetail = lazy(() => import("./pages/ChatDetail"));
+const Progress = lazy(() => import("./pages/Progress"));
+const Scouting = lazy(() => import("./pages/Scouting"));
+const YourTeam = lazy(() => import("./pages/YourTeam"));
+const Watchlist = lazy(() => import("./pages/Watchlist"));
+const ProfileSearch = lazy(() => import("./pages/ProfileSearch"));
+const NotFound = lazy(() => import("./pages/NotFound"));
+const UpgradePro = lazy(() => import("./pages/UpgradePro"));
+const ProOnboarding = lazy(() => import("./pages/ProOnboarding"));
+const TrainingsPage = lazy(() => import("./pages/progress/TrainingsPage"));
+const VisibilityPage = lazy(() => import("./pages/progress/VisibilityPage"));
+const ComparePage = lazy(() => import("./pages/progress/ComparePage"));
+const LeaderboardPage = lazy(() => import("./pages/progress/LeaderboardPage"));
+const TargetsPage = lazy(() => import("./pages/progress/TargetsPage"));
+const ChallengesPage = lazy(() => import("./pages/progress/ChallengesPage"));
+const PerformancePage = lazy(() => import("./pages/progress/PerformancePage"));
 
 export default function App() {
   return (
@@ -41,6 +43,7 @@ export default function App() {
     <SkillsProvider>
     <ChallengesProvider>
     <TargetsProvider>
+    <Suspense fallback={null}>
     <Routes>
       <Route path="upgrade-pro" element={<UpgradePro />} />
       <Route path="pro-onboarding" element={<ProOnboarding />} />
@@ -79,6 +82,7 @@ export default function App() {
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
+    </Suspense>
     </TargetsProvider>
     </ChallengesProvider>
     </SkillsProvider>
