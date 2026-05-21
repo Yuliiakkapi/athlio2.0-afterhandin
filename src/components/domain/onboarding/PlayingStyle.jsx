@@ -341,7 +341,7 @@ export default function PlayingStyle({ value, onChange, positions }) {
       {/* Description */}
       {active && (
         <div className="style-desc">
-          <p>{active.description}</p>
+          <p className="text-base-regular">{active.description}</p>
         </div>
       )}
     </div>

@@ -20,7 +20,7 @@ import GoalsField from "../components/domain/onboarding/GoalsField";
 import GoalsSelect from "../components/domain/onboarding/GoalsSelect";
 import AddHighlight from "../components/domain/onboarding/AddHighlight";
 import Notifications from "../components/domain/onboarding/Notifications";
-import Bio from "../components/domain/onboarding/Bio";
+import FindPeople from "../components/domain/onboarding/FindPeople";
 import FollowSuggestions from "../components/domain/onboarding/FollowSuggestions";
 import Premium from "../components/domain/onboarding/Premium";
 import { getSteps } from "../utils/steps";
@@ -252,6 +252,8 @@ export default function Setup() {
           return true; // highlight is optional — Post or Skip both advance
         case "notifications":
           return true; // always enabled — user can skip or turn on
+        case "find-people":
+          return true; // find-people is optional — can skip
         default:
           return true;
       }
@@ -328,15 +330,20 @@ export default function Setup() {
           />
         )}
 
-        {stepId === "bio" && (
-          <Bio
-            value={form.bio}
-            onChange={(v) => set({ bio: v })}
+        {stepId === "find-people" && (
+          <FindPeople
+            role={role}
             sport={form.primarySport}
             position={form.position}
             clubId={form.club_id}
-            clubOtherName={form.club_other_name}
             country={form.country}
+            goals={
+              role === "athlete"
+                ? form.goals
+                : typeof form.talent_preferences === "string"
+                  ? form.talent_preferences
+                  : ""
+            }
           />
         )}
 
@@ -492,6 +499,7 @@ export default function Setup() {
           stepId === "highlight"     ? "Skip" :
           stepId === "notifications" ? "Skip" :
           stepId === "location"      ? "Skip" :
+          stepId === "find-people"   ? "Skip" :
           null
         }
         onSecondary={
@@ -499,6 +507,8 @@ export default function Setup() {
           stepId === "goals"     ? () => next() :
           stepId === "highlight" ? () => next() :
           stepId === "notifications" ? () => next() :
+          stepId === "location"  ? () => next() :
+          stepId === "find-people" ? () => next() :
           null
         }
       />
