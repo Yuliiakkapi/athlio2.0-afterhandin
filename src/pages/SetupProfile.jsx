@@ -254,6 +254,8 @@ export default function Setup() {
           return true; // always enabled — user can skip or turn on
         case "find-people":
           return true; // find-people is optional — can skip
+        case "premium":
+          return true; // premium is optional — can skip
         default:
           return true;
       }
@@ -267,6 +269,7 @@ export default function Setup() {
       {/* Fixed topbar: back arrow + progress bar */}
       <OnboardingTopbar
         onBack={back}
+        onClose={stepId === "premium" ? () => navigate("/home") : undefined}
         currentStep={idx + 1}
         totalSteps={Math.max(steps.length, 1)}
         showBack={true}
@@ -335,19 +338,13 @@ export default function Setup() {
             role={role}
             sport={form.primarySport}
             position={form.position}
+            playingStyle={form.playingStyle}
             clubId={form.club_id}
             country={form.country}
-            goals={
-              role === "athlete"
-                ? form.goals
-                : typeof form.talent_preferences === "string"
-                  ? form.talent_preferences
-                  : ""
-            }
           />
         )}
 
-        {stepId === "premium" && <Premium onContinue={() => next()} />}
+        {stepId === "premium" && <Premium />}
 
         {stepId === "club" && (role === "athlete" || role === "scout" || role === "professional") && (
           <ClubPicker
@@ -455,7 +452,7 @@ export default function Setup() {
 
         {/* Removed final 'review' step per request (auto-finish after last configured step) */}
       </StepContainer>
-      <OnboardingNavbar
+      {stepId !== "premium" && <OnboardingNavbar
         onBack={back}
         onNext={
           stepId === "notifications"
@@ -511,7 +508,7 @@ export default function Setup() {
           stepId === "find-people" ? () => next() :
           null
         }
-      />
+      />}
     </div>
   );
 }

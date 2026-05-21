@@ -5,17 +5,17 @@
  */
 export function getSteps(role) {
   if (role === "athlete") {
-    return ["role", "name", "dob", "position", "style", "leg", "location", "club", "goals", "highlight", "notifications", "find-people"];
+    return ["role", "name", "dob", "position", "style", "leg", "location", "club", "goals", "highlight", "notifications", "find-people", "premium"];
   }
 
   // "professional" means the user picked Professional but hasn't chosen a sub-role yet
   if (role === "professional") {
-    return ["role", "profession", "name", "dob", "location", "find-people", "scout"];
+    return ["role", "profession", "name", "dob", "location", "find-people", "premium"];
   }
 
   // Sub-roles set after the profession step — skip the profession picker
   if (role === "scout" || role === "coach" || role === "manager" || role === "agent") {
-    return ["role", "name", "dob", "location", "find-people", "scout"];
+    return ["role", "name", "dob", "location", "find-people", "premium"];
   }
 
   if (role === "organization") {

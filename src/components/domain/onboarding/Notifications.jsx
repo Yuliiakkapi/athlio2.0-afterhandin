@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import stadiumImg from "../../../assets/images/stadium-notif.jpg";
+import footballImg from "../../../assets/images/footballrun.png";
 import avatar1 from "../../../assets/images/notif-avatar-1.jpg";
 import avatar2 from "../../../assets/images/notif-avatar-2.jpg";
 import "./Notifications.css";
@@ -49,6 +49,8 @@ const NOTIFICATIONS = [
 
 // Card height (78) + gap (8) = one slot
 const SLOT = 86;
+// Scale per visual position: 0 = top (full), 1 = bottom (smaller)
+const SCALES = [1, 0.86];
 
 function NotifAvatar({ card }) {
   if (card.avatar) {
@@ -61,9 +63,9 @@ function NotifAvatar({ card }) {
   );
 }
 
-function NotifCard({ card, secondary }) {
+function NotifCard({ card }) {
   return (
-    <div className={`notif-card${secondary ? " notif-card--secondary" : ""}`}>
+    <div className="notif-card">
       <NotifAvatar card={card} />
       <div className="notif-card-body">
         <div className="notif-card-name-row">
@@ -77,23 +79,21 @@ function NotifCard({ card, secondary }) {
 }
 
 export default function Notifications() {
-  // Stable id counter and notif index pointer — no stale closures
-  const nextId    = useRef(3);
-  const nextNotif = useRef(3); // initial cards use indices 0-2
+  const nextId    = useRef(2);
+  const nextNotif = useRef(2);
 
   const [cards, setCards] = useState(() =>
-    NOTIFICATIONS.slice(0, 3).map((notif, i) => ({ id: i, notif }))
+    NOTIFICATIONS.slice(0, 2).map((notif, i) => ({ id: i, notif }))
   );
   const [animating, setAnimating] = useState(false);
 
   useEffect(() => {
-    const ANIM_MS = 800; // must match CSS transition duration
+    const ANIM_MS = 800;
     const HOLD_MS = 4000;
 
     const timer = setInterval(() => {
       setAnimating(true);
 
-      // Wait for transition to fully finish (+60ms buffer) before swapping DOM
       setTimeout(() => {
         setCards(prev => [
           ...prev.slice(1),
@@ -121,28 +121,36 @@ export default function Notifications() {
       <div className="notif-visual">
         {/* Phone frame */}
         <div className="notif-phone">
-          <img src={stadiumImg} alt="" className="notif-phone-bg" aria-hidden="true" />
+          <img src={footballImg} alt="" className="notif-phone-bg" aria-hidden="true" />
           <div className="notif-phone-dim" aria-hidden="true" />
           <div className="notif-timer" aria-hidden="true">6:07</div>
         </div>
 
-        {/* Ticker cards — overflow hidden clips exiting top card and incoming bottom card */}
+        {/* Stacked ticker cards — each slot moves up one position per tick,
+            scaling from small (bottom) to full (top); exiting card dissolves upward */}
         <div className="notif-cards" aria-live="polite" aria-atomic="true">
-          {cards.map((item, i) => (
-            <div
-              key={item.id}
-              className="notif-card-slot"
-              style={{
-                transform: `translateY(${(animating ? i - 1 : i) * SLOT}px)`,
-                opacity: i === 0 && animating ? 0 : 1,
-                transition: animating
-                  ? "transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.6s ease-in"
-                  : "none",
-              }}
-            >
-              <NotifCard card={item.notif} secondary={i === 1} />
-            </div>
-          ))}
+          {cards.map((item, i) => {
+            const targetPos = animating ? i - 1 : i;
+            const scale = targetPos < 0 ? 1 : (SCALES[targetPos] ?? SCALES[SCALES.length - 1]);
+            const isExiting = i === 0 && animating;
+
+            return (
+              <div
+                key={item.id}
+                className="notif-card-slot"
+                style={{
+                  transform: `translateY(${targetPos * SLOT}px) scale(${scale})`,
+                  transformOrigin: "center top",
+                  opacity: isExiting ? 0 : 1,
+                  transition: animating
+                    ? "transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.5s ease-out"
+                    : "none",
+                }}
+              >
+                <NotifCard card={item.notif} />
+              </div>
+            );
+          })}
         </div>
 
         {/* Bottom fade */}

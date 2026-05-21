@@ -121,3 +121,20 @@
   font-size: 3px;
   color: var(--muted, #91909b);
 }
+
+.find-people-section-label {
+  margin: 0 0 8px 0;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted, #91909b);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.find-people-status {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--muted, #91909b);
+}

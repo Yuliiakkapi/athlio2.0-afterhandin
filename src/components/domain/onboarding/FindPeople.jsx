@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { supabase } from "../../../lib/supabase";
 import { follow, unfollow, isFollowing } from "../../../lib/follows";
 import SearchBar from "../../UI/SearchBar";
@@ -6,103 +6,125 @@ import Button from "../../UI/Button";
 import ProfilePicture from "../../UI/ProfilePicture";
 import "./FindPeople.css";
 
-export default function FindPeople({ role, sport, position, clubId, country, goals }) {
-  const [allSuggestions, setAllSuggestions] = useState([]);
-  const [filteredSuggestions, setFilteredSuggestions] = useState([]);
+export default function FindPeople({ sport, position, playingStyle }) {
+  const [currentUserId, setCurrentUserId] = useState(null);
+  const [suggestions, setSuggestions] = useState([]);
+  const [suggestionsLoading, setSuggestionsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
-  const [loading, setLoading] = useState(true);
+  const [searchResults, setSearchResults] = useState([]);
+  const [searchLoading, setSearchLoading] = useState(false);
   const [followingMap, setFollowingMap] = useState({});
+  const searchTimer = useRef(null);
 
+  // Resolve current user once
   useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => {
+      setCurrentUserId(data?.user?.id ?? null);
+    });
+  }, []);
+
+  // Fetch suggested players (position-matched, style-matched, or same sport fallback)
+  useEffect(() => {
+    if (currentUserId === null) return;
     let mounted = true;
+
     (async () => {
-      setLoading(true);
-      const conditions = [];
-
-      if (goals) {
-        const parts = goals.split(",").map((s) => s.trim()).filter(Boolean);
-        for (const p of parts.slice(0, 3)) {
-          const esc = p.replace(/[,()]/g, "");
-          conditions.push(`goals.ilike.%${esc}%`);
-        }
-      }
-
-      if (sport) conditions.push(`primary_sport.eq.${sport}`);
-      if (clubId) conditions.push(`club_id.eq.${clubId}`);
-      if (country) conditions.push(`country.eq.${country}`);
-
+      setSuggestionsLoading(true);
       try {
-        const { data: userData } = await supabase.auth.getUser();
-        const uid = userData?.user?.id || null;
+        const posArr = Array.isArray(position) ? position : position ? [position] : [];
+        let data = [];
 
-        let data = null;
-
-        if (conditions.length > 0) {
-          const orStr = conditions.join(",");
-          const { data: qdata, error } = await supabase
+        // 1. Position overlap + same sport
+        if (posArr.length > 0 && sport) {
+          const { data: posMatches } = await supabase
             .from("profiles")
-            .select("id, full_name, avatar_url, primary_sport, club_id, country, goals, position, role")
-            .neq("id", uid)
-            .or(orStr)
-            .limit(12);
-          if (!error && qdata && qdata.length > 0) data = qdata;
+            .select("id, full_name, avatar_url, primary_sport, club_id, country, position, role")
+            .neq("id", currentUserId)
+            .eq("primary_sport", sport)
+            .overlaps("position", posArr)
+            .limit(5);
+          if (posMatches) data = posMatches;
         }
 
-        if (!data) {
-          const { data: all, error: ae } = await supabase
+        // 2. Supplement: same sport, not already included
+        if (data.length < 5 && sport) {
+          const excludeIds = new Set([currentUserId, ...data.map((p) => p.id)]);
+          const { data: all } = await supabase
             .from("profiles")
-            .select("id, full_name, avatar_url, primary_sport, club_id, country, goals, position, role")
-            .neq("id", uid)
-            .limit(200);
-          if (!ae && all && all.length > 0) {
-            const shuffled = all.sort(() => Math.random() - 0.5);
-            data = shuffled.slice(0, 12);
-          } else {
-            data = [];
-          }
+            .select("id, full_name, avatar_url, primary_sport, club_id, country, position, role")
+            .eq("primary_sport", sport)
+            .limit(20);
+          const extra = (all || []).filter((p) => !excludeIds.has(p.id)).slice(0, 5 - data.length);
+          if (extra) data = [...data, ...extra];
         }
 
-        if (mounted) {
-          setAllSuggestions(data || []);
-          setFilteredSuggestions(data || []);
-
-          const map = {};
-          await Promise.all(
-            (data || []).map(async (p) => {
-              try {
-                const f = await isFollowing(p.id);
-                map[p.id] = f;
-              } catch (e) {
-                map[p.id] = false;
-              }
-            }),
-          );
-          if (mounted) setFollowingMap(map);
+        // 3. Final fallback: any profiles
+        if (data.length === 0) {
+          const { data: any } = await supabase
+            .from("profiles")
+            .select("id, full_name, avatar_url, primary_sport, club_id, country, position, role")
+            .neq("id", currentUserId)
+            .limit(5);
+          data = any || [];
         }
-      } catch (e) {
-        // ignore
+
+        if (!mounted) return;
+        setSuggestions(data.slice(0, 5));
+        await loadFollowStatus(data);
       } finally {
-        if (mounted) setLoading(false);
+        if (mounted) setSuggestionsLoading(false);
       }
     })();
-    return () => (mounted = false);
-  }, [sport, position, clubId, country, goals]);
 
+    return () => { mounted = false; };
+  }, [currentUserId, sport, position]);
+
+  // Debounced server-side search across ALL profiles
   useEffect(() => {
+    if (searchTimer.current) clearTimeout(searchTimer.current);
+
     if (!searchQuery.trim()) {
-      setFilteredSuggestions(allSuggestions);
+      setSearchResults([]);
+      setSearchLoading(false);
       return;
     }
 
-    const query = searchQuery.toLowerCase();
-    const filtered = allSuggestions.filter((p) => {
-      const name = (p.full_name || "").toLowerCase();
-      const club = (p.club_name || "").toLowerCase();
-      const team = (p.team_name || "").toLowerCase();
-      return name.includes(query) || club.includes(query) || team.includes(query);
-    });
-    setFilteredSuggestions(filtered);
-  }, [searchQuery, allSuggestions]);
+    if (!currentUserId) {
+      setSearchLoading(false);
+      return;
+    }
+
+    setSearchLoading(true);
+    searchTimer.current = setTimeout(async () => {
+      try {
+        const { data } = await supabase
+          .from("profiles")
+          .select("id, full_name, avatar_url, primary_sport, club_id, country, position, role")
+          .neq("id", currentUserId)
+          .ilike("full_name", `%${searchQuery.trim()}%`)
+          .limit(20);
+
+        setSearchResults(data || []);
+        await loadFollowStatus(data || []);
+      } finally {
+        setSearchLoading(false);
+      }
+    }, 300);
+
+    return () => clearTimeout(searchTimer.current);
+  }, [searchQuery, currentUserId]);
+
+  async function loadFollowStatus(profiles) {
+    const newIds = profiles.map((p) => p.id).filter((id) => !(id in followingMap));
+    if (newIds.length === 0) return;
+    const map = {};
+    await Promise.all(
+      newIds.map(async (id) => {
+        try { map[id] = await isFollowing(id); } catch { map[id] = false; }
+      }),
+    );
+    setFollowingMap((prev) => ({ ...prev, ...map }));
+  }
 
   async function handleFollowToggle(id) {
     const currently = !!followingMap[id];
@@ -110,43 +132,67 @@ export default function FindPeople({ role, sport, position, clubId, country, goa
     try {
       if (currently) await unfollow(id);
       else await follow(id);
-    } catch (e) {
+    } catch {
       setFollowingMap((m) => ({ ...m, [id]: currently }));
     }
   }
+
+  const isSearching = searchQuery.trim().length > 0;
 
   return (
     <div className="find-people-root">
       <div className="role-header">
         <h1 className="role-header-title">Find people</h1>
-        <p className="role-header-subtitle">Connect with other players, coaches and scouts you might know</p>
+        <p className="role-header-subtitle">Connect with players, coaches and scouts you might know</p>
       </div>
 
       <SearchBar
-        label="Search for name, surname or team..."
-        placeholder="Search for name, surname or team..."
+        label="Search by name..."
+        placeholder="Search by name..."
         value={searchQuery}
         onChange={setSearchQuery}
       />
 
-      <div style={{ marginTop: 12 }}>
-        {loading ? (
-          <div>Loading...</div>
-        ) : filteredSuggestions.length === 0 ? (
-          <div>No results found.</div>
-        ) : (
-          <div className="find-people-list">
-            {filteredSuggestions.map((p) => (
-              <PlayerCardItem
-                key={p.id}
-                profile={p}
-                isFollowing={!!followingMap[p.id]}
-                onToggleFollow={() => handleFollowToggle(p.id)}
-              />
-            ))}
-          </div>
-        )}
-      </div>
+      {isSearching ? (
+        <div>
+          {searchLoading ? (
+            <p className="find-people-status">Searching...</p>
+          ) : searchResults.length === 0 ? (
+            <p className="find-people-status">No results found.</p>
+          ) : (
+            <div className="find-people-list">
+              {searchResults.map((p) => (
+                <PlayerCardItem
+                  key={p.id}
+                  profile={p}
+                  isFollowing={!!followingMap[p.id]}
+                  onToggleFollow={() => handleFollowToggle(p.id)}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+      ) : (
+        <div>
+          <p className="find-people-section-label">Suggested for you</p>
+          {suggestionsLoading ? (
+            <p className="find-people-status">Loading...</p>
+          ) : suggestions.length === 0 ? (
+            <p className="find-people-status">No suggestions yet.</p>
+          ) : (
+            <div className="find-people-list">
+              {suggestions.map((p) => (
+                <PlayerCardItem
+                  key={p.id}
+                  profile={p}
+                  isFollowing={!!followingMap[p.id]}
+                  onToggleFollow={() => handleFollowToggle(p.id)}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
@@ -158,24 +204,24 @@ function PlayerCardItem({ profile, isFollowing, onToggleFollow }) {
     let mounted = true;
     if (!profile.club_id) return;
 
-    (async () => {
-      try {
-        const { data, error } = await supabase
-          .from("clubs")
-          .select("name")
-          .eq("id", profile.club_id)
-          .maybeSingle();
-        if (mounted && !error && data) setClubName(data.name);
-      } catch (e) {
-        // ignore
-      }
-    })();
+    supabase
+      .from("clubs")
+      .select("name")
+      .eq("id", profile.club_id)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (mounted && data) setClubName(data.name);
+      });
 
-    return () => (mounted = false);
+    return () => { mounted = false; };
   }, [profile.club_id]);
 
   const roleText = profile.role ? profile.role.charAt(0).toUpperCase() + profile.role.slice(1) : "";
-  const positions = Array.isArray(profile.position) ? profile.position : profile.position ? [profile.position] : [];
+  const positions = Array.isArray(profile.position)
+    ? profile.position
+    : profile.position
+      ? [profile.position]
+      : [];
 
   return (
     <div className="player-card-item">

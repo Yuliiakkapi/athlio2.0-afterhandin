@@ -1,71 +1,44 @@
+import { useNavigate } from "react-router-dom";
+import PerformanceCard from "../Progress-athletes/PerformanceCard";
 import Button from "../../UI/Button";
 import "./Premium.css";
-import premiumGraph from "../../../assets/graphics/premium_graph.svg";
-import { ChartBar, Trophy } from "@phosphor-icons/react";
 
-export default function Premium({ onContinue }) {
+export default function Premium() {
+  const navigate = useNavigate();
+
+  function goToUpgrade() {
+    navigate("/upgrade-pro", { state: { fromOnboarding: true } });
+  }
+
   return (
     <div className="premium-root">
-      {/* Heading */}
-      <h1 className="premium-title">Level up your game</h1>
-
-      {/* Premium badge */}
-      <div className="premium-badge" aria-label="Premium badge">
-        <span className="premium-badge-dot" aria-hidden="true" />
-        <span>Premium</span>
-      </div>
-
-      {/* Big training progress card */}
-      <section className="premium-card">
-        <div className="premium-card-header">
-          {/* Use stats.svg icon with accent color via CSS */}
-          <ChartBar className="premium-icon-svg premium-icon-svg--accent" aria-hidden="true" />
-          <p className="premium-card-title">Training Progress</p>
+      <div className="premium-container">
+        {/* Header */}
+        <div className="premium-header">
+          <h1 className="premium-main-title">Level up your game</h1>
         </div>
-        <p className="premium-card-subtext">
-          Track your daily training sessions and see improvement over time
-        </p>
-        {/* Decorative performance graph illustration */}
-        <img src={premiumGraph} alt="" className="premium-graph" aria-hidden="true" />
-      </section>
 
-      {/* Feature grid */}
-      <div className="premium-features">
-        <section className="premium-card premium-card--small">
-          <div className="premium-card-header">
-            <ChartBar className="premium-icon-svg premium-icon-svg--accent" aria-hidden="true" />
-            <p className="premium-card-title">Performance Analytics</p>
-          </div>
-          <p className="premium-card-subtext">
-            Get AI-powered insights on your stats and performance trends
-          </p>
-        </section>
-        <section className="premium-card premium-card--small">
-          <div className="premium-card-header">
-            <Trophy className="premium-icon-svg premium-icon-svg--accent" aria-hidden="true" />
-            <p className="premium-card-title">Goal Tracking</p>
-          </div>
-          <p className="premium-card-subtext">
-            Set personal goals and get personalized recommendations
-          </p>
-        </section>
-      </div>
-
-      {/* CTA */}
-      <section className="premium-cta">
-        <div className="premium-cta-inner">
-          <h2 className="premium-cta-title">Start your free trial</h2>
-          <p className="premium-cta-sub">7 days free, then $9.99/month</p>
-          <div className="premium-cta-button">
-            <Button
-              size="medium"
-              type="outline"
-              label="Try Premium Free"
-              onClick={onContinue}
-            />
-          </div>
+        {/* Main content */}
+        <div className="premium-content">
+          <PerformanceCard />
         </div>
-      </section>
+
+        {/* Paywall card */}
+        <div className="premium-paywall">
+          <div className="premium-paywall-badge">PRO</div>
+          <h2 className="premium-paywall-title">Unlock pro features</h2>
+          <p className="premium-paywall-subtitle">
+            Get AI insights, advanced analytics, and full scout visibility. Take your career to the next level.
+          </p>
+          <Button
+            size="medium"
+            type="primary"
+            label="Get Premium features"
+            fullWidth
+            onClick={goToUpgrade}
+          />
+        </div>
+      </div>
     </div>
   );
 }

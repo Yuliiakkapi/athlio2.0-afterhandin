@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
   X,
   MagnifyingGlass,
@@ -49,6 +49,7 @@ const AVATARS = [user1, user2, user3, user4];
 
 export default function UpgradePro() {
   const navigate = useNavigate();
+  const { state } = useLocation();
   const [plan, setPlan] = useState("annual");
   const [confirming, setConfirming] = useState(false);
 
@@ -70,7 +71,7 @@ export default function UpgradePro() {
             size="medium"
             type="subtle"
             icon={X}
-            onClick={() => navigate(-1)}
+            onClick={() => state?.fromOnboarding ? navigate("/home") : navigate(-1)}
           />
         </div>
 

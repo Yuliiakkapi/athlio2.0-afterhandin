@@ -12,7 +12,8 @@
       "Bash(powershell -Command \"Start-Process 'http://localhost:5173/setup'\")",
       "Bash(powershell -Command \"cd 'c:\\\\Users\\\\jakub\\\\Documents\\\\coding\\\\athlio2.0'; npm run build 2>&1 | Select-Object -First 50\")",
       "Bash(mkdir -p \"c:\\\\Users\\\\jakub\\\\Documents\\\\coding\\\\athlio2.0\\\\src\\\\assets\\\\images\\\\playing-styles\")",
-      "Bash(npm run *)"
+      "Bash(npm run *)",
+      "Bash(xargs grep -l \"Activity\\\\|Donut\\\\|Visitors\")"
     ],
     "additionalDirectories": [
       "c:\\Users\\jakub\\Documents\\coding\\athlio2.0\\src\\assets\\images"

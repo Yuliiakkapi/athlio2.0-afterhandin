@@ -31,6 +31,7 @@ export function buildProfilePayload({ role, form, heightUnit, weightUnit }) {
     city: form.city || null,
     goals: form.goals || null,
     talent_preferences: form.talent_preferences || null,
+    playing_style: form.playingStyle || null,
   };
 
   // Add organization-specific fields
