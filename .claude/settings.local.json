@@ -8,7 +8,9 @@
       "PowerShell(Get-Content \"$env:APPDATA\\\\GitHub CLI\\\\hosts.yml\" -ErrorAction SilentlyContinue; Get-Content \"$env:LOCALAPPDATA\\\\gh\\\\hosts.yml\" -ErrorAction SilentlyContinue)",
       "Bash(git commit *)",
       "Bash(git push *)",
-      "mcp__claude_ai_Figma__get_design_context"
+      "mcp__claude_ai_Figma__get_design_context",
+      "Bash(powershell -Command \"Start-Process 'http://localhost:5173/setup'\")",
+      "Bash(powershell -Command \"cd 'c:\\\\Users\\\\jakub\\\\Documents\\\\coding\\\\athlio2.0'; npm run build 2>&1 | Select-Object -First 50\")"
     ]
   }
 }

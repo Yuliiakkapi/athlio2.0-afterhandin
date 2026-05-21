@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { MapPin, MagnifyingGlass, X } from "@phosphor-icons/react";
+import { MapPin, X } from "@phosphor-icons/react";
+import SearchBar from "../../UI/SearchBar";
 import Globe from "./Globe";
 import "./LocationFields.css";
 
@@ -29,7 +30,6 @@ export default function LocationFields({ country, city, onChange }) {
   const [open,        setOpen]        = useState(false);
   const [pinCoords,   setPinCoords]   = useState(null);
   const deb     = useRef(null);
-  const inputRef = useRef(null);
 
   const hasSelection = !!(city && country);
 
@@ -58,7 +58,6 @@ export default function LocationFields({ country, city, onChange }) {
     onChange({ city: "", country: "" });
     setPinCoords(null);
     setQuery("");
-    setTimeout(() => inputRef.current?.focus(), 50);
   }
 
   const globeSize = Math.min(Math.round(window.innerWidth * 0.78), 300);
@@ -84,28 +83,13 @@ export default function LocationFields({ country, city, onChange }) {
         </div>
       ) : (
         <div className="loc-search-wrap">
-          <div className="loc-search-bar">
-            <MagnifyingGlass size={18} weight="regular" className="loc-search-icon" aria-hidden="true" />
-            <input
-              ref={inputRef}
-              type="text"
-              className="loc-search-input"
-              placeholder="Search for a city or town..."
-              value={query}
-              onChange={e => setQuery(e.target.value)}
-              onFocus={() => suggestions.length > 0 && setOpen(true)}
-              autoComplete="off"
-            />
-            {query.length > 0 && (
-              <button
-                className="loc-search-clear"
-                onClick={() => { setQuery(""); setSuggestions([]); setOpen(false); }}
-                aria-label="Clear"
-              >
-                <X size={16} weight="bold" />
-              </button>
-            )}
-          </div>
+          <SearchBar
+            label="Search for a city or town..."
+            placeholder="Search for a city or town..."
+            value={query}
+            onChange={(v) => setQuery(v)}
+            onClear={() => { setQuery(""); setSuggestions([]); setOpen(false); }}
+          />
 
           {open && (
             <div className="loc-suggestions">

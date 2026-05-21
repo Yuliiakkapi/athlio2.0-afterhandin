@@ -1,61 +1,56 @@
-﻿/* Figma frame 2557 - textarea styling for Bio step */
-.ta-wrapper {
+﻿.ta-wrapper {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 4px;
+  position: relative;
 }
 
-.ta-label {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--black, #0b0b0b);
+.ta-container {
+  position: relative;
+  width: 100%;
 }
 
 .ta-input {
   width: 100%;
 }
 
-.ta-input textarea {
+.ta-field {
   width: 100%;
-  min-height: 140px; /* roomy textarea for bio */
-  padding: 12px 14px;
-  border-radius: 12px;
-  border: 1.5px solid var(--neutral-100, #dbe9ff);
-  background: var(--white, #ffffff);
-  font-size: 14px;
-  line-height: 1.4;
-  color: var(--black, #0b0b0b);
-  font-family: inherit;
-  resize: vertical;
-  outline: none;
-  transition: box-shadow 120ms ease, border-color 120ms ease;
-}
-
-.ta-input textarea::placeholder {
-  color: var(--neutral-400, #9CA3AF);
-}
-
-.ta-input textarea:focus {
-  border-color: var(--primary-default, #4051fd);
-  box-shadow: 0 6px 18px rgba(59,130,246,0.12);
-}
-
-.ta-suggestions {
-  margin-top: 12px;
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.ta-suggestion-btn {
-  padding: 8px 12px;
+  min-height: 96px;
+  padding: 13px 12px;
   border-radius: 8px;
-  border: 1px solid var(--neutral-200, #E6E9EF);
-  background: var(--white, #fff);
-  cursor: pointer;
-  font-size: 13px;
+  border: 1.5px solid var(--neutral-200, #e1e1e4);
+  background: var(--white, #ffffff);
+  font-size: 16px;
+  font-weight: 500;
+  font-family: var(--font-sans, "Barlow", sans-serif);
+  line-height: 1;
+  color: var(--black, #151622);
+  resize: none;
+  outline: none;
+  transition: border-color 120ms ease;
+  box-sizing: border-box;
 }
 
-.ta-suggestion-btn:hover {
-  background: #f6f6f7;
+.ta-field::placeholder {
+  color: transparent;
+}
+
+.ta-field:focus {
+  border-color: var(--primary-default, #4051fd);
+}
+
+.ta-floating-label {
+  position: absolute;
+  top: -8px;
+  left: 8px;
+  padding: 0 2px;
+  background: linear-gradient(to bottom, #f6f6f7, white);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--black, #151622);
+  font-family: var(--font-sans, "Barlow", sans-serif);
+  line-height: 1;
+  white-space: nowrap;
+  pointer-events: none;
 }

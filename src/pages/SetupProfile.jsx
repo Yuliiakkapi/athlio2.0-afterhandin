@@ -236,7 +236,7 @@ export default function Setup() {
         case "dob":
           return true; // pre-selected by default
         case "position":
-          return true; // position is optional
+          return form.position && form.position.length > 0;
         case "style":
           return true; // first style is pre-selected
         case "leg":

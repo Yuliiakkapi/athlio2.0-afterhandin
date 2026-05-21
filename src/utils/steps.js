@@ -5,7 +5,7 @@
  */
 export function getSteps(role) {
   if (role === "athlete") {
-    return ["role", "name", "dob", "position", "style", "leg", "club", "goals", "highlight", "notifications", "location", "bio"];
+    return ["role", "name", "dob", "position", "style", "leg", "location", "club", "goals", "highlight", "notifications", "bio"];
   }
 
   // "professional" means the user picked Professional but hasn't chosen a sub-role yet
