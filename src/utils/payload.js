@@ -14,24 +14,17 @@ export function buildProfilePayload({ role, form, heightUnit, weightUnit }) {
     full_name: form.full_name,
     username: username || undefined,
     avatar_url: form.avatar_url?.startsWith("data:") ? undefined : (form.avatar_url || undefined),
-    age: form.dob
-      ? Math.floor((Date.now() - new Date(form.dob)) / (365.25 * 24 * 3600 * 1000))
-      : (form.age ? parseInt(form.age) : null),
     bio: form.bio || form.description,
     sports: Array.isArray(form.sports) ? form.sports : [],
     primary_sport: form.primarySport || null,
     gender: form.gender || null,
-    height_cm: form.height ? parseInt(form.height) : null,
-    weight_kg: form.weight ? parseInt(form.weight) : null,
     position: Array.isArray(form.position) ? form.position : [],
     club_id: form.club_id || null,
-    club_other_name: form.club_other_name || null,
     country: form.country || null,
     region: form.region || null,
     city: form.city || null,
     goals: form.goals || null,
     talent_preferences: form.talent_preferences || null,
-    playing_style: form.playingStyle || null,
   };
 
   // Add organization-specific fields

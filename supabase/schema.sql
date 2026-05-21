@@ -123,6 +123,25 @@ create trigger profiles_updated_at
   before update on profiles
   for each row execute procedure public.set_updated_at();
 
+create or replace function public.handle_new_profile()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  insert into public.info (profile_id)
+  values (new.id)
+  on conflict do nothing;
+  return new;
+end;
+$$;
+
+drop trigger if exists on_profile_created on profiles;
+create trigger on_profile_created
+  after insert on profiles
+  for each row execute procedure public.handle_new_profile();
+
 -- ============================================================
 -- FOLLOWS
 -- ============================================================
@@ -322,6 +341,7 @@ create table if not exists info (
   position         text,
   shirt_number     int,
   preferred_foot   text check (preferred_foot in ('left','right','both')),
+  playing_style    text,
   club_id          uuid references clubs(id) on delete set null,
   updated_at       timestamptz not null default now()
 );

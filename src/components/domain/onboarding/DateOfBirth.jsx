@@ -106,6 +106,15 @@ export default function DateOfBirth({ value, onChange }) {
   const [monthIdx, setMonthIdx] = useState(init.monthIdx);
   const [yearIdx,  setYearIdx]  = useState(init.yearIdx >= 0 ? init.yearIdx : YEARS.length - 16);
 
+  // Emit the default date on mount so the parent form is always populated
+  useEffect(() => {
+    if (!value) {
+      const effectiveYearIdx = init.yearIdx >= 0 ? init.yearIdx : YEARS.length - 16;
+      emit(init.dayIdx, init.monthIdx, effectiveYearIdx);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const currentYear  = YEARS[yearIdx];
   const daysCount    = getDaysInMonth(monthIdx, currentYear);
   const days         = Array.from({ length: daysCount }, (_, i) => i + 1);

@@ -41,10 +41,11 @@ function DonutChart() {
   );
 }
 
-export default function PremiumProfessional() {
+export default function PremiumProfessional({ onFinish }) {
   const navigate = useNavigate();
 
-  function goToScouting() {
+  async function goToScouting() {
+    await onFinish?.();
     navigate("/scouting");
   }
 

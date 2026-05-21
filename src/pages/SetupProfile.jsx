@@ -74,6 +74,7 @@ export default function Setup() {
   const [userId, setUserId] = useState(null);
   const [usernameErr, setUsernameErr] = useState("");
   const [isCheckingUsername, setIsCheckingUsername] = useState(false);
+  const [highlightFile, setHighlightFile] = useState(null);
 
   const steps = useMemo(() => getSteps(role), [role]);
   const [idx, setIdx] = useState(0);
@@ -197,14 +198,65 @@ export default function Setup() {
     setIdx((i) => Math.max(i - 1, 0));
   }
 
+  async function postHighlight() {
+    try {
+      const { data: auth } = await supabase.auth.getUser();
+      if (auth?.user) {
+        let mediaUrl = null;
+        if (highlightFile) {
+          const path = `posts/${auth.user.id}/${Date.now()}_highlight`;
+          const { error: upErr } = await supabase.storage
+            .from("post-media")
+            .upload(path, highlightFile, { cacheControl: "3600", upsert: false, contentType: highlightFile.type });
+          if (!upErr) {
+            const { data: pub } = supabase.storage.from("post-media").getPublicUrl(path);
+            mediaUrl = pub.publicUrl;
+          }
+        }
+        const content = form.highlightText || form.highlightMatch || "";
+        if (content || mediaUrl) {
+          await supabase.from("posts").insert({
+            author_id: auth.user.id,
+            type: "basic",
+            content,
+            media: mediaUrl,
+          });
+        }
+      }
+    } catch (err) {
+      console.error("Failed to create highlight post:", err);
+    }
+    setIdx((i) => Math.min(i + 1, steps.length - 1));
+  }
+
   async function finish() {
     const {
       data: { user },
     } = await supabase.auth.getUser();
 
-    const payload = buildProfilePayload({ role, form, heightUnit, weightUnit });
-    console.log("Submitting profile payload:", payload);
-    console.log("Full name in form:", form.full_name);
+    // Upload avatar data: URL to storage and swap in the real public URL
+    let avatarUrl = form.avatar_url;
+    if (user && avatarUrl?.startsWith("data:")) {
+      try {
+        const blob = await fetch(avatarUrl).then((r) => r.blob());
+        const ext = blob.type.split("/")[1] || "jpg";
+        const path = `avatars/${user.id}.${ext}`;
+        const { error: upErr } = await supabase.storage
+          .from("post-media")
+          .upload(path, blob, { cacheControl: "3600", upsert: true, contentType: blob.type });
+        if (!upErr) {
+          const { data: pub } = supabase.storage.from("post-media").getPublicUrl(path);
+          avatarUrl = pub.publicUrl;
+        } else {
+          avatarUrl = undefined;
+        }
+      } catch (e) {
+        console.error("Avatar upload failed:", e);
+        avatarUrl = undefined;
+      }
+    }
+
+    const payload = buildProfilePayload({ role, form: { ...form, avatar_url: avatarUrl }, heightUnit, weightUnit });
 
     if (user) {
       const { error: upsertErr } = await supabase
@@ -214,10 +266,34 @@ export default function Setup() {
       if (upsertErr) {
         console.error("PROFILE UPSERT ERROR", upsertErr);
         alert("Error saving profile: " + upsertErr.message);
-      } else {
-        console.log("Profile saved successfully!");
-        setProfile({ id: user.id, ...payload });
+        return;
       }
+
+      const infoPayload = {
+        ...(form.dob          && { birth_date:     form.dob }),
+        ...(form.preferredLeg && { preferred_foot: form.preferredLeg }),
+        ...(form.playingStyle && { playing_style:  form.playingStyle }),
+        ...(form.club_id      && { club_id:        form.club_id }),
+        ...(form.height       && { height_cm:      parseFloat(form.height) }),
+        ...(form.weight       && { weight_kg:      parseFloat(form.weight) }),
+      };
+      if (Object.keys(infoPayload).length > 0) {
+        const { data: existingInfo } = await supabase
+          .from("info")
+          .select("id")
+          .eq("profile_id", user.id)
+          .is("season_id", null)
+          .maybeSingle();
+        if (existingInfo) {
+          const { error: infoErr } = await supabase.from("info").update(infoPayload).eq("id", existingInfo.id);
+          if (infoErr) console.error("INFO UPDATE ERROR", infoErr);
+        } else {
+          const { error: infoErr } = await supabase.from("info").insert({ profile_id: user.id, ...infoPayload });
+          if (infoErr) console.error("INFO INSERT ERROR", infoErr);
+        }
+      }
+
+      setProfile({ id: user.id, ...payload });
     }
 
     navigate("/home");
@@ -270,7 +346,7 @@ export default function Setup() {
       {/* Fixed topbar: back arrow + progress bar */}
       <OnboardingTopbar
         onBack={back}
-        onClose={stepId === "premium" ? () => navigate("/home") : undefined}
+        onClose={stepId === "premium" ? finish : undefined}
         currentStep={idx + 1}
         totalSteps={Math.max(steps.length, 1)}
         showBack={true}
@@ -347,8 +423,8 @@ export default function Setup() {
 
         {stepId === "premium" && (
           ["professional", "scout", "coach", "manager", "agent"].includes(role)
-            ? <PremiumProfessional />
-            : <Premium />
+            ? <PremiumProfessional onFinish={finish} />
+            : <Premium onFinish={finish} />
         )}
 
         {stepId === "club" && (role === "athlete" || role === "scout" || role === "professional") && (
@@ -383,12 +459,15 @@ export default function Setup() {
             mediaType={form.highlightType}
             text={form.highlightText}
             match={form.highlightMatch}
-            onMediaChange={(v) =>
-              set(v
-                ? { highlightUrl: v.url, highlightType: v.type }
-                : { highlightUrl: "", highlightType: "" }
-              )
-            }
+            onMediaChange={(v) => {
+              if (v) {
+                set({ highlightUrl: v.url, highlightType: v.type });
+                setHighlightFile(v.file || null);
+              } else {
+                set({ highlightUrl: "", highlightType: "" });
+                setHighlightFile(null);
+              }
+            }}
             onTextChange={(v) => set({ highlightText: v })}
             onMatchChange={(v) => set({ highlightMatch: v })}
           />
@@ -463,7 +542,9 @@ export default function Setup() {
       {stepId !== "premium" && <OnboardingNavbar
         onBack={back}
         onNext={
-          stepId === "notifications"
+          stepId === "highlight"
+            ? postHighlight
+          : stepId === "notifications"
             ? async () => { if ("Notification" in window) await Notification.requestPermission().catch(() => {}); next(); }
           : stepId === "location" && !form.city
             ? async () => {

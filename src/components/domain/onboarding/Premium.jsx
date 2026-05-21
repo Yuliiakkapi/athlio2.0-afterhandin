@@ -41,10 +41,11 @@ function DonutChart() {
   );
 }
 
-export default function Premium() {
+export default function Premium({ onFinish }) {
   const navigate = useNavigate();
 
-  function goToUpgrade() {
+  async function goToUpgrade() {
+    await onFinish?.();
     navigate("/upgrade-pro", { state: { fromOnboarding: true } });
   }
 
