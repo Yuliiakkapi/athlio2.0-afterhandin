@@ -23,6 +23,7 @@ import Notifications from "../components/domain/onboarding/Notifications";
 import FindPeople from "../components/domain/onboarding/FindPeople";
 import FollowSuggestions from "../components/domain/onboarding/FollowSuggestions";
 import Premium from "../components/domain/onboarding/Premium";
+import PremiumProfessional from "../components/domain/onboarding/PremiumProfessional";
 import { getSteps } from "../utils/steps";
 import { buildProfilePayload } from "../utils/payload";
 import Textarea from "../components/inputs/TextArea";
@@ -344,7 +345,11 @@ export default function Setup() {
           />
         )}
 
-        {stepId === "premium" && <Premium />}
+        {stepId === "premium" && (
+          ["professional", "scout", "coach", "manager", "agent"].includes(role)
+            ? <PremiumProfessional />
+            : <Premium />
+        )}
 
         {stepId === "club" && (role === "athlete" || role === "scout" || role === "professional") && (
           <ClubPicker
