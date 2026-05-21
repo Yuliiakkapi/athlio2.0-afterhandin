@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "../../../../lib/supabase";
 import ProfileInfoCard from "../../../UI/InfoCards";
 import CareerHistory from "../CareerHistory";
-import "./InfoTab.css";
+import "./Infotab.css";
 
 export default function InfoTab({ profile, isMe = false }) {
   const [infoRow, setInfoRow] = useState(null);
