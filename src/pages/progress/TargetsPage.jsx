@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Plus, Trash } from "@phosphor-icons/react";
 import { useUser } from "../../context/UserContext";
 import { useTargets } from "../../context/TargetsContext";
-import Tabs from "../../components/UI/Tabs";
+import NavigationTabs from "../../components/UI/NavTabs";
 import Badge from "../../components/UI/Badge";
 import Button from "../../components/UI/Button";
 import IconButton from "../../components/UI/IconButton";
@@ -106,7 +106,7 @@ export default function TargetsPage() {
 
   return (
     <div className="tp-page">
-      <Tabs tabs={TABS} active={tab} onChange={setTab} />
+      <NavigationTabs variant="segment" tabs={TABS} activeTab={tab} onTabChange={setTab} lockedTabs={LOCKED_TABS} onLockedClick={() => {}} />
 
       {isLocked ? (
         <LockedState onUnlock={() => navigate("/upgrade-pro")} />

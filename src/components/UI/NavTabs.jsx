@@ -1,31 +1,69 @@
-import React from 'react';
-import './NavTabs.css';
+import { Lock } from "@phosphor-icons/react";
+import "./NavTabs.css";
 
-const NavigationTabs = ({
-  tabs = [
-    { id: 'stats', label: 'Stats' },
-    { id: 'info', label: 'Info' },
-    { id: 'experience', label: 'Experience' },
-    { id: 'availability', label: 'Availability' },
-  ],
+/**
+ * NavigationTabs
+ *
+ * variant      "underline" | "pill" | "segment"
+ * tabs         { id, label }[]  OR  string[]  (strings used as both id and label)
+ * activeTab    string
+ * onTabChange  (id: string) => void
+ * lockedTabs   string[]   — tab ids that are locked (segment variant)
+ * onLockedClick () => void — called when a locked tab is tapped
+ */
+export default function NavigationTabs({
+  tabs = [],
   activeTab,
   onTabChange,
-  variant = 'underline', // 'underline' | 'pill'
-}) => {
+  variant = "underline",
+  lockedTabs = [],
+  onLockedClick,
+}) {
+  const normalized = tabs.map((t) =>
+    typeof t === "string" ? { id: t, label: t } : t
+  );
 
-  if (variant === 'pill') {
+  function handleClick(id) {
+    if (lockedTabs.includes(id)) {
+      onLockedClick?.();
+    } else {
+      onTabChange?.(id);
+    }
+  }
+
+  if (variant === "segment") {
+    return (
+      <div className="navtabs-segment">
+        {normalized.map(({ id, label }) => {
+          const locked = lockedTabs.includes(id);
+          return (
+            <button
+              key={id}
+              className={`navtabs-segment__item${activeTab === id ? " navtabs-segment__item--active" : ""}${locked ? " navtabs-segment__item--locked" : ""}`}
+              onClick={() => handleClick(id)}
+            >
+              {label}
+              {locked && <Lock size={14} weight="bold" className="navtabs-segment__lock" />}
+            </button>
+          );
+        })}
+      </div>
+    );
+  }
+
+  if (variant === "pill") {
     return (
       <div className="navtabs-pill-wrap">
         <div className="navtabs-pill">
-          {tabs.map((tab) => (
+          {normalized.map(({ id, label }) => (
             <button
-              key={tab.id}
-              onClick={() => onTabChange(tab.id)}
-              className={`navtabs-pill-tab ${activeTab === tab.id ? 'navtabs-pill-tab--active' : ''}`}
+              key={id}
+              onClick={() => handleClick(id)}
+              className={`navtabs-pill-tab${activeTab === id ? " navtabs-pill-tab--active" : ""}`}
               role="tab"
-              aria-selected={activeTab === tab.id}
+              aria-selected={activeTab === id}
             >
-              {tab.label}
+              {label}
             </button>
           ))}
         </div>
@@ -36,22 +74,20 @@ const NavigationTabs = ({
   return (
     <nav className="navbartabs">
       <div className="tabContainer">
-        {tabs.map((tab) => (
+        {normalized.map(({ id, label }) => (
           <button
-            key={tab.id}
-            onClick={() => onTabChange(tab.id)}
-            className={`tab ${activeTab === tab.id ? 'tabActive' : ''}`}
+            key={id}
+            onClick={() => handleClick(id)}
+            className={`tab${activeTab === id ? " tabActive" : ""}`}
             role="tab"
-            aria-selected={activeTab === tab.id}
+            aria-selected={activeTab === id}
           >
-            <span className={`tabLabel ${activeTab === tab.id ? 'tabLabelActive' : ''}`}>
-              {tab.label}
+            <span className={`tabLabel${activeTab === id ? " tabLabelActive" : ""}`}>
+              {label}
             </span>
           </button>
         ))}
       </div>
     </nav>
   );
-};
-
-export default NavigationTabs;
+}

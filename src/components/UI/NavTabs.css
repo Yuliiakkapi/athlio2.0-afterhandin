@@ -94,6 +94,46 @@
   }
 }
 
+/* ─── Segment variant (formerly Tabs component) ──────────────── */
+.navtabs-segment {
+  display: flex;
+  background: var(--neutral-100);
+  border-radius: 100px;
+  padding: 4px;
+}
+
+.navtabs-segment__item {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 8px;
+  border: none;
+  border-radius: 100px;
+  background: transparent;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  font-style: italic;
+  color: var(--neutral-500);
+  text-transform: uppercase;
+}
+
+.navtabs-segment__item--active {
+  background: var(--white);
+  color: var(--black);
+}
+
+.navtabs-segment__item--locked {
+  color: var(--neutral-400);
+}
+
+.navtabs-segment__lock {
+  margin-left: 4px;
+  flex-shrink: 0;
+}
+
 /* ─── Pill variant (Figma node 9301-79) ───────────────────────── */
 .navtabs-pill-wrap {
   display: flex;

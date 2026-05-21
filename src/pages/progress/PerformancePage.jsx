@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { CaretRight, SneakerMove, Heartbeat, Barbell } from "@phosphor-icons/react";
 import { useSkills } from "../../context/SkillsContext";
 import AISuggestion from "../../components/domain/Progress-athletes/AISuggestion";
-import Tabs from "../../components/UI/Tabs";
+import NavigationTabs from "../../components/UI/NavTabs";
 import Button from "../../components/UI/Button";
 import "./PerformancePage.css";
 
@@ -212,7 +212,7 @@ export default function PerformancePage() {
 
       {/* Chart card */}
       <div className="perf-chart-card">
-        <Tabs tabs={CHART_TABS} active={tab} onChange={setTab} />
+        <NavigationTabs variant="segment" tabs={CHART_TABS} activeTab={tab} onTabChange={setTab} />
         <div className="perf-chart-wrap">
           <LineChart tab={tab} />
         </div>

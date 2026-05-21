@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Target, Plus } from "@phosphor-icons/react";
 import Button from "../../UI/Button";
-import Tabs from "../../UI/Tabs";
+import NavigationTabs from "../../UI/NavTabs";
 import AISuggestion from "./AISuggestion";
 import { useTargets } from "../../../context/TargetsContext";
 import "./TargetsSection.css";
@@ -91,10 +91,11 @@ export default function TargetsSection({ isPro = false }) {
         <Button type="subtle" size="xsmall" label="See all" onClick={() => navigate("/progress/targets")} />
       </div>
 
-      <Tabs
+      <NavigationTabs
+        variant="segment"
         tabs={TARGET_TABS}
-        active={tab}
-        onChange={setTab}
+        activeTab={tab}
+        onTabChange={setTab}
         lockedTabs={lockedTabs}
         onLockedClick={() => navigate("/upgrade-pro")}
       />

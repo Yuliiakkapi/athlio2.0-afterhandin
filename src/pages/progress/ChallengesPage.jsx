@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Flame, CheckCircle } from "@phosphor-icons/react";
 import { useChallenges } from "../../context/ChallengesContext";
-import Tabs from "../../components/UI/Tabs";
+import NavigationTabs from "../../components/UI/NavTabs";
 import Badge from "../../components/UI/Badge";
 import Button from "../../components/UI/Button";
 import "./ChallengesPage.css";
@@ -72,7 +72,7 @@ export default function ChallengesPage() {
 
   return (
     <div className="cp-page">
-      <Tabs tabs={TABS} active={tab} onChange={setTab} />
+      <NavigationTabs variant="segment" tabs={TABS} activeTab={tab} onTabChange={setTab} />
 
       <div className="cp-list">
         {filtered.length === 0 ? (
