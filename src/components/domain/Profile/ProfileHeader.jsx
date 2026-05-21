@@ -2,9 +2,7 @@ import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "./ProfileHeader.css";
 
-const DECO_1 = "https://www.figma.com/api/mcp/asset/52ded45f-c755-40dc-9c51-9ee493f1728d";
-const DECO_2 = "https://www.figma.com/api/mcp/asset/12ed800c-7121-4de6-914e-0fac6f2ccb2a";
-const DECO_3 = "https://www.figma.com/api/mcp/asset/502d28dc-b1c8-4892-acd5-2d324bbebfd0";
+import darkblueStripes from "../../../assets/images/darkblue-stripes.png";
 
 export default function ProfileHeader({
   profile,
@@ -52,10 +50,7 @@ export default function ProfileHeader({
 
   return (
     <section className="ph-root">
-      {/* Decorative background shapes from Figma */}
-      <img className="ph-deco ph-deco-1" src={DECO_1} alt="" aria-hidden="true" />
-      <img className="ph-deco ph-deco-2" src={DECO_2} alt="" aria-hidden="true" />
-      <img className="ph-deco ph-deco-3" src={DECO_3} alt="" aria-hidden="true" />
+      <img className="ph-deco" src={darkblueStripes} alt="" aria-hidden="true" />
 
       {/* Top bar: back arrow + share */}
       <div className="ph-topbar">
