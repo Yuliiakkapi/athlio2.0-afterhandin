@@ -1,3 +1,4 @@
+import { useState } from "react";
 import "./PositionSelect.css";
 import PitchBg from "../../../assets/images/position-bg.png";
 
@@ -44,11 +45,22 @@ const FOOTBALL_POSITIONS = [
 ];
 
 export default function PositionSelect({ value = [], onChange }) {
+  const maxPositions = 3;
+  const [showLimitError, setShowLimitError] = useState(false);
+
   function toggle(id) {
     const current = Array.isArray(value) ? value.slice() : [];
     const idx = current.indexOf(id);
-    if (idx >= 0) current.splice(idx, 1);
-    else current.push(id);
+    if (idx >= 0) {
+      current.splice(idx, 1);
+      setShowLimitError(false);
+    } else if (current.length < maxPositions) {
+      current.push(id);
+      setShowLimitError(false);
+    } else {
+      setShowLimitError(true);
+      setTimeout(() => setShowLimitError(false), 1500);
+    }
     onChange(current);
   }
 
@@ -63,7 +75,12 @@ export default function PositionSelect({ value = [], onChange }) {
       {/* ── Header — same flow & position as every other step ────── */}
       <div className="pos-header role-select-header">
         <h1 className="pos-title role-header-title">Choose your position</h1>
-        <p className="pos-subtitle role-header-subtitle">You can select multiple</p>
+        <p
+          className="pos-subtitle role-header-subtitle"
+          style={{ color: showLimitError ? "var(--negative-default)" : "var(--white)" }}
+        >
+          You can select up to {maxPositions} positions
+        </p>
       </div>
 
       {/* ── Position buttons — fixed overlay, viewport coordinates ─ */}
