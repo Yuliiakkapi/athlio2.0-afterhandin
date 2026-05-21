@@ -1,0 +1,140 @@
+.find-people-root {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-bottom: 100px;
+  position: relative;
+}
+
+.find-people-root::after {
+  content: '';
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 120px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, var(--neutral-50-bg, #f6f6f7) 40%);
+  pointer-events: none;
+  z-index: 50;
+}
+
+.find-people-root .role-header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.find-people-root .role-header-title {
+  margin: 0;
+  font-family: var(--font-condensed);
+  font-size: 44px;
+  font-weight: 700;
+  font-style: italic;
+  line-height: 1.1;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: var(--black, #151622);
+}
+
+.find-people-root .role-header-subtitle {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 0;
+  color: var(--muted, #91909b);
+}
+
+.find-people-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.player-card-item {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  background: var(--white, white);
+  padding: 12px;
+  border-radius: 12px;
+}
+
+.player-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+
+.player-card-header {
+  display: flex;
+  gap: 4px;
+  align-items: flex-start;
+}
+
+.player-card-name {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--black, #151622);
+  white-space: nowrap;
+}
+
+.player-card-badges {
+  display: flex;
+  gap: 2px;
+  flex-wrap: wrap;
+}
+
+.badge {
+  background-color: var(--primary-100, #dbe9ff);
+  color: var(--primary-800, #1f2cb4);
+  padding: 2px 6px;
+  border-radius: 9999px;
+  font-size: 10px;
+  font-weight: 600;
+  font-style: italic;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.player-card-info {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 14px;
+  color: var(--muted, #91909b);
+}
+
+.player-card-club {
+  white-space: nowrap;
+}
+
+.player-card-country {
+  white-space: nowrap;
+}
+
+.player-card-separator {
+  font-size: 3px;
+  color: var(--muted, #91909b);
+}
+
+.find-people-section-label {
+  margin: 0 0 8px 0;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted, #91909b);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.find-people-status {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--muted, #91909b);
+}

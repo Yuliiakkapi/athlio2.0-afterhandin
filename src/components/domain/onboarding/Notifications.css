@@ -8,6 +8,19 @@
   flex-direction: column;
   gap: 24px;
   min-height: calc(100dvh - 176px);
+  position: relative;
+}
+
+.notif-step::after {
+  content: "";
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 280px;
+  background: linear-gradient(to bottom, transparent, #fff);
+  pointer-events: none;
+  z-index: 10;
 }
 
 /* ─── Header ────────────────────────────────────────────────────── */
@@ -45,9 +58,8 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  /* slight upward offset so the block reads as centred given the
-     bottom nav bar adds visual weight at the foot of the screen */
   padding-bottom: 32px;
+  overflow: hidden;
 }
 
 /* ─── Phone frame ───────────────────────────────────────────────── */
@@ -55,12 +67,13 @@
   position: relative;
   width: 73%;
   aspect-ratio: 287 / 521;
-  margin: 0 auto;
+  margin: 100px auto 0;
   border: 4px solid var(--primary-950, #141952);
   border-bottom: none;
   border-radius: 40px 40px 0 0;
   overflow: hidden;
   background: var(--neutral-900, #1a1a2e);
+  z-index: 1;
 }
 
 .notif-phone-bg {
@@ -79,7 +92,7 @@
 
 .notif-timer {
   position: absolute;
-  bottom: 20%;
+  top: 14%;
   left: 50%;
   transform: translateX(-50%);
   font-family: var(--font-condensed);
@@ -95,11 +108,11 @@
 /* ─── Notification cards ────────────────────────────────────────── */
 .notif-cards {
   position: relative;
-  /* 2 visible cards: 78px each + 8px gap = 164px */
-  height: 164px;
+  /* 2 cards: top at 0px (78px tall), bottom at 86px (scale 0.86, ~67px tall) → ~153px total */
+  height: 155px;
   overflow: hidden;
-  margin: -56px 16px 0;
-  z-index: 2;
+  margin: -250px 16px 0;
+  z-index: 3;
 }
 
 .notif-card-slot {
@@ -116,14 +129,6 @@
   background: #fff;
   border-radius: 12px;
   padding: 13px 12px;
-  box-shadow: 0 1px 26px rgba(0, 0, 0, 0.25);
-  /* scale transition when secondary → primary */
-  transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-.notif-card--secondary {
-  transform: scale(0.944);
-  transform-origin: center top;
 }
 
 .notif-card-avatar {

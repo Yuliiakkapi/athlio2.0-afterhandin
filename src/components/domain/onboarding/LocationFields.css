@@ -42,51 +42,6 @@
   position: relative;
 }
 
-.loc-search-bar {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: var(--neutral-100, #eeeff1);
-  border-radius: 9999px;
-  padding: 0 16px;
-  height: 44px;
-  box-sizing: border-box;
-  width: 100%;
-  border: none;
-  cursor: text;
-}
-
-.loc-search-icon {
-  flex-shrink: 0;
-  color: var(--neutral-700, #7d7c86);
-}
-
-.loc-search-input {
-  flex: 1;
-  border: none;
-  background: transparent;
-  outline: none;
-  font-family: var(--font-sans);
-  font-size: var(--text-base);
-  font-weight: 500;
-  color: var(--black);
-  min-width: 0;
-}
-
-.loc-search-input::placeholder {
-  color: var(--neutral-700, #7d7c86);
-}
-
-.loc-search-clear {
-  background: none;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  color: var(--neutral-400, #b8b9c1);
-  flex-shrink: 0;
-}
 
 /* ─── Suggestions dropdown ──────────────────────────────────────── */
 .loc-suggestions {

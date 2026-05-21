@@ -1,0 +1,79 @@
+.image-select-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  height: 177px;
+  background: var(--neutral-100, #f4f4f6);
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background 150ms ease;
+}
+
+.image-select-area:hover {
+  background: var(--neutral-200, #e1e1e4);
+}
+
+.image-select-area--drag {
+  background: var(--primary-50, #f0f4ff);
+  outline: 2px dashed var(--primary-default, #4051fd);
+  outline-offset: -2px;
+}
+
+.image-select-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--primary-200, #bfd6ff);
+  color: var(--primary-default, #4051fd);
+  flex-shrink: 0;
+}
+
+.image-select-label {
+  font-family: var(--font-sans);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--black);
+  line-height: 1;
+}
+
+.image-select-sub {
+  font-family: var(--font-sans);
+  font-size: var(--text-sm, 14px);
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.image-select-preview {
+  position: relative;
+  width: 100%;
+  height: 177px;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.image-select-media {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.image-select-remove {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 4px 10px;
+  border: none;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}

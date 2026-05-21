@@ -41,11 +41,11 @@ function DonutChart() {
   );
 }
 
-export default function Premium() {
+export default function PremiumProfessional() {
   const navigate = useNavigate();
 
-  function goToUpgrade() {
-    navigate("/upgrade-pro", { state: { fromOnboarding: true } });
+  function goToScouting() {
+    navigate("/scouting");
   }
 
   return (
@@ -53,7 +53,7 @@ export default function Premium() {
       <div className="premium-container">
         {/* Header */}
         <div className="premium-header">
-          <h1 className="premium-main-title">Level up your game</h1>
+          <h1 className="premium-main-title">Scouting</h1>
         </div>
 
         {/* Main content */}
@@ -86,19 +86,19 @@ export default function Premium() {
           </div>
         </div>
 
-        {/* Paywall card */}
+        {/* CTA card */}
         <div className="premium-paywall">
           <div className="premium-paywall-badge">PRO</div>
-          <h2 className="premium-paywall-title">Unlock pro features</h2>
+          <h2 className="premium-paywall-title">Explore scouting features</h2>
           <p className="premium-paywall-subtitle">
-            Get AI insights, advanced analytics, and full scout visibility. Take your career to the next level.
+            Search players, build your watchlist, and discover talent with advanced scouting tools.
           </p>
           <Button
             size="medium"
             type="primary"
-            label="Get Premium features"
+            label="Go to scouting"
             fullWidth
-            onClick={goToUpgrade}
+            onClick={goToScouting}
           />
         </div>
       </div>

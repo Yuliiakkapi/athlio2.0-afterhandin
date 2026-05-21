@@ -18,8 +18,8 @@ const SearchBar = ({
       {...(!editable ? { role: "button", onClick, tabIndex: 0 } : {})}
     >
       <div className="search-content">
-        <span className="search-icon" aria-hidden>
-          <MagnifyingGlass size={24} />
+        <span className="search-icon" aria-hidden="true">
+          <MagnifyingGlass size={18} />
         </span>
 
         {editable ? (

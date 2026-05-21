@@ -1,0 +1,130 @@
+.perf-chart-card {
+  background: var(--white);
+  border-radius: 12px;
+  padding: 8px;
+  box-shadow: 0 0 10.5px rgba(0, 0, 0, 0.08);
+  width: 100%;
+}
+
+.perf-chart-header {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+  padding: 0 8px;
+}
+
+.perf-chart-tab {
+  flex: 1;
+  height: 32px;
+  border: none;
+  border-radius: 8px;
+  background: var(--neutral-50-bg);
+  color: var(--muted);
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: var(--text-sm);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.perf-chart-tab.active {
+  background: var(--primary-default);
+  color: var(--white);
+}
+
+.perf-chart-container {
+  display: flex;
+  gap: 8px;
+  padding: 8px;
+}
+
+.perf-y-axis {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30px;
+  height: 196px;
+  text-align: right;
+}
+
+.perf-y-label {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  line-height: 1;
+}
+
+.perf-chart-plot {
+  position: relative;
+  flex: 1;
+}
+
+.perf-chart-svg {
+  display: block;
+  width: 100%;
+}
+
+.perf-chart-line {
+  stroke: var(--primary-default);
+  stroke-width: 2.5;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.perf-data-point {
+  fill: var(--primary-default);
+}
+
+.perf-values {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 0 4px;
+  pointer-events: none;
+}
+
+.perf-value-label {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--primary-default);
+  line-height: 1;
+  margin-top: -8px;
+}
+
+.perf-x-axis {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.perf-x-label {
+  flex: 1;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.perf-predicted {
+  font-family: var(--font-condensed);
+  font-size: 9px;
+  font-weight: 600;
+  font-style: italic;
+  color: var(--primary-default);
+  text-transform: uppercase;
+  letter-spacing: -0.09px;
+  background: var(--primary-100);
+  padding: 2px 4px;
+  border-radius: 4px;
+}

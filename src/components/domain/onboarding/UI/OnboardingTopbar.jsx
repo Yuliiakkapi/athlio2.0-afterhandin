@@ -1,9 +1,10 @@
-import { ArrowLeft } from "@phosphor-icons/react";
+import { ArrowLeft, X } from "@phosphor-icons/react";
 import IconButton from "../../../../components/UI/IconButton";
 import "./OnboardingTopbar.css";
 
 export default function OnboardingTopbar({
   onBack,
+  onClose,
   currentStep = 1,
   totalSteps = 1,
   showBack = true,
@@ -35,6 +36,15 @@ export default function OnboardingTopbar({
         <div className="ob-topbar-track">
           <div className="ob-topbar-fill" style={{ width: `${percent}%` }} />
         </div>
+      </div>
+
+      <div style={{ visibility: onClose ? "visible" : "hidden" }}>
+        <IconButton
+          size="small"
+          type="subtle"
+          icon={X}
+          onClick={onClose}
+        />
       </div>
     </div>
   );

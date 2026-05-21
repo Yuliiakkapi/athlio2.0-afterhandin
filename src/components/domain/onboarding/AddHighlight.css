@@ -148,80 +148,37 @@
   background: var(--neutral-200, #e1e1e4);
 }
 
-/* ─── Text field ─────────────────────────────────────────────────── */
-.highlight-text-wrap {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.highlight-text-label {
-  font-family: var(--font-sans);
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--muted);
-}
-
-.highlight-textarea {
-  width: 100%;
-  min-height: 96px;
-  padding: 12px 14px;
-  box-sizing: border-box;
-  background: var(--neutral-50-bg, #f9f9fb);
-  border: 1px solid var(--neutral-200, #e1e1e4);
-  border-radius: 10px;
-  resize: none;
-  font-family: var(--font-sans);
-  font-size: var(--text-base);
-  font-weight: 400;
-  color: var(--black);
-  line-height: 1.5;
-  outline: none;
-  transition: border-color 120ms ease;
-}
-
-.highlight-textarea--filled {
-  background: #fff;
-}
-
-.highlight-textarea::placeholder {
-  color: var(--muted);
-}
-
-.highlight-textarea:focus {
-  border-color: var(--primary-default, #4051fd);
-}
-
-/* ─── Match selector ─────────────────────────────────────────────── */
+/* ─── Match selector button ─────────────────────────────────────── */
 .highlight-match-btn {
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  height: 44px;
-  padding: 0 14px;
-  box-sizing: border-box;
-  background: #fff;
-  border: 1px solid var(--neutral-200, #e1e1e4);
-  border-radius: 10px;
+  padding: 12px 14px;
+  background: var(--white, white);
+  border: 1.5px solid var(--neutral-200, #e1e1e4);
+  border-radius: 8px;
   cursor: pointer;
-  transition: border-color 120ms ease;
+  transition: border-color 120ms ease, background 120ms ease;
+  font-family: inherit;
 }
 
 .highlight-match-btn:hover {
   border-color: var(--primary-200, #bfd6ff);
 }
 
-.highlight-match-label {
-  font-family: var(--font-sans);
-  font-size: var(--text-base);
-  font-weight: 500;
-  color: var(--muted);
+.highlight-match-btn:active {
+  background: var(--neutral-50, #f9f9fb);
 }
 
-.highlight-match-caret {
+.highlight-match-label {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--muted, #666);
+}
+
+.highlight-match-icon {
   color: var(--neutral-400, #9899a8);
   flex-shrink: 0;
 }

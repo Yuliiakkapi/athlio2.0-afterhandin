@@ -1,10 +1,13 @@
 import { useRef, useState } from "react";
-import { Play, Images, CaretDown, X } from "@phosphor-icons/react";
+import { Play, Images, CaretDown } from "@phosphor-icons/react";
+import TextArea from "../../inputs/TextArea";
+import MatchSelectModal from "./MatchSelectModal";
 import "./AddHighlight.css";
 
-export default function AddHighlight({ mediaUrl, mediaType, text, match, onMediaChange, onTextChange, onMatchChange }) {
+export default function AddHighlight({ mediaUrl, mediaType, text, match, onMediaChange, onTextChange, onMatchChange, matches = [] }) {
   const fileRef = useRef(null);
   const [dragging, setDragging] = useState(false);
+  const [showMatchModal, setShowMatchModal] = useState(false);
 
   function handleFile(file) {
     if (!file) return;
@@ -84,28 +87,34 @@ export default function AddHighlight({ mediaUrl, mediaType, text, match, onMedia
       />
 
       {/* Text field */}
-      <div className="highlight-text-wrap">
-        <span className="highlight-text-label">Add text</span>
-        <textarea
-          className={`highlight-textarea${hasMedia ? " highlight-textarea--filled" : ""}`}
-          placeholder="Describe your moment..."
-          value={text}
-          onChange={(e) => onTextChange(e.target.value)}
-          rows={4}
-        />
-      </div>
+      <TextArea
+        label="Add text"
+        placeholder="Describe your moment..."
+        value={text}
+        onChange={onTextChange}
+        rows={4}
+      />
 
       {/* Match selector */}
       <button
         type="button"
         className="highlight-match-btn"
-        aria-label="Select match"
+        onClick={() => setShowMatchModal(true)}
       >
         <span className="highlight-match-label">
           {match || "Select match"}
         </span>
-        <CaretDown size={18} weight="bold" className="highlight-match-caret" />
+        <CaretDown size={18} weight="bold" className="highlight-match-icon" />
       </button>
+
+      {showMatchModal && (
+        <MatchSelectModal
+          matches={matches}
+          selectedMatch={match}
+          onSelect={onMatchChange}
+          onClose={() => setShowMatchModal(false)}
+        />
+      )}
     </div>
   );
 }

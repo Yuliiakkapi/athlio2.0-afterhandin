@@ -20,9 +20,10 @@ import GoalsField from "../components/domain/onboarding/GoalsField";
 import GoalsSelect from "../components/domain/onboarding/GoalsSelect";
 import AddHighlight from "../components/domain/onboarding/AddHighlight";
 import Notifications from "../components/domain/onboarding/Notifications";
-import Bio from "../components/domain/onboarding/Bio";
+import FindPeople from "../components/domain/onboarding/FindPeople";
 import FollowSuggestions from "../components/domain/onboarding/FollowSuggestions";
 import Premium from "../components/domain/onboarding/Premium";
+import PremiumProfessional from "../components/domain/onboarding/PremiumProfessional";
 import { getSteps } from "../utils/steps";
 import { buildProfilePayload } from "../utils/payload";
 import Textarea from "../components/inputs/TextArea";
@@ -236,7 +237,7 @@ export default function Setup() {
         case "dob":
           return true; // pre-selected by default
         case "position":
-          return true; // position is optional
+          return form.position && form.position.length > 0;
         case "style":
           return true; // first style is pre-selected
         case "leg":
@@ -252,6 +253,10 @@ export default function Setup() {
           return true; // highlight is optional — Post or Skip both advance
         case "notifications":
           return true; // always enabled — user can skip or turn on
+        case "find-people":
+          return true; // find-people is optional — can skip
+        case "premium":
+          return true; // premium is optional — can skip
         default:
           return true;
       }
@@ -265,6 +270,7 @@ export default function Setup() {
       {/* Fixed topbar: back arrow + progress bar */}
       <OnboardingTopbar
         onBack={back}
+        onClose={stepId === "premium" ? () => navigate("/home") : undefined}
         currentStep={idx + 1}
         totalSteps={Math.max(steps.length, 1)}
         showBack={true}
@@ -328,19 +334,22 @@ export default function Setup() {
           />
         )}
 
-        {stepId === "bio" && (
-          <Bio
-            value={form.bio}
-            onChange={(v) => set({ bio: v })}
+        {stepId === "find-people" && (
+          <FindPeople
+            role={role}
             sport={form.primarySport}
             position={form.position}
+            playingStyle={form.playingStyle}
             clubId={form.club_id}
-            clubOtherName={form.club_other_name}
             country={form.country}
           />
         )}
 
-        {stepId === "premium" && <Premium onContinue={() => next()} />}
+        {stepId === "premium" && (
+          ["professional", "scout", "coach", "manager", "agent"].includes(role)
+            ? <PremiumProfessional />
+            : <Premium />
+        )}
 
         {stepId === "club" && (role === "athlete" || role === "scout" || role === "professional") && (
           <ClubPicker
@@ -448,7 +457,7 @@ export default function Setup() {
 
         {/* Removed final 'review' step per request (auto-finish after last configured step) */}
       </StepContainer>
-      <OnboardingNavbar
+      {stepId !== "premium" && <OnboardingNavbar
         onBack={back}
         onNext={
           stepId === "notifications"
@@ -492,6 +501,7 @@ export default function Setup() {
           stepId === "highlight"     ? "Skip" :
           stepId === "notifications" ? "Skip" :
           stepId === "location"      ? "Skip" :
+          stepId === "find-people"   ? "Skip" :
           null
         }
         onSecondary={
@@ -499,9 +509,11 @@ export default function Setup() {
           stepId === "goals"     ? () => next() :
           stepId === "highlight" ? () => next() :
           stepId === "notifications" ? () => next() :
+          stepId === "location"  ? () => next() :
+          stepId === "find-people" ? () => next() :
           null
         }
-      />
+      />}
     </div>
   );
 }
