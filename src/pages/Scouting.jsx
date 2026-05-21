@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CaretDown, CaretRight, Star, Sparkle as SparkleIcon } from "@phosphor-icons/react";
 import { useUser } from "../context/UserContext";
-import OvrBadge from "../components/ui/OvrBadge";
+import OvrBadge from "../components/UI/OvrBadge.jsx";
 // Use user-provided PNG background if present
 import WATCHLIST_BG from "../assets/images/watchlist-bg.png";
 // Upsell background provided by user
