@@ -11,6 +11,17 @@
   z-index: 1000;
 }
 
+.topbar--transparent {
+  position: absolute;
+  background: transparent;
+  color: #ffffff;
+}
+
+.topbar--transparent svg,
+.topbar--transparent button {
+  color: #ffffff;
+}
+
 .topbar--page {
   display: grid;
   grid-template-columns: 36px 1fr 36px;

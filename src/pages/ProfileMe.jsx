@@ -32,7 +32,7 @@ export default function MyProfile() {
 
       const { data, error } = await supabase
         .from("profiles")
-        .select("*")
+        .select("*, clubs(name, logo_url, country)")
         .eq("id", user.id)
         .single();
 

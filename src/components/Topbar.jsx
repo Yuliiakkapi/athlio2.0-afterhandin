@@ -4,7 +4,7 @@ import {
   ArrowLeft,
   Bell,
   ChatCircle,
-  List,
+  GearSix,
   MagnifyingGlass,
   Plus,
   ShareNetwork,
@@ -102,44 +102,30 @@ const TOPBAR_CONFIG = {
       />
     ),
   },
-  "/profile/me": {
-    title: null,
+  "/profile/me/following": {
     left: (nav) => (
-      <div className="topbar-left-with-back">
-        <IconButton size="large" type="subtle" icon={ArrowLeft} onClick={() => nav(-1)} />
-        <MainLogo className="main-logo" />
-      </div>
+      <IconButton size="large" type="subtle" icon={ArrowLeft} onClick={() => nav(-1)} />
+    ),
+    center: () => <h1 className="topbar-page-title">Following</h1>,
+    right: () => <span aria-hidden="true" />,
+    variant: "page",
+  },
+  "/profile/me": {
+    transparent: true,
+    left: (nav) => (
+      <IconButton size="large" type="subtle" icon={ArrowLeft} onClick={() => nav(-1)} />
     ),
     right: () => (
-      <div className="topbar-icons">
-        <List
-          size={24}
-          className="topbar-menu-icon"
-          aria-label="Menu"
-          onClick={() => {
-            console.log("Menu clicked");
-          }}
-        />
-      </div>
+      <GearSix size={24} aria-label="Settings" onClick={() => console.log("Settings clicked")} />
     ),
   },
   "/profile/other": {
-    title: null,
+    transparent: true,
     left: (nav) => (
-      <div className="topbar-left-with-back">
-        <IconButton size="large" type="subtle" icon={ArrowLeft} onClick={() => nav(-1)} />
-        <MainLogo className="main-logo" />
-      </div>
+      <IconButton size="large" type="subtle" icon={ArrowLeft} onClick={() => nav(-1)} />
     ),
     right: () => (
-      <Button
-        size="small"
-        type="outline"
-        onClick={() => {
-          console.log("Share clicked");
-        }}
-        leadingIcon={ShareNetwork}
-      />
+      <ShareNetwork size={24} aria-label="Share profile" onClick={() => console.log("Share clicked")} />
     ),
   },
   "/profile/me/edit": {
@@ -211,7 +197,7 @@ export default function Topbar() {
   if (!config) return null;
 
   return (
-    <header className={`topbar${config.variant === "page" ? " topbar--page" : ""}`}>
+    <header className={`topbar${config.variant === "page" ? " topbar--page" : ""}${config.transparent ? " topbar--transparent" : ""}`}>
       <div>{config.left?.(navigate, profile, counts)}</div>
       {config.center?.(navigate, profile, counts) || (
         <h1 className="topbar-title">{config.title}</h1>

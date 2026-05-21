@@ -35,7 +35,7 @@ export default function OtherProfile() {
 
       const { data, error } = await supabase
         .from("profiles")
-        .select("*")
+        .select("*, clubs(name, logo_url, country)")
         .eq("id", id)
         .maybeSingle();
 
@@ -87,7 +87,7 @@ export default function OtherProfile() {
 
       const { data: updatedProfile, error } = await supabase
         .from("profiles")
-        .select("*")
+        .select("*, clubs(name, logo_url, country)")
         .eq("id", profile.id)
         .single();
 

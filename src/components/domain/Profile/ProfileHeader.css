@@ -7,8 +7,7 @@
 .ph-root {
   position: relative;
   width: 100%;
-  min-height: 283px;
-  background: none;
+  min-height: 222px;
   border-radius: 0 0 24px 24px;
   overflow: hidden;
   display: flex;
@@ -25,70 +24,34 @@
   object-fit: cover;
   pointer-events: none;
   display: block;
-  opacity: 1;
 }
 
-/* ─── Top bar: back + share ────────────────────────────────────── */
-.ph-topbar {
+/* ─── Box: wraps content + actions ──────────────────────────────── */
+.ph-box {
   position: relative;
   z-index: 2;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-top: 16px;
-  padding-bottom: 12px;
-}
-
-.ph-icon-btn {
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: none;
-  border: none;
-  color: #fff;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-  padding: 0;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+  width: 100%;
+  padding-top: 60px;
 }
 
 /* ─── Main content row: avatar LEFT + info RIGHT ─────────────────── */
 .ph-content {
-  position: relative;
-  z-index: 2;
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
   align-items: center;
   gap: 17px;
-  flex: 1;
-  padding-top: 8px;
   width: 100%;
 }
 
 /* ─── Avatar ────────────────────────────────────────────────────── */
 .ph-avatar-wrap {
   flex-shrink: 0;
-  width: 84px;
-  height: 84px;
-  border-radius: 50%;
-  overflow: hidden;
-  background: rgba(255, 255, 255, 0.15);
-}
-
-.ph-avatar {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center top;
-  display: block;
-}
-
-.ph-avatar--placeholder {
-  width: 100%;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.2);
+  cursor: pointer;
 }
 
 /* ─── Info column ───────────────────────────────────────────────── */
@@ -103,7 +66,7 @@
 /* Name */
 .ph-name {
   line-height: 1;
-  color: #ffffff;
+  color: var(--white);
   white-space: pre-wrap;
   margin: 0;
 }
@@ -123,21 +86,6 @@
   flex-wrap: wrap;
 }
 
-/* Position badge — light blue pill */
-.ph-badge {
-  font-family: var(--font-condensed, "Barlow Condensed", sans-serif);
-  font-size: 14px;
-  font-weight: 600;
-  font-style: italic;
-  text-transform: uppercase;
-  letter-spacing: -0.01em;
-  color: var(--primary-800, #1f2cb4);
-  background: var(--primary-100, #dbe9ff);
-  border-radius: 9999px;
-  padding: 2px 8px;
-  white-space: nowrap;
-}
-
 /* Dot separator */
 .ph-dot {
   width: 3px;
@@ -149,51 +97,25 @@
 
 /* Club name */
 .ph-club {
-  color: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--white);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
+.ph-club-logo {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
 /* ─── Action buttons ─────────────────────────────────────────────── */
 .ph-actions {
-  position: relative;
-  z-index: 2;
   display: flex;
   gap: 10px;
-  margin-top: 16px;
-}
-
-.ph-btn {
-  flex: 1;
-  height: 36px;
-  padding: 0 12px;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-  transition: opacity 150ms ease;
-  white-space: nowrap;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.ph-btn:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
-/* Secondary — neutral/100 bg + border, primary text */
-.ph-btn--secondary {
-  background: var(--neutral-100, #eeeff1);
-  border: 1px solid var(--neutral-200, #e1e1e4);
-  color: var(--primary-700, #2230e0);
-}
-
-/* Ghost — white/20% bg, white text */
-.ph-btn--ghost {
-  background: rgba(255, 255, 255, 0.2);
-  color: #ffffff;
-  border: none;
+  width: 100%;
 }
