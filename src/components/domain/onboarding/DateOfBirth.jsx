@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react";
+﻿import { useRef, useState, useEffect } from "react";
 import "./DateOfBirth.css";
 
 const ITEM_H = 54;           // height of each drum item in px
@@ -15,9 +15,9 @@ function getDaysInMonth(month0, year) {
   return new Date(year, month0 + 1, 0).getDate();
 }
 
-/* ──────────────────────────────────────────────────────────────────
+/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
    Single drum column
-────────────────────────────────────────────────────────────────── */
+â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 function Drum({ items, initialIdx, onSelect, format, label }) {
   const scrollRef = useRef();
   const timerRef  = useRef();
@@ -84,10 +84,10 @@ function Drum({ items, initialIdx, onSelect, format, label }) {
   );
 }
 
-/* ──────────────────────────────────────────────────────────────────
+/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
    DateOfBirth step
    value: "YYYY-MM-DD" string  |  onChange: (str) => void
-────────────────────────────────────────────────────────────────── */
+â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 export default function DateOfBirth({ value, onChange }) {
   function parseValue() {
     if (value) {
@@ -130,13 +130,13 @@ export default function DateOfBirth({ value, onChange }) {
   return (
     <div className="dob-step">
       <div className="dob-header">
-        <h1 className="dob-title">Date of birth</h1>
+        <h1 className="heading-5xl-italic dob-title">Date of birth</h1>
         <p className="dob-subtitle">We use this to show you relevant comparisons and opportunities.</p>
       </div>
 
       <div className="dob-picker-shell">
         <div className="dob-picker" role="group" aria-label="Date of birth picker">
-          {/* Day — remount key when daysCount changes to re-sync scroll */}
+          {/* Day â€” remount key when daysCount changes to re-sync scroll */}
           <Drum
             key={`day-${daysCount}`}
             items={days}

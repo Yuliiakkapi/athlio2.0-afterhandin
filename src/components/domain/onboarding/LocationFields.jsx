@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { MapPin, X } from "@phosphor-icons/react";
 import SearchBar from "../../UI/SearchBar";
 import Globe from "./Globe";
@@ -29,7 +30,9 @@ export default function LocationFields({ country, city, onChange }) {
   const [searching,   setSearching]   = useState(false);
   const [open,        setOpen]        = useState(false);
   const [pinCoords,   setPinCoords]   = useState(null);
-  const deb     = useRef(null);
+  const deb           = useRef(null);
+  const searchWrapRef = useRef(null);
+  const [dropdownRect, setDropdownRect] = useState(null);
 
   const hasSelection = !!(city && country);
 
@@ -60,6 +63,21 @@ export default function LocationFields({ country, city, onChange }) {
     setQuery("");
   }
 
+  useEffect(() => {
+    if (!open || !searchWrapRef.current) { setDropdownRect(null); return; }
+    function update() {
+      const r = searchWrapRef.current?.getBoundingClientRect();
+      if (r) setDropdownRect({ top: r.bottom + 6, left: r.left, right: window.innerWidth - r.right });
+    }
+    update();
+    window.addEventListener("scroll", update, true);
+    window.addEventListener("resize", update);
+    return () => {
+      window.removeEventListener("scroll", update, true);
+      window.removeEventListener("resize", update);
+    };
+  }, [open]);
+
   const globeSize = Math.min(Math.round(window.innerWidth * 0.78), 300);
 
   return (
@@ -82,7 +100,7 @@ export default function LocationFields({ country, city, onChange }) {
           </button>
         </div>
       ) : (
-        <div className="loc-search-wrap">
+        <div className="loc-search-wrap" ref={searchWrapRef}>
           <SearchBar
             label="Search for a city or town..."
             placeholder="Search for a city or town..."
@@ -91,8 +109,11 @@ export default function LocationFields({ country, city, onChange }) {
             onClear={() => { setQuery(""); setSuggestions([]); setOpen(false); }}
           />
 
-          {open && (
-            <div className="loc-suggestions">
+          {open && dropdownRect && createPortal(
+            <div
+              className="loc-suggestions"
+              style={{ position: "fixed", top: dropdownRect.top, left: dropdownRect.left, right: dropdownRect.right }}
+            >
               {searching && <p className="loc-searching">Searching…</p>}
               {suggestions.map(s => (
                 <button key={s.id} className="loc-suggestion-item" onClick={() => pickSuggestion(s)} type="button">
@@ -103,7 +124,8 @@ export default function LocationFields({ country, city, onChange }) {
                   </div>
                 </button>
               ))}
-            </div>
+            </div>,
+            document.body
           )}
         </div>
       )}

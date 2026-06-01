@@ -21,6 +21,11 @@
   background: var(--neutral-50-bg, #f6f6f7);
 }
 
+.setup-profile-page:has(.premium-root) {
+  max-height: 100dvh;
+  overflow: hidden;
+}
+
 /* Figma-inspired basic onboarding styles */
 .basic-step {
   display: flex;

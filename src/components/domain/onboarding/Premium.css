@@ -7,6 +7,7 @@
 .premium-root {
   position: relative;
   min-height: calc(100dvh - 68px - 32px);
+  max-height: 100vh;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -121,4 +122,15 @@
 .premium-paywall :global(.button) {
   position: relative;
   z-index: 2;
+}
+
+/* ── PRO badge gradient override (PremiumProfessional only) ─────── */
+.pro-badge--scout-gradient {
+  border-radius: 99999px;
+  border: 2px solid var(--white, #fff);
+  background: linear-gradient(12deg, var(--warning-DEFAULT, #FF983D) 0%, var(--negative-DEFAULT, #FF3D52) 100%);
+}
+
+.pro-badge--scout-gradient .badge-text {
+  color: var(--white, #fff);
 }
