@@ -107,6 +107,7 @@ export default function ProfileEdit() {
           <AvatarPicker
             value={form.avatar_url}
             onChange={(v) => set({ avatar_url: v })}
+            userId={userId}
           />
         </div>
 

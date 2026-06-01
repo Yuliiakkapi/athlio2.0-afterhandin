@@ -1,5 +1,7 @@
 import PostIcon from "../../UI/PostIcon";
-import { ChatCircle, FireSimple, Repeat } from "@phosphor-icons/react";
+import { ChatCircle } from "@phosphor-icons/react";
+import AuraIcon from "../../../assets/icons/aura.svg?react";
+import AuraActiveIcon from "../../../assets/icons/aura-active.svg?react";
 import "./PostActions.css";
 import { useEffect, useState } from "react";
 import { supabase } from "../../../lib/supabase";
@@ -16,7 +18,6 @@ export default function PostActions({
   const { profile } = useUser();
   const [liked, setLiked] = useState(false);
   const [likes, setLikes] = useState(Number(auraCount) || 0);
-  const [reposted, setReposted] = useState(false);
   const [showComments, setShowComments] = useState(false);
   const [comments, setComments] = useState(Number(commentCount) || 0);
 
@@ -110,10 +111,6 @@ export default function PostActions({
     setShowComments(true);
   }
 
-  async function handleRepost() {
-    const newReposted = !reposted;
-  }
-
   function handleCommentAdded() {
     setComments((prev) => (Number(prev) || 0) + 1);
   }
@@ -122,13 +119,11 @@ export default function PostActions({
     <>
       <div className="post-actions">
         <PostIcon
-          Icon={FireSimple}
+          Icon={liked ? AuraActiveIcon : AuraIcon}
           count={likes}
           onClick={handleAura}
-          className={`postIcon ${liked ? "active" : ""}`}
         />
         <PostIcon Icon={ChatCircle} count={comments} onClick={handleComment} />
-        <PostIcon Icon={Repeat} onClick={handleRepost} />
       </div>
 
       <CommentsOverlay
