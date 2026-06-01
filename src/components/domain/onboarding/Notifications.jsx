@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+﻿import { useEffect, useRef, useState } from "react";
 import footballImg from "../../../assets/images/footballrun.png";
 import avatar1 from "../../../assets/images/notif-avatar-1.jpg";
 import avatar2 from "../../../assets/images/notif-avatar-2.jpg";
@@ -12,7 +12,7 @@ const NOTIFICATIONS = [
     avatar: avatar1,
   },
   {
-    name: "Jośe Mourinho",
+    name: "JoĹ›e Mourinho",
     role: "Coach",
     msg: "Are you ready to invest in your future?",
     avatar: avatar2,
@@ -34,7 +34,7 @@ const NOTIFICATIONS = [
   {
     name: "Marco Ferrari",
     role: "Scout",
-    msg: "Watched your highlights — let's talk opportunities.",
+    msg: "Watched your highlights â€” let's talk opportunities.",
     initials: "MF",
     color: "#16a34a",
   },
@@ -83,7 +83,7 @@ export default function Notifications() {
   const nextNotif = useRef(2);
 
   const [cards, setCards] = useState(() =>
-    NOTIFICATIONS.slice(0, 2).map((notif, i) => ({ id: i, notif }))
+    NOTIFICATIONS.slice(0, 2).map((notif, i) => ({ id: i, notif, entering: false }))
   );
   const [animating, setAnimating] = useState(false);
 
@@ -92,18 +92,27 @@ export default function Notifications() {
     const HOLD_MS = 4000;
 
     const timer = setInterval(() => {
-      setAnimating(true);
+      // Add new card with entering:true so it renders invisible at the bottom position
+      setCards(prev => [
+        ...prev,
+        {
+          id: nextId.current++,
+          notif: NOTIFICATIONS[nextNotif.current++ % NOTIFICATIONS.length],
+          entering: true,
+        },
+      ]);
 
-      setTimeout(() => {
-        setCards(prev => [
-          ...prev.slice(1),
-          {
-            id: nextId.current++,
-            notif: NOTIFICATIONS[nextNotif.current++ % NOTIFICATIONS.length],
-          },
-        ]);
-        setAnimating(false);
-      }, ANIM_MS + 60);
+      // Two rAFs ensure the card is painted at its starting position before transitioning
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          setAnimating(true);
+
+          setTimeout(() => {
+            setCards(prev => prev.slice(1).map(c => ({ ...c, entering: false })));
+            setAnimating(false);
+          }, ANIM_MS + 60);
+        });
+      });
     }, HOLD_MS);
 
     return () => clearInterval(timer);
@@ -126,7 +135,7 @@ export default function Notifications() {
           <div className="notif-timer" aria-hidden="true">6:07</div>
         </div>
 
-        {/* Stacked ticker cards — each slot moves up one position per tick,
+        {/* Stacked ticker cards â€” each slot moves up one position per tick,
             scaling from small (bottom) to full (top); exiting card dissolves upward */}
         <div className="notif-cards" aria-live="polite" aria-atomic="true">
           {cards.map((item, i) => {
@@ -141,7 +150,7 @@ export default function Notifications() {
                 style={{
                   transform: `translateY(${targetPos * SLOT}px) scale(${scale})`,
                   transformOrigin: "center top",
-                  opacity: isExiting ? 0 : 1,
+                  opacity: isExiting ? 0 : (item.entering && !animating ? 0 : 1),
                   transition: animating
                     ? "transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.5s ease-out"
                     : "none",
@@ -159,3 +168,4 @@ export default function Notifications() {
     </div>
   );
 }
+

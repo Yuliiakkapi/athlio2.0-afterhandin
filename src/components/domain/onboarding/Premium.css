@@ -1,26 +1,46 @@
+/* ── Root ───────────────────────────────────────────────────────────
+   Height = viewport minus topbar (68px) minus desired bottom gap (32px).
+   This extends into setup-profile-page's 108px bottom padding so
+   margin-top:auto on the card lands it exactly 32px from the viewport
+   bottom (no OnboardingNavbar is rendered on the premium step).
+─────────────────────────────────────────────────────────────────── */
 .premium-root {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-
-  background: var(--neutral-50-bg);
-  min-height: 100vh;
   position: relative;
-}
-
-.premium-container {
+  min-height: calc(100dvh - 68px - 32px);
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  max-width: 390px;
+  overflow: hidden;
 }
 
-.premium-header {
-  padding-top: 20px;
-  padding-bottom: 8px;
+/* ── Background screenshot — shifted 20px up ────────────────────── */
+.premium-bg {
+  position: absolute;
+  top: -20px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  pointer-events: none;
 }
 
+/* ── Gradient: image visible at top, fades to page bg at bottom ─── */
+.premium-fade {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    transparent 35%,
+    var(--neutral-50-bg, #f6f6f7) 72%
+  );
+}
+
+/* ── "Level up your game" heading — top, like all other steps ───── */
 .premium-main-title {
+  position: relative;
+  z-index: 2;
   font-family: var(--font-condensed);
   font-size: var(--heading-5xl);
   font-weight: 700;
@@ -28,47 +48,18 @@
   color: var(--black);
   text-transform: uppercase;
   line-height: 1.1;
-  margin: 0;
-  text-align: center;
+  margin: 0 0 auto;
   letter-spacing: -0.44px;
 }
 
-.premium-close-btn {
-  position: absolute;
-  top: 56px;
-  right: 16px;
-  width: 40px;
-  height: 40px;
-  border: none;
-  background: rgba(240, 240, 243, 0.1);
-  border-radius: 50%;
-  cursor: pointer;
-  font-size: 24px;
-  color: var(--black);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10;
-}
-
-.premium-close-btn:hover {
-  background: rgba(240, 240, 243, 0.2);
-}
-
-.premium-content {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-top: 8px;
-}
-
+/* ── Paywall card — pushed to the bottom via margin-top: auto ────── */
 .premium-paywall {
+  position: relative;
+  z-index: 2;
   background: linear-gradient(135deg, #222f8d 0%, #1f2cb4 100%);
   border-radius: 24px;
   padding: 20px 16px;
-  margin-top: 16px;
   text-align: center;
-  position: relative;
   overflow: hidden;
   display: flex;
   flex-direction: column;

@@ -73,7 +73,7 @@ export default function RoleSelect({ role, onChange, onNext }) {
 
               {/* Description — fades in on expand */}
               <div className="role-photo-card-desc" aria-hidden={!selected}>
-                <p>{r.description}</p>
+                <p className="text-base-medium">{r.description}</p>
               </div>
 
               {/* Chevron */}

@@ -1,32 +1,40 @@
 import "./ProfessionalRole.css";
-import CoachImg   from "../../../assets/images/prof-coach.png";
-import ScoutImg   from "../../../assets/images/prof-scout.png";
-import ManagerImg from "../../../assets/images/prof-manager.png";
-import AgentImg   from "../../../assets/images/prof-agent.png";
+import CoachBw      from "../../../assets/images/coach-bw.png";
+import CoachColor   from "../../../assets/images/coach-color.png";
+import ScoutBw      from "../../../assets/images/scout.png";
+import ScoutColor   from "../../../assets/images/scout-color.png";
+import ManagerBw    from "../../../assets/images/manager-bw.png";
+import ManagerColor from "../../../assets/images/manager-color.png";
+import AgentBw      from "../../../assets/images/Agent-bw.png";
+import AgentColor   from "../../../assets/images/Agent-color.png";
 
 const PROFESSIONS = [
   {
     id: "coach",
     label: "Coach",
-    image: CoachImg,
+    imageBw: CoachBw,
+    imageColor: CoachColor,
     description: "Lead athletes and shape winning teams.",
   },
   {
     id: "scout",
     label: "Scout",
-    image: ScoutImg,
+    imageBw: ScoutBw,
+    imageColor: ScoutColor,
     description: "Discover emerging talent around the world.",
   },
   {
     id: "manager",
     label: "Manager",
-    image: ManagerImg,
+    imageBw: ManagerBw,
+    imageColor: ManagerColor,
     description: "Oversee club operations and player development.",
   },
   {
     id: "agent",
     label: "Agent",
-    image: AgentImg,
+    imageBw: AgentBw,
+    imageColor: AgentColor,
     description: "Represent athletes and negotiate their careers.",
   },
 ];
@@ -54,7 +62,8 @@ function ProfCard({ prof, selected, onSelect }) {
       className={`prof-card${selected ? " prof-card--selected" : ""}`}
       onClick={() => onSelect(prof.id)}
     >
-      <img src={prof.image} alt="" className="prof-card-img" />
+      <img src={prof.imageBw}    alt="" className="prof-card-img prof-card-img--bw" />
+      <img src={prof.imageColor} alt="" className="prof-card-img prof-card-img--color" />
       <div className="prof-card-overlay" />
 
       <div className="prof-card-label-wrap" aria-hidden="true">
@@ -62,7 +71,7 @@ function ProfCard({ prof, selected, onSelect }) {
       </div>
 
       <div className="prof-card-desc" aria-hidden={!selected}>
-        <p>{prof.description}</p>
+        <p className="text-base-medium">{prof.description}</p>
       </div>
 
       <div

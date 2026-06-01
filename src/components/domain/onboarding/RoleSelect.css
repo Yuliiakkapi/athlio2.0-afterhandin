@@ -115,15 +115,16 @@
 /* ─── Description — fades in when expanded ─────────────────────── */
 .role-photo-card-desc {
   position: absolute;
-  bottom: 62px;
+  bottom: 24px;
   left: 16px;
-  right: 16px;
+  right: 60px;
   opacity: 0;
   transform: translateY(6px);
   transition:
     opacity 250ms ease 80ms,
     transform 250ms ease 80ms;
   pointer-events: none;
+  text-align: left;
 }
 
 .role-photo-card--selected .role-photo-card-desc {
@@ -133,9 +134,6 @@
 
 .role-photo-card-desc p {
   margin: 0;
-  font-family: var(--font-sans, "Barlow", sans-serif);
-  font-size: 13px;
-  font-weight: 500;
   line-height: 1.4;
   color: rgba(255, 255, 255, 0.85);
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
@@ -144,7 +142,7 @@
 /* ─── Chevron circle — bottom-right ────────────────────────────── */
 .role-photo-card-chevron {
   position: absolute;
-  bottom: 14px;
+  bottom: 24px;
   right: 14px;
   width: 36px;
   height: 36px;

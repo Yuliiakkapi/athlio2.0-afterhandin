@@ -1,9 +1,8 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import { CaretDown, MagnifyingGlass, Plus, X } from "@phosphor-icons/react";
+﻿import { useEffect, useMemo, useRef, useState } from "react";
+import { MagnifyingGlass, Plus, X } from "@phosphor-icons/react";
 import { supabase } from "../../../lib/supabase.js";
 import "./ClubPicker.css";
 
-const TEAM_TYPES = ["Main Team", "Reserve", "U-23", "U-21", "U-19", "Academy", "Youth"];
 
 function searchClubs(clubs, query) {
   const term = query.trim().toLowerCase();
@@ -37,12 +36,11 @@ function AddTeamSheet({ onClose, onSubmit }) {
   const [clubName, setClubName] = useState("");
   const [city, setCity]         = useState("");
   const [league, setLeague]     = useState("");
-  const [teamType, setTeamType] = useState("Main Team");
 
   function handleSubmit() {
     const clean = clubName.trim();
     if (!clean) return;
-    onSubmit({ clubName: clean, city: city.trim(), league: league.trim(), teamType });
+    onSubmit({ clubName: clean, city: city.trim(), league: league.trim() });
   }
 
   return (
@@ -78,18 +76,6 @@ function AddTeamSheet({ onClose, onSubmit }) {
             value={league}
             onChange={e => setLeague(e.target.value)}
           />
-          <div className="add-team-select-wrap">
-            <select
-              className="add-team-select"
-              value={teamType}
-              onChange={e => setTeamType(e.target.value)}
-            >
-              {TEAM_TYPES.map(t => (
-                <option key={t} value={t}>{t}</option>
-              ))}
-            </select>
-            <CaretDown size={18} className="add-team-select-icon" aria-hidden="true" />
-          </div>
         </div>
 
         {/* Footer */}
@@ -101,6 +87,45 @@ function AddTeamSheet({ onClose, onSubmit }) {
           >
             Add club
           </button>
+        </div>
+
+      </div>
+    </div>
+  );
+}
+
+function VerificationSheet({ onClose }) {
+  useEffect(() => {
+    const t = setTimeout(onClose, 2000);
+    return () => clearTimeout(t);
+  }, [onClose]);
+
+  return (
+    <div className="add-team-backdrop" onClick={onClose}>
+      <div className="add-team-sheet verify-sheet" onClick={e => e.stopPropagation()}>
+
+        {/* Close row */}
+        <div className="verify-close-row">
+          <button className="add-team-close" onClick={onClose} aria-label="Close">
+            <X size={24} weight="regular" />
+          </button>
+        </div>
+
+        {/* Body */}
+        <div className="verify-body">
+          <div className="verify-icon" aria-hidden="true">
+            <svg viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg" className="verify-check-svg">
+              <circle cx="45" cy="45" r="40" stroke="var(--primary-default,#4051fd)" strokeWidth="4" strokeLinecap="round" className="verify-check-circle" />
+              <polyline points="27,45 39,57 63,33" stroke="var(--primary-default,#4051fd)" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" className="verify-check-mark" />
+            </svg>
+          </div>
+
+          <div className="verify-text">
+            <p className="verify-title">Got it.</p>
+            <p className="verify-subtitle text-base-medium">
+              We will review your club and add it to our database shortly. You will be notified once it is verified.
+            </p>
+          </div>
         </div>
 
       </div>
@@ -129,11 +154,12 @@ function pickFeatured(clubs, userCity, userCountry) {
 }
 
 export default function ClubPicker({ value, onChange, onNext, userCity, userCountry }) {
-  const [query, setQuery]               = useState("");
-  const [showAddSheet, setShowAddSheet] = useState(false);
-  const [clubs, setClubs]               = useState([]);
-  const [featured, setFeatured]         = useState([]);
-  const [loading, setLoading]           = useState(true);
+  const [query, setQuery]                       = useState("");
+  const [showAddSheet, setShowAddSheet]         = useState(false);
+  const [showVerification, setShowVerification] = useState(false);
+  const [clubs, setClubs]                       = useState([]);
+  const [featured, setFeatured]                 = useState([]);
+  const [loading, setLoading]                   = useState(true);
   const inputRef = useRef(null);
 
   useEffect(() => {
@@ -153,7 +179,7 @@ export default function ClubPicker({ value, onChange, onNext, userCity, userCoun
           city    = geo.address?.city || geo.address?.town || geo.address?.village || "";
           country = geo.address?.country || "";
         } catch {
-          // geolocation unavailable or denied — proceed without
+          // geolocation unavailable or denied â€” proceed without
         }
       }
 
@@ -182,7 +208,7 @@ export default function ClubPicker({ value, onChange, onNext, userCity, userCoun
     onChange({ club_id: club.id, club_other_name: club.name });
   }
 
-  async function handleAddTeam({ clubName, city, league, teamType }) {
+  async function handleAddTeam({ clubName, city, league }) {
     const { data, error } = await supabase
       .from("clubs")
       .insert({ name: clubName, city: city || null, league: league || null, country: userCountry || null, sport: "football" })
@@ -196,10 +222,9 @@ export default function ClubPicker({ value, onChange, onNext, userCity, userCoun
       club_other_name: clubName,
       club_city: city || undefined,
       club_league: league || undefined,
-      club_team_type: teamType,
     });
     setShowAddSheet(false);
-    onNext?.();
+    setShowVerification(true);
   }
 
   return (
@@ -239,7 +264,7 @@ export default function ClubPicker({ value, onChange, onNext, userCity, userCoun
         <p className="team-list-label">{listLabel}</p>
 
         <div className="team-list">
-          {loading && <p className="team-empty">Loading clubs…</p>}
+          {loading && <p className="team-empty">Loading clubsâ€¦</p>}
           {!loading && showList.map(club => {
             const selected = value?.club_id === club.id || value?.club_other_name === club.name;
             return (
@@ -252,7 +277,7 @@ export default function ClubPicker({ value, onChange, onNext, userCity, userCoun
                 <ClubLogo club={club} />
                 <div className="team-club-meta">
                   <span className="team-club-name">{club.name}</span>
-                  <span className="team-club-sub">{club.league} · {club.country}</span>
+                  <span className="team-club-sub">{club.league} Â· {club.country}</span>
                 </div>
               </button>
             );
@@ -283,6 +308,14 @@ export default function ClubPicker({ value, onChange, onNext, userCity, userCoun
           onSubmit={handleAddTeam}
         />
       )}
+
+      {/* Verification notice */}
+      {showVerification && (
+        <VerificationSheet
+          onClose={() => { setShowVerification(false); onNext?.(); }}
+        />
+      )}
     </div>
   );
 }
+

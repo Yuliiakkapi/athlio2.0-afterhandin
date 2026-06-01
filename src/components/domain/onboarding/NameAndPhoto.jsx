@@ -1,10 +1,12 @@
 import { useRef, useState, useEffect } from "react";
 import { UserCircle, Plus } from "@phosphor-icons/react";
+import AvatarCropModal from "./AvatarCropModal";
 import "./NameAndPhoto.css";
 
 export default function NameAndPhoto({ name, avatarUrl, onNameChange, onAvatarChange }) {
   const fileRef = useRef();
-  const [preview, setPreview] = useState(avatarUrl || "");
+  const [preview,  setPreview]  = useState(avatarUrl || "");
+  const [cropSrc,  setCropSrc]  = useState(null);
 
   useEffect(() => {
     setPreview(avatarUrl || "");
@@ -13,16 +15,28 @@ export default function NameAndPhoto({ name, avatarUrl, onNameChange, onAvatarCh
   function handleFile(e) {
     const f = e.target.files?.[0];
     if (!f) return;
+    // Reset input so the same file can be re-selected after cancel
+    e.target.value = "";
     const reader = new FileReader();
-    reader.onload = () => {
-      setPreview(reader.result);
-      if (typeof onAvatarChange === "function") onAvatarChange(reader.result);
-    };
+    reader.onload = () => setCropSrc(reader.result);
     reader.readAsDataURL(f);
+  }
+
+  function handleCropApply(dataUrl) {
+    setCropSrc(null);
+    setPreview(dataUrl);
+    if (typeof onAvatarChange === "function") onAvatarChange(dataUrl);
   }
 
   return (
     <div className="name-step">
+      {cropSrc && (
+        <AvatarCropModal
+          src={cropSrc}
+          onApply={handleCropApply}
+          onCancel={() => setCropSrc(null)}
+        />
+      )}
       {/* Heading */}
       <div className="name-step-header">
         <h1 className="name-step-title">What is your name?</h1>

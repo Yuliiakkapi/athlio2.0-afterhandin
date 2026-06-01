@@ -1,0 +1,195 @@
+/* ── Backdrop ──────────────────────────────────────────────────── */
+.acm-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  animation: acm-fade-in 200ms ease;
+}
+
+@keyframes acm-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ── Bottom sheet ──────────────────────────────────────────────── */
+.acm-sheet {
+  background: var(--white, #ffffff);
+  border-radius: 24px 24px 0 0;
+  padding: 0 20px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: acm-slide-up 300ms cubic-bezier(0.22, 0.9, 0.3, 1);
+  /* prevent sheet from being too tall on large screens */
+  max-height: 96dvh;
+}
+
+@keyframes acm-slide-up {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0);    }
+}
+
+/* ── Handle ────────────────────────────────────────────────────── */
+.acm-handle {
+  width: 48px;
+  height: 4px;
+  background: var(--neutral-200, #e1e1e4);
+  border-radius: 9999px;
+  margin: 10px 0 20px;
+  flex-shrink: 0;
+}
+
+/* ── Heading ───────────────────────────────────────────────────── */
+.acm-title {
+  color: var(--black, #151622);
+  margin: 0 0 4px;
+  text-align: center;
+}
+
+.acm-hint {
+  color: var(--muted, #91909b);
+  margin: 0 0 20px;
+  text-align: center;
+}
+
+/* ── Crop area ─────────────────────────────────────────────────── */
+.acm-crop-wrap {
+  position: relative;
+  width: 280px;
+  height: 280px;
+  overflow: hidden;
+  border-radius: 6px;
+  background: #111;
+  flex-shrink: 0;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+  margin-bottom: 20px;
+}
+
+.acm-crop-wrap:active {
+  cursor: grabbing;
+}
+
+.acm-img {
+  position: absolute;
+  display: block;
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+
+/* Dark overlay with a transparent circular aperture */
+.acm-crop-mask {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  background: radial-gradient(
+    circle 138px at 50% 50%,
+    transparent 0%,
+    transparent 98.5%,
+    rgba(0, 0, 0, 0.6) 100%
+  );
+}
+
+/* Subtle white ring tracing the crop boundary */
+.acm-circle-ring {
+  position: absolute;
+  width: 276px;
+  height: 276px;
+  border-radius: 50%;
+  top: 2px;
+  left: 2px;
+  pointer-events: none;
+  z-index: 3;
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.55);
+}
+
+/* ── Zoom slider ───────────────────────────────────────────────── */
+.acm-zoom-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  max-width: 280px;
+  margin-bottom: 24px;
+}
+
+.acm-zoom-icon {
+  font-size: 22px;
+  font-weight: 300;
+  line-height: 1;
+  width: 18px;
+  text-align: center;
+  color: var(--neutral-500, #a5a5af);
+  flex-shrink: 0;
+}
+
+.acm-zoom-slider {
+  flex: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  border-radius: 9999px;
+  background: var(--neutral-200, #e1e1e4);
+  outline: none;
+  cursor: pointer;
+}
+
+.acm-zoom-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--primary-default, #4051fd);
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 1px 6px rgba(64, 81, 253, 0.35);
+}
+
+.acm-zoom-slider::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--primary-default, #4051fd);
+  cursor: pointer;
+  border: none;
+}
+
+/* ── Action buttons ────────────────────────────────────────────── */
+.acm-actions {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+}
+
+.acm-btn {
+  flex: 1;
+  height: 44px;
+  border-radius: 8px;
+  cursor: pointer;
+  border: none;
+  transition: opacity 120ms ease;
+  line-height: 1;
+}
+
+.acm-btn:active {
+  opacity: 0.78;
+}
+
+.acm-btn--cancel {
+  background: transparent;
+  border: 2px solid var(--neutral-200, #e1e1e4);
+  color: var(--black, #151622);
+}
+
+.acm-btn--apply {
+  background: var(--primary-default, #4051fd);
+  color: #ffffff;
+}

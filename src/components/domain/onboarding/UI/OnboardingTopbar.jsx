@@ -38,14 +38,14 @@ export default function OnboardingTopbar({
         </div>
       </div>
 
-      <div style={{ visibility: onClose ? "visible" : "hidden" }}>
+      {onClose && (
         <IconButton
           size="small"
           type="subtle"
           icon={X}
           onClick={onClose}
         />
-      </div>
+      )}
     </div>
   );
 }

@@ -347,8 +347,8 @@ export default function Setup() {
       <OnboardingTopbar
         onBack={back}
         onClose={stepId === "premium" ? finish : undefined}
-        currentStep={idx + 1}
-        totalSteps={Math.max(steps.length, 1)}
+        currentStep={stepId === "role" ? 1 : idx + 1}
+        totalSteps={stepId === "role" ? 10 : Math.max(steps.length, 1)}
         showBack={true}
         dark={stepId === "position"}
       />

@@ -3,13 +3,17 @@ import { CheckSquare, Square } from "@phosphor-icons/react";
 import "./GoalsSelect.css";
 
 const GOALS = [
-  { id: "discovered",    label: "Get discovered by scouts and clubs" },
-  { id: "new-club",      label: "Find a new club or trial opportunity" },
-  { id: "higher-level",  label: "Move to a higher level of football" },
-  { id: "track",         label: "Track my progress" },
-  { id: "build-profile", label: "Build my football profile" },
-  { id: "showcase",      label: "Showcase my highlights" },
+  { id: "discovered",    label: "Get discovered by scouts and clubs",   count: 84200 },
+  { id: "new-club",      label: "Find a new club or trial opportunity",  count: 31700 },
+  { id: "higher-level",  label: "Move to a higher level of football",    count: 9400  },
+  { id: "track",         label: "Track my progress",                     count: 62100 },
+  { id: "build-profile", label: "Build my football profile",             count: 14800 },
+  { id: "showcase",      label: "Showcase my highlights",                count: 8300  },
 ];
+
+function formatCount(n) {
+  return n > 10000 ? "10,000+" : n.toLocaleString();
+}
 
 function parseGoals(value) {
   if (!value) return [];
@@ -20,6 +24,11 @@ function parseGoals(value) {
 
 export default function GoalsSelect({ value, onChange }) {
   const selected = useMemo(() => parseGoals(value), [value]);
+
+  const totalCount = useMemo(() => {
+    const sum = GOALS.filter(g => selected.includes(g.id)).reduce((acc, g) => acc + g.count, 0);
+    return sum;
+  }, [selected]);
 
   function toggle(id) {
     const next = selected.includes(id)
@@ -41,7 +50,9 @@ export default function GoalsSelect({ value, onChange }) {
       {/* ── "People in common" badge ───────────────────────────── */}
       <div className="goals-badge-wrap">
         <span className="goals-badge">
-          {selected.length} {selected.length === 1 ? "person" : "people"} in common
+          {selected.length === 0
+            ? "0 people in common"
+            : `${formatCount(totalCount)} people in common`}
         </span>
       </div>
 
