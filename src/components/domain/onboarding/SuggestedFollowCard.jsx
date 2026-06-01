@@ -1,31 +1,39 @@
+import { Link } from "react-router-dom";
 import ProfilePicture from "../../UI/ProfilePicture";
-import Button from "../../UI/Button";
-import { Plus } from "@phosphor-icons/react";
+import Badge from "../../UI/Badge";
+import { toPositionAbbr } from "../../../utils/positions";
 import "./SuggestedFollowCard.css";
 
-// Contract
-// props: { id, name, avatarUrl, verified, isFollowing, onToggle }
 export default function SuggestedFollowCard({
   id,
   name,
   avatarUrl,
   verified = false,
-  isFollowing = false,
-  onToggle,
+  positions = [],
+  clubName = null,
 }) {
+  const parts = (name || "").trim().split(" ");
+  const firstName = parts[0] || "";
+  const lastName = parts.slice(1).join(" ");
+
   return (
-    <div className="suggest-follow-card" data-node-id="2207:21535">
-      <ProfilePicture imgUrl={avatarUrl || ""} size="large" verified={verified} />
-      <div className="suggest-follow-card-name" title={name}>
-        {name}
+    <Link to={`/profile/${id}`} className="suggest-follow-card">
+      <div className="suggest-card-photo-wrap">
+        <ProfilePicture imgUrl={avatarUrl} size="large" verified={verified} />
+        {positions.length > 0 && (
+          <div className="suggest-card-badges">
+            {positions.slice(0, 2).map((pos) => (
+              <Badge key={pos} text={toPositionAbbr(pos)} color="light" size="xs" />
+            ))}
+          </div>
+        )}
       </div>
-      <Button
-        size="small"
-        type={isFollowing ? "subtle" : "outline"}
-        label={isFollowing ? "Following" : "Follow"}
-        leadingIcon={!isFollowing ? Plus : undefined}
-        onClick={() => onToggle && onToggle(id)}
-      />
-    </div>
+
+      <div className="suggest-card-info">
+        <p className="suggest-card-firstname">{firstName}</p>
+        {lastName && <p className="suggest-card-lastname">{lastName}</p>}
+        {clubName && <p className="suggest-card-club">{clubName}</p>}
+      </div>
+    </Link>
   );
 }

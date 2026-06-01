@@ -1,7 +1,7 @@
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useState } from "react";
 import ProfilePicture from "../../UI/ProfilePicture";
 import Avatar from "../../../assets/images/avatar.webp";
-import { Check, Plus } from "@phosphor-icons/react";
+import { Plus } from "@phosphor-icons/react";
 import Button from "../../UI/Button";
 import "./PostHeader.css";
 import {
@@ -11,6 +11,7 @@ import {
 } from "../../../lib/follows";
 import { supabase } from "../../../lib/supabase";
 import { Link } from "react-router";
+import { toPositionAbbr } from "../../../utils/positions";
 
 export default function PostHeader({
   name,
@@ -20,9 +21,8 @@ export default function PostHeader({
   authorId,
   hideFollow = false,
 }) {
-  const [isFollowing, setIsFollowing] = useState(null); // null = loading
+  const [isFollowing, setIsFollowing] = useState(null);
   const [avatarUrl, setAvatarUrl] = useState(null);
-  const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
     let alive = true;
@@ -82,18 +82,17 @@ export default function PostHeader({
     const next = !isFollowing;
     setIsFollowing(next); // optimistic
 
-    startTransition(async () => {
+    (async () => {
       try {
         if (next) await follow(authorId);
         else await unfollow(authorId);
       } catch (e) {
         console.error(e);
-        setIsFollowing(!next); // revert on fail
+        setIsFollowing(!next);
       }
-    });
+    })();
   }
 
-  const loading = isFollowing === null || isPending;
   const profileHref = `/profile/${authorId}`;
 
   return (
@@ -112,9 +111,18 @@ export default function PostHeader({
           </Link>
           <div className="subheader-text">
             <p className="role">
-              {position && club
-                ? `${String(position).replace(/[[\]"]/g, "")} at @${club}`
-                : String(position)?.replace(/[[\]"]/g, "") || club || ""}
+              {(() => {
+                const abbr = position
+                  ? String(position)
+                      .replace(/[[\]"]/g, "")
+                      .split(",")
+                      .map((p) => toPositionAbbr(p.trim()))
+                      .filter(Boolean)
+                      .join(" · ")
+                  : null;
+                if (abbr && club) return `${abbr} at @${club}`;
+                return abbr || club || "";
+              })()}
             </p>
             <span className="subheader-dot" aria-hidden="true" />
             <p className="date">{date}</p>
@@ -122,15 +130,13 @@ export default function PostHeader({
         </div>
       </div>
 
-      {!hideFollow && (
+      {!hideFollow && isFollowing === false && (
         <Button
           size="small"
-          type={isFollowing ? "following" : "primary"}
-          label={loading ? "..." : isFollowing ? "" : "Follow"}
-          aria-label={isFollowing ? "Unfollow user" : "Follow user"}
-          leadingIcon={loading ? undefined : isFollowing ? Check : Plus}
+          type="primary"
+          label="Follow"
+          leadingIcon={Plus}
           onClick={onToggle}
-          disabled={loading}
         />
       )}
     </div>

@@ -18,7 +18,7 @@ export function getSteps(role) {
     return ["role", "name", "dob", "location", "club", "find-people", "premium"];
   }
 
-  if (role === "organization") {
+  if (role === "manager" || role === "agent") {
     return ["role", "name", "dob", "location"];
   }
 

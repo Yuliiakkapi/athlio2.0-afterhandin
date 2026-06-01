@@ -12,6 +12,7 @@ body {
 :root {
   /* Font families */
   --font-condensed: "Barlow Condensed", sans-serif;
+  --font-semi-condensed: "Barlow Semi Condensed", sans-serif;
   --font-sans: "Barlow", sans-serif;
 
   /* Heading sizes */

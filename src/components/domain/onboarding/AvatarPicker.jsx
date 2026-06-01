@@ -1,6 +1,7 @@
-﻿import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect } from "react";
 import ProfilePicture from "../../UI/ProfilePicture";
 import Button from "../../UI/Button";
+import { supabase } from "../../../lib/supabase";
 
 function DefaultProfileIcon() {
   return (
@@ -11,49 +12,99 @@ function DefaultProfileIcon() {
   );
 }
 
-export default function AvatarPicker({ value, onChange }) {
+async function compressImage(file, maxPx = 800, quality = 0.8) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      const scale = Math.min(1, maxPx / Math.max(img.width, img.height));
+      const w = Math.round(img.width * scale);
+      const h = Math.round(img.height * scale);
+      const canvas = document.createElement("canvas");
+      canvas.width = w;
+      canvas.height = h;
+      canvas.getContext("2d").drawImage(img, 0, 0, w, h);
+      canvas.toBlob((blob) => resolve(blob ?? file), "image/jpeg", quality);
+    };
+    img.onerror = () => resolve(file);
+    img.src = url;
+  });
+}
+
+export default function AvatarPicker({ value, onChange, userId }) {
   const fileRef = useRef();
   const [preview, setPreview] = useState(value || "");
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState("");
 
   useEffect(() => {
     setPreview(value || "");
   }, [value]);
 
-  function handleFile(e) {
-    const f = e.target.files && e.target.files[0];
-    if (!f) return;
-    const reader = new FileReader();
-    reader.onload = () => {
-      const dataUrl = reader.result;
-      setPreview(dataUrl);
-      if (typeof onChange === "function") onChange(dataUrl);
-    };
-    reader.readAsDataURL(f);
+  async function handleFile(e) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Show preview instantly via object URL
+    const objectUrl = URL.createObjectURL(file);
+    setPreview(objectUrl);
+    setUploadError("");
+    setUploading(true);
+
+    try {
+      const uid = userId || (await supabase.auth.getUser()).data?.user?.id;
+      if (!uid) throw new Error("Not authenticated");
+
+      const ext = file.name.split(".").pop() || "jpg";
+      const path = `${uid}/${Date.now()}.${ext}`;
+
+      // Compress before uploading
+      const compressed = await compressImage(file);
+
+      const { error: uploadErr } = await supabase.storage
+        .from("avatars")
+        .upload(path, compressed, { upsert: true, contentType: "image/jpeg" });
+
+      if (uploadErr) throw uploadErr;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from("avatars")
+        .getPublicUrl(path);
+
+      setPreview(publicUrl);
+      if (typeof onChange === "function") onChange(publicUrl);
+    } catch (err) {
+      console.error("Avatar upload failed:", err);
+      setUploadError("Upload failed. Please try again.");
+      setPreview(value || "");
+    } finally {
+      setUploading(false);
+      URL.revokeObjectURL(objectUrl);
+    }
   }
 
-  // Keep the picture and upload action side-by-side.
   return (
     <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
       <button
         type="button"
-        onClick={() => fileRef.current?.click()}
-        style={{ 
-          width: 80, 
-          height: 80, 
-          borderRadius: "50%", 
-          background: "var(--neutral-50-bg,#f5f6fa)", 
-          display: "flex", 
-          alignItems: "center", 
-          justifyContent: "center", 
+        onClick={() => !uploading && fileRef.current?.click()}
+        style={{
+          width: 80,
+          height: 80,
+          borderRadius: "50%",
+          background: "var(--neutral-50-bg,#f5f6fa)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
           overflow: "hidden",
           border: "none",
-          cursor: "pointer",
+          cursor: uploading ? "wait" : "pointer",
           padding: 0,
-          transition: "opacity 0.2s"
+          opacity: uploading ? 0.6 : 1,
+          transition: "opacity 0.2s",
         }}
-        onMouseEnter={(e) => e.currentTarget.style.opacity = "0.8"}
-        onMouseLeave={(e) => e.currentTarget.style.opacity = "1"}
-        title="Click to change picture"
+        title={uploading ? "Uploading…" : "Click to change picture"}
       >
         {preview ? (
           <ProfilePicture imgUrl={preview} size="large" />
@@ -65,14 +116,18 @@ export default function AvatarPicker({ value, onChange }) {
       </button>
 
       <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-        <div style={{ display: "flex", gap: 8 }}>
-          <Button
-            size="medium"
-            type="outline"
-            label="Select picture"
-            onClick={() => fileRef.current?.click()}
-          />
-        </div>
+        <Button
+          size="medium"
+          type="outline"
+          label={uploading ? "Uploading…" : "Select picture"}
+          disabled={uploading}
+          onClick={() => fileRef.current?.click()}
+        />
+        {uploadError && (
+          <p style={{ fontSize: 12, color: "var(--danger, red)", margin: 0 }}>
+            {uploadError}
+          </p>
+        )}
       </div>
 
       <input

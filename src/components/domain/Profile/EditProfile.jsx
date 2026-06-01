@@ -197,7 +197,9 @@ export default function EditProfile() {
           options={[
             { value: "athlete", label: "Athlete" },
             { value: "scout", label: "Scout" },
-            { value: "organization", label: "Organization" },
+            { value: "coach", label: "Coach" },
+            { value: "manager", label: "Manager" },
+            { value: "agent", label: "Agent" },
           ]}
         />
       </form>

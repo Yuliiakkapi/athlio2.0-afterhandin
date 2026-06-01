@@ -27,8 +27,8 @@ export function buildProfilePayload({ role, form, heightUnit, weightUnit }) {
     talent_preferences: form.talent_preferences || null,
   };
 
-  // Add organization-specific fields
-  if (role === "organization") {
+  // Add manager-specific fields
+  if (role === "manager") {
     payload.org_name = form.org_name || null;
     payload.org_founded_year = form.org_founded_year ? parseInt(form.org_founded_year) : null;
     payload.org_team_size = form.org_team_size ? parseInt(form.org_team_size) : null;

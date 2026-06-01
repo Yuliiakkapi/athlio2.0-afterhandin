@@ -16,6 +16,7 @@ export default function BasicPost({
   likesCount,
   commentsCount,
   hideFollow = false,
+  initialLiked = null,
 }) {
   if (!id) return null;
 
@@ -72,6 +73,7 @@ export default function BasicPost({
         auraCount={likesCount}
         commentCount={commentsCount}
         postAuthorId={authorId}
+        initialLiked={initialLiked}
       />
     </article>
   );

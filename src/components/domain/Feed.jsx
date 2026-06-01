@@ -7,7 +7,7 @@ import { supabase } from "../../lib/supabase";
 import { useUser } from "../../context/UserContext";
 import SuggestedAccounts from "../domain/Suggested/SuggestedAccounts";
 
-export function PostSwitcher({ post }) {
+export function PostSwitcher({ post, likedPostIds = new Set() }) {
   // prefer joined profile data if present
   const prof = post.profiles || {};
   const club = prof.club || {};
@@ -46,6 +46,7 @@ export function PostSwitcher({ post }) {
         yourTeam={club.name}
         likesCount={Number(post.likes_count) || 0}
         commentsCount={Number(post.comments_count) || 0}
+        initialLiked={likedPostIds.has(post.id) ? true : null}
       />
     );
   }
@@ -69,6 +70,7 @@ export default function Feed() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [suggested, setSuggested] = useState([]);
+  const [likedPostIds, setLikedPostIds] = useState(new Set());
 
   const [refreshKey, setRefreshKey] = useState(0);
 
@@ -155,7 +157,23 @@ export default function Feed() {
       if (postsErr) {
         setError(postsErr.message);
       } else {
-        setPosts(Array.isArray(postRows) ? postRows : []);
+        const rows = Array.isArray(postRows) ? postRows : [];
+        setPosts(rows);
+
+        // Batch-fetch all liked post IDs in one query
+        if (rows.length > 0) {
+          const postIds = rows.map((p) => p.id);
+          const { data: { session } } = await supabase.auth.getSession();
+          const me = session?.user?.id;
+          if (me) {
+            const { data: likedRows } = await supabase
+              .from("post_likes")
+              .select("post_id")
+              .in("post_id", postIds)
+              .eq("user_id", me);
+            setLikedPostIds(new Set((likedRows || []).map((r) => r.post_id)));
+          }
+        }
       }
       //suggested accounts
       const excludeIds = authorIds; // me + people I follow
@@ -219,7 +237,7 @@ export default function Feed() {
 
         return (
           <div key={p.id} className="feed-item">
-            <PostSwitcher post={p} />
+            <PostSwitcher post={p} likedPostIds={likedPostIds} />
             {showSuggestions && <SuggestedAccounts profiles={suggested} />}
           </div>
         );

@@ -24,6 +24,7 @@ export default function PlayerCard({
   infoType = "club",
   isFollowing = false,
   onFollow,
+  showAction = true,
 }) {
   if (!profile) return null;
 
@@ -130,21 +131,23 @@ export default function PlayerCard({
         </div>
       </div>
 
-      <div
-        className="player-card-action"
-        onClick={(e) => e.preventDefault()}
-      >
-        {isFollowing ? (
-          <IconButton icon={Check} size="small" type="subtle" onClick={onFollow} />
-        ) : (
-          <Button
-            size="small"
-            type="primary"
-            label="Follow"
-            onClick={onFollow}
-          />
-        )}
-      </div>
+      {showAction && (
+        <div
+          className="player-card-action"
+          onClick={(e) => e.preventDefault()}
+        >
+          {isFollowing ? (
+            <IconButton icon={Check} size="small" type="subtle" onClick={onFollow} />
+          ) : (
+            <Button
+              size="small"
+              type="primary"
+              label="Follow"
+              onClick={onFollow}
+            />
+          )}
+        </div>
+      )}
     </Link>
   );
 }
