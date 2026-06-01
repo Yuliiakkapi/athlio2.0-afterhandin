@@ -1,4 +1,4 @@
-import SuggestedCard from "./SuggestedCard";
+import SuggestedFollowCard from "../onboarding/SuggestedFollowCard";
 import "./SuggestedAccounts.css";
 
 export default function SuggestedAccounts({ profiles }) {
@@ -10,7 +10,14 @@ export default function SuggestedAccounts({ profiles }) {
       <ul className="suggested-card-list">
         {profiles.map((p) => (
           <li key={p.id}>
-            <SuggestedCard profile={p} />
+            <SuggestedFollowCard
+              id={p.id}
+              name={p.full_name || p.username}
+              avatarUrl={p.avatar_url}
+              verified={p.verified}
+              positions={p.position ?? []}
+              clubName={p.clubs?.name || p.club_other_name || null}
+            />
           </li>
         ))}
       </ul>

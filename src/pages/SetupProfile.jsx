@@ -512,7 +512,7 @@ export default function Setup() {
           />
         )}
 
-        {stepId === "org" && role === "organization" && (
+        {stepId === "org" && role === "manager" && (
           <div>
             <TextInput
               label="Organization name"

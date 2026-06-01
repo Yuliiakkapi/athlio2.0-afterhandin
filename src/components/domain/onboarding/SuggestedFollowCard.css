@@ -1,63 +1,75 @@
-﻿.suggest-follow-card {
+.suggest-follow-card {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
-  gap: 16px;
-  padding: 12px 10px 8px; /* top 12, sides 10, bottom 8 per design */
-  background: var(--neutral-50-bg); /* #f6f6f7 */
-  border: 1.5px solid var(--neutral-300); /* #e1e1e4 */
-  border-radius: 8px;
-  width: 110px; /* matches Figma card width */
+  background: var(--white);
+  border-radius: 12px;
+  width: 110px;
   box-sizing: border-box;
+  flex-shrink: 0;
+  padding: 12px 8px 10px;
+  gap: 0;
+  text-decoration: none;
+  color: inherit;
 }
 
-/* Name text block */
-.suggest-follow-card-name {
-  font-size: 12px;
-  line-height: 12px;
-  font-weight: 500;
-  font-family: var(--font-sans);
-  text-align: center;
-  width: 90px; /* Figma text frame width */
-  color: var(--black);
-  word-break: break-word;
+/* ─── Photo + badges ──────────────────────────────────────────── */
+.suggest-card-photo-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 4px;
 }
 
-/* Button tweaks inside the card (outline small variant) */
-.suggest-follow-card .button.button--small.button--outline {
-  height: 28px; /* explicit height from design */
-  padding: 0 8px; /* keep horizontal padding, remove vertical to honor height */
-  border-width: 1.5px; /* design uses 1.5px stroke */
-  display: inline-flex;
-}
-
-/* Ensure text doesn't wrap awkwardly */
-.suggest-follow-card .button p {
+.suggest-card-badges {
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 4px;
   white-space: nowrap;
+}
+
+/* ─── Info ────────────────────────────────────────────────────── */
+.suggest-card-info {
+  padding-top: 16px;
+  text-align: center;
+  width: 100%;
+}
+
+.suggest-card-firstname {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--black);
+  line-height: 1.3;
+  margin: 0;
+}
+
+.suggest-card-lastname {
+  font-family: var(--font-condensed);
+  font-size: 18px;
+  font-weight: 700;
+  font-style: italic;
+  text-transform: uppercase;
+  color: var(--black);
+  line-height: 1.1;
+  margin: 0;
+}
+
+.suggest-card-club {
+  font-family: var(--font-sans);
   font-size: 12px;
-  line-height: 12px;
-  font-weight: 500;
+  font-weight: 400;
+  color: var(--neutral-600);
+  margin: 4px 0 0;
 }
 
-/* Plus icon size per Figma (24px frame) */
-.suggest-follow-card .button .button-icon {
-  width: 24px;
-  height: 24px;
-}
-
-/* Grid wrapper for cards */
+/* ─── Grid wrapper ────────────────────────────────────────────── */
 .suggest-follow-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px; /* Figma gap */
-}
-
-@media (max-width: 520px) {
-  .suggest-follow-card {
-    width: 100px; /* slightly narrower on very small screens */
-  }
-  .suggest-follow-card-name {
-    width: 80px;
-  }
+  gap: 8px;
 }
