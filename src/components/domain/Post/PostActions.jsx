@@ -14,14 +14,17 @@ export default function PostActions({
   auraCount = 0,
   commentCount = 0,
   postAuthorId,
+  initialLiked = null,
 }) {
   const { profile } = useUser();
-  const [liked, setLiked] = useState(false);
+  const [liked, setLiked] = useState(initialLiked ?? false);
   const [likes, setLikes] = useState(Number(auraCount) || 0);
   const [showComments, setShowComments] = useState(false);
   const [comments, setComments] = useState(Number(commentCount) || 0);
 
   useEffect(() => {
+    // Skip the fetch if the parent already supplied the liked state
+    if (initialLiked !== null) return;
     let live = true;
     (async () => {
       try {

@@ -25,6 +25,7 @@ export default function MatchPost({
   hideFollow = false,
   likesCount,
   commentsCount,
+  initialLiked = null,
   yellowCards = 0,
   redCards = 0,
 }) {
@@ -90,6 +91,7 @@ export default function MatchPost({
         auraCount={likesCount}
         commentCount={commentsCount}
         postAuthorId={authorId}
+        initialLiked={initialLiked}
       />
     </article>
   );
