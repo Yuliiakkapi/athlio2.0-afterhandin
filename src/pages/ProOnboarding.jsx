@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../context/UserContext";
+import { supabase } from "../lib/supabase";
 import OnboardingTopbar from "../components/domain/onboarding/UI/OnboardingTopbar";
 import OnboardingNavbar from "../components/domain/onboarding/UI/OnboardingNavbar";
 import ProSplash from "../components/domain/Progress-athletes/ProOnboarding/ProSplash";
@@ -14,7 +15,7 @@ const FORM_STEPS = 3; // steps 1-3 show progress bar
 
 export default function ProOnboarding() {
   const navigate = useNavigate();
-  const { setProfile } = useUser();
+  const { user, setProfile } = useUser();
   const [step, setStep] = useState(1);
   const [canContinue, setCanContinue] = useState(false);
 
@@ -23,7 +24,10 @@ export default function ProOnboarding() {
     if (step === 1) navigate(-1);
     else setStep((s) => s - 1);
   }
-  function finish() {
+  async function finish() {
+    if (user?.id) {
+      await supabase.from("profiles").update({ is_pro: true }).eq("id", user.id);
+    }
     setProfile((prev) => ({ ...prev, is_pro: true }));
     navigate("/progress");
   }

@@ -17,13 +17,17 @@ export default function AppShell() {
     pathname.startsWith("/add-post") ||
     pathname.startsWith("/progress/") ||
     pathname === "/scouting/team" ||
+    pathname === "/scouting/substitution" ||
+    pathname === "/scouting/select-players" ||
     pathname === "/scouting/watchlist";
 
   const hideTopbar =
     pathname.startsWith("/auth") ||
     pathname.startsWith("/intro") ||
     pathname.startsWith("/setup-profile") ||
-    pathname === "/scouting/watchlist";
+    pathname === "/scouting/watchlist" ||
+    pathname === "/scouting/substitution" ||
+    pathname === "/scouting/select-players";
 
   return (
     <div className="app-shell">

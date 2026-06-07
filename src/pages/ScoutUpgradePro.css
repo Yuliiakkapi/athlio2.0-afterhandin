@@ -1,0 +1,386 @@
+/* ──────────────────────────────────────────────────────────────────
+   Scout Upgrade Pro page
+────────────────────────────────────────────────────────────────── */
+
+.scout-upgrade-page {
+  height: 100dvh;
+  overflow: hidden;
+  background: linear-gradient(180deg, #222c94 0%, #070a1d 100%);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ─── Scroll container ─────────────────────────────────────────── */
+
+.scout-upgrade-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 20px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ─── Topbar ───────────────────────────────────────────────────── */
+
+.scout-upgrade-topbar {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.scout-upgrade-close {
+  width: 40px;
+  height: 40px;
+  border-radius: 100px;
+  background: rgba(240, 240, 243, 0.1);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--white);
+  cursor: pointer;
+}
+
+/* ─── Hero ─────────────────────────────────────────────────────── */
+
+.scout-upgrade-hero {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  text-align: center;
+  align-items: center;
+}
+
+.scout-upgrade-title {
+  font-family: var(--font-condensed);
+  font-size: var(--heading-5xl);
+  font-weight: 700;
+  font-style: italic;
+  color: var(--white);
+  text-transform: uppercase;
+  line-height: 1.1;
+  margin: 0;
+}
+
+.scout-upgrade-title .badge--pro-scout {
+  vertical-align: middle;
+  position: relative;
+  top: -2px;
+}
+
+.scout-upgrade-subtitle {
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--primary-300, #98baff);
+  margin: 0;
+  line-height: 1.5;
+  max-width: 280px;
+}
+
+/* ─── Billing toggle (Club / Individual) ───────────────────────── */
+
+.scout-billing-toggle {
+  display: flex;
+  gap: 3px;
+  background: rgba(238, 239, 241, 0.2);
+  border-radius: 100px;
+  padding: 4px;
+}
+
+.scout-billing-option {
+  flex: 1;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: none;
+  border-radius: 100px;
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.scout-billing-option--active {
+  background: var(--white);
+}
+
+.scout-billing-label {
+  font-family: var(--font-condensed);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  font-style: italic;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  color: var(--muted, #72717a);
+  transition: color 0.15s;
+}
+
+.scout-billing-option--active .scout-billing-label {
+  color: var(--black);
+}
+
+.scout-billing-badge {
+  background: var(--primary-200, #bfd6ff);
+  color: var(--black);
+  font-family: var(--font-condensed);
+  font-size: var(--text-2xs, 10px);
+  font-weight: 600;
+  font-style: italic;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  border-radius: 9999px;
+  padding: 2px 6px;
+  white-space: nowrap;
+}
+
+/* ─── Pricing plans ────────────────────────────────────────────── */
+
+.scout-upgrade-plans {
+  display: flex;
+  gap: 12px;
+}
+
+.scout-plan-card {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid transparent;
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  cursor: pointer;
+  text-align: left;
+  position: relative;
+  overflow: visible;
+}
+
+.scout-plan-card--active {
+  border-color: var(--primary-default, #4051fd);
+}
+
+.scout-plan-annual-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.scout-plan-period {
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  font-style: italic;
+  color: var(--neutral-400, #b8b9c1);
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  line-height: 24px;
+  display: block;
+}
+
+.scout-plan-price-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.scout-plan-price {
+  font-family: var(--font-condensed);
+  font-size: var(--heading-5xl);
+  font-weight: 700;
+  font-style: italic;
+  color: #fbfbfb;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+.scout-plan-unit {
+  font-family: var(--font-sans);
+  font-size: var(--text-2xs, 10px);
+  font-weight: 500;
+  color: var(--neutral-400, #b8b9c1);
+  padding-bottom: 4px;
+  line-height: 1;
+  width: 46px;
+}
+
+.scout-plan-billed {
+  font-family: var(--font-sans);
+  font-size: var(--text-xs, 12px);
+  font-weight: 500;
+  color: var(--neutral-500, #a5a5af);
+  line-height: normal;
+}
+
+.scout-plan-save-badge {
+  position: absolute;
+  top: -12px;
+  right: -2px;
+  background: var(--warning-600, #ef5b07);
+  color: var(--white);
+  font-family: var(--font-condensed);
+  font-size: var(--text-2xs, 10px);
+  font-weight: 600;
+  font-style: italic;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  border-radius: 9999px;
+  padding: 2px 6px;
+  white-space: nowrap;
+}
+
+.scout-plan-check {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--primary-default, #4051fd);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--white);
+  flex-shrink: 0;
+}
+
+/* ─── Features card ────────────────────────────────────────────── */
+
+.scout-features-card {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 0 21px rgba(0, 0, 0, 0.08);
+}
+
+.scout-feature-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+}
+
+.scout-feature-row--border {
+  border-bottom: 1px solid rgba(125, 124, 134, 0.5);
+}
+
+.scout-feature-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 100px;
+  background: rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--white);
+}
+
+.scout-feature-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.scout-feature-title {
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--white);
+  line-height: 1;
+}
+
+.scout-feature-desc {
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--muted, #72717a);
+  line-height: 1.3;
+}
+
+/* ─── Social proof ─────────────────────────────────────────────── */
+
+.scout-upgrade-social {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding-bottom: 8px;
+}
+
+.scout-upgrade-avatars {
+  display: flex;
+}
+
+.scout-upgrade-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid #0e1239;
+  margin-left: -12px;
+  flex-shrink: 0;
+  object-fit: cover;
+}
+
+.scout-upgrade-avatars .scout-upgrade-avatar:first-child {
+  margin-left: 0;
+}
+
+.scout-upgrade-social-text {
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--white);
+}
+
+/* ─── Sticky CTA ───────────────────────────────────────────────── */
+
+.scout-upgrade-cta-bar {
+  padding: 12px 20px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+}
+
+.scout-upgrade-footnote {
+  font-family: var(--font-sans);
+  font-size: var(--text-xs, 12px);
+  font-weight: 500;
+  color: var(--neutral-700, #7d7c86);
+  margin: 0;
+  text-align: center;
+}
+
+/* ─── Transition overlay ───────────────────────────────────────── */
+
+.scout-upgrade-overlay {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(135deg, #4051fd 0%, #7b8cff 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  animation: scout-overlay-in 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.scout-upgrade-overlay-text {
+  font-family: var(--font-condensed);
+  font-size: var(--heading-6xl, 96px);
+  font-weight: 700;
+  font-style: italic;
+  color: var(--white);
+  text-transform: uppercase;
+  animation: scout-text-in 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.25s both;
+}
+
+@keyframes scout-overlay-in {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes scout-text-in {
+  0%   { opacity: 0; transform: scale(0.85) translateY(8px); }
+  100% { opacity: 1; transform: scale(1.25) translateY(0); }
+}

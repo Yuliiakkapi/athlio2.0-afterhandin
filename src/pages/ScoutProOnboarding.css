@@ -1,0 +1,9 @@
+.scout-pro-onboarding-page {
+  min-height: 100dvh;
+  background: var(--neutral-50-bg, #f6f6f7);
+}
+
+/* Progress bar fill uses scout blue gradient */
+.scout-pro-onboarding-page .ob-topbar-fill {
+  background: linear-gradient(90deg, #4051fd 0%, #7b8cff 100%);
+}

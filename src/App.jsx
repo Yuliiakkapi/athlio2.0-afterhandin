@@ -25,11 +25,16 @@ const ChatDetail = lazy(() => import("./pages/ChatDetail"));
 const Progress = lazy(() => import("./pages/Progress"));
 const Scouting = lazy(() => import("./pages/Scouting"));
 const YourTeam = lazy(() => import("./pages/YourTeam"));
+const Substitution = lazy(() => import("./pages/Substitution"));
+const SelectPlayers = lazy(() => import("./pages/SelectPlayers"));
 const Watchlist = lazy(() => import("./pages/Watchlist"));
 const ProfileSearch = lazy(() => import("./pages/ProfileSearch"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const UpgradePro = lazy(() => import("./pages/UpgradePro"));
 const ProOnboarding = lazy(() => import("./pages/ProOnboarding"));
+const ScoutProOnboarding = lazy(() => import("./pages/ScoutProOnboarding"));
+const ScoutUpgradePro = lazy(() => import("./pages/ScoutUpgradePro"));
+const AiScout = lazy(() => import("./pages/AiScout"));
 const TrainingsPage = lazy(() => import("./pages/progress/TrainingsPage"));
 const VisibilityPage = lazy(() => import("./pages/progress/VisibilityPage"));
 const ComparePage = lazy(() => import("./pages/progress/ComparePage"));
@@ -48,6 +53,9 @@ export default function App() {
     <Routes>
       <Route path="upgrade-pro" element={<UpgradePro />} />
       <Route path="pro-onboarding" element={<ProOnboarding />} />
+      <Route path="scout-pro-onboarding" element={<ScoutProOnboarding />} />
+      <Route path="scout-upgrade-pro" element={<ScoutUpgradePro />} />
+      <Route path="scouting/ai-scout" element={<AiScout />} />
       <Route element={<AppShell />}>
         <Route index element={<Landing />} />
         <Route path="intro" element={<Intro />} />
@@ -77,6 +85,8 @@ export default function App() {
         <Route path="progress/challenges" element={<ChallengesPage />} />
         <Route path="scouting" element={<Scouting />} />
         <Route path="scouting/team" element={<YourTeam />} />
+        <Route path="scouting/substitution" element={<Substitution />} />
+        <Route path="scouting/select-players" element={<SelectPlayers />} />
         <Route path="scouting/watchlist" element={<Watchlist />} />
         <Route path="scouting/search" element={<ProfileSearch />} />
         <Route path="search" element={<ProfileSearch />} />

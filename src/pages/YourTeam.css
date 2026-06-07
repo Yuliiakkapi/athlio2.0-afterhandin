@@ -1,6 +1,5 @@
 /* ──────────────────────────────────────────────────────────────────
    Your Team — full-screen premium pitch view
-   Mirrors PositionSelect layout: fixed pitch bg + fixed overlay.
    Figma node 7620-24520
 ────────────────────────────────────────────────────────────────── */
 
@@ -9,7 +8,6 @@
 }
 
 .your-team-page {
-  /* Acts as a scroll root so fixed children anchor here */
   position: relative;
   min-height: 100dvh;
 }
@@ -34,16 +32,15 @@
   user-select: none;
 }
 
-/* Heavy gradient at top for header readability, lighter fade at bottom */
 .yt-gradient {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(180deg, rgba(0, 0, 0, 0.80) 0%, rgba(0, 0, 0, 0) 36%),
-    linear-gradient(0deg,   rgba(0, 0, 0, 0.50) 0%, rgba(0, 0, 0, 0) 22%);
+    linear-gradient(179.87deg, rgba(0,0,0,0) 77.9%, rgba(0,0,0,0.5) 100%),
+    linear-gradient(180.07deg, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0) 39.74%);
 }
 
-/* ─── Fixed top bar: back button + title ─────────────────────── */
+/* ─── Fixed top bar ───────────────────────────────────────────── */
 
 .yt-topbar {
   position: fixed;
@@ -53,73 +50,106 @@
   z-index: 20;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   padding: 16px 16px 8px;
-  gap: 8px;
 }
 
-.yt-back-btn {
-  width: 36px;
-  height: 36px;
+.yt-back-btn,
+.yt-close-btn {
+  width: 28px;
+  height: 28px;
   flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.12);
+  background: none;
   border: none;
-  border-radius: 8px;
-  color: white;
+  color: var(--white);
   cursor: pointer;
+  padding: 0;
 }
 
 .yt-title {
   flex: 1;
   margin: 0;
-  color: white;
+  color: var(--white);
   text-align: center;
+  font-family: var(--font-condensed);
+  font-size: var(--heading-3xl);
+  font-weight: 700;
+  font-style: italic;
+  text-transform: uppercase;
 }
 
-.yt-topbar-spacer {
-  width: 36px;
-  flex-shrink: 0;
-}
+/* ─── White OVR stats card ────────────────────────────────────── */
 
-/* ─── Fixed OVR stats bar ────────────────────────────────────── */
-
-.yt-ovr-bar {
+.yt-ovr-card {
   position: fixed;
-  top: 60px;
-  left: 0;
-  right: 0;
+  top: 62px;
+  left: 18px;
+  right: 18px;
   z-index: 20;
+  background: var(--white);
+  border-radius: 14px;
+  box-shadow: 0 0 10.5px rgba(0, 0, 0, 0.08);
   display: flex;
   align-items: center;
   gap: 16px;
-  padding: 8px 20px 12px;
+  padding: 8px 12px;
+}
+
+.yt-ovr-left {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  flex-shrink: 0;
+}
+
+.yt-ovr-rotated-label {
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--muted);
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  white-space: nowrap;
+  line-height: 1;
 }
 
 .yt-ovr-divider {
   width: 1px;
-  height: 40px;
-  background: rgba(255, 255, 255, 0.2);
+  height: 70px;
+  background: var(--neutral-200);
   flex-shrink: 0;
 }
 
-.yt-ovr-metrics {
+.yt-ovr-stats {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  flex: 1;
+}
+
+.yt-ovr-stat {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
 }
 
-.yt-ovr-metric {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.yt-ovr-label {
-  color: rgba(255, 255, 255, 0.75);
+.yt-ovr-stat-label {
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--muted);
   line-height: 1;
-  min-width: 52px;
+}
+
+.yt-ovr-stat-value {
+  font-family: var(--font-sans);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  color: var(--black);
+  line-height: 1;
 }
 
 /* ─── Player markers (fixed overlay) ────────────────────────── */
@@ -140,38 +170,29 @@
   align-items: center;
   gap: 3px;
   filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.5));
+  cursor: pointer;
 }
 
-/* Position abbreviation label above the circle (matches pos-btn-label) */
-.yt-player-pos {
-  font-family: var(--font-sans);
-  font-size: 13px;
-  font-weight: 600;
-  font-style: italic;
-  text-transform: uppercase;
-  letter-spacing: -0.5px;
-  color: white;
-  text-align: center;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
-  line-height: 1;
-}
-
-/* Container for circle + badge overlay */
 .yt-player-inner {
   position: relative;
-  width: 42px;
-  height: 42px;
+  width: 72px;
+  height: 72px;
 }
 
-/* Avatar circle — mirrors pos-btn-circle */
 .yt-player-circle {
-  width: 42px;
-  height: 42px;
+  width: 72px;
+  height: 72px;
   border-radius: 50%;
-  border: 2px solid white;
   overflow: hidden;
   background: rgba(255, 255, 255, 0.2);
   box-sizing: border-box;
+}
+
+.yt-player--empty .yt-player-circle {
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .yt-player-img {
@@ -182,24 +203,41 @@
   display: block;
 }
 
-/* OVR badge pinned to top-right corner of the circle */
-.yt-player-badge {
-  position: absolute;
-  top: -3px;
-  right: -5px;
-}
-
-/* Player name below circle */
-.yt-player-name {
+.yt-player-initials {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-family: var(--font-condensed);
-  font-size: 13px;
+  font-size: 22px;
   font-weight: 700;
   font-style: italic;
-  text-transform: uppercase;
   color: white;
+  text-transform: uppercase;
+  background: rgba(255,255,255,0.15);
+}
+
+.yt-player-jersey {
+  display: block;
+}
+
+.yt-player-badge {
+  position: absolute;
+  bottom: -4px;
+  right: -6px;
+}
+
+.yt-player-name {
+  color: var(--white, #FFF);
   text-align: center;
+  font-family: Barlow;
+  font-size: 14px;
+  font-style: italic;
+  font-weight: 700;
+  line-height: 22.395px;
   letter-spacing: -0.14px;
-  line-height: 1.3;
+  text-transform: uppercase;
   white-space: nowrap;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
 }

@@ -32,7 +32,7 @@ const TOPBAR_CONFIG = {
   "/progress/trainings":  pageConfig("Trainings", Plus),
   "/progress/visibility": pageConfig("Profile visibility"),
   "/progress/compare":    pageConfig("Compare"),
-  "/progress/leaderboard":pageConfig("Leaderboard"),
+  "/progress/leaderboard":pageConfig("Leaderboards", MagnifyingGlass),
   "/progress/targets":    pageConfig("Targets"),
   "/progress/challenges": pageConfig("Challenges"),
   "/home": {

@@ -497,6 +497,11 @@
   overflow-x: auto;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .ai-scout-card::-webkit-scrollbar {
@@ -533,6 +538,7 @@
 /* ─── Leaderboard ──────────────────────────────────────────────── */
 
 .lb-card {
+  cursor: pointer;
   background: white;
   border-radius: 12px;
   overflow: hidden;

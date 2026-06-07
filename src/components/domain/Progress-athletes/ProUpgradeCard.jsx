@@ -9,6 +9,7 @@ export default function ProUpgradeCard({
   description = "Get AI insights, advanced analytics, and full scout visibility. Take your career to the next level.",
   buttonLabel = "Unlock Premium",
   onButtonClick,
+  badgeColor = "pro-athlete",
   badgeClassName,
 }) {
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ export default function ProUpgradeCard({
       className="pro-upgrade-card"
       style={{ backgroundImage: `url(${darkblueStripes})` }}
     >
-      <Badge text="PRO" color="pro-athlete" size="md" className={badgeClassName} />
+      <Badge text="PRO" color={badgeColor} size="md" className={badgeClassName} />
       <div className="pro-upgrade-text">
         <h2 className="pro-upgrade-title">{title}</h2>
         <p className="pro-upgrade-desc">{description}</p>

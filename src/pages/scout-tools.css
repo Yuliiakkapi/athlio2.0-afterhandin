@@ -552,6 +552,7 @@
 
 /* ─── Overall Leaderboard ────────────────────────────────────────── */
 .st-leaderboard-card {
+  cursor: pointer;
   margin: 0 16px;
   background: #ffffff;
   border-radius: 12px;

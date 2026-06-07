@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import FootballPitch from "../assets/graphics/football_pitch.svg";
 import { useUser } from "../context/UserContext";
+import ProUpgradeCard from "../components/domain/Progress-athletes/ProUpgradeCard";
 import "./scout-tools.css";
 
 const WATCHLIST_PLAYERS = [
@@ -78,6 +80,7 @@ const POSITIONS_ON_PITCH = [
 
 export default function ScoutTools() {
   const { profile } = useUser();
+  const navigate = useNavigate();
   const [hasPremium, setHasPremium] = useState(false);
   const [selectedPosition, setSelectedPosition] = useState(null);
   const [aiInput, setAiInput] = useState("");
@@ -256,7 +259,7 @@ export default function ScoutTools() {
         </section>
 
         {/* ── Overall Leaderboard ── */}
-        <section className="st-leaderboard-card">
+        <section className="st-leaderboard-card" onClick={() => navigate("/progress/leaderboard")}>
           <div className="st-lb-header">
             <div className="st-section-title-group">
               <h2 className="st-section-title">Overall Leaderboard</h2>
@@ -324,18 +327,9 @@ export default function ScoutTools() {
         {!hasPremium && (
           <div className="st-unlock-wrap">
             <div className="st-unlock-fade" />
-            <section className="st-unlock-banner">
-              <div className="st-unlock-deco st-unlock-deco-1" />
-              <div className="st-unlock-deco st-unlock-deco-2" />
-              <div className="st-pro-badge">PRO</div>
-              <h2 className="st-unlock-title">Unlock pro features</h2>
-              <p className="st-unlock-subtitle">
-                Get AI insights, advanced analytics, and full scout visibility.
-              </p>
-              <button className="st-unlock-btn" onClick={() => setHasPremium(true)}>
-                Unlock Premium
-              </button>
-            </section>
+            <div className="st-unlock-banner">
+              <ProUpgradeCard badgeColor="pro-scout" buttonLabel="Get Premium features" onButtonClick={() => setHasPremium(true)} />
+            </div>
           </div>
         )}
       </div>

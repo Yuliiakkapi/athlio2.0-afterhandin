@@ -4,7 +4,11 @@ import Badge from "../../../../components/UI/Badge";
 import whiteStripes from "../../../../assets/images/background-whitestrpes.png";
 import "./ReadyScreen.css";
 
-export default function ReadyScreen({ onClose }) {
+export default function ReadyScreen({
+  onClose,
+  badgeColor = "pro-athlete",
+  subtitle = "Your personalized system ready based on your schedule, skills and connected apps",
+}) {
   useEffect(() => {
     const timer = setTimeout(onClose, 3000);
     return () => clearTimeout(timer);
@@ -21,14 +25,11 @@ export default function ReadyScreen({ onClose }) {
         <h1 className="ready-title">
           You're ready to
           <br />
-          Go <Badge text="PRO" color="pro-athlete" size="md" />
+          Go <Badge text="PRO" color={badgeColor} size="md" />
         </h1>
       </div>
 
-      <p className="ready-sub">
-        Your personalized system ready based on your{" "}
-        schedule, skills and connected apps
-      </p>
+      <p className="ready-sub">{subtitle}</p>
     </div>
   );
 }

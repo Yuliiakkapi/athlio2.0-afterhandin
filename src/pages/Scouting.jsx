@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CaretDown, CaretRight, Star, Sparkle as SparkleIcon } from "@phosphor-icons/react";
 import { useUser } from "../context/UserContext";
@@ -6,7 +5,7 @@ import OvrBadge from "../components/UI/OvrBadge.jsx";
 // Use user-provided PNG background if present
 import WATCHLIST_BG from "../assets/images/watchlist-bg.png";
 // Upsell background provided by user
-import PROFEATURES_BG from "../assets/images/Profeatures.png";
+import ProUpgradeCard from "../components/domain/Progress-athletes/ProUpgradeCard";
 import "./Scouting.css";
 
 // Decorative Figma vectors removed — using user's image as background instead
@@ -231,6 +230,7 @@ function SuggestedSection({ isPremium }) {
 /* ─── AI Scout ───────────────────────────────────────────────────── */
 
 function AiScoutSection() {
+  const navigate = useNavigate();
   return (
     <section className="scout-section">
       <div className="scout-section-header">
@@ -239,7 +239,11 @@ function AiScoutSection() {
           <p className="scout-section-subtitle text-sm-medium">Ranking your position and age</p>
         </div>
       </div>
-      <div className="ai-scout-card">
+      <button
+        className="ai-scout-card"
+        onClick={() => navigate("/scouting/ai-scout")}
+        aria-label="Open AI Scout"
+      >
         <div className="ai-scout-icon">
           <SparkleIcon size={32} weight="fill" />
         </div>
@@ -248,7 +252,7 @@ function AiScoutSection() {
             {prompt}
           </div>
         ))}
-      </div>
+      </button>
     </section>
   );
 }
@@ -256,6 +260,7 @@ function AiScoutSection() {
 /* ─── Overall Leaderboard ────────────────────────────────────────── */
 
 function LeaderboardSection() {
+  const navigate = useNavigate();
   return (
     <section className="scout-section">
       <div className="scout-section-header">
@@ -266,7 +271,7 @@ function LeaderboardSection() {
         <FilterButton label="Division 3" />
       </div>
 
-      <div className="lb-card">
+      <div className="lb-card" onClick={() => navigate("/progress/leaderboard")}>
         <div className="lb-col-header">
           <span className="lb-col-player">player</span>
           <div className="lb-col-stats">
@@ -345,31 +350,13 @@ function YourTeamSection() {
   );
 }
 
-/* ─── Premium upsell card ────────────────────────────────────────── */
-
-function PremiumUpsellCard({ onUnlock }) {
-  return (
-    <div className="premium-upsell-card" style={{ backgroundImage: `url(${PROFEATURES_BG})` }}>
-      <div className="premium-pro-badge">PRO</div>
-
-      <div className="premium-upsell-content">
-        <h3 className="heading-4xl-italic">Unlock pro features</h3>
-        <p className="premium-upsell-desc text-sm-medium">
-          Get AI insights, advanced analytics, and full scout visibility. Take your career to the next level.
-        </p>
-      </div>
-
-      <button className="premium-upsell-btn" onClick={onUnlock}>
-        Unlock Premium
-      </button>
-    </div>
-  );
-}
 
 /* ─── Page ───────────────────────────────────────────────────────── */
 
 export default function Scouting() {
-  const [isPremium, setIsPremium] = useState(false);
+  const { profile } = useUser();
+  const navigate = useNavigate();
+  const isPremium = !!profile?.is_pro;
 
   return (
     <div className="scouting-page">
@@ -392,7 +379,7 @@ export default function Scouting() {
         <div className="scouting-premium-gate">
           <div className="premium-gate-fade" />
           <div className="premium-gate-body">
-            <PremiumUpsellCard onUnlock={() => setIsPremium(true)} />
+            <ProUpgradeCard badgeColor="pro-scout" buttonLabel="Get Premium features" onButtonClick={() => navigate("/scout-upgrade-pro")} />
           </div>
         </div>
       )}
