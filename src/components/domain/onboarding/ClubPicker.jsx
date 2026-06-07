@@ -277,7 +277,7 @@ export default function ClubPicker({ value, onChange, onNext, userCity, userCoun
                 <ClubLogo club={club} />
                 <div className="team-club-meta">
                   <span className="team-club-name">{club.name}</span>
-                  <span className="team-club-sub">{club.league} Â· {club.country}</span>
+                  <span className="team-club-sub">{club.league} · {club.country}</span>
                 </div>
               </button>
             );
