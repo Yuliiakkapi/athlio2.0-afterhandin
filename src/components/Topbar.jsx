@@ -86,20 +86,31 @@ const TOPBAR_CONFIG = {
     ),
   },
   "/add-post": {
-    title: null,
-    left: (nav, profile) => (
-      <div className="button-avatar">
-        <IconButton onClick={() => nav(-1)} size="large" type="subtle" icon={X} />
-        <ProfilePicture imgUrl={profile?.avatar_url} size="medium" />
-      </div>
+    variant: "page",
+    left: () => <span aria-hidden="true" />,
+    center: () => <h1 className="topbar-page-title">Create new post</h1>,
+    right: (nav) => (
+      <IconButton onClick={() => nav(-1)} size="large" type="subtle" icon={X} />
     ),
-    right: () => (
-      <Button
-        size="medium"
-        type="primary"
-        label="Post it"
-        onClick={() => document.dispatchEvent(new Event("composer:submit"))}
-      />
+  },
+  "/post-match-select": {
+    variant: "page",
+    left: (nav) => (
+      <IconButton onClick={() => nav(-1)} size="large" type="subtle" icon={ArrowLeft} />
+    ),
+    center: () => <h1 className="topbar-page-title">Post about match</h1>,
+    right: (nav) => (
+      <IconButton onClick={() => nav("/home")} size="large" type="subtle" icon={X} />
+    ),
+  },
+  "/add-match": {
+    variant: "page",
+    left: (nav) => (
+      <IconButton onClick={() => nav(-1)} size="large" type="subtle" icon={ArrowLeft} />
+    ),
+    center: () => <h1 className="topbar-page-title">Add your match</h1>,
+    right: (nav) => (
+      <IconButton onClick={() => nav("/home")} size="large" type="subtle" icon={X} />
     ),
   },
   "/profile/me/following": {

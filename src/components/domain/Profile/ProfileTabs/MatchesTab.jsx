@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../../../../lib/supabase";
+import { formatMatchDate } from "../../../../lib/format";
 import MatchCard from "../../Post/MatchCard";
 import Button from "../../../UI/Button";
 import Accordion from "../../../UI/Accordion";
@@ -41,6 +42,7 @@ export default function MatchesTab({ profile, isMe = false }) {
           league,
           your_team,
           opponent,
+          opponent_club:opponent_club_id ( logo_url ),
           your_score,
           opponent_score,
           author_id,
@@ -167,14 +169,14 @@ export default function MatchesTab({ profile, isMe = false }) {
         {filteredMatches.map((m) => (
           <MatchCard
             key={m.id}
-            isImage={false}
-            imageUrl={null}
             yourTeam={m.your_team || m?.profiles?.club?.name || "—"}
+            yourTeamLogoUrl={m.profiles?.club?.logo_url}
             yourScore={m.your_score}
             opponent={m.opponent}
+            opponentLogoUrl={m.opponent_club?.logo_url}
             opponentScore={m.opponent_score}
             league={m.league}
-            date={m.date_of_game}
+            date={formatMatchDate(m.date_of_game)}
             goalsCount={m.goals}
             assistsCount={m.assists}
             minCount={m.minutes_played}

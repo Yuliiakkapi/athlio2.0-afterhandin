@@ -191,10 +191,11 @@ create table if not exists posts (
   league         text,
   location       text,
   date_of_game   date,
-  your_team      text,
-  opponent       text,
-  your_score     int,
-  opponent_score int,
+  your_team           text,
+  opponent            text,
+  opponent_club_id    uuid references clubs(id) on delete set null,
+  your_score          int,
+  opponent_score      int,
   minutes_played int,
   goals          int,
   assists        int,
@@ -202,6 +203,8 @@ create table if not exists posts (
 );
 
 create index if not exists posts_author_created on posts (author_id, created_at desc);
+
+alter table posts add column if not exists opponent_club_id uuid references clubs(id) on delete set null;
 
 -- ============================================================
 -- POST LIKES

@@ -1,126 +1,110 @@
-import { useEffect, useState, useMemo, useRef } from "react";
+import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { SoccerBall, Sneaker } from "@phosphor-icons/react";
 import { supabase } from "../../../lib/supabase";
-import GrowingTextArea from "../../inputs/GrowingTextArea";
-import PostPillBar from "./PostPillBar";
+import TextArea from "../../inputs/TextArea";
+import MediaPickerArea from "../../UI/MediaPickerArea";
+import Button from "../../UI/Button";
+import SuccessPopover from "../../UI/SuccessPopover";
 import "./Composer.css";
-import IconButton from "../../UI/IconButton";
-import { X } from "@phosphor-icons/react";
 
-export default function Composer({
-  onSubmit /* UI-only: do not insert here */,
-}) {
+export default function Composer() {
   const [text, setText] = useState("");
-  const [image, setImage] = useState(null); // can be a File or an upload object
+  const [images, setImages] = useState([]);
+  const [posted, setPosted] = useState(false);
   const postingRef = useRef(false);
   const navigate = useNavigate();
-  const [preview, setPreview] = useState(null);
 
-  useEffect(() => {
-    if (!image) {
-      setPreview(null);
-      return;
+  const isUploading = images.some((img) => img._temp);
+  const hasMedia = images.some((img) => !img._temp && img.publicUrl);
+  const canShare = (text.trim().length > 0 || hasMedia) && !isUploading;
+
+  async function handleShare() {
+    if (!canShare || postingRef.current) return;
+    postingRef.current = true;
+
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.user) throw new Error("Not authenticated");
+
+      // Use the first uploaded image URL (DB has a single media column)
+      const firstReady = images.find((img) => !img._temp);
+      const mediaUrl = firstReady?.publicUrl ?? null;
+
+      const { error } = await supabase.from("posts").insert({
+        author_id: session.user.id,
+        type: "basic",
+        content: text.trim(),
+        media: mediaUrl,
+      });
+
+      if (error) throw error;
+
+      document.dispatchEvent(new CustomEvent("composer:posted"));
+      setPosted(true);
+    } catch (err) {
+      console.error("Failed to create post:", err);
+    } finally {
+      postingRef.current = false;
     }
+  }
 
-    // if PostPillBar provided an uploaded object
-    if (image && typeof image === "object" && image.publicUrl) {
-      setPreview(image.publicUrl);
-      return;
-    }
-
-    // fallback: raw File object case
-    const url = URL.createObjectURL(image);
-    setPreview(url);
-    return () => URL.revokeObjectURL(url);
-  }, [image]);
-
-  const isUploading = !!(
-    image instanceof File ||
-    (image && typeof image === "object" && image._temp === true)
-  );
-  const canPost = useMemo(
-    () => text.trim().length > 0 && !isUploading,
-    [text, isUploading],
-  );
-
-  // topbar submits the post
-  useEffect(() => {
-    const handler = async () => {
-      if (!canPost) return;
-      if (postingRef.current) return; // prevent duplicates
-      postingRef.current = true;
-
-      try {
-        const { data: auth, error: authErr } = await supabase.auth.getUser();
-        if (authErr || !auth?.user)
-          throw authErr || new Error("Not authenticated");
-
-        // Only persist a real hosted URL, never a temp blob
-        const hasImage = !!image;
-        const mediaUrl =
-          image && typeof image === "object" && image._temp === false
-            ? image.publicUrl
-            : null;
-
-        // If user attached an image but upload hasn't finished, do not insert yet
-        if (hasImage && !mediaUrl) {
-          console.warn("Blocked submit: image selected but not uploaded yet.");
-          return;
-        }
-
-        const { error } = await supabase.from("posts").insert({
-          author_id: auth.user.id,
-          type: "basic",
-          content: text.trim(),
-          media: mediaUrl, // null only when there was no image
-        });
-        if (error) throw error;
-
-        document.dispatchEvent(new CustomEvent("composer:posted"));
-
-        navigate("/home");
-
-        // reset UI
-        setText("");
-        setImage(null);
-        setPreview(null);
-      } catch (err) {
-        console.error("Failed to create post:", err);
-      } finally {
-        postingRef.current = false;
-      }
-    };
-
-    document.addEventListener("composer:submit", handler);
-    return () => document.removeEventListener("composer:submit", handler);
-  }, [canPost, text, image]);
-
-  function handleRemoveImage() {
-    setImage(null);
-    setPreview(null);
+  if (posted) {
+    return (
+      <SuccessPopover
+        title="Post is created"
+        subtitle="Now your friends can see your results and get inspired"
+        onClose={() => navigate("/home")}
+      />
+    );
   }
 
   return (
-    <div className="composer-wrap" aria-busy={isUploading ? "true" : "false"}>
-      <GrowingTextArea
-        value={text}
-        onChange={setText}
-        placeholder="What is this post about?"
-      />
-      {preview && (
-        <figure className="composer-preview">
-          <img src={preview} alt="Selected" className="composer-preview-img" />
-          <figcaption className="composer-preview-caption">
-            <IconButton
-              size="small"
-              type="neutral"
-              icon={X}
-              onClick={handleRemoveImage}
+    <div className="composer-wrap">
+      <div className="composer-body">
+        <MediaPickerArea onImagesChange={setImages} />
+
+        <TextArea
+          label="Add text"
+          value={text}
+          onChange={setText}
+          placeholder="Add a caption..."
+          rows={5}
+        />
+
+        <div className="composer-attach">
+          <p className="composer-attach-title">Attach</p>
+          <div className="composer-attach-row">
+            <Button
+              label="Match"
+              type="secondary"
+              size="medium"
+              fullWidth
+              leadingIcon={SoccerBall}
+              onClick={() => navigate("/post-match-select")}
             />
-          </figcaption>
-        </figure>
-      )}
-      <PostPillBar onImageSelected={setImage} />
+            <Button
+              label="Training"
+              type="secondary"
+              size="medium"
+              fullWidth
+              leadingIcon={Sneaker}
+              disabled
+            />
+          </div>
+        </div>
+      </div>
+
+      <div className="composer-footer">
+        <Button
+          label="Share"
+          type="primary"
+          size="medium"
+          fullWidth
+          disabled={!canShare}
+          onClick={handleShare}
+        />
+      </div>
     </div>
   );
 }

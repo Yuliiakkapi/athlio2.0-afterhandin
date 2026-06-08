@@ -15,6 +15,8 @@ export default function AppShell() {
     pathname.startsWith("/intro") ||
     pathname.startsWith("/setup-profile") ||
     pathname.startsWith("/add-post") ||
+    pathname.startsWith("/post-match-select") ||
+    pathname.startsWith("/add-match") ||
     pathname.startsWith("/progress/") ||
     pathname === "/scouting/team" ||
     pathname === "/scouting/watchlist";

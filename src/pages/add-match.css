@@ -1,0 +1,224 @@
+main:has(.am-page) {
+  padding: 0;
+}
+
+.am-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: var(--neutral-50-bg);
+  padding-top: 72px;
+}
+
+.am-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px 16px 0;
+}
+
+/* ─── Chip group ──────────────────────────────────────────────── */
+.am-chip-group {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 8px;
+}
+
+.am-chip {
+  flex: 1;
+  height: 40px;
+  padding: 0 12px;
+  border-radius: 9999px;
+  border: 1.5px solid var(--neutral-200);
+  background: var(--white);
+  color: var(--black);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.am-chip--active {
+  border-color: var(--primary-500);
+  color: var(--primary-500);
+  background: var(--primary-50);
+}
+
+.am-field-error {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: var(--danger, #e53e3e);
+  margin: -8px 0 0 4px;
+}
+
+/* ─── ReadOnly TextInput cursor ──────────────────────────────── */
+.am-body .textinput-field[readonly] {
+  cursor: pointer;
+}
+
+/* ─── Section titles ──────────────────────────────────────────── */
+/* ─── White inputs + 44px height ─────────────────────────────── */
+.am-body .textinput-wrapper,
+.am-body .textinput-container.filled:not(:focus-within) .textinput-wrapper {
+  background: var(--white);
+}
+
+.am-body .textinput-wrapper {
+  height: 44px;
+}
+
+.am-body .textinput-field,
+.am-body .selectinput-select {
+  height: 44px;
+  padding-top: 16px;
+  padding-bottom: 4px;
+}
+
+
+.am-section-title {
+  color: var(--black);
+  margin: 4px 0 0;
+}
+
+/* ─── Score / stats rows ──────────────────────────────────────── */
+.am-score-row,
+.am-stats-row {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.am-score-row > *,
+.am-stats-row > * {
+  flex: 1;
+}
+
+.am-score-dash {
+  flex: 0 0 auto;
+  font-size: 20px;
+  color: var(--neutral-400);
+  padding-top: 14px;
+}
+
+/* ─── Footer ──────────────────────────────────────────────────── */
+.am-footer {
+  padding: 16px;
+  position: sticky;
+  bottom: 0;
+  background: var(--neutral-50-bg);
+}
+
+/* ─── Type picker list ────────────────────────────────────────── */
+.am-type-list {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 16px;
+}
+
+.am-type-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 0;
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--neutral-100);
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+}
+
+.am-type-option:last-child {
+  border-bottom: none;
+}
+
+/* ─── Club rows in pickers ────────────────────────────────────── */
+.am-picker-section-label {
+  color: var(--black);
+  margin: 12px 0 8px;
+}
+
+.am-club-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--white);
+  border: 1.5px solid var(--neutral-200);
+  border-radius: 12px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.am-club-row--selected {
+  border-color: var(--primary-500);
+  background: var(--primary-50);
+}
+
+.am-club-logo-wrap {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--neutral-200);
+  background: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.am-club-logo {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+}
+
+.am-club-initial {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--neutral-600);
+}
+
+.am-club-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.am-club-league {
+  color: var(--neutral-600);
+}
+
+/* ─── Add manually option ─────────────────────────────────────── */
+.am-add-manual {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 16px;
+  background: none;
+  border: 1.5px dashed var(--primary-200);
+  border-radius: 12px;
+  margin-bottom: 16px;
+  cursor: pointer;
+  color: var(--primary-500);
+  text-align: left;
+}
+
+.am-add-manual-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: var(--primary-100);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}

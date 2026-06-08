@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import BasicPost from "../domain/Post/BasicPost";
 import MatchPost from "../domain/Post/MatchPost";
 import { supabase } from "../../lib/supabase";
+import { formatMatchDate } from "../../lib/format";
 // adjust this path if your context sits elsewhere
 import { useUser } from "../../context/UserContext";
 import SuggestedAccounts from "../domain/Suggested/SuggestedAccounts";
@@ -38,12 +39,14 @@ export function PostSwitcher({ post, likedPostIds = new Set() }) {
         goalsCount={Number(post.goals) || 0}
         assistsCount={Number(post.assists) || 0}
         minCount={Number(post.minutes_played) || 0}
-        date={post.date_of_game ?? ""}
+        date={formatMatchDate(post.date_of_game)}
         league={post.league ?? ""}
         opponent={post.opponent ?? ""}
         yourScore={Number(post.your_score) || 0}
         opponentScore={Number(post.opponent_score) || 0}
         yourTeam={club.name}
+        yourTeamLogoUrl={club.logo_url}
+        opponentLogoUrl={post.opponent_club?.logo_url}
         likesCount={Number(post.likes_count) || 0}
         commentsCount={Number(post.comments_count) || 0}
         initialLiked={likedPostIds.has(post.id) ? true : null}
@@ -133,6 +136,7 @@ export default function Feed() {
       league,
       your_team,
       opponent,
+      opponent_club:opponent_club_id ( logo_url ),
       your_score,
       opponent_score,
       author_id,

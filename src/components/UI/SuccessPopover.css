@@ -1,0 +1,84 @@
+/* ─── Overlay ─────────────────────────────────────────────────── */
+.success-popover-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: flex-end;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+/* ─── Sheet ───────────────────────────────────────────────────── */
+.success-popover {
+  width: 100%;
+  background: var(--white);
+  border-radius: 20px 20px 0 0;
+  animation: sheet-up 250ms ease-out;
+}
+
+@keyframes sheet-up {
+  from { transform: translateY(40px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+/* ─── Header ──────────────────────────────────────────────────── */
+.success-popover-header {
+  display: flex;
+  justify-content: flex-end;
+  padding: 20px 16px 0;
+}
+
+/* ─── Content ─────────────────────────────────────────────────── */
+.success-popover-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+  padding: 20px 16px 40px;
+}
+
+/* ─── SVG animation ───────────────────────────────────────────── */
+.success-svg {
+  overflow: visible;
+}
+
+/* Circle: draws itself over 1.4s */
+.success-circle {
+  stroke-dasharray: 274;
+  stroke-dashoffset: 274;
+  animation: draw-circle 1.4s ease-in-out forwards;
+}
+
+@keyframes draw-circle {
+  to { stroke-dashoffset: 0; }
+}
+
+/* Checkmark: starts after circle finishes, draws over 0.5s */
+.success-check {
+  stroke-dasharray: 56;
+  stroke-dashoffset: 56;
+  animation: draw-check 0.5s ease-out 1.4s forwards;
+}
+
+@keyframes draw-check {
+  to { stroke-dashoffset: 0; }
+}
+
+/* ─── Text ────────────────────────────────────────────────────── */
+.success-popover-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  text-align: center;
+}
+
+.success-popover-title {
+  margin: 0;
+  color: var(--black);
+}
+
+.success-popover-subtitle {
+  margin: 0;
+  color: var(--muted, #72717a);
+}

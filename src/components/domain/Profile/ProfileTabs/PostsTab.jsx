@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "../../../../lib/supabase";
 import BasicPost from "../../Post/BasicPost";
 import MatchPost from "../../Post/MatchPost";
+import { formatMatchDate } from "../../../../lib/format";
 import "./PostsTab.css";
 import IconButton from "../../../UI/IconButton";
 import { Plus } from "@phosphor-icons/react";
@@ -37,12 +38,14 @@ function PostSwitcher({ post }) {
         goalsCount={Number(post.goals) || 0}
         assistsCount={Number(post.assists) || 0}
         minCount={Number(post.minutes_played) || 0}
-        date={post.date_of_game ?? ""}
+        date={formatMatchDate(post.date_of_game)}
         league={post.league ?? ""}
         opponent={post.opponent ?? ""}
         yourScore={Number(post.your_score) || 0}
         opponentScore={Number(post.opponent_score) || 0}
         yourTeam={club.name}
+        yourTeamLogoUrl={club.logo_url}
+        opponentLogoUrl={post.opponent_club?.logo_url}
         hideFollow={true}
       />
     );
@@ -90,6 +93,7 @@ export default function PostsTab({ profile, isMe = false }) {
           league,
           your_team,
           opponent,
+          opponent_club:opponent_club_id ( logo_url ),
           your_score,
           opponent_score,
           author_id,

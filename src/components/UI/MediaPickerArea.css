@@ -1,0 +1,129 @@
+.media-picker {
+  width: 100%;
+}
+
+/* ─── Empty state ─────────────────────────────────────────────── */
+.media-picker-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  height: 200px;
+  background: var(--neutral-100);
+  border: none;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: background 150ms ease;
+}
+
+.media-picker-area:hover {
+  background: var(--neutral-200);
+}
+
+.media-picker-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--primary-100);
+  color: var(--primary-500);
+}
+
+.media-picker-title {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--black);
+}
+
+.media-picker-sub {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--neutral-500);
+}
+
+/* ─── Thumbnails scroll ───────────────────────────────────────── */
+.media-picker-scroll {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-bottom: 2px;
+}
+
+.media-picker-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* ─── Single thumbnail ────────────────────────────────────────── */
+.media-thumb {
+  position: relative;
+  flex-shrink: 0;
+  width: 160px;
+  height: 160px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--neutral-100);
+}
+
+.media-thumb-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.media-thumb-uploading {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  animation: pulse 1s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.3; }
+  50%       { opacity: 0.6; }
+}
+
+/* ─── Remove button ───────────────────────────────────────────── */
+.media-thumb-remove {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.55);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  backdrop-filter: blur(4px);
+}
+
+/* ─── Add more tile ───────────────────────────────────────────── */
+.media-thumb-add {
+  flex-shrink: 0;
+  width: 160px;
+  height: 160px;
+  border-radius: 12px;
+  border: 1.5px dashed var(--neutral-300);
+  background: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--neutral-400);
+  transition: border-color 150ms, color 150ms;
+}
+
+.media-thumb-add:hover {
+  border-color: var(--primary-500);
+  color: var(--primary-500);
+}

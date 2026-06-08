@@ -2,20 +2,21 @@ import { useNavigate } from "react-router-dom";
 import { useUser } from "../../../context/UserContext";
 import "./PostTypePicer.css";
 import PostTypeButton from "../../UI/PostTypeButton";
-import { Article, ChartBar } from "@phosphor-icons/react";
+import { PlusCircle, SoccerBall, Sneaker } from "@phosphor-icons/react";
+
+const TYPES = [
+  { key: "post",     title: "Post",     icon: PlusCircle, disabled: false },
+  { key: "match",    title: "Match",    icon: SoccerBall, disabled: false },
+  { key: "training", title: "Training", icon: Sneaker,    disabled: true  },
+];
 
 export default function PostTypePicker({ onChoose }) {
   const navigate = useNavigate();
   const { isScout, canPost } = useUser();
 
-  const types = [
-    { key: "post", title: "Post", icon: Article },
-    { key: "match", title: "Manual Match", icon: ChartBar },
-  ];
-
   const visibleTypes = isScout
-    ? types.filter((t) => t.key !== "match")
-    : types;
+    ? TYPES.filter((t) => t.key !== "match")
+    : TYPES;
 
   return (
     <div className="post-type-picker">
@@ -24,9 +25,9 @@ export default function PostTypePicker({ onChoose }) {
           key={t.key}
           title={t.title}
           icon={t.icon}
+          disabled={t.disabled || !canPost(t.key)}
           onClick={() => {
-            if (!canPost(t.key)) return;
-            if (t.key === "match") navigate("/add-post/match");
+            if (t.key === "match") navigate("/post-match-select");
             else onChoose?.(t.key);
           }}
         />

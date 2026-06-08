@@ -1,0 +1,36 @@
+main:has(.pam-page) {
+  padding: 0;
+}
+
+.pam-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: var(--neutral-50-bg);
+  padding-top: 72px;
+}
+
+.pam-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px 16px 0;
+}
+
+.pam-cards-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.pam-card-wrap {
+  cursor: pointer;
+}
+
+.pam-footer {
+  padding: 16px;
+  background: var(--neutral-50-bg);
+  position: sticky;
+  bottom: 0;
+}

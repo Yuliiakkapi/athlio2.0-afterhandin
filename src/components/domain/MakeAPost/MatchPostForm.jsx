@@ -82,7 +82,7 @@ function normalizeClubValue(v) {
     v.club_name ||
     "";
 
-  return { club_id: id, club_other_name: other };
+  return { club_id: id, club_other_name: other, logo_url: v.logo_url || null };
 }
 
 export default function MatchPostForm({ onCreated }) {
@@ -188,10 +188,14 @@ export default function MatchPostForm({ onCreated }) {
         your: form.your_team,
         opp: form.opponent_team,
       });
-      const yourTeamName = await resolveClubName(form.your_team);
-      const opponentName = await resolveClubName(form.opponent_team);
-      // Upload media if any
-      const mediaUrl = await uploadMediaIfAny(imageFile, meId);
+      const [yourTeamName, opponentName, mediaUrl] = await Promise.all([
+        resolveClubName(form.your_team),
+        resolveClubName(form.opponent_team),
+        uploadMediaIfAny(imageFile, meId),
+      ]);
+
+      const opponentClubId =
+        form.opponent_team?.club_id || form.opponent_team?.id || null;
 
       const row = {
         type: "match",
@@ -200,6 +204,7 @@ export default function MatchPostForm({ onCreated }) {
         date_of_game: form.date_of_game || null,
         your_team: yourTeamName,
         opponent: opponentName,
+        opponent_club_id: opponentClubId,
         your_score: Number(form.your_score) || 0,
         opponent_score: Number(form.opponent_score) || 0,
         minutes_played: Number(form.minutes_played) || 0,
@@ -259,7 +264,7 @@ export default function MatchPostForm({ onCreated }) {
               <DateInput
                 label="Date of game"
                 value={form.date_of_game}
-                onChange={(e) => patch({ date_of_game: e.target.value })}
+                onChange={(v) => patch({ date_of_game: v })}
               />
 
               <div className="score-inputs-container">

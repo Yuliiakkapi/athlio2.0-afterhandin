@@ -143,13 +143,17 @@
 /* Floating label when focused or filled */
 .textinput-field:focus ~ .textinput-label,
 .textinput-container.filled .textinput-label {
-  /* lift label slightly and reduce size */
   top: 4px;
-  font-size: 12px;
-  font-weight: 500; /* medium */
-  /* use a dark grey (gray-900) when selected/outlined */
-  color: #151622;
-  /* match the page background so the label appears to float */
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--neutral-600);
   background: var(--neutral-50-bg);
   padding: 0 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.ti-required {
+  color: var(--primary-500);
+  margin-left: 1px;
 }

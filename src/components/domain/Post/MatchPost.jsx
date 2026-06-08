@@ -28,6 +28,8 @@ export default function MatchPost({
   initialLiked = null,
   yellowCards = 0,
   redCards = 0,
+  yourTeamLogoUrl,
+  opponentLogoUrl,
 }) {
   const isImage = !!imageUrl;
 
@@ -75,6 +77,8 @@ export default function MatchPost({
       <MatchCard
         imageUrl={imageUrl}
         yourTeam={yourTeam}
+        yourTeamLogoUrl={yourTeamLogoUrl}
+        opponentLogoUrl={opponentLogoUrl}
         yourScore={yourScore}
         opponent={opponent}
         opponentScore={opponentScore}
