@@ -179,7 +179,7 @@ export default function ClubPicker({ value, onChange, onNext, userCity, userCoun
   const listLabel = query.trim().length >= 2 ? "Search results" : hasLocation ? "Nearby clubs" : "Featured clubs";
 
   function pickClub(club) {
-    onChange({ club_id: club.id, club_other_name: club.name });
+    onChange({ club_id: club.id, club_other_name: club.name, logo_url: club.logo_url || null });
   }
 
   async function handleAddTeam({ clubName, city, league, teamType }) {

@@ -1,21 +1,17 @@
-import IconButton from "./IconButton";
 import "./PostTypeButton.css";
 
-export default function PostTypeButton({ title, icon: Icon, onClick }) {
+export default function PostTypeButton({ title, icon: Icon, onClick, disabled = false }) {
   return (
-    <div
-      className="post-type-button"
-      role="button"
-      tabIndex={0}
-      onClick={onClick}
-      onKeyDown={(e) => {
-        if (e.key === "Enter" || e.key === " ") onClick?.();
-      }}
+    <button
+      className={`post-type-btn${disabled ? " post-type-btn--disabled" : ""}`}
+      onClick={disabled ? undefined : onClick}
+      tabIndex={disabled ? -1 : 0}
+      aria-disabled={disabled}
     >
-      <span className="post-type-button" onClick={onClick}>
-        <IconButton size="small" type="subtle" icon={Icon} />
-        <p>{title}</p>
+      <span className="post-type-btn-icon">
+        <Icon size={28} weight="light" />
       </span>
-    </div>
+      <span className="post-type-btn-label">{title}</span>
+    </button>
   );
 }

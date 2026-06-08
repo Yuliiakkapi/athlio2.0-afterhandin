@@ -20,6 +20,9 @@ const Notifications = lazy(() => import("./pages/Notifications"));
 const PostDetails = lazy(() => import("./pages/PostDetails"));
 const AddPost = lazy(() => import("./pages/AddPost"));
 const AddMatchPost = lazy(() => import("./pages/AddMatchPost"));
+const PostAboutMatch = lazy(() => import("./pages/PostAboutMatch"));
+const PostAboutMatchComposer = lazy(() => import("./pages/PostAboutMatchComposer"));
+const AddMatch = lazy(() => import("./pages/AddMatch"));
 const Chat = lazy(() => import("./pages/Chat"));
 const ChatDetail = lazy(() => import("./pages/ChatDetail"));
 const Progress = lazy(() => import("./pages/Progress"));
@@ -65,6 +68,9 @@ export default function App() {
         <Route path="post/:id" element={<PostDetails />} />
         <Route path="add-post" element={<AddPost />} />
         <Route path="add-post/match" element={<AddMatchPost />} />
+        <Route path="post-match-select" element={<PostAboutMatch />} />
+        <Route path="post-about-match/:matchId" element={<PostAboutMatchComposer />} />
+        <Route path="add-match" element={<AddMatch />} />
         <Route path="chat" element={<Chat />} />
         <Route path="chat/:id" element={<ChatDetail />} />
         <Route path="progress" element={<Progress />} />

@@ -180,6 +180,40 @@ create trigger follows_count_sync
 -- POSTS
 -- ============================================================
 
+-- ============================================================
+-- MATCHES  (player performance records, independent of posts)
+-- ============================================================
+create table if not exists matches (
+  id               uuid primary key default uuid_generate_v4(),
+  player_id        uuid not null references profiles(id) on delete cascade,
+  date_of_game     date,
+  league           text,
+  your_team        text,
+  opponent         text,
+  opponent_club_id uuid references clubs(id) on delete set null,
+  your_score       int not null default 0,
+  opponent_score   int not null default 0,
+  minutes_played   int not null default 0,
+  goals            int not null default 0,
+  assists          int not null default 0,
+  yellow_cards     int not null default 0,
+  red_cards        int not null default 0,
+  home_or_away     text,
+  participation    text,
+  created_at       timestamptz not null default now()
+);
+
+create index if not exists matches_player_date on matches (player_id, date_of_game desc);
+
+alter table matches enable row level security;
+create policy if not exists matches_select on matches for select using (true);
+create policy if not exists matches_insert on matches for insert to authenticated with check (auth.uid() = player_id);
+create policy if not exists matches_update on matches for update to authenticated using (auth.uid() = player_id);
+create policy if not exists matches_delete on matches for delete to authenticated using (auth.uid() = player_id);
+
+-- ============================================================
+-- POSTS  (social feed — basic or linked to a match)
+-- ============================================================
 create table if not exists posts (
   id             uuid primary key default uuid_generate_v4(),
   author_id      uuid not null references profiles(id) on delete cascade,
@@ -188,20 +222,15 @@ create table if not exists posts (
   media          text,
   likes_count    int not null default 0,
   comments_count int not null default 0,
-  league         text,
-  location       text,
-  date_of_game   date,
-  your_team      text,
-  opponent       text,
-  your_score     int,
-  opponent_score int,
-  minutes_played int,
-  goals          int,
-  assists        int,
+  match_id       uuid references matches(id) on delete set null,
+  media_urls     text[] not null default '{}',
   created_at     timestamptz not null default now()
 );
 
 create index if not exists posts_author_created on posts (author_id, created_at desc);
+
+alter table posts add column if not exists match_id    uuid references matches(id) on delete set null;
+alter table posts add column if not exists media_urls  text[] not null default '{}';
 
 -- ============================================================
 -- POST LIKES
