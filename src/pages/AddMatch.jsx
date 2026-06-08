@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { CheckCircle, Plus, MagnifyingGlass } from "@phosphor-icons/react";
+import { CheckCircle, Plus, X, Copy, Images } from "@phosphor-icons/react";
 import { supabase } from "../lib/supabase";
 import { useUser } from "../context/UserContext";
 import TextInput from "../components/inputs/TextInput";
@@ -9,7 +9,18 @@ import SelectInput from "../components/inputs/SelectInput";
 import Button from "../components/UI/Button";
 import BottomSheet from "../components/UI/BottomSheet";
 import SearchBar from "../components/UI/SearchBar";
+import MatchCard from "../components/domain/Post/MatchCard";
+import { formatMatchDate } from "../lib/format";
 import "./add-match.css";
+
+async function uploadFile(file, userId) {
+  const path = `posts/${userId}/${Date.now()}_${file.name.replace(/[^a-zA-Z0-9._-]/g, "_")}`;
+  await supabase.storage.from("post-media").upload(path, file, {
+    cacheControl: "3600", upsert: false, contentType: file.type || "application/octet-stream",
+  });
+  const { data: { publicUrl } } = supabase.storage.from("post-media").getPublicUrl(path);
+  return publicUrl;
+}
 
 const MATCH_TYPES = [
   "League match",
@@ -73,6 +84,22 @@ export default function AddMatch() {
   const navigate = useNavigate();
   const savingRef = useRef(false);
   const { profile } = useUser();
+
+  // Post-save flow: "form" → "make-post" → "match-added"
+  const [step, setStep] = useState("form");
+  const [savedMatchId, setSavedMatchId] = useState(null);
+  const [makePostText, setMakePostText] = useState("");
+  const [shareOnFeed, setShareOnFeed] = useState(true);
+  const [makePostImages, setMakePostImages] = useState([]);
+  const makePostFileRef = useRef(null);
+  const makingPostRef = useRef(false);
+
+  // Auto-close "match-added" after the checkmark animation finishes (~2.7s)
+  useEffect(() => {
+    if (step !== "match-added") return;
+    const t = setTimeout(() => navigate("/home"), 2700);
+    return () => clearTimeout(t);
+  }, [step, navigate]);
 
   const [form, setForm] = useState({
     homeOrAway: null,
@@ -163,9 +190,8 @@ export default function AddMatch() {
 
       const minutesNum = parseInt(form.minutesPlayed) || 0;
 
-      const { error } = await supabase.from("posts").insert({
-        author_id: session.user.id,
-        type: "match",
+      const { data, error } = await supabase.from("matches").insert({
+        player_id: session.user.id,
         league: form.matchType,
         date_of_game: form.date || null,
         your_team: form.yourTeam?.name || null,
@@ -176,12 +202,15 @@ export default function AddMatch() {
         minutes_played: minutesNum,
         goals: Number(form.goals) || 0,
         assists: Number(form.assists) || 0,
-        content: null,
-        media: null,
-      });
+        yellow_cards: form.cards === "Yellow" ? 1 : 0,
+        red_cards: form.cards === "Red" ? 1 : 0,
+        home_or_away: form.homeOrAway || null,
+        participation: form.participation || null,
+      }).select("id").single();
 
       if (error) throw error;
-      navigate("/post-match-select", { replace: true });
+      setSavedMatchId(data?.id ?? null);
+      setStep("make-post");
     } catch (err) {
       console.error("Failed to save match:", err);
     } finally {
@@ -189,9 +218,189 @@ export default function AddMatch() {
     }
   }
 
+  async function handleMakePostFiles(e) {
+    const files = Array.from(e.target.files || []);
+    if (!files.length) return;
+    const { data: { session } } = await supabase.auth.getSession();
+    const userId = session?.user?.id;
+    const newItems = files.map((f) => ({
+      id: `${Date.now()}_${Math.random()}`,
+      preview: URL.createObjectURL(f),
+      publicUrl: null,
+      _temp: true,
+      _file: f,
+    }));
+    setMakePostImages((prev) => [...prev, ...newItems]);
+    await Promise.all(newItems.map(async (item) => {
+      const url = await uploadFile(item._file, userId).catch(() => null);
+      setMakePostImages((prev) =>
+        prev.map((img) => img.id === item.id ? { ...img, publicUrl: url, _temp: false } : img)
+      );
+    }));
+  }
+
+  async function handlePublish() {
+    if (makingPostRef.current) return;
+    makingPostRef.current = true;
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.user && savedMatchId) {
+        const readyUrls = makePostImages.filter((img) => !img._temp && img.publicUrl).map((img) => img.publicUrl);
+        await supabase.from("posts").insert({
+          author_id: session.user.id,
+          type: "match",
+          content: makePostText.trim() || null,
+          media: readyUrls[0] ?? null,
+          media_urls: readyUrls,
+          match_id: savedMatchId,
+        });
+        document.dispatchEvent(new CustomEvent("composer:posted"));
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      makingPostRef.current = false;
+      setStep("match-added");
+    }
+  }
+
   const filteredClubs = clubSearch.length >= 2
     ? clubs.filter((c) => c.name.toLowerCase().includes(clubSearch.toLowerCase()))
     : clubs;
+
+  /* ── Make a post overlay ── */
+  if (step === "make-post") {
+    return (
+      <div className="am-overlay">
+        <div className="am-sheet">
+          <div className="am-sheet-header">
+            <span className="am-sheet-title text-lg-semibold">Make a post</span>
+            <button className="am-sheet-close" onClick={() => setStep("match-added")} aria-label="Close">
+              <X size={20} />
+            </button>
+          </div>
+
+          <div className="am-sheet-body">
+            {/* 1 photo: show "Change photo" above card */}
+            {makePostImages.length === 1 && (
+              <button type="button" className="am-change-photo" onClick={() => { makePostFileRef.current.value = ""; makePostFileRef.current.click(); }}>
+                Change photo
+              </button>
+            )}
+
+            {/* Match card — switches variant based on photo count */}
+            <MatchCard
+              imageUrl={makePostImages.length === 1 ? (makePostImages[0].publicUrl || makePostImages[0].preview) : null}
+              yourTeam={form.yourTeam?.name || "—"}
+              yourTeamLogoUrl={form.yourTeam?.logo_url || profile?.club?.logo_url}
+              yourScore={Number(form.yourScore) || 0}
+              opponent={form.opponentTeam?.name || "—"}
+              opponentLogoUrl={form.opponentTeam?.logo_url}
+              opponentScore={Number(form.opponentScore) || 0}
+              league={form.matchType}
+              date={formatMatchDate(form.date)}
+              goalsCount={Number(form.goals) || 0}
+              assistsCount={Number(form.assists) || 0}
+              minCount={parseInt(form.minutesPlayed) || 0}
+              yellowCards={form.cards === "Yellow" ? 1 : 0}
+              redCards={form.cards === "Red" ? 1 : 0}
+            />
+
+            {/* 0 photos: empty picker */}
+            {makePostImages.length === 0 && (
+              <button type="button" className="am-photo-empty" onClick={() => { makePostFileRef.current.value = ""; makePostFileRef.current.click(); }}>
+                <span className="am-photo-icon-wrap"><Images size={22} /></span>
+                <span className="am-photo-label text-base-semibold">Add video or photo</span>
+                <span className="am-photo-sub text-sm-medium">Choose from library</span>
+              </button>
+            )}
+
+            {/* 2+ photos: carousel */}
+            {makePostImages.length >= 2 && (
+              <div className="am-photo-thumbs">
+                {makePostImages.map((img) => (
+                  <div key={img.id} className="am-photo-thumb">
+                    <img src={img.preview} alt="" />
+                    {img._temp && <div className="am-photo-thumb-uploading" />}
+                    <button onClick={() => setMakePostImages((p) => p.filter((i) => i.id !== img.id))} aria-label="Remove">
+                      <X size={12} weight="bold" />
+                    </button>
+                  </div>
+                ))}
+                <button className="am-photo-thumb-add" onClick={() => { makePostFileRef.current.value = ""; makePostFileRef.current.click(); }}><Plus size={20} /></button>
+              </div>
+            )}
+
+            <input ref={makePostFileRef} type="file" accept="image/*,video/*" multiple style={{ display: "none" }} onChange={handleMakePostFiles} />
+
+            {/* Caption */}
+            <div className="am-caption-field">
+              <span className="am-caption-label text-2xs-semibold">Add text</span>
+              <textarea
+                className="am-caption-textarea"
+                value={makePostText}
+                onChange={(e) => setMakePostText(e.target.value)}
+                placeholder="Add a caption..."
+                rows={3}
+              />
+            </div>
+          </div>
+
+          <div className="am-sheet-footer">
+            <button className="am-skip-btn text-base-semibold" onClick={() => setStep("match-added")}>Skip</button>
+            <Button label="Publish" type="primary" size="medium" onClick={handlePublish} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  /* ── Match added overlay ── */
+  if (step === "match-added") {
+    const link = savedMatchId ? `https://athlio.app/match/${savedMatchId}` : "https://athlio.app/match/001";
+    return (
+      <div className="am-overlay">
+        <div className="am-sheet am-sheet--added">
+          <div className="am-sheet-header">
+            <button className="am-sheet-close" onClick={() => navigate("/home")} aria-label="Close">
+              <X size={20} />
+            </button>
+          </div>
+
+          <div className="am-added-content">
+            <svg className="am-added-svg" width="90" height="90" viewBox="0 0 90 90" fill="none">
+              <path
+                className="am-added-circle"
+                d="M45 1.57895C50.7021 1.57895 56.3484 2.70207 61.6165 4.88418C66.8846 7.06629 71.6713 10.2647 75.7033 14.2967C79.7353 18.3287 82.9337 23.1154 85.1158 28.3835C87.2979 33.6516 88.4211 39.2979 88.4211 45C88.4211 50.7021 87.2979 56.3484 85.1158 61.6165C82.9337 66.8846 79.7353 71.6713 75.7033 75.7033C71.6713 79.7353 66.8846 82.9337 61.6165 85.1158C56.3484 87.2979 50.7021 88.4211 45 88.4211C39.2979 88.4211 33.6516 87.2979 28.3835 85.1158C23.1154 82.9337 18.3287 79.7353 14.2967 75.7033C10.2647 71.6713 7.06628 66.8846 4.88417 61.6165C2.70206 56.3484 1.57894 50.7021 1.57895 45C1.57895 39.2978 2.70207 33.6515 4.88419 28.3835C7.0663 23.1154 10.2647 18.3287 14.2967 14.2967C18.3287 10.2646 23.1154 7.06628 28.3835 4.88417C33.6516 2.70206 39.2979 1.57894 45 1.57895L45 1.57895Z"
+                stroke="var(--primary-default, #4051fd)"
+                strokeWidth="3.15789"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+              <path
+                className="am-added-check"
+                d="M26.0526 44.3684L39.3701 57.6316L64.7368 32.3684"
+                stroke="var(--primary-default, #4051fd)"
+                strokeWidth="3.15789"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+
+            <p className="am-added-title heading-4xl-italic">Match is added</p>
+            <p className="am-added-sub text-sm-medium">Share link with your coach to get verification badge</p>
+
+            <div className="am-added-link-row">
+              <span className="am-added-link-text text-sm-medium">{link}</span>
+              <button className="am-added-copy" onClick={() => navigator.clipboard?.writeText(link)} aria-label="Copy link">
+                <Copy size={18} />
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <main className="am-page">

@@ -1,5 +1,6 @@
 import PostHeader from "./PostHeader";
 import PostActions from "./PostActions";
+import MediaCarousel from "../../UI/MediaCarousel";
 import "./BasicPost.css";
 import { useEffect, useRef, useState } from "react";
 
@@ -9,6 +10,7 @@ export default function BasicPost({
   authorId,
   content,
   imageUrl,
+  mediaUrls,
   createdAt,
   author_role,
   position,
@@ -62,11 +64,10 @@ export default function BasicPost({
         </div>
       )}
 
-      {imageUrl && (
-        <div className="post-media">
-          <img className="post-image" src={imageUrl} alt="" />
-        </div>
-      )}
+      {(() => {
+        const urls = mediaUrls?.length ? mediaUrls : (imageUrl ? [imageUrl] : []);
+        return urls.length ? <MediaCarousel urls={urls} /> : null;
+      })()}
 
       <PostActions
         postId={id}

@@ -27,7 +27,7 @@ export default function PostTypePicker({ onChoose }) {
           icon={t.icon}
           disabled={t.disabled || !canPost(t.key)}
           onClick={() => {
-            if (t.key === "match") navigate("/post-match-select");
+            if (t.key === "match") navigate("/add-match");
             else onChoose?.(t.key);
           }}
         />

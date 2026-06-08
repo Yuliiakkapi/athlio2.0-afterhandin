@@ -103,6 +103,14 @@ const TOPBAR_CONFIG = {
       <IconButton onClick={() => nav("/home")} size="large" type="subtle" icon={X} />
     ),
   },
+  "/post-about-match": {
+    variant: "page",
+    left: () => <span aria-hidden="true" />,
+    center: () => <h1 className="topbar-page-title">Post about match</h1>,
+    right: (nav) => (
+      <IconButton onClick={() => nav("/home")} size="large" type="subtle" icon={X} />
+    ),
+  },
   "/add-match": {
     variant: "page",
     left: (nav) => (
@@ -200,6 +208,7 @@ export default function Topbar() {
 
   let config = TOPBAR_CONFIG[pathname];
   if (!config && pathname.startsWith("/add-post")) config = TOPBAR_CONFIG["/add-post"];
+  if (!config && pathname.startsWith("/post-about-match")) config = TOPBAR_CONFIG["/post-about-match"];
   if (!config && pathname.startsWith("/post/")) config = TOPBAR_CONFIG["/post"];
   if (!config && pathname.startsWith("/profile/")) {
     if (!pathname.startsWith("/profile/me")) config = TOPBAR_CONFIG["/profile/other"];

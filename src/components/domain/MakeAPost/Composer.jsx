@@ -27,15 +27,14 @@ export default function Composer() {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session?.user) throw new Error("Not authenticated");
 
-      // Use the first uploaded image URL (DB has a single media column)
-      const firstReady = images.find((img) => !img._temp);
-      const mediaUrl = firstReady?.publicUrl ?? null;
+      const readyUrls = images.filter((img) => !img._temp && img.publicUrl).map((img) => img.publicUrl);
 
       const { error } = await supabase.from("posts").insert({
         author_id: session.user.id,
         type: "basic",
         content: text.trim(),
-        media: mediaUrl,
+        media: readyUrls[0] ?? null,
+        media_urls: readyUrls,
       });
 
       if (error) throw error;

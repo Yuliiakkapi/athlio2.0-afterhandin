@@ -20,16 +20,16 @@ export default function PostAboutMatch() {
       if (!userId) { setLoading(false); return; }
 
       const { data } = await supabase
-        .from("posts")
+        .from("matches")
         .select(`
           id, your_team, opponent, your_score, opponent_score,
           league, date_of_game, goals, assists, minutes_played,
+          yellow_cards, red_cards,
           opponent_club:opponent_club_id ( logo_url ),
-          profiles:author_id ( club:club_id ( logo_url ) )
+          profiles:player_id ( club:club_id ( logo_url ) )
         `)
-        .eq("author_id", userId)
-        .eq("type", "match")
-        .order("created_at", { ascending: false });
+        .eq("player_id", userId)
+        .order("date_of_game", { ascending: false });
 
       if (!cancel) {
         const rows = data ?? [];
@@ -59,7 +59,7 @@ export default function PostAboutMatch() {
 
         <div className="pam-cards-grid">
           {matches.map((m) => (
-            <div key={m.id} className="pam-card-wrap">
+            <div key={m.id} className="pam-card-wrap" onClick={() => navigate(`/post-about-match/${m.id}`)} style={{ cursor: "pointer" }}>
               <MatchCard
                 compact
                 yourTeam={m.your_team}
@@ -73,6 +73,8 @@ export default function PostAboutMatch() {
                 goalsCount={Number(m.goals) || 0}
                 assistsCount={Number(m.assists) || 0}
                 minCount={Number(m.minutes_played) || 0}
+                yellowCards={m.yellow_cards ?? 0}
+                redCards={m.red_cards ?? 0}
               />
             </div>
           ))}

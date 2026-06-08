@@ -183,11 +183,6 @@ export default function MatchPostForm({ onCreated }) {
     if (saving) return;
     setSaving(true);
     try {
-      // Resolve display names
-      console.log("POSTING NAMES", {
-        your: form.your_team,
-        opp: form.opponent_team,
-      });
       const [yourTeamName, opponentName, mediaUrl] = await Promise.all([
         resolveClubName(form.your_team),
         resolveClubName(form.opponent_team),
@@ -197,27 +192,37 @@ export default function MatchPostForm({ onCreated }) {
       const opponentClubId =
         form.opponent_team?.club_id || form.opponent_team?.id || null;
 
-      const row = {
-        type: "match",
-        league: form.league?.trim() || null,
-        location: form.location?.trim() || null,
-        date_of_game: form.date_of_game || null,
-        your_team: yourTeamName,
-        opponent: opponentName,
-        opponent_club_id: opponentClubId,
-        your_score: Number(form.your_score) || 0,
-        opponent_score: Number(form.opponent_score) || 0,
-        minutes_played: Number(form.minutes_played) || 0,
-        goals: Number(form.goals) || 0,
-        assists: Number(form.assists) || 0,
-        content: caption || null,
-        media: mediaUrl,
-        author_id: meId || undefined,
-      };
+      // 1. Save match record
+      const { data: matchData, error: matchError } = await supabase
+        .from("matches")
+        .insert({
+          player_id: meId,
+          league: form.league?.trim() || null,
+          date_of_game: form.date_of_game || null,
+          your_team: yourTeamName,
+          opponent: opponentName,
+          opponent_club_id: opponentClubId,
+          your_score: Number(form.your_score) || 0,
+          opponent_score: Number(form.opponent_score) || 0,
+          minutes_played: Number(form.minutes_played) || 0,
+          goals: Number(form.goals) || 0,
+          assists: Number(form.assists) || 0,
+        })
+        .select("id")
+        .single();
+      if (matchError) throw matchError;
 
+      // 2. Save post linked to match
       const { data, error } = await supabase
         .from("posts")
-        .insert(row)
+        .insert({
+          author_id: meId,
+          type: "match",
+          content: caption || null,
+          media: mediaUrl,
+          media_urls: mediaUrl ? [mediaUrl] : [],
+          match_id: matchData.id,
+        })
         .select("id")
         .single();
       if (error) throw error;

@@ -27,17 +27,10 @@ export default function MatchesTab({ profile, isMe = false }) {
       setError(null);
 
       let query = supabase
-        .from("posts")
+        .from("matches")
         .select(
           `
           id,
-          type,
-          content,
-          media,
-          created_at,
-          goals,
-          assists,
-          minutes_played,
           date_of_game,
           league,
           your_team,
@@ -45,16 +38,15 @@ export default function MatchesTab({ profile, isMe = false }) {
           opponent_club:opponent_club_id ( logo_url ),
           your_score,
           opponent_score,
-          author_id,
-          profiles:author_id (
-            id,
-            club_id,
-            club:club_id ( id, name, logo_url )
-          )
+          goals,
+          assists,
+          minutes_played,
+          yellow_cards,
+          red_cards,
+          profiles:player_id ( club:club_id ( logo_url ) )
         `,
         )
-        .eq("author_id", profile.id)
-        .eq("type", "match")
+        .eq("player_id", profile.id)
         .order("date_of_game", { ascending: false });
 
       const { data, error } = await query;
@@ -67,10 +59,7 @@ export default function MatchesTab({ profile, isMe = false }) {
         return;
       }
 
-      const noImageMatches = (data || []).map((m) => ({
-        ...m,
-        media: null,
-      }));
+      const noImageMatches = data || [];
 
       // 🧮 Build available seasons dynamically
       const seasons = new Set();
@@ -124,7 +113,7 @@ export default function MatchesTab({ profile, isMe = false }) {
               size="medium"
               type="primary"
               icon={Plus}
-              onClick={() => navigate("/add-post")}
+              onClick={() => navigate("/add-match")}
             />
           </div>
         </div>
@@ -180,6 +169,8 @@ export default function MatchesTab({ profile, isMe = false }) {
             goalsCount={m.goals}
             assistsCount={m.assists}
             minCount={m.minutes_played}
+            yellowCards={m.yellow_cards ?? 0}
+            redCards={m.red_cards ?? 0}
           />
         ))}
       </div>

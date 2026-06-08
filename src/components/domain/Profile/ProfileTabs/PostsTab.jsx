@@ -30,22 +30,26 @@ function PostSwitcher({ post }) {
   };
 
   if (post.type === "match") {
+    const m = post.match || {};
     return (
       <MatchPost
         {...common}
         content={post.content ?? ""}
         imageUrl={post.media || ""}
-        goalsCount={Number(post.goals) || 0}
-        assistsCount={Number(post.assists) || 0}
-        minCount={Number(post.minutes_played) || 0}
-        date={formatMatchDate(post.date_of_game)}
-        league={post.league ?? ""}
-        opponent={post.opponent ?? ""}
-        yourScore={Number(post.your_score) || 0}
-        opponentScore={Number(post.opponent_score) || 0}
-        yourTeam={club.name}
+        mediaUrls={post.media_urls?.length ? post.media_urls : undefined}
+        yourTeam={m.your_team || club.name}
         yourTeamLogoUrl={club.logo_url}
-        opponentLogoUrl={post.opponent_club?.logo_url}
+        yourScore={Number(m.your_score) || 0}
+        opponent={m.opponent ?? ""}
+        opponentLogoUrl={m.opponent_club?.logo_url}
+        opponentScore={Number(m.opponent_score) || 0}
+        league={m.league ?? ""}
+        date={formatMatchDate(m.date_of_game)}
+        goalsCount={Number(m.goals) || 0}
+        assistsCount={Number(m.assists) || 0}
+        minCount={Number(m.minutes_played) || 0}
+        yellowCards={m.yellow_cards ?? 0}
+        redCards={m.red_cards ?? 0}
         hideFollow={true}
       />
     );
@@ -56,6 +60,7 @@ function PostSwitcher({ post }) {
       {...common}
       content={post.content ?? ""}
       imageUrl={post.media || undefined}
+      mediaUrls={post.media_urls?.length ? post.media_urls : undefined}
       yourTeam={club.name}
       hideFollow={true}
     />
@@ -85,18 +90,15 @@ export default function PostsTab({ profile, isMe = false }) {
           type,
           content,
           media,
+          media_urls,
           created_at,
-          goals,
-          assists,
-          minutes_played,
-          date_of_game,
-          league,
-          your_team,
-          opponent,
-          opponent_club:opponent_club_id ( logo_url ),
-          your_score,
-          opponent_score,
           author_id,
+          match:match_id (
+            id, your_team, opponent, your_score, opponent_score,
+            league, date_of_game, goals, assists, minutes_played,
+            yellow_cards, red_cards,
+            opponent_club:opponent_club_id ( logo_url )
+          ),
           profiles:author_id (
             id,
             full_name,
