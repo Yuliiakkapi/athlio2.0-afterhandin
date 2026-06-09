@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import MatchCard from "./MatchCard";
 import PostHeader from "./PostHeader";
+import MediaCarousel from "../../UI/MediaCarousel";
 import "./MatchPost.css";
 import PostActions from "./PostActions";
 
@@ -28,8 +29,15 @@ export default function MatchPost({
   initialLiked = null,
   yellowCards = 0,
   redCards = 0,
+  yourTeamLogoUrl,
+  opponentLogoUrl,
+  mediaUrls,
 }) {
-  const isImage = !!imageUrl;
+  // Normalize: prefer mediaUrls array, fall back to single imageUrl
+  const allUrls = mediaUrls?.length ? mediaUrls : (imageUrl ? [imageUrl] : []);
+  // 1 photo → with-picture card; 0 or 2+ → without-picture + optional carousel
+  const cardImageUrl = allUrls.length === 1 ? allUrls[0] : null;
+  const carouselUrls = allUrls.length >= 2 ? allUrls : [];
 
   const [isExpanded, setIsExpanded] = useState(false);
   const [isOverflowing, setIsOverflowing] = useState(false);
@@ -73,8 +81,10 @@ export default function MatchPost({
         </div>
       )}
       <MatchCard
-        imageUrl={imageUrl}
+        imageUrl={cardImageUrl}
         yourTeam={yourTeam}
+        yourTeamLogoUrl={yourTeamLogoUrl}
+        opponentLogoUrl={opponentLogoUrl}
         yourScore={yourScore}
         opponent={opponent}
         opponentScore={opponentScore}
@@ -86,6 +96,7 @@ export default function MatchPost({
         yellowCards={yellowCards}
         redCards={redCards}
       />
+      {carouselUrls.length > 0 && <MediaCarousel urls={carouselUrls} />}
       <PostActions
         postId={id}
         auraCount={likesCount}

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import BasicPost from "../domain/Post/BasicPost";
 import MatchPost from "../domain/Post/MatchPost";
 import { supabase } from "../../lib/supabase";
+import { formatMatchDate } from "../../lib/format";
 // adjust this path if your context sits elsewhere
 import { useUser } from "../../context/UserContext";
 import SuggestedAccounts from "../domain/Suggested/SuggestedAccounts";
@@ -30,20 +31,26 @@ export function PostSwitcher({ post, likedPostIds = new Set() }) {
   };
 
   if (post.type === "match") {
+    const m = post.match || {};
     return (
       <MatchPost
         {...common}
         content={post.content ?? ""}
         imageUrl={post.media || ""}
-        goalsCount={Number(post.goals) || 0}
-        assistsCount={Number(post.assists) || 0}
-        minCount={Number(post.minutes_played) || 0}
-        date={post.date_of_game ?? ""}
-        league={post.league ?? ""}
-        opponent={post.opponent ?? ""}
-        yourScore={Number(post.your_score) || 0}
-        opponentScore={Number(post.opponent_score) || 0}
-        yourTeam={club.name}
+        mediaUrls={post.media_urls?.length ? post.media_urls : undefined}
+        yourTeam={m.your_team || club.name}
+        yourTeamLogoUrl={club.logo_url}
+        yourScore={Number(m.your_score) || 0}
+        opponent={m.opponent ?? ""}
+        opponentLogoUrl={m.opponent_club?.logo_url}
+        opponentScore={Number(m.opponent_score) || 0}
+        league={m.league ?? ""}
+        date={formatMatchDate(m.date_of_game)}
+        goalsCount={Number(m.goals) || 0}
+        assistsCount={Number(m.assists) || 0}
+        minCount={Number(m.minutes_played) || 0}
+        yellowCards={m.yellow_cards ?? 0}
+        redCards={m.red_cards ?? 0}
         likesCount={Number(post.likes_count) || 0}
         commentsCount={Number(post.comments_count) || 0}
         initialLiked={likedPostIds.has(post.id) ? true : null}
@@ -57,6 +64,7 @@ export function PostSwitcher({ post, likedPostIds = new Set() }) {
       {...common}
       content={post.content ?? ""}
       imageUrl={post.media || undefined}
+      mediaUrls={post.media_urls?.length ? post.media_urls : undefined}
       yourTeam={club.name}
       likesCount={Number(post.likes_count) || 0}
       commentsCount={Number(post.comments_count) || 0}
@@ -123,19 +131,17 @@ export default function Feed() {
       type,
       content,
       media,
+      media_urls,
       created_at,
       likes_count,
       comments_count,
-      goals,
-      assists,
-      minutes_played,
-      date_of_game,
-      league,
-      your_team,
-      opponent,
-      your_score,
-      opponent_score,
       author_id,
+      match:match_id (
+        id, your_team, opponent, your_score, opponent_score,
+        league, date_of_game, goals, assists, minutes_played,
+        yellow_cards, red_cards,
+        opponent_club:opponent_club_id ( logo_url )
+      ),
       profiles:author_id (
         id,
         full_name,

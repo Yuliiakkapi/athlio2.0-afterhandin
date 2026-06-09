@@ -1,24 +1,55 @@
-import MatchPostCount from "../../UI/MatchPostCount";
-import MatchVerdict from "../../UI/MatchVerdict";
 import "./MatchCard.css";
 
-/**
- * MatchCard — shows match result with optional background photo.
- *
- * Props:
- *   imageUrl       string?   — match action photo (full-bleed with gradient)
- *   yourTeam       string    — player's team name
- *   yourScore      number    — player's team score
- *   opponent       string    — opposing team name
- *   opponentScore  number    — opposing team score
- *   league         string    — competition name ("La Liga")
- *   date           string    — match date ("23 Mar")
- *   goalsCount     number
- *   assistsCount   number
- *   minCount       number    — minutes played
- *   yellowCards    number?   — yellow cards received (renders card indicator)
- *   redCards       number?   — red cards received (renders card indicator)
- */
+function TeamIcon({ logoUrl, name }) {
+  if (logoUrl) return <img src={logoUrl} alt={name} className="mc-team-icon-img" />;
+  return <span className="mc-team-icon-initial">{(name || "?")[0].toUpperCase()}</span>;
+}
+
+function ResultBadge({ yourScore, opponentScore, size = "sm" }) {
+  const win = Number(yourScore) > Number(opponentScore);
+  const lose = Number(yourScore) < Number(opponentScore);
+  const label = win ? "W" : lose ? "L" : "D";
+  const mod = win ? "win" : lose ? "lose" : "draw";
+  return (
+    <div className={`mc-result-badge mc-result-badge--${mod} mc-result-badge--${size}`}>
+      {label}
+    </div>
+  );
+}
+
+function StatsRow({ goalsCount, assistsCount, minCount, yellowCards, redCards, suggested }) {
+  const showCards = !suggested && (yellowCards > 0 || redCards > 0);
+  return (
+    <div className={`mc-stats${suggested ? " mc-stats--suggested" : ""}`}>
+      <div className="mc-stat">
+        <span className="mc-stat-label">GOALS</span>
+        <span className="mc-stat-value">{goalsCount ?? 0}</span>
+      </div>
+      <div className="mc-stat">
+        <span className="mc-stat-label">AST</span>
+        <span className="mc-stat-value">{assistsCount ?? 0}</span>
+      </div>
+      <div className="mc-stat">
+        <span className="mc-stat-label">MIN.</span>
+        <span className="mc-stat-value">{minCount ?? 0}</span>
+      </div>
+      {showCards && (
+        <div className="mc-stat">
+          <span className="mc-stat-label">CARDS</span>
+          <div className="mc-cards">
+            {Array.from({ length: yellowCards }).map((_, i) => (
+              <div key={`y-${i}`} className="mc-card mc-card--yellow" />
+            ))}
+            {Array.from({ length: redCards }).map((_, i) => (
+              <div key={`r-${i}`} className="mc-card mc-card--red" />
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function MatchCard({
   imageUrl,
   yourTeam,
@@ -32,67 +63,130 @@ export default function MatchCard({
   minCount,
   yellowCards = 0,
   redCards = 0,
+  compact = false,
+  yourTeamLogoUrl,
+  opponentLogoUrl,
 }) {
-  const hasImage = !!imageUrl;
-  const showCards = yellowCards > 0 || redCards > 0;
+  /* ── Variant 3: Suggested (compact) ── */
+  if (compact) {
+    return (
+      <div className="mc mc--suggested">
+        <div className="mc-suggested-header">
+          <ResultBadge yourScore={yourScore} opponentScore={opponentScore} size="lg" />
+          <div className="mc-suggested-meta">
+            <span className="mc-meta-text">{league}</span>
+            <span className="mc-meta-text">{date}</span>
+          </div>
+        </div>
+        <div className="mc-suggested-body">
+          <div className="mc-suggested-teams">
+            <div className="mc-suggested-team">
+              <div className="mc-team-icon">
+                <TeamIcon logoUrl={yourTeamLogoUrl} name={yourTeam} />
+              </div>
+              <span className="mc-suggested-name mc-suggested-name--yours">{yourTeam}</span>
+              <span className="mc-suggested-score">{yourScore}</span>
+            </div>
+            <div className="mc-suggested-team">
+              <div className="mc-team-icon">
+                <TeamIcon logoUrl={opponentLogoUrl} name={opponent} />
+              </div>
+              <span className="mc-suggested-name">{opponent}</span>
+              <span className="mc-suggested-score mc-suggested-score--opponent">{opponentScore}</span>
+            </div>
+          </div>
+          <StatsRow
+            goalsCount={goalsCount}
+            assistsCount={assistsCount}
+            minCount={minCount}
+            yellowCards={yellowCards}
+            redCards={redCards}
+            suggested
+          />
+        </div>
+      </div>
+    );
+  }
 
+  /* ── Variant 1: With picture ── */
+  if (imageUrl) {
+    return (
+      <div className="mc mc--with-picture">
+        <div className="mc-picture-top">
+          <div className="mc-picture-bg" aria-hidden="true">
+            <img src={imageUrl} alt="" className="mc-picture-bg-img" />
+            <div className="mc-picture-gradient" />
+          </div>
+          <div className="mc-picture-meta">
+            <span className="mc-picture-meta-text">{league}</span>
+            <span className="mc-picture-meta-text">{date}</span>
+          </div>
+          <div className="mc-picture-bottom-row">
+            <div className="mc-picture-teams">
+              <div className="mc-picture-team">
+                <div className="mc-team-icon">
+                  <TeamIcon logoUrl={yourTeamLogoUrl} name={yourTeam} />
+                </div>
+                <span className="mc-picture-team-name">{yourTeam}</span>
+                <span className="mc-picture-score">{yourScore}</span>
+              </div>
+              <div className="mc-picture-team">
+                <div className="mc-team-icon">
+                  <TeamIcon logoUrl={opponentLogoUrl} name={opponent} />
+                </div>
+                <span className="mc-picture-team-name mc-picture-team-name--opponent">{opponent}</span>
+                <span className="mc-picture-score mc-picture-score--opponent">{opponentScore}</span>
+              </div>
+            </div>
+            <ResultBadge yourScore={yourScore} opponentScore={opponentScore} />
+          </div>
+        </div>
+        <StatsRow
+          goalsCount={goalsCount}
+          assistsCount={assistsCount}
+          minCount={minCount}
+          yellowCards={yellowCards}
+          redCards={redCards}
+        />
+      </div>
+    );
+  }
+
+  /* ── Variant 2: Without picture ── */
   return (
-    <div className="match-card">
-
-      {/* ── Top: image background + match info ──────────────────── */}
-      <div className={`match-card-top${hasImage ? " match-card-top--image" : ""}`}>
-        {hasImage && (
-          <div aria-hidden="true" className="match-card-bg">
-            <img src={imageUrl} alt="" className="match-card-bg-img" />
-            <div className="match-card-gradient" />
+    <div className="mc mc--without-picture">
+      <div className="mc-nopic-top">
+        <div className="mc-nopic-teams">
+          <div className="mc-nopic-team">
+            <div className="mc-team-icon">
+              <TeamIcon logoUrl={yourTeamLogoUrl} name={yourTeam} />
+            </div>
+            <span className="mc-nopic-team-name">{yourTeam}</span>
+            <span className="mc-nopic-score">{yourScore}</span>
           </div>
-        )}
-
-        {/* League + date — top right */}
-        <div className="match-card-meta">
-          <span className="match-card-league">{league}</span>
-          <span className="match-card-date">{date}</span>
+          <div className="mc-nopic-team">
+            <div className="mc-team-icon">
+              <TeamIcon logoUrl={opponentLogoUrl} name={opponent} />
+            </div>
+            <span className="mc-nopic-team-name mc-nopic-team-name--opponent">{opponent}</span>
+            <span className="mc-nopic-score mc-nopic-score--opponent">{opponentScore}</span>
+          </div>
         </div>
-
-        {/* Teams + scores + verdict — bottom of the card-top */}
-        <div className="match-card-teams-row">
-          <div className="match-card-teams">
-            {/* Your team */}
-            <div className="match-card-team match-card-team--yours">
-              <span className="match-card-team-name">{yourTeam}</span>
-              <span className="match-card-score match-card-score--yours">{yourScore}</span>
-            </div>
-            {/* Opponent */}
-            <div className="match-card-team match-card-team--opponent">
-              <span className="match-card-team-name match-card-team-name--opponent">{opponent}</span>
-              <span className="match-card-score match-card-score--opponent">{opponentScore}</span>
-            </div>
+        <div className="mc-nopic-right">
+          <div className="mc-nopic-meta">
+            <span className="mc-nopic-meta-text">{league}</span>
+            <span className="mc-nopic-meta-text">{date}</span>
           </div>
-
-          <MatchVerdict yourScore={yourScore} opponentScore={opponentScore} />
+          <ResultBadge yourScore={yourScore} opponentScore={opponentScore} />
         </div>
       </div>
-
-      {/* ── Bottom: player stats ──────────────────────────────────── */}
-      <div className="match-card-stats">
-        <MatchPostCount label="Goals" count={goalsCount} />
-        <MatchPostCount label="Ast" count={assistsCount} />
-        <MatchPostCount label="Min." count={minCount} />
-
-        {showCards && (
-          <div className="match-card-cards-stat">
-            <span className="match-card-cards-label">Cards</span>
-            <div className="match-card-cards">
-              {Array.from({ length: yellowCards }).map((_, i) => (
-                <div key={`y-${i}`} className="match-card-card match-card-card--yellow" />
-              ))}
-              {Array.from({ length: redCards }).map((_, i) => (
-                <div key={`r-${i}`} className="match-card-card match-card-card--red" />
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
+      <StatsRow
+        goalsCount={goalsCount}
+        assistsCount={assistsCount}
+        minCount={minCount}
+        yellowCards={yellowCards}
+        redCards={redCards}
+      />
     </div>
   );
 }

@@ -1,51 +1,39 @@
-﻿/* Backdrop */
 .addmodal-overlay {
   position: fixed;
   inset: 0;
+  z-index: 1000;
   display: flex;
   justify-content: center;
   align-items: flex-end;
-  margin-bottom: 80px;
-  display: flex;
-  z-index: 1000; /* higher than your navbar */
-  border-radius: 8px;
+  padding-bottom: 90px;
 }
 
-/* Panel */
 .addmodal-sheet {
-  background-color: var(--neutral-50-bg);
-  color: var(--black, #fff);
-  border-radius: 8px;
-  padding: 10px 18px 10px 10px;
-  outline: none; /* allow focus without ugly outline if you style focus elsewhere */
+  background: var(--white);
+  border-radius: 16px;
+  padding: 12px;
+  outline: none;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  width: 148px;
 }
 
 @media (prefers-reduced-motion: no-preference) {
   .addmodal-sheet {
-    transform: translateY(6px);
+    transform: translateY(8px);
     opacity: 0;
-    animation: modal-in 160ms ease-out forwards;
+    animation: modal-in 180ms ease-out forwards;
   }
 
   .addmodal-sheet.closing {
-    animation: modal-out 160ms ease-in forwards;
+    animation: modal-out 150ms ease-in forwards;
   }
 
   @keyframes modal-in {
-    to {
-      transform: translateY(0);
-      opacity: 1;
-    }
+    to { transform: translateY(0); opacity: 1; }
   }
 
   @keyframes modal-out {
-    from {
-      transform: translateY(0);
-      opacity: 1;
-    }
-    to {
-      transform: translateY(6px);
-      opacity: 0;
-    }
+    from { transform: translateY(0); opacity: 1; }
+    to   { transform: translateY(8px); opacity: 0; }
   }
 }

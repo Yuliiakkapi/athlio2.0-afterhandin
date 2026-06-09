@@ -1,45 +1,163 @@
-/* ──────────────────────────────────────────────────────────────────
-   MatchCard — match result card with optional action photo
-   Figma node 9153-4192
+/* ──────────────────────────────────────────────────────────────
+   MatchCard — 3 variants: with-picture, without-picture, suggested
+   Figma node 9153-4191
 ────────────────────────────────────────────────────────────────── */
 
-.match-card {
-  width: 100%;
+/* ─── Shared base ─────────────────────────────────────────────── */
+.mc {
   background: var(--white, #fff);
-  border: 1px solid var(--neutral-200, #e1e1e4);
   border-radius: 12px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
 }
 
-/* ─── Top section (image bg + match details) ─────────────────────── */
-.match-card-top {
+.mc--with-picture,
+.mc--without-picture {
+  border: 1px solid var(--neutral-200, #e1e1e4);
+  width: 100%;
+}
+
+/* ─── Team icon ───────────────────────────────────────────────── */
+.mc-team-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.mc-team-icon-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.mc-team-icon-initial {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--neutral-600, #72717a);
+}
+
+/* ─── Result badge ────────────────────────────────────────────── */
+.mc-result-badge {
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-family: var(--font-sans);
+  font-weight: 500;
+  color: var(--white, #fff);
+  line-height: 1;
+}
+
+.mc-result-badge--sm {
+  width: 24px;
+  height: 24px;
+  font-size: 12px;
+}
+
+.mc-result-badge--lg {
+  width: 32px;
+  height: 32px;
+  font-size: 16px;
+}
+
+.mc-result-badge--win  { background: var(--success-default, #00ab3d); }
+.mc-result-badge--lose { background: var(--negative-default, #ff3d52); }
+.mc-result-badge--draw { background: var(--neutral-400, #a0a0a8); }
+
+/* ─── Stats row ───────────────────────────────────────────────── */
+.mc-stats {
+  display: flex;
+  align-items: flex-start;
+  gap: 48px;
+  padding: 16px;
+}
+
+.mc-stats--suggested {
+  gap: 0;
+  padding: 0;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.mc-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.mc-stat-label {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--black, #151622);
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.mc-stats--suggested .mc-stat-label {
+  font-size: 10px;
+}
+
+.mc-stat-value {
+  font-family: var(--font-condensed);
+  font-size: 32px;
+  font-weight: 700;
+  font-style: italic;
+  color: var(--neutral-950, #323135);
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.mc-stats--suggested .mc-stat-value {
+  font-size: 18px;
+  letter-spacing: -0.18px;
+  line-height: 24px;
+}
+
+.mc-cards {
+  display: flex;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.mc-card {
+  width: 21px;
+  height: 23px;
+  border-radius: 4px;
+}
+
+.mc-card--yellow { background: #ffc53d; }
+.mc-card--red    { background: var(--negative-default, #ff3d52); }
+
+
+/* ══════════════════════════════════════════════════════════════
+   Variant 1: WITH PICTURE
+══════════════════════════════════════════════════════════════ */
+.mc-picture-top {
   position: relative;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   padding: 12px;
   gap: 52px;
-  /* Default (no image): dark neutral bg */
-  background: var(--neutral-950, #323135);
-  border-radius: 12px 12px 0 0;
-}
-
-.match-card-top--image {
   min-height: 168px;
-}
-
-/* Background image + gradient overlay */
-.match-card-bg {
-  position: absolute;
-  inset: 0;
   border-radius: 12px 12px 0 0;
   overflow: hidden;
+}
+
+.mc-picture-bg {
+  position: absolute;
+  inset: 0;
   pointer-events: none;
 }
 
-.match-card-bg-img {
+.mc-picture-bg-img {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -49,50 +167,38 @@
   border-radius: 12px 12px 0 0;
 }
 
-.match-card-gradient {
+.mc-picture-gradient {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    216.7deg,
-    rgba(0, 0, 0, 0) 18%,
-    rgba(0, 0, 0, 0.86) 82%
-  );
+  background: linear-gradient(216.7deg, rgba(0, 0, 0, 0) 18%, rgba(0, 0, 0, 0.86) 82%);
   border-radius: 12px 12px 0 0;
 }
 
-/* ─── League + date — top right ──────────────────────────────────── */
-.match-card-meta {
+.mc-picture-meta {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   gap: 2px;
+  align-self: flex-end;
   position: relative;
   z-index: 1;
-  align-self: flex-end;
-  margin-left: auto;
 }
 
-.match-card-league {
+.mc-picture-meta-text {
   font-family: var(--font-sans);
-  font-size: var(--text-xs); /* 12px */
+  font-size: 12px;
   font-weight: 600;
   color: var(--white, #fff);
-  white-space: nowrap;
   line-height: 1;
+  white-space: nowrap;
 }
 
-.match-card-date {
-  font-family: var(--font-sans);
-  font-size: var(--text-xs); /* 12px */
+.mc-picture-meta-text + .mc-picture-meta-text {
   font-weight: 500;
-  color: var(--white, #fff);
-  white-space: nowrap;
-  line-height: 1;
   text-align: right;
 }
 
-/* ─── Teams row ──────────────────────────────────────────────────── */
-.match-card-teams-row {
+.mc-picture-bottom-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -100,91 +206,216 @@
   z-index: 1;
 }
 
-.match-card-teams {
+.mc-picture-teams {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  flex: 1;
-  min-width: 0;
+  gap: 8px;
+  flex-shrink: 0;
 }
 
-.match-card-team {
+.mc-picture-team {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 8px;
+  gap: 4px;
 }
 
-.match-card-team-name {
+.mc-picture-team-name {
   font-family: var(--font-sans);
-  font-size: var(--text-lg); /* 18px */
+  font-size: 16px;
   font-weight: 600;
   color: var(--white, #fff);
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
   line-height: 1;
+  margin-right: 8px;
 }
 
-.match-card-team-name--opponent {
-  font-weight: 500;
-}
-
-.match-card-score {
-  font-family: var(--font-sans);
-  font-size: var(--text-lg); /* 18px */
-  font-weight: 600;
-  line-height: 24px;
-  letter-spacing: -0.18px;
+.mc-picture-team-name--opponent {
   color: var(--white, #fff);
-  flex-shrink: 0;
-  text-align: right;
 }
 
-.match-card-score--opponent {
+.mc-picture-score {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--white, #fff);
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.mc-picture-score--opponent {
   color: var(--neutral-300, #cecfd4);
 }
 
-/* ─── Stats section ──────────────────────────────────────────────── */
-.match-card-stats {
+
+/* ══════════════════════════════════════════════════════════════
+   Variant 2: WITHOUT PICTURE
+══════════════════════════════════════════════════════════════ */
+.mc-nopic-top {
   display: flex;
-  align-items: flex-start;
-  gap: 48px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
   padding: 16px;
+  border-bottom: 1px solid var(--neutral-200, #e1e1e4);
 }
 
-/* ─── Cards stat ─────────────────────────────────────────────────── */
-.match-card-cards-stat {
+.mc-nopic-teams {
   display: flex;
   flex-direction: column;
-  gap: 9px;
-  align-items: flex-start;
+  gap: 8px;
+  flex-shrink: 0;
 }
 
-.match-card-cards-label {
-  font-family: var(--font-sans);
-  font-size: var(--text-xs); /* 12px */
-  font-weight: 500;
-  text-transform: uppercase;
-  color: var(--black);
-  line-height: 1;
-}
-
-.match-card-cards {
+.mc-nopic-team {
   display: flex;
+  align-items: center;
   gap: 4px;
 }
 
-.match-card-card {
-  width: 28px;
-  height: 33px;
-  border-radius: 4px;
+.mc-nopic-team-name {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--black, #151622);
+  white-space: nowrap;
+  line-height: 1;
+  margin-right: 8px;
 }
 
-.match-card-card--yellow {
-  background: #ffc53d;
+.mc-nopic-team-name--opponent {
+  color: var(--muted, #72717a);
 }
 
-.match-card-card--red {
-  background: var(--negative-default, #ff3d52);
+.mc-nopic-score {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--black, #151622);
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.mc-nopic-score--opponent {
+  color: var(--muted, #72717a);
+}
+
+.mc-nopic-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+  align-self: stretch;
+}
+
+.mc-nopic-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.mc-nopic-meta-text {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text, #000215);
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.mc-nopic-meta-text + .mc-nopic-meta-text {
+  font-weight: 500;
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   Variant 3: SUGGESTED (compact)
+══════════════════════════════════════════════════════════════ */
+.mc--suggested {
+  width: 174px;
+  min-width: 174px;
+  border-radius: 8px;
+  padding: 12px;
+  height: 200px;
+  justify-content: space-between;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--neutral-100, #f0f0f2);
+}
+
+.mc-suggested-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.mc-suggested-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.mc-meta-text {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--muted, #72717a);
+  line-height: 1;
+  white-space: nowrap;
+  text-align: right;
+}
+
+.mc-suggested-body {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.mc-suggested-teams {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.mc-suggested-team {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.mc-suggested-team .mc-team-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.mc-suggested-name {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--black, #151622);
+  white-space: nowrap;
+  line-height: 1;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mc-suggested-name--yours {
+  font-weight: 600;
+  color: var(--primary-default, #4051fd);
+}
+
+.mc-suggested-score {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--black, #151622);
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.mc-suggested-score--opponent {
+  color: var(--muted, #72717a);
 }

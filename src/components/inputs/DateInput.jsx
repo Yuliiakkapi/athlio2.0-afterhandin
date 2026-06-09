@@ -7,7 +7,7 @@ export default function DateInput({ value, onChange }) {
         id="date_of_game"
         type="date"
         value={value}
-        onChange={onChange}
+        onChange={(e) => onChange(e.target.value)}
         placeholder="Date of game"
         required
       />

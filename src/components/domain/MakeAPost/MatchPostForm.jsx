@@ -82,7 +82,7 @@ function normalizeClubValue(v) {
     v.club_name ||
     "";
 
-  return { club_id: id, club_other_name: other };
+  return { club_id: id, club_other_name: other, logo_url: v.logo_url || null };
 }
 
 export default function MatchPostForm({ onCreated }) {
@@ -183,36 +183,46 @@ export default function MatchPostForm({ onCreated }) {
     if (saving) return;
     setSaving(true);
     try {
-      // Resolve display names
-      console.log("POSTING NAMES", {
-        your: form.your_team,
-        opp: form.opponent_team,
-      });
-      const yourTeamName = await resolveClubName(form.your_team);
-      const opponentName = await resolveClubName(form.opponent_team);
-      // Upload media if any
-      const mediaUrl = await uploadMediaIfAny(imageFile, meId);
+      const [yourTeamName, opponentName, mediaUrl] = await Promise.all([
+        resolveClubName(form.your_team),
+        resolveClubName(form.opponent_team),
+        uploadMediaIfAny(imageFile, meId),
+      ]);
 
-      const row = {
-        type: "match",
-        league: form.league?.trim() || null,
-        location: form.location?.trim() || null,
-        date_of_game: form.date_of_game || null,
-        your_team: yourTeamName,
-        opponent: opponentName,
-        your_score: Number(form.your_score) || 0,
-        opponent_score: Number(form.opponent_score) || 0,
-        minutes_played: Number(form.minutes_played) || 0,
-        goals: Number(form.goals) || 0,
-        assists: Number(form.assists) || 0,
-        content: caption || null,
-        media: mediaUrl,
-        author_id: meId || undefined,
-      };
+      const opponentClubId =
+        form.opponent_team?.club_id || form.opponent_team?.id || null;
 
+      // 1. Save match record
+      const { data: matchData, error: matchError } = await supabase
+        .from("matches")
+        .insert({
+          player_id: meId,
+          league: form.league?.trim() || null,
+          date_of_game: form.date_of_game || null,
+          your_team: yourTeamName,
+          opponent: opponentName,
+          opponent_club_id: opponentClubId,
+          your_score: Number(form.your_score) || 0,
+          opponent_score: Number(form.opponent_score) || 0,
+          minutes_played: Number(form.minutes_played) || 0,
+          goals: Number(form.goals) || 0,
+          assists: Number(form.assists) || 0,
+        })
+        .select("id")
+        .single();
+      if (matchError) throw matchError;
+
+      // 2. Save post linked to match
       const { data, error } = await supabase
         .from("posts")
-        .insert(row)
+        .insert({
+          author_id: meId,
+          type: "match",
+          content: caption || null,
+          media: mediaUrl,
+          media_urls: mediaUrl ? [mediaUrl] : [],
+          match_id: matchData.id,
+        })
         .select("id")
         .single();
       if (error) throw error;
@@ -259,7 +269,7 @@ export default function MatchPostForm({ onCreated }) {
               <DateInput
                 label="Date of game"
                 value={form.date_of_game}
-                onChange={(e) => patch({ date_of_game: e.target.value })}
+                onChange={(v) => patch({ date_of_game: v })}
               />
 
               <div className="score-inputs-container">
