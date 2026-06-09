@@ -132,3 +132,21 @@
   display: flex;
   justify-content: center;
 }
+
+.prog-lb-filter-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 32px;
+  padding: 0 8px;
+  background: var(--neutral-100);
+  border: 1px solid var(--neutral-200);
+  border-radius: 8px;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--primary-700);
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+}

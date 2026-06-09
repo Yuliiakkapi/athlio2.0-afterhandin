@@ -1,27 +1,40 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { CaretLeft, X } from "@phosphor-icons/react";
 import OvrBadge from "../components/UI/OvrBadge";
 import { supabase } from "../lib/supabase";
 import PitchBg from "../assets/images/position-bg.png";
 import "./YourTeam.css";
 
-const TEAM_STATS = { ovr: 72, def: 71, att: 71, mid: 71 };
-
-// Fixed formation slots with pitch coordinates
+// Fixed formation slots — group drives DEF/MID/ATT breakdown
 const FORMATION_SLOTS = [
-  { pos: "ST",  left: 50.0, top: 28.0 },
-  { pos: "LW",  left: 17.0, top: 35.0 },
-  { pos: "CAM", left: 50.0, top: 38.5 },
-  { pos: "RW",  left: 83.0, top: 35.0 },
-  { pos: "LCM", left: 24.0, top: 50.5 },
-  { pos: "CM",  left: 50.0, top: 52.5 },
-  { pos: "RCM", left: 76.0, top: 50.5 },
-  { pos: "LCB", left: 25.0, top: 66.0 },
-  { pos: "CB",  left: 50.0, top: 69.0 },
-  { pos: "RCB", left: 75.0, top: 66.0 },
-  { pos: "GK",  left: 50.0, top: 82.0 },
+  { pos: "ST",  group: "att", left: 50.0, top: 28.0 },
+  { pos: "LW",  group: "att", left: 17.0, top: 35.0 },
+  { pos: "RW",  group: "att", left: 83.0, top: 35.0 },
+  { pos: "CAM", group: "mid", left: 50.0, top: 38.5 },
+  { pos: "CM",  group: "mid", left: 24.0, top: 50.5 },
+  { pos: "CM",  group: "mid", left: 50.0, top: 52.5 },
+  { pos: "CM",  group: "mid", left: 76.0, top: 50.5 },
+  { pos: "CB",  group: "def", left: 25.0, top: 66.0 },
+  { pos: "CB",  group: "def", left: 50.0, top: 69.0 },
+  { pos: "CB",  group: "def", left: 75.0, top: 66.0 },
+  { pos: "GK",  group: "def", left: 50.0, top: 82.0 },
 ];
+
+function avg(nums) {
+  return nums.length === 0 ? 0 : Math.round(nums.reduce((a, b) => a + b, 0) / nums.length);
+}
+
+function computeTeamStats(players) {
+  const ovrs = FORMATION_SLOTS.map((_, i) => players[i] ? fakeOvr(players[i].id) : null);
+  const byGroup = (g) => ovrs.filter((v, i) => v !== null && FORMATION_SLOTS[i].group === g);
+  return {
+    ovr: avg(ovrs.filter(Boolean)),
+    att: avg(byGroup("att")),
+    mid: avg(byGroup("mid")),
+    def: avg(byGroup("def")),
+  };
+}
 
 // Deterministic fake OVR from profile id
 function fakeOvr(id) {
@@ -70,17 +83,22 @@ function PlayerMarker({ slot, player, onClick }) {
           </div>
         )}
       </div>
-      <span className="yt-player-name">
-        {isEmpty ? slot.pos : shortName(player.full_name)}
-      </span>
+      {!isEmpty && (
+        <span className="yt-player-name">{shortName(player.full_name)}</span>
+      )}
+      {isEmpty && (
+        <span className="yt-player-pos">{slot.pos}</span>
+      )}
     </div>
   );
 }
 
 export default function YourTeam() {
   const navigate = useNavigate();
+  const { state: navState } = useLocation();
   const [players, setPlayers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const stats = computeTeamStats(players);
 
   useEffect(() => {
     async function fetchAthletes() {
@@ -90,14 +108,20 @@ export default function YourTeam() {
         .eq("role", "athlete")
         .order("created_at", { ascending: false })
         .limit(11);
-      setPlayers(data ?? []);
+      let fetched = data ?? [];
+      if (navState?.slotIndex != null && navState?.inPlayer) {
+        fetched = fetched.map((p, i) =>
+          i === navState.slotIndex ? navState.inPlayer : p
+        );
+      }
+      setPlayers(fetched);
       setLoading(false);
     }
     fetchAthletes();
   }, []);
 
-  function handlePlayerClick(slot, player) {
-    navigate("/scouting/substitution", { state: { slot, player } });
+  function handlePlayerClick(slot, player, slotIndex) {
+    navigate("/scouting/substitution", { state: { slot, slotIndex, player } });
   }
 
   return (
@@ -108,7 +132,7 @@ export default function YourTeam() {
       </div>
 
       <div className="yt-topbar">
-        <button className="yt-back-btn" onClick={() => navigate(-1)} aria-label="Back">
+        <button className="yt-back-btn" onClick={() => navigate("/scouting")} aria-label="Back">
           <CaretLeft size={20} weight="bold" />
         </button>
         <h1 className="yt-title">YOUR TEAM</h1>
@@ -120,21 +144,21 @@ export default function YourTeam() {
       <div className="yt-ovr-card">
         <div className="yt-ovr-left">
           <span className="yt-ovr-rotated-label">team ovr</span>
-          <OvrBadge value={TEAM_STATS.ovr} size="lg" variant="gold" />
+          <OvrBadge value={stats.ovr} size="lg" variant="gold" />
         </div>
         <div className="yt-ovr-divider" />
         <div className="yt-ovr-stats">
           <div className="yt-ovr-stat">
-            <span className="yt-ovr-stat-label">Def</span>
-            <span className="yt-ovr-stat-value">{TEAM_STATS.def}</span>
+            <span className="yt-ovr-stat-label">DEF</span>
+            <span className="yt-ovr-stat-value">{stats.def}</span>
           </div>
           <div className="yt-ovr-stat">
             <span className="yt-ovr-stat-label">ATT</span>
-            <span className="yt-ovr-stat-value">{TEAM_STATS.att}</span>
+            <span className="yt-ovr-stat-value">{stats.att}</span>
           </div>
           <div className="yt-ovr-stat">
-            <span className="yt-ovr-stat-label">Mid</span>
-            <span className="yt-ovr-stat-value">{TEAM_STATS.mid}</span>
+            <span className="yt-ovr-stat-label">MID</span>
+            <span className="yt-ovr-stat-value">{stats.mid}</span>
           </div>
         </div>
       </div>
@@ -143,10 +167,10 @@ export default function YourTeam() {
         <div className="yt-players" aria-label="Team formation" role="group">
           {FORMATION_SLOTS.map((slot, i) => (
             <PlayerMarker
-              key={slot.pos}
+              key={i}
               slot={slot}
               player={players[i] ?? null}
-              onClick={handlePlayerClick}
+              onClick={(s, p) => handlePlayerClick(s, p, i)}
             />
           ))}
         </div>

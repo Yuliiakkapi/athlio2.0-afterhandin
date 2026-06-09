@@ -129,7 +129,7 @@ function WatchlistSection() {
       <div className="watchlist-inner">
         <div className="watchlist-header-row">
           <span className="watchlist-title">Your watchlist</span>
-          <button className="watchlist-find-btn">Find more players</button>
+          <button className="watchlist-find-btn" onClick={() => navigate("/search")}>Find more players</button>
         </div>
 
         <div className="watchlist-table">
@@ -236,6 +236,7 @@ function SuggestedCard({ player }) {
 
 function SuggestedSection({ isPremium }) {
   const [players, setPlayers] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchPlayerSuggestions(8)
@@ -252,7 +253,7 @@ function SuggestedSection({ isPremium }) {
             {isPremium ? "based on your preferences" : "Test yourself with football stars"}
           </p>
         </div>
-        <button className="scout-link-btn text-sm-semibold">Find more players</button>
+        <button className="scout-link-btn text-sm-semibold" onClick={() => navigate("/search")}>Find more players</button>
       </div>
       <div className="suggested-scroll">
         {players.slice(0, isPremium ? 5 : 3).map((p) => (

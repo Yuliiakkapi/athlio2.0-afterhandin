@@ -6,14 +6,15 @@ import OnboardingNavbar from "../components/domain/onboarding/UI/OnboardingNavba
 import ScoutSplash from "../components/domain/Scouting/ProOnboarding/ScoutSplash";
 import ScoutingFocus from "../components/domain/Scouting/ProOnboarding/ScoutingFocus";
 import ScoutCriteria from "../components/domain/Scouting/ProOnboarding/ScoutCriteria";
-import ScoutReadyScreen from "../components/domain/Scouting/ProOnboarding/ScoutReadyScreen";
+import ReadyScreen from "../components/domain/Progress-athletes/ProOnboarding/ReadyScreen";
+import { supabase } from "../lib/supabase";
 import "./ScoutProOnboarding.css";
 
 const FORM_STEPS = 2;
 
 export default function ScoutProOnboarding() {
   const navigate = useNavigate();
-  const { setProfile } = useUser();
+  const { user, setProfile } = useUser();
   const [step, setStep] = useState(0);
   const [canContinue, setCanContinue] = useState(false);
 
@@ -22,7 +23,10 @@ export default function ScoutProOnboarding() {
     if (step === 1) navigate(-1);
     else setStep((s) => s - 1);
   }
-  function finish() {
+  async function finish() {
+    if (user?.id) {
+      await supabase.from("profiles").update({ is_pro: true }).eq("id", user.id);
+    }
     setProfile((prev) => ({ ...prev, is_pro: true }));
     navigate("/scouting");
   }

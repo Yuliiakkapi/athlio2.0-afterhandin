@@ -53,6 +53,7 @@ function PlayerCard({ player, onSelect }) {
   const clubName = player.clubs?.name ?? player.club_other_name ?? null;
   const age = player.age ?? null;
   const avatarUrl = player.avatar_url;
+  const positions = player.position ?? [];
 
   const initials = (player.full_name ?? "?")
     .split(" ")
@@ -82,6 +83,9 @@ function PlayerCard({ player, onSelect }) {
         <div className="sp-player-details">
           <p className="sp-player-name">{player.full_name ?? "Unknown"}</p>
           <div className="sp-player-meta">
+            {positions.slice(0, 2).map((pos) => (
+              <span key={pos} className="sp-pos-badge">{pos.toUpperCase()}</span>
+            ))}
             {clubName && <span className="sp-player-club">{clubName}</span>}
             {clubName && age && <span className="sp-dot" />}
             {age && <span className="sp-player-info">{age}y.o.</span>}
@@ -120,7 +124,12 @@ export default function SelectPlayers() {
 
   function handleSelect(selectedPlayer) {
     navigate("/scouting/substitution", {
-      state: { player: state?.outPlayer, slot: state?.slot, inPlayer: selectedPlayer },
+      state: {
+        player: state?.outPlayer,
+        slot: state?.slot,
+        slotIndex: state?.slotIndex,
+        inPlayer: selectedPlayer,
+      },
     });
   }
 

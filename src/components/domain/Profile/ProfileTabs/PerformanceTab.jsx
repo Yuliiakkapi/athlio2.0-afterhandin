@@ -1,68 +1,25 @@
 import { useState } from "react";
-import { CaretDown } from "@phosphor-icons/react";
-import OvrBadge from "../../../UI/OvrBadge";
 import AISuggestion from "../../Progress-athletes/AISuggestion";
 import SeasonOverviewCard from "../../Performance/SeasonOverviewCard";
 import {
   PredictionsSection,
   SkillTrendsSection,
-  TrainingImpactSection,
 } from "../../Performance/PerformanceSections";
+import YourProgressSection from "../../Progress-athletes/YourProgressSection";
+import LeaderboardSection from "../../Progress-athletes/LeaderboardSection";
 import ProUpgradeCard from "../../Progress-athletes/ProUpgradeCard";
 import "./PerformanceTab.css";
 
-const LEADERBOARD = [
-  { id: 1, name: "Kylan Mbappe",      club: "Real Madrid FC", age: 16, goals: 18, ovr: 52 },
-  { id: 2, name: "Samuel Soares",     club: "FC Benfica",      age: 17, goals: 15, ovr: 53 },
-  { id: 3, name: "Emil Jensen Bryld", club: "Hobro IK",        age: 18, goals: 12, ovr: 53 },
-  { id: 4, name: "Kylan Mbappe",      club: "Real Madrid FC",  age: 17, goals: 10, ovr: 55 },
-  { id: 5, name: "Kylan Mbappe",      club: "Real Madrid FC",  age: 17, goals:  9, ovr: 56 },
-];
-
-function LeaderboardSection() {
+function ExportScoutingReportButton() {
   return (
-    <section className="perf-lb-section">
-      <div className="perf-lb-header">
-        <div>
-          <h3 className="perf-section-title">Leaderboard</h3>
-          <p className="perf-lb-sub text-2xs-medium">Ranking your position and age</p>
-        </div>
-        <button className="perf-lb-scope text-sm-medium">
-          All world <CaretDown size={14} />
-        </button>
-      </div>
-      <div className="perf-lb-table">
-        <div className="perf-lb-col-row text-2xs-medium">
-          <span className="perf-lb-col-player">Player</span>
-          <span className="perf-lb-col-a">A</span>
-          <span className="perf-lb-col-g">G</span>
-          <span className="perf-lb-col-rating">Rating</span>
-        </div>
-        {LEADERBOARD.map((p) => (
-          <div key={p.id} className="perf-lb-row">
-            <div className="perf-lb-player">
-              <div className="perf-lb-avatar">
-                <span className="text-xs-medium">
-                  {p.name.split(" ").map((w) => w[0]).join("").slice(0, 2)}
-                </span>
-              </div>
-              <div className="perf-lb-player-info">
-                <span className="perf-lb-name text-sm-semibold">{p.name}</span>
-                <span className="perf-lb-club text-2xs-medium">{p.club}</span>
-              </div>
-            </div>
-            <span className="perf-lb-col-a text-sm-medium">{p.age}</span>
-            <span className="perf-lb-col-g text-sm-medium">{p.goals}</span>
-            <span className="perf-lb-col-rating">
-              <OvrBadge value={p.ovr} size="xs" variant="default" />
-            </span>
-          </div>
-        ))}
-      </div>
-    </section>
+    <button className="perf-export-btn">
+      <svg width="22" height="20" viewBox="0 0 22 20" fill="none" color="white" aria-hidden="true">
+        <path d="M0.75 14.7502L4.67678 8.85999C4.71353 8.80485 4.79278 8.80007 4.83591 8.85038L7.66077 12.146C7.70488 12.1975 7.78633 12.1911 7.82186 12.1334L11.6836 5.85798C11.7175 5.80296 11.7938 5.794 11.8395 5.83968L13.25 7.25015M17.25 7.25015L20.75 0.750153M18.4773 16.9002L18.4937 16.882C19.2728 16.025 19.7045 14.9084 19.7045 13.7502V13.6519C19.7045 12.5569 19.2964 11.5012 18.5598 10.691C17.7256 9.77331 16.543 9.25015 15.3028 9.25015H15.1063C13.8661 9.25015 12.6835 9.77331 11.8493 10.691C11.1127 11.5012 10.7045 12.5569 10.7045 13.6519V13.8484C10.7045 14.9434 11.1127 15.9991 11.8493 16.8093C12.6835 17.727 13.8661 18.2502 15.1063 18.2502H15.4255C16.5875 18.2502 17.6956 17.76 18.4773 16.9002ZM18.4773 16.9002L20.75 18.8499" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+      </svg>
+      Export a Scouting Report
+    </button>
   );
 }
-
 
 export default function PerformanceTab({ viewerIsPro: initialIsPro = false }) {
   const [isPro, setIsPro] = useState(Boolean(initialIsPro));
@@ -78,8 +35,9 @@ export default function PerformanceTab({ viewerIsPro: initialIsPro = false }) {
           />
           <PredictionsSection />
           <SkillTrendsSection />
-          <TrainingImpactSection />
+          <YourProgressSection />
           <LeaderboardSection />
+          <ExportScoutingReportButton />
         </>
       ) : (
         <ProUpgradeCard badgeColor="pro-scout" buttonLabel="Get Premium features" onButtonClick={() => setIsPro(true)} />

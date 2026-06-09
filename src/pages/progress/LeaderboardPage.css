@@ -230,3 +230,37 @@
   display: flex;
   justify-content: center;
 }
+
+/* Clickable rows */
+.lbp-row--clickable {
+  cursor: pointer;
+  transition: background 0.12s;
+}
+.lbp-row--clickable:hover {
+  background: var(--neutral-50, #f9f9f9);
+}
+.lbp-row--clickable:active {
+  background: var(--neutral-100);
+}
+
+/* Skeleton loading */
+.lbp-row--skeleton {
+  height: 60px;
+  background: linear-gradient(90deg, var(--neutral-100) 25%, var(--neutral-50, #f9f9f9) 50%, var(--neutral-100) 75%);
+  background-size: 200% 100%;
+  animation: lbp-shimmer 1.4s infinite;
+}
+
+@keyframes lbp-shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Empty state */
+.lbp-empty {
+  padding: 32px 16px;
+  text-align: center;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  color: var(--muted);
+}

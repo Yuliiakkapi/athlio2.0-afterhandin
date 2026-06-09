@@ -1,6 +1,9 @@
+import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { CaretLeft, ArrowRight, Plus, Sparkle } from "@phosphor-icons/react";
+import { ArrowLeft, ArrowRight, Plus, Sparkle, X } from "@phosphor-icons/react";
 import OvrBadge from "../components/UI/OvrBadge";
+import IconButton from "../components/UI/IconButton";
+import { supabase } from "../lib/supabase";
 import "./Substitution.css";
 
 const TEAM_STATS = { ovr: 72, def: 71, att: 71, mid: 71 };
@@ -100,28 +103,48 @@ export default function Substitution() {
   const { state } = useLocation();
   const player = state?.player ?? null;
   const slot = state?.slot ?? null;
-  const inPlayer = state?.inPlayer ?? null;
+  const slotIndex = state?.slotIndex ?? null;
+
+  const [localInPlayer, setLocalInPlayer] = useState(state?.inPlayer ?? null);
+  const [autoPickLoading, setAutoPickLoading] = useState(false);
 
   const posLabel = (player?.position?.[0] ?? slot?.pos ?? "CDM").toUpperCase();
   const outOvr = fakeOvr(player?.id ?? "0");
-  const inOvr = inPlayer ? fakeOvr(inPlayer.id) : null;
+  const inOvr = localInPlayer ? fakeOvr(localInPlayer.id) : null;
 
   const outStats = makeStats(player?.id ?? "0");
-  const inStats = inPlayer ? makeStats(inPlayer.id) : null;
+  const inStats = localInPlayer ? makeStats(localInPlayer.id) : null;
   const colors = statColors(outStats, inStats);
 
-  const teamOvrAfter = inPlayer
+  const teamOvrAfter = localInPlayer
     ? Math.max(60, Math.min(99, TEAM_STATS.ovr + Math.round((inOvr - outOvr) * 0.3)))
     : null;
+
+  async function handleAutoPick() {
+    setAutoPickLoading(true);
+    const { data } = await supabase
+      .from("profiles")
+      .select("*, clubs(name, logo_url, country)")
+      .eq("role", "athlete")
+      .limit(50);
+    const athletes = data ?? [];
+    const posFiltered = athletes.filter((p) =>
+      p.position?.some((pos) => pos.toUpperCase() === posLabel)
+    );
+    const pool = posFiltered.length > 0 ? posFiltered : athletes;
+    const best = pool.reduce((acc, p) => {
+      return !acc || fakeOvr(p.id) > fakeOvr(acc.id) ? p : acc;
+    }, null);
+    if (best) setLocalInPlayer(best);
+    setAutoPickLoading(false);
+  }
 
   return (
     <div className="sub-page">
       <div className="sub-topbar">
-        <button className="sub-back-btn" onClick={() => navigate(-1)} aria-label="Back">
-          <CaretLeft size={28} weight="bold" />
-        </button>
+        <IconButton size="small" type="subtle" icon={ArrowLeft} onClick={() => navigate(-1)} />
         <h1 className="sub-title">Substitution</h1>
-        <span className="sub-pos-badge">{posLabel}</span>
+        <IconButton size="small" type="subtle" icon={X} onClick={() => navigate("/scouting/team")} />
       </div>
 
       {/* Team OVR card */}
@@ -178,9 +201,9 @@ export default function Substitution() {
           <ArrowRight size={24} color="var(--neutral-400)" />
         </div>
 
-        {inPlayer ? (
+        {localInPlayer ? (
           <PlayerCard
-            player={inPlayer}
+            player={localInPlayer}
             ovr={inOvr}
             stats={inStats}
             colorKey={colors.map((c) => c.in)}
@@ -193,7 +216,7 @@ export default function Substitution() {
                 className="sub-add-btn"
                 onClick={() =>
                   navigate("/scouting/select-players", {
-                    state: { pos: posLabel, outPlayer: player, slot },
+                    state: { pos: posLabel, outPlayer: player, slot, slotIndex },
                   })
                 }
               >
@@ -202,9 +225,9 @@ export default function Substitution() {
                 </div>
                 <span className="sub-add-label">Add a player</span>
               </button>
-              <button className="sub-autopick-btn">
+              <button className="sub-autopick-btn" onClick={handleAutoPick} disabled={autoPickLoading}>
                 <Sparkle size={18} color="var(--primary-700)" />
-                <span>Auto-pick</span>
+                <span>{autoPickLoading ? "Picking…" : "Auto-pick"}</span>
               </button>
             </div>
           </div>
@@ -215,13 +238,20 @@ export default function Substitution() {
       <div className="sub-actions">
         <button
           className="sub-confirm-btn"
-          disabled={!inPlayer}
-          onClick={() => navigate(-1)}
+          disabled={!localInPlayer}
+          onClick={() => navigate("/scouting/team", { state: { slotIndex, inPlayer: localInPlayer } })}
         >
           Confirm Substitution
         </button>
-        <button className="sub-cancel-btn" onClick={() => navigate(-1)}>
-          Cancel
+        <button
+          className="sub-cancel-btn"
+          onClick={() =>
+            navigate("/scouting/select-players", {
+              state: { pos: posLabel, outPlayer: player, slot, slotIndex },
+            })
+          }
+        >
+          Choose a different player
         </button>
       </div>
     </div>

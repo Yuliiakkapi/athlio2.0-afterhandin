@@ -1,85 +1,165 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { supabase } from "../../lib/supabase";
+import { fetchWatchlist } from "../../lib/watchlist";
+import { fetchSeasonStats } from "../../lib/stats";
 import OvrBadge from "../../components/UI/OvrBadge";
-import { useUser } from "../../context/UserContext";
 import "./LeaderboardPage.css";
 
-const ALL_WORLD = [
-  { id: 1,  name: "Kylian Mbappe",     club: "Real Madrid FC",  g: 15, a: 18, ovr: 52 },
-  { id: 2,  name: "Samuel Soares",     club: "FC Benfica",       g: 15, a: 17, ovr: 53 },
-  { id: 3,  name: "Kylian Mbappe",     club: "Real Madrid FC",  g: 17, a: 10, ovr: 55, isMe: true },
-  { id: 4,  name: "Lionel Messi",      club: "Inter Miami CF",   g: 15, a: 12, ovr: 40 },
-  { id: 5,  name: "Cristiano Ronaldo", club: "Al Nassr",         g: 20, a: 9,  ovr: 60 },
-  { id: 6,  name: "Erling Haaland",    club: "Manchester City",  g: 22, a: 8,  ovr: 48 },
-  { id: 7,  name: "Neymar Jr.",        club: "Al Hilal",         g: 10, a: 11, ovr: 30 },
-  { id: 8,  name: "Mohamed Salah",     club: "Liverpool FC",     g: 18, a: 13, ovr: 45 },
-  { id: 9,  name: "Alex Morgan",       club: "Orlando Pride",    g: 18, a: 13, ovr: 45 },
-  { id: 10, name: "Alex Morgan",       club: "Orlando Pride",    g: 18, a: 13, ovr: 45 },
-];
+/* ── seeded OVR (same as Watchlist.jsx) ── */
+function seededRand(seed) {
+  let s = seed;
+  return () => { s = (s * 1664525 + 1013904223) & 0xffffffff; return (s >>> 0) / 0xffffffff; };
+}
+function fakeOvr(idStr) {
+  const n = idStr.split("").reduce((a, c) => a + c.charCodeAt(0), 0);
+  return Math.round(seededRand(n * 3571)() * 40 + 50);
+}
 
-const DIVISION_3 = [
-  { id: 1,  name: "Emil Jensen Bryld", club: "Hobro IK",         g: 18, a: 12, ovr: 55 },
-  { id: 2,  name: "Mikkel Pedersen",   club: "Hobro IK",         g: 17, a: 10, ovr: 55 },
-  { id: 3,  name: "Søren Jørgensen",   club: "VRI",              g: 17, a: 9,  ovr: 56 },
-  { id: 4,  name: "Lars Nielsen",      club: "FC Fredericia",    g: 14, a: 8,  ovr: 50 },
-  { id: 5,  name: "Jonas Madsen",      club: "Silkeborg IF",     g: 13, a: 11, ovr: 49 },
-  { id: 6,  name: "Rasmus Berg",       club: "AGF Aarhus",       g: 12, a: 7,  ovr: 48 },
-  { id: 7,  name: "Tobias Lund",       club: "OB Odense",        g: 11, a: 9,  ovr: 47 },
-  { id: 8,  name: "Anders Holm",       club: "Randers FC",       g: 10, a: 6,  ovr: 46 },
-  { id: 9,  name: "Christian Dahl",    club: "FC Midtjylland",   g: 9,  a: 8,  ovr: 44 },
-  { id: 10, name: "Frederik Koch",     club: "Esbjerg fB",       g: 8,  a: 5,  ovr: 43 },
-];
+function buildRows(profiles, statsArr) {
+  const statsMap = new Map(statsArr.map((r) => [r.profile_id, r.stats]));
+  return profiles
+    .map((p) => {
+      const s = statsMap.get(p.id);
+      return {
+        id: p.id,
+        name: p.full_name || "Unknown",
+        club: p.club || "—",
+        g: s?.goals ?? 0,
+        a: s?.assists ?? 0,
+        ovr: fakeOvr(p.id),
+        avatarUrl: p.avatar_url || null,
+      };
+    })
+    .sort((a, b) => b.g - a.g || b.a - a.a)
+    .slice(0, 10);
+}
 
-const LA_LIGA_U19 = [
-  { id: 1,  name: "Lamine Yamal",      club: "FC Barcelona",     g: 20, a: 15, ovr: 68 },
-  { id: 2,  name: "Pau Cubarsí",       club: "FC Barcelona",     g: 3,  a: 7,  ovr: 65 },
-  { id: 3,  name: "Marc Guiu",         club: "Chelsea FC",       g: 14, a: 6,  ovr: 62 },
-  { id: 4,  name: "Gavi",              club: "FC Barcelona",     g: 8,  a: 12, ovr: 70 },
-  { id: 5,  name: "Pedri",             club: "FC Barcelona",     g: 10, a: 14, ovr: 72 },
-  { id: 6,  name: "Nico Williams",     club: "Athletic Bilbao",  g: 16, a: 9,  ovr: 67 },
-  { id: 7,  name: "Alejandro Iturbe",  club: "Real Sociedad",    g: 11, a: 8,  ovr: 60 },
-  { id: 8,  name: "Carlos Romero",     club: "Sevilla FC",       g: 9,  a: 5,  ovr: 58 },
-  { id: 9,  name: "Hugo Duro",         club: "Valencia CF",      g: 12, a: 4,  ovr: 57 },
-  { id: 10, name: "Sergio Camello",    club: "Atletico Madrid",  g: 7,  a: 6,  ovr: 55 },
-];
+async function loadWatchlist() {
+  const wl = await fetchWatchlist();
+  if (!wl.length) return [];
+  const statsArr = await fetchSeasonStats(wl.map((p) => p.id));
+  return buildRows(wl, statsArr);
+}
+
+async function loadAll() {
+  const { data: profiles, error } = await supabase
+    .from("profiles")
+    .select("id, full_name, avatar_url")
+    .not("full_name", "is", null)
+    .limit(100);
+  if (error || !profiles?.length) return [];
+
+  const ids = profiles.map((p) => p.id);
+  const { data: infoRows } = await supabase
+    .from("info")
+    .select("profile_id, club:club_id(name)")
+    .in("profile_id", ids);
+  const infoMap = new Map((infoRows || []).map((r) => [r.profile_id, r]));
+
+  const enriched = profiles.map((p) => ({
+    ...p,
+    club: infoMap.get(p.id)?.club?.name || null,
+  }));
+
+  const statsArr = await fetchSeasonStats(ids);
+  return buildRows(enriched, statsArr);
+}
+
+async function loadLaLigaU19() {
+  const { data: spanishClubs } = await supabase
+    .from("clubs")
+    .select("id")
+    .eq("country_code", "ES");
+  if (!spanishClubs?.length) return [];
+
+  const spanishClubIds = spanishClubs.map((c) => c.id);
+  const { data: infoRows } = await supabase
+    .from("info")
+    .select("profile_id, birth_date, club:club_id(name)")
+    .in("club_id", spanishClubIds);
+  if (!infoRows?.length) return [];
+
+  const today = new Date();
+  const u19 = infoRows.filter((r) => {
+    if (!r.birth_date) return false;
+    const birth = new Date(r.birth_date);
+    let age = today.getFullYear() - birth.getFullYear();
+    if (today < new Date(today.getFullYear(), birth.getMonth(), birth.getDate())) age--;
+    return age <= 19;
+  });
+  if (!u19.length) return [];
+
+  const ids = u19.map((r) => r.profile_id);
+  const infoMap = new Map(u19.map((r) => [r.profile_id, r]));
+
+  const { data: profiles } = await supabase
+    .from("profiles")
+    .select("id, full_name, avatar_url")
+    .in("id", ids);
+
+  const enriched = (profiles || []).map((p) => ({
+    ...p,
+    club: infoMap.get(p.id)?.club?.name || null,
+  }));
+
+  const statsArr = await fetchSeasonStats(ids);
+  return buildRows(enriched, statsArr);
+}
 
 const TABS = [
-  { label: "Watchlist",     players: ALL_WORLD },
-  { label: "All",           players: ALL_WORLD },
-  { label: "La Liga 1 U19", players: LA_LIGA_U19 },
+  { label: "Watchlist",     load: loadWatchlist },
+  { label: "All",           load: loadAll },
+  { label: "La Liga 1 U19", load: loadLaLigaU19 },
 ];
 
-function LeaderboardCard({ players, profile }) {
-  const rows = players.map((p) =>
-    p.isMe
-      ? { ...p, name: profile?.full_name || profile?.username || p.name, club: profile?.club_other_name || p.club, avatar: profile?.avatar_url }
-      : p
+/* ── Card ── */
+function LeaderboardCard({ players, loading, onPlayerClick }) {
+  const header = (
+    <div className="lbp-thead">
+      <span className="lbp-thead-player">Player</span>
+      <div className="lbp-thead-right">
+        <span className="lbp-thead-stat">G</span>
+        <span className="lbp-thead-stat">A</span>
+        <span className="lbp-thead-rating">Rating</span>
+      </div>
+    </div>
   );
+
+  if (loading) {
+    return (
+      <div className="lbp-card">
+        {header}
+        {Array.from({ length: 5 }).map((_, i) => (
+          <div key={i} className={`lbp-row lbp-row--skeleton${i === 4 ? " lbp-row--last" : ""}`} />
+        ))}
+      </div>
+    );
+  }
+
+  if (!players.length) {
+    return (
+      <div className="lbp-card">
+        {header}
+        <div className="lbp-empty">No players found</div>
+      </div>
+    );
+  }
 
   return (
     <div className="lbp-card">
-      <div className="lbp-thead">
-        <span className="lbp-thead-player">Player</span>
-        <div className="lbp-thead-right">
-          <span className="lbp-thead-stat">G</span>
-          <span className="lbp-thead-stat">A</span>
-          <span className="lbp-thead-rating">Rating</span>
-        </div>
-      </div>
-
-      {rows.map((player, i) => (
+      {header}
+      {players.map((player, i) => (
         <div
           key={player.id}
-          className={[
-            "lbp-row",
-            player.isMe && "lbp-row--me",
-            i === rows.length - 1 && "lbp-row--last",
-          ].filter(Boolean).join(" ")}
+          className={["lbp-row lbp-row--clickable", i === players.length - 1 && "lbp-row--last"].filter(Boolean).join(" ")}
+          onClick={() => onPlayerClick(player.id)}
         >
           <div className="lbp-row-left">
             <span className="lbp-rank">{i + 1}.</span>
-            <div className={`lbp-avatar${player.isMe ? " lbp-avatar--me" : ""}`}>
-              {player.avatar
-                ? <img src={player.avatar} alt="" className="lbp-avatar-img" />
+            <div className="lbp-avatar">
+              {player.avatarUrl
+                ? <img src={player.avatarUrl} alt={player.name} className="lbp-avatar-img" />
                 : player.name.split(" ").slice(0, 2).map((w) => w[0]).join("")}
             </div>
             <div className="lbp-player-info">
@@ -89,10 +169,10 @@ function LeaderboardCard({ players, profile }) {
           </div>
 
           <div className="lbp-row-right">
-            <span className={`lbp-stat${player.isMe ? " lbp-stat--me" : ""}`}>{player.g}</span>
-            <span className={`lbp-stat${player.isMe ? " lbp-stat--me" : ""}`}>{player.a}</span>
+            <span className="lbp-stat">{player.g}</span>
+            <span className="lbp-stat">{player.a}</span>
             <div className="lbp-rating">
-              <OvrBadge value={player.ovr} size={player.isMe ? "md" : "sm"} />
+              <OvrBadge value={player.ovr} size="sm" />
             </div>
           </div>
         </div>
@@ -101,13 +181,48 @@ function LeaderboardCard({ players, profile }) {
   );
 }
 
+/* ── Page ── */
 export default function LeaderboardPage() {
-  const { profile } = useUser();
-  const [activeTab, setActiveTab] = useState(1);
+  const [activeTab, setActiveTab] = useState(0);
+  const [tabData, setTabData] = useState({});
+  const [tabLoading, setTabLoading] = useState({});
+  const loadedRef = useRef(new Set());
   const carouselRef = useRef(null);
+  const navigate = useNavigate();
+
+  function loadTab(index) {
+    if (loadedRef.current.has(index)) return;
+    loadedRef.current.add(index);
+    setTabLoading((prev) => ({ ...prev, [index]: true }));
+    TABS[index].load()
+      .then((players) => setTabData((prev) => ({ ...prev, [index]: players })))
+      .catch(() => setTabData((prev) => ({ ...prev, [index]: [] })))
+      .finally(() => setTabLoading((prev) => ({ ...prev, [index]: false })));
+  }
+
+  const loadTabRef = useRef(loadTab);
+  loadTabRef.current = loadTab;
+
+  useEffect(() => {
+    loadTabRef.current(0);
+  }, []);
+
+  useEffect(() => {
+    const carousel = carouselRef.current;
+    if (!carousel) return;
+    function onScroll() {
+      const cardWidth = carousel.offsetWidth + 12;
+      const index = Math.round(carousel.scrollLeft / cardWidth);
+      setActiveTab(index);
+      loadTabRef.current(index);
+    }
+    carousel.addEventListener("scroll", onScroll, { passive: true });
+    return () => carousel.removeEventListener("scroll", onScroll);
+  }, []);
 
   function handleTabClick(index) {
     setActiveTab(index);
+    loadTab(index);
     const carousel = carouselRef.current;
     if (!carousel) return;
     const card = carousel.children[index];
@@ -129,8 +244,13 @@ export default function LeaderboardPage() {
       </div>
 
       <div className="lbp-carousel" ref={carouselRef}>
-        {TABS.map((tab) => (
-          <LeaderboardCard key={tab.label} players={tab.players} profile={profile} />
+        {TABS.map((tab, i) => (
+          <LeaderboardCard
+            key={tab.label}
+            players={tabData[i] || []}
+            loading={!!tabLoading[i]}
+            onPlayerClick={(id) => navigate(`/profile/${id}`)}
+          />
         ))}
       </div>
     </div>

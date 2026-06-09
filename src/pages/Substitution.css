@@ -12,30 +12,24 @@
   background: var(--neutral-50-bg);
   display: flex;
   flex-direction: column;
+  padding-top: 52px;
   padding-bottom: 120px;
 }
 
 /* ─── Top navbar ──────────────────────────────────────────────── */
 
 .sub-topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  height: 52px;
   display: flex;
   align-items: center;
-  padding: 16px 16px 12px;
-  gap: 16px;
-}
-
-.sub-back-btn {
-  width: 28px;
-  height: 28px;
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: none;
-  border: none;
-  color: var(--black);
-  cursor: pointer;
-  padding: 0;
+  gap: 12px;
+  padding: 0 16px;
+  background: var(--neutral-50-bg, #f6f6f7);
 }
 
 .sub-title {
@@ -124,22 +118,6 @@
   font-weight: 600;
   color: var(--black);
   line-height: 1;
-}
-
-/* ─── Position badge in topbar ────────────────────────────────── */
-
-.sub-pos-badge {
-  background: var(--primary-100);
-  color: var(--primary-800, #1f2cb4);
-  font-family: var(--font-sans);
-  font-size: var(--text-sm);
-  font-weight: 600;
-  font-style: italic;
-  text-transform: uppercase;
-  border-radius: 9999px;
-  padding: 4px 8px;
-  letter-spacing: -0.1px;
-  flex-shrink: 0;
 }
 
 /* ─── OUT / IN direction labels ───────────────────────────────── */

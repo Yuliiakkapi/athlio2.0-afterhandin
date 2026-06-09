@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { X } from "@phosphor-icons/react";
 import Badge from "../../../../components/UI/Badge";
 import whiteStripes from "../../../../assets/images/background-whitestrpes.png";
+import whiteStripesScouts from "../../../../assets/images/background-whitestripes-scouts.png";
 import "./ReadyScreen.css";
 
 export default function ReadyScreen({
@@ -15,7 +16,7 @@ export default function ReadyScreen({
   }, [onClose]);
 
   return (
-    <div className="ready-screen" style={{ backgroundImage: `url(${whiteStripes})` }}>
+    <div className="ready-screen" style={{ backgroundImage: `url(${badgeColor === "pro-scout" ? whiteStripesScouts : whiteStripes})` }}>
 
       <button className="ready-close" onClick={onClose} aria-label="Close">
         <X size={20} weight="bold" />

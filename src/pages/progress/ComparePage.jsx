@@ -1,5 +1,6 @@
-import { X, Sparkle, CaretDown } from "@phosphor-icons/react";
-import { useLocation } from "react-router-dom";
+import { useState } from "react";
+import { X, Sparkle, CaretDown, Plus } from "@phosphor-icons/react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useUser } from "../../context/UserContext";
 import OvrBadge from "../../components/UI/OvrBadge";
 import Badge from "../../components/UI/Badge";
@@ -94,26 +95,56 @@ function StatRow({ label, left, right, fmt }) {
   );
 }
 
+const EMPTY_PLAYER = {
+  name: "—",
+  flag: "",
+  positions: [],
+  club: "",
+  age: null,
+  foot: "—",
+  ovr: 0,
+  img: null,
+  initials: "?",
+  stats: {
+    matches: 0, minutes: 0, winPct: 0, matchesStarted: 0,
+    goals: 0, gpm: 0, goalsPerMin: 0,
+    assists: 0, assistsPerMatch: 0, assistsPerMin: 0,
+  },
+};
+
+function seedNum(idStr, salt, min, max) {
+  let s = (idStr + salt).split("").reduce((a, c) => a + c.charCodeAt(0), 0);
+  s = (s * 1664525 + 1013904223) & 0xffffffff;
+  return Math.round(min + ((s >>> 0) / 0xffffffff) * (max - min));
+}
+
 function fromWatchlistPlayer(p) {
-  const gpm = parseFloat(p.stats?.find((s) => s.label === "GPM")?.value) || 0;
-  const apm = parseFloat(p.stats?.find((s) => s.label === "APM")?.value) || 0;
-  const winPctRaw = p.stats?.find((s) => s.label === "%WIN")?.value || "0%";
+  const id = p.id ?? p.name ?? "x";
+  const matches         = seedNum(id, "m",  18, 38);
+  const matchesStarted  = seedNum(id, "ms", Math.round(matches * 0.5), matches);
+  const minutes         = matchesStarted * seedNum(id, "min", 70, 90);
+  const goals           = seedNum(id, "g",  4, 22);
+  const assists         = seedNum(id, "a",  3, 18);
+  const winPct          = seedNum(id, "w",  30, 72);
+  const gpm             = parseFloat((goals / matches).toFixed(2));
+  const goalsPerMin     = parseFloat((goals / (minutes || 1)).toFixed(3));
+  const assistsPerMatch = parseFloat((assists / matches).toFixed(2));
+  const assistsPerMin   = parseFloat((assists / (minutes || 1)).toFixed(3));
+
   return {
     name: p.name,
     flag: "🏴",
-    positions: [p.position].filter(Boolean),
+    positions: (p.positions ?? [p.position].filter(Boolean)),
     club: p.club || "",
-    age: p.age || 0,
-    foot: "Right foot",
+    age: p.age || null,
+    foot: seedNum(id, "foot", 0, 1) ? "Right foot" : "Left foot",
     ovr: p.ovr || 0,
     img: p.avatarUrl || null,
     initials: p.initials || p.name?.[0] || "?",
     stats: {
-      matches: 0, minutes: 0,
-      winPct: parseInt(winPctRaw) || 0,
-      matchesStarted: 0,
-      goals: 0, gpm, goalsPerMin: 0,
-      assists: 0, assistsPerMatch: apm, assistsPerMin: 0,
+      matches, minutes, winPct, matchesStarted,
+      goals, gpm, goalsPerMin,
+      assists, assistsPerMatch, assistsPerMin,
     },
   };
 }
@@ -121,11 +152,32 @@ function fromWatchlistPlayer(p) {
 export default function ComparePage() {
   const { profile } = useUser();
   const location = useLocation();
+  const navigate = useNavigate();
   const meImg = profile?.avatar_url || playerImg;
 
-  const opponent = location.state?.player
-    ? fromWatchlistPlayer(location.state.player)
-    : OPPONENT;
+  const { player, playerA: initA, playerB: initB } = location.state || {};
+  const isWatchlistCompare = !!(initA || initB);
+
+  const [rawLeft,  setRawLeft]  = useState(initA ?? null);
+  const [rawRight, setRawRight] = useState(initB ?? player ?? null);
+
+  const leftPlayer = rawLeft ? fromWatchlistPlayer(rawLeft) : (isWatchlistCompare ? EMPTY_PLAYER : ME);
+  const leftImg    = isWatchlistCompare ? (leftPlayer.img || null) : meImg;
+
+  const opponent   = rawRight ? fromWatchlistPlayer(rawRight) : (isWatchlistCompare ? EMPTY_PLAYER : OPPONENT);
+
+  const leftEmpty  = isWatchlistCompare && !rawLeft;
+  const rightEmpty = opponent.name === "—";
+
+  function handleFillSlot(slot) {
+    navigate("/scouting/watchlist", {
+      state: {
+        compareMode: true,
+        slot,
+        fixedPlayer: slot === "right" ? rawLeft : rawRight,
+      },
+    });
+  }
 
   return (
     <div className="cpv2-page">
@@ -133,30 +185,55 @@ export default function ComparePage() {
       {/* ── Player Photos ─────────────────────────────────────────── */}
       <div className="cpv2-photos-row">
         <div className="cpv2-photo-slot cpv2-photo-slot--left">
-          <div className="cpv2-photo-circle cpv2-photo-circle--shadow">
-            <img src={meImg} alt="You" className="cpv2-photo-img" />
+          <div
+            className={`cpv2-photo-circle cpv2-photo-circle--shadow${leftEmpty ? " cpv2-photo-circle--empty" : ""}`}
+            onClick={leftEmpty ? () => handleFillSlot("left") : undefined}
+            role={leftEmpty ? "button" : undefined}
+            tabIndex={leftEmpty ? 0 : undefined}
+          >
+            {leftEmpty
+              ? <Plus size={36} weight="bold" className="cpv2-plus-icon" />
+              : leftImg
+              ? <img src={leftImg} alt={leftPlayer.name} className="cpv2-photo-img" />
+              : <span className="cpv2-photo-initials">{leftPlayer.initials}</span>
+            }
           </div>
-          <div className="cpv2-ovr-wrap cpv2-ovr-wrap--right">
-            <OvrBadge value={ME.ovr} variant="gold" size="md" />
-          </div>
-          <button className="cpv2-remove-btn cpv2-remove-btn--left">
-            <X size={12} weight="bold" />
-          </button>
+          {!leftEmpty && (
+            <div className="cpv2-ovr-wrap cpv2-ovr-wrap--right">
+              <OvrBadge value={leftPlayer.ovr} variant="gold" size="md" />
+            </div>
+          )}
+          {!leftEmpty && isWatchlistCompare && (
+            <button className="cpv2-remove-btn cpv2-remove-btn--left" onClick={() => setRawLeft(null)}>
+              <X size={12} weight="bold" />
+            </button>
+          )}
         </div>
 
         <div className="cpv2-photo-slot cpv2-photo-slot--right">
-          <div className="cpv2-photo-circle">
-            {opponent.img
+          <div
+            className={`cpv2-photo-circle${rightEmpty ? " cpv2-photo-circle--empty" : ""}`}
+            onClick={rightEmpty ? () => handleFillSlot("right") : undefined}
+            role={rightEmpty ? "button" : undefined}
+            tabIndex={rightEmpty ? 0 : undefined}
+          >
+            {rightEmpty
+              ? <Plus size={36} weight="bold" className="cpv2-plus-icon" />
+              : opponent.img
               ? <img src={opponent.img} alt={opponent.name} className="cpv2-photo-img" />
               : <span className="cpv2-photo-initials">{opponent.initials}</span>
             }
           </div>
-          <div className="cpv2-ovr-wrap cpv2-ovr-wrap--left">
-            <OvrBadge value={opponent.ovr} variant="default" size="md" />
-          </div>
-          <button className="cpv2-remove-btn cpv2-remove-btn--right">
-            <X size={12} weight="bold" />
-          </button>
+          {!rightEmpty && (
+            <div className="cpv2-ovr-wrap cpv2-ovr-wrap--left">
+              <OvrBadge value={opponent.ovr} variant="default" size="md" />
+            </div>
+          )}
+          {!rightEmpty && (
+            <button className="cpv2-remove-btn cpv2-remove-btn--right" onClick={() => setRawRight(null)}>
+              <X size={12} weight="bold" />
+            </button>
+          )}
         </div>
       </div>
 
@@ -164,19 +241,19 @@ export default function ComparePage() {
       <div className="cpv2-info-card">
         <div className="cpv2-info-player">
           <div className="cpv2-name-row">
-            <span className="cpv2-flag">{ME.flag}</span>
-            <span className="cpv2-player-name">{ME.name}</span>
+            <span className="cpv2-flag">{leftPlayer.flag}</span>
+            <span className="cpv2-player-name">{leftPlayer.name}</span>
           </div>
           <div className="cpv2-badges-row">
-            {ME.positions.map((p) => <Badge key={p} text={p} color="light" size="xs" />)}
+            {leftPlayer.positions.map((p) => <Badge key={p} text={p} color="light" size="xs" />)}
           </div>
           <div className="cpv2-meta-row">
-            <span className="cpv2-meta-text">{ME.club}</span>
-            <span className="cpv2-dot" />
-            <span className="cpv2-meta-text">{ME.age}y.o.</span>
+            {leftPlayer.club && <span className="cpv2-meta-text">{leftPlayer.club}</span>}
+            {leftPlayer.club && leftPlayer.age && <span className="cpv2-dot" />}
+            {leftPlayer.age && <span className="cpv2-meta-text">{leftPlayer.age}y.o.</span>}
           </div>
           <div className="cpv2-meta-row">
-            <span className="cpv2-meta-text">{ME.foot}</span>
+            <span className="cpv2-meta-text">{leftPlayer.foot}</span>
           </div>
         </div>
 
@@ -189,9 +266,9 @@ export default function ComparePage() {
             {opponent.positions.map((p) => <Badge key={p} text={p} color="light" size="xs" />)}
           </div>
           <div className="cpv2-meta-row cpv2-meta-row--right">
-            <span className="cpv2-meta-text">{opponent.club}</span>
-            <span className="cpv2-dot" />
-            <span className="cpv2-meta-text">{opponent.age}y.o.</span>
+            {opponent.club && <span className="cpv2-meta-text">{opponent.club}</span>}
+            {opponent.club && opponent.age && <span className="cpv2-dot" />}
+            {opponent.age && <span className="cpv2-meta-text">{opponent.age}y.o.</span>}
           </div>
           <div className="cpv2-meta-row cpv2-meta-row--right">
             <span className="cpv2-meta-text">{opponent.foot}</span>
@@ -208,7 +285,7 @@ export default function ComparePage() {
 
         <div className="cpv2-section-body">
           {SEASON_STATS.map(({ key, label, fmt }) => (
-            <StatRow key={key} label={label} left={ME.stats[key]} right={opponent.stats[key]} fmt={fmt} />
+            <StatRow key={key} label={label} left={leftPlayer.stats[key]} right={opponent.stats[key]} fmt={fmt} />
           ))}
         </div>
 
@@ -217,7 +294,7 @@ export default function ComparePage() {
         </div>
         <div className="cpv2-section-body">
           {GOALS_STATS.map(({ key, label, fmt }) => (
-            <StatRow key={key} label={label} left={ME.stats[key]} right={opponent.stats[key]} fmt={fmt} />
+            <StatRow key={key} label={label} left={leftPlayer.stats[key]} right={opponent.stats[key]} fmt={fmt} />
           ))}
         </div>
 
@@ -226,7 +303,7 @@ export default function ComparePage() {
         </div>
         <div className="cpv2-section-body">
           {ASSISTS_STATS.map(({ key, label, fmt }) => (
-            <StatRow key={key} label={label} left={ME.stats[key]} right={opponent.stats[key]} fmt={fmt} />
+            <StatRow key={key} label={label} left={leftPlayer.stats[key]} right={opponent.stats[key]} fmt={fmt} />
           ))}
         </div>
       </div>

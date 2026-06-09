@@ -2,13 +2,14 @@
   display: flex;
   align-items: flex-start;
   gap: 8px;
-  background: var(--success-50);
+  background: var(--warning-50);
   border-radius: 12px;
   padding: 8px;
+  box-shadow: 0px 0px 10.5px rgba(0, 0, 0, 0.08);
 }
 
 .ai-suggestion-icon {
-  background: linear-gradient(90deg, #33f578 0%, #e7fc6f 100%);
+  background: linear-gradient(12deg, var(--warning-default) 0%, var(--warning-600) 100%);
   border: 2px solid var(--white);
   border-radius: 12px;
   padding: 12px;
