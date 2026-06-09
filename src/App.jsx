@@ -1,4 +1,5 @@
 import { lazy, Suspense } from "react";
+import { Navigate } from "react-router-dom";
 import { Route, Routes } from "react-router-dom";
 import { TargetsProvider } from "./context/TargetsContext";
 import { ChallengesProvider } from "./context/ChallengesContext";
@@ -55,14 +56,15 @@ export default function App() {
     <TargetsProvider>
     <Suspense fallback={null}>
     <Routes>
+      <Route index element={<Navigate to="/intro" replace />} />
+      <Route path="intro" element={<Intro />} />
       <Route path="upgrade-pro" element={<UpgradePro />} />
       <Route path="pro-onboarding" element={<ProOnboarding />} />
       <Route path="scout-pro-onboarding" element={<ScoutProOnboarding />} />
       <Route path="scout-upgrade-pro" element={<ScoutUpgradePro />} />
       <Route path="scouting/ai-scout" element={<AiScout />} />
       <Route element={<AppShell />}>
-        <Route index element={<Landing />} />
-        <Route path="intro" element={<Intro />} />
+        <Route path="landing" element={<Landing />} />
         <Route path="auth" element={<Auth />} />
         <Route path="setup-profile" element={<SetupProfile />} />
         <Route path="auth/callback" element={<AuthCallback />} />
