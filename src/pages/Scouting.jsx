@@ -255,7 +255,7 @@ function SuggestedSection({ isPremium }) {
         <button className="scout-link-btn text-sm-semibold">Find more players</button>
       </div>
       <div className="suggested-scroll">
-        {players.map((p) => (
+        {players.slice(0, isPremium ? 5 : 3).map((p) => (
           <SuggestedCard key={p.id} player={p} />
         ))}
       </div>
@@ -410,46 +410,26 @@ function YourTeamSection() {
 /* ─── Page ───────────────────────────────────────────────────────── */
 
 export default function Scouting() {
-  const { profile, setProfile } = useUser();
+  const { profile } = useUser();
   const navigate = useNavigate();
   const isPremium = !!profile?.is_pro;
-
-  async function handleUpgrade() {
-    if (!profile?.id) return;
-    const { data } = await supabase
-      .from("profiles")
-      .update({ is_pro: true })
-      .eq("id", profile.id)
-      .select()
-      .maybeSingle();
-    if (data) setProfile(data);
-  }
 
   return (
     <div className="scouting-page">
       <div className="scouting-sections">
         <WatchlistSection />
         <SuggestedSection isPremium={isPremium} />
-        <AiScoutSection />
 
         {isPremium ? (
           <>
+            <AiScoutSection />
             <LeaderboardSection />
             <YourTeamSection />
           </>
         ) : (
-          <div className="scouting-premium-spacer" />
+          <ProUpgradeCard badgeColor="pro-scout" buttonLabel="Get Premium features" onButtonClick={() => navigate("/scout-upgrade-pro")} />
         )}
       </div>
-
-      {!isPremium && (
-        <div className="scouting-premium-gate">
-          <div className="premium-gate-fade" />
-          <div className="premium-gate-body">
-            <ProUpgradeCard badgeColor="pro-scout" buttonLabel="Get Premium features" onButtonClick={handleUpgrade} />
-          </div>
-        </div>
-      )}
     </div>
   );
 }

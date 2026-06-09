@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { CaretLeft, SlidersHorizontal, ArrowsLeftRight } from "@phosphor-icons/react";
 import OvrBadge from "../components/UI/OvrBadge";
 import NavigationTabs from "../components/UI/NavTabs";
-import { fetchPlayerSuggestions } from "../lib/profiles";
+import { fetchWatchlist, removeFromWatchlist } from "../lib/watchlist";
 import { toPositionAbbr } from "../utils/positions";
 import "./Watchlist.css";
 
@@ -206,13 +206,14 @@ export default function Watchlist() {
   const [players,   setPlayers]   = useState([]);
 
   useEffect(() => {
-    fetchPlayerSuggestions(10)
+    fetchWatchlist()
       .then((raw) => setPlayers(raw.map(normalizeForWatchlist)))
       .catch(console.error);
   }, []);
 
   function handleDelete(id) {
     setPlayers((prev) => prev.filter((p) => p.id !== id));
+    removeFromWatchlist(id).catch(console.error);
   }
 
   function handleCompare(player) {
@@ -248,9 +249,13 @@ export default function Watchlist() {
 
       {/* Player list */}
       <div className="wl-list">
-        {players.map((player) => (
-          <PlayerCard key={player.id} player={player} onDelete={handleDelete} onCompare={handleCompare} onOpen={handleOpen} />
-        ))}
+        {players.length === 0 ? (
+          <p className="wl-empty text-sm-medium">No saved players yet. Bookmark athletes from their profile.</p>
+        ) : (
+          players.map((player) => (
+            <PlayerCard key={player.id} player={player} onDelete={handleDelete} onCompare={handleCompare} onOpen={handleOpen} />
+          ))
+        )}
       </div>
 
       {/* Compare FAB — navigates to the select-player page */}

@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import FootballPitch from "../assets/graphics/football_pitch.svg";
 import { useUser } from "../context/UserContext";
-import { supabase } from "../lib/supabase";
 import ProUpgradeCard from "../components/domain/Progress-athletes/ProUpgradeCard";
 import { fetchPlayerSuggestions } from "../lib/profiles";
 import { toPositionAbbr } from "../utils/positions";
@@ -88,20 +87,9 @@ const POSITIONS_ON_PITCH = [
 ];
 
 export default function ScoutTools() {
-  const { profile, setProfile } = useUser();
+  const { profile } = useUser();
   const navigate = useNavigate();
-  const hasPremium = !!profile?.is_pro;
-
-  async function handleUpgrade() {
-    if (!profile?.id) return;
-    const { data } = await supabase
-      .from("profiles")
-      .update({ is_pro: true })
-      .eq("id", profile.id)
-      .select()
-      .maybeSingle();
-    if (data) setProfile(data);
-  }
+  const [hasPremium, setHasPremium] = useState(false);
   const [selectedPosition, setSelectedPosition] = useState(null);
   const [aiInput, setAiInput] = useState("");
   const [suggestedPlayers, setSuggestedPlayers] = useState([]);
@@ -365,7 +353,7 @@ export default function ScoutTools() {
           <div className="st-unlock-wrap">
             <div className="st-unlock-fade" />
             <div className="st-unlock-banner">
-              <ProUpgradeCard badgeColor="pro-scout" buttonLabel="Get Premium features" onButtonClick={handleUpgrade} />
+              <ProUpgradeCard badgeColor="pro-scout" buttonLabel="Get Premium features" onButtonClick={() => setHasPremium(true)} />
             </div>
           </div>
         )}

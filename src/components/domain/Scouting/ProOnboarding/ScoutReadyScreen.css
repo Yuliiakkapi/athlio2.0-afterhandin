@@ -1,0 +1,116 @@
+.srs-screen {
+  min-height: 100dvh;
+  background: var(--neutral-50-bg, #fafafa);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 32px 80px;
+}
+
+/* ─── Diagonal decorative stripes ───────────────────────────────── */
+
+.srs-stripe {
+  position: absolute;
+  width: 200%;
+  height: 280px;
+  border-radius: 40px;
+  transform-origin: center;
+  pointer-events: none;
+}
+
+.srs-stripe--1 {
+  background: linear-gradient(90deg, rgba(255, 152, 61, 0.22) 0%, rgba(255, 61, 82, 0.12) 100%);
+  transform: rotate(-40deg) translateX(-30%);
+  top: 0;
+  left: -20%;
+}
+
+.srs-stripe--2 {
+  background: linear-gradient(90deg, rgba(255, 152, 61, 0.14) 0%, rgba(255, 61, 82, 0.07) 100%);
+  transform: rotate(-40deg) translateX(-15%);
+  top: 80px;
+  left: -10%;
+}
+
+.srs-stripe--3 {
+  background: linear-gradient(90deg, rgba(255, 152, 61, 0.10) 0%, rgba(255, 61, 82, 0.05) 100%);
+  transform: rotate(-40deg) translateX(10%);
+  top: -40px;
+  left: 20%;
+}
+
+/* ─── Close button ───────────────────────────────────────────────── */
+
+.srs-close {
+  position: absolute;
+  top: 59px;
+  right: 16px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--black, #151622);
+  cursor: pointer;
+}
+
+/* ─── Content ────────────────────────────────────────────────────── */
+
+.srs-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+}
+
+.srs-title {
+  font-family: var(--font-condensed, "Barlow Condensed", sans-serif);
+  font-size: 44px;
+  font-weight: 700;
+  font-style: italic;
+  color: var(--black, #151622);
+  text-transform: uppercase;
+  line-height: 1.1;
+  margin: 0;
+}
+
+/* ─── PRO pill badge ─────────────────────────────────────────────── */
+
+.srs-pro-badge {
+  display: inline-block;
+  background: linear-gradient(7deg, #FF983D 0%, #FF3D52 100%);
+  border: 3px solid white;
+  border-radius: 100px;
+  padding: 3px 18px 6px;
+  font-family: var(--font-condensed, "Barlow Condensed", sans-serif);
+  font-size: 36px;
+  font-weight: 700;
+  font-style: italic;
+  color: white;
+  text-transform: uppercase;
+  line-height: 1.1;
+  vertical-align: middle;
+}
+
+/* ─── Subtitle ───────────────────────────────────────────────────── */
+
+.srs-sub {
+  position: absolute;
+  bottom: 40px;
+  left: 0;
+  right: 0;
+  padding: 0 48px;
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--muted, #72717a);
+  text-align: center;
+  margin: 0;
+  line-height: 1.5;
+  z-index: 1;
+}

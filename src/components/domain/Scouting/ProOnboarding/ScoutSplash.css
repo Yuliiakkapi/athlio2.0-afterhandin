@@ -1,6 +1,6 @@
 .scout-splash {
   min-height: 100dvh;
-  background: linear-gradient(135deg, #4051fd 0%, #7b8cff 100%);
+  background: linear-gradient(12deg, var(--warning-DEFAULT, #FF983D) 0%, var(--negative-DEFAULT, #FF3D52) 100%);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -14,7 +14,7 @@
   font-size: 96px;
   font-weight: 700;
   font-style: italic;
-  color: #fff;
+  color: white;
   text-transform: uppercase;
   line-height: 1;
 }

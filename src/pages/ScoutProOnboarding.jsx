@@ -6,11 +6,10 @@ import OnboardingNavbar from "../components/domain/onboarding/UI/OnboardingNavba
 import ScoutSplash from "../components/domain/Scouting/ProOnboarding/ScoutSplash";
 import ScoutingFocus from "../components/domain/Scouting/ProOnboarding/ScoutingFocus";
 import ScoutCriteria from "../components/domain/Scouting/ProOnboarding/ScoutCriteria";
-import ScoutTools from "../components/domain/Scouting/ProOnboarding/ScoutTools";
-import ReadyScreen from "../components/domain/Progress-athletes/ProOnboarding/ReadyScreen";
+import ScoutReadyScreen from "../components/domain/Scouting/ProOnboarding/ScoutReadyScreen";
 import "./ScoutProOnboarding.css";
 
-const FORM_STEPS = 3;
+const FORM_STEPS = 2;
 
 export default function ScoutProOnboarding() {
   const navigate = useNavigate();
@@ -42,7 +41,6 @@ export default function ScoutProOnboarding() {
           />
           {step === 1 && <ScoutingFocus onSelectionChange={setCanContinue} />}
           {step === 2 && <ScoutCriteria />}
-          {step === 3 && <ScoutTools />}
           <OnboardingNavbar
             onNext={next}
             secondaryLabel={step === FORM_STEPS ? "Skip" : null}
@@ -53,11 +51,11 @@ export default function ScoutProOnboarding() {
         </>
       )}
 
-      {step === 4 && (
+      {step === 3 && (
         <ReadyScreen
           onClose={finish}
           badgeColor="pro-scout"
-          subtitle="Your scouting workspace is set up based on your focus, criteria and selected tools"
+          subtitle="Your scouting workspace is set up based on your focus and criteria"
         />
       )}
     </div>

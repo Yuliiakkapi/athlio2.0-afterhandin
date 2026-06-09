@@ -59,6 +59,7 @@ export default function OtherProfile() {
         } catch (err) {
           console.error("isFollowing check failed:", err);
         }
+
       }
 
       setState("ready");

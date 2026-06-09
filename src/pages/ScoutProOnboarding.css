@@ -3,7 +3,7 @@
   background: var(--neutral-50-bg, #f6f6f7);
 }
 
-/* Progress bar fill uses scout blue gradient */
+/* Progress bar fill matches pro upgrade animation */
 .scout-pro-onboarding-page .ob-topbar-fill {
-  background: linear-gradient(90deg, #4051fd 0%, #7b8cff 100%);
+  background: linear-gradient(90deg, var(--warning-DEFAULT, #FF983D) 0%, var(--negative-DEFAULT, #FF3D52) 100%);
 }

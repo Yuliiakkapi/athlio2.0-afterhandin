@@ -1,8 +1,10 @@
-import { useLocation, useNavigate } from "react-router";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate, useParams } from "react-router";
 import { useUser } from "../context/UserContext";
 import {
   ArrowLeft,
   Bell,
+  BookmarkSimple,
   ChatCircle,
   GearSix,
   MagnifyingGlass,
@@ -15,6 +17,76 @@ import "./Topbar.css";
 import Button from "./UI/Button";
 import IconButton from "./UI/IconButton";
 import ProfilePicture from "./UI/ProfilePicture";
+import { isBookmarked, addToWatchlist, removeFromWatchlist } from "../lib/watchlist";
+import { supabase } from "../lib/supabase";
+
+const PROFESSIONAL_ROLES = ["scout", "coach", "manager", "agent", "professional"];
+
+function ProfileOtherActions() {
+  const { id } = useParams();
+  const { profile: viewerProfile } = useUser();
+  const viewerIsScout = viewerProfile?.role === "scout";
+
+  const [saved, setSaved] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [isAthleteProfile, setIsAthleteProfile] = useState(false);
+
+  useEffect(() => {
+    if (!id || !viewerIsScout) return;
+    let ignore = false;
+
+    (async () => {
+      const { data } = await supabase
+        .from("profiles")
+        .select("role")
+        .eq("id", id)
+        .maybeSingle();
+
+      if (ignore) return;
+      const isAthlete = data && !PROFESSIONAL_ROLES.includes(data.role);
+      setIsAthleteProfile(isAthlete);
+
+      if (isAthlete) {
+        try {
+          const result = await isBookmarked(id);
+          if (!ignore) setSaved(result);
+        } catch { /* silent */ }
+      }
+    })();
+
+    return () => { ignore = true; };
+  }, [id, viewerIsScout]);
+
+  async function handleBookmark() {
+    if (busy) return;
+    setBusy(true);
+    const next = !saved;
+    setSaved(next);
+    try {
+      if (next) await addToWatchlist(id);
+      else await removeFromWatchlist(id);
+    } catch {
+      setSaved(!next);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <div className="topbar-profile-actions">
+      {viewerIsScout && isAthleteProfile && (
+        <button
+          className={`topbar-bookmark-btn${saved ? " topbar-bookmark-btn--saved" : ""}`}
+          aria-label={saved ? "Remove from watchlist" : "Save to watchlist"}
+          onClick={handleBookmark}
+        >
+          <BookmarkSimple size={24} weight={saved ? "fill" : "regular"} />
+        </button>
+      )}
+      <ShareNetwork size={24} aria-label="Share profile" onClick={() => console.log("Share clicked")} />
+    </div>
+  );
+}
 
 function pageConfig(title, RightIcon) {
   return {
@@ -125,9 +197,7 @@ const TOPBAR_CONFIG = {
     left: (nav) => (
       <IconButton size="large" type="subtle" icon={ArrowLeft} onClick={() => nav(-1)} />
     ),
-    right: () => (
-      <ShareNetwork size={24} aria-label="Share profile" onClick={() => console.log("Share clicked")} />
-    ),
+    right: () => <ProfileOtherActions />,
   },
   "/profile/me/edit": {
     title: "Edit profile",

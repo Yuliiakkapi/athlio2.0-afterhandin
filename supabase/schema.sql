@@ -147,9 +147,10 @@ create trigger on_profile_created
 -- ============================================================
 
 create table if not exists follows (
-  follower_id  uuid not null references profiles(id) on delete cascade,
-  following_id uuid not null references profiles(id) on delete cascade,
-  created_at   timestamptz not null default now(),
+  follower_id    uuid not null references profiles(id) on delete cascade,
+  following_id   uuid not null references profiles(id) on delete cascade,
+  created_at     timestamptz not null default now(),
+  is_watchlisted boolean not null default false,
   primary key (follower_id, following_id)
 );
 
@@ -466,6 +467,7 @@ drop policy if exists profiles_delete on profiles;
 
 drop policy if exists follows_select on follows;
 drop policy if exists follows_insert on follows;
+drop policy if exists follows_update on follows;
 drop policy if exists follows_delete on follows;
 
 drop policy if exists posts_select on posts;
@@ -521,6 +523,7 @@ create policy profiles_delete on profiles for delete using (auth.uid() = id);
 
 create policy follows_select on follows for select using (true);
 create policy follows_insert on follows for insert with check (auth.uid() = follower_id);
+create policy follows_update on follows for update using (auth.uid() = follower_id);
 create policy follows_delete on follows for delete using (auth.uid() = follower_id);
 
 create policy posts_select on posts for select using (true);

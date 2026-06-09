@@ -758,26 +758,10 @@
 
 /* ─── Premium gate (free mode) ─────────────────────────────────── */
 
-.scouting-premium-spacer {
-  height: 160px;
+.scouting-premium-inline {
+  padding-bottom: 8px;
 }
 
-.scouting-premium-gate {
-  margin-top: -180px;
-  position: relative;
-  z-index: 10;
-}
-
-.premium-gate-fade {
-  height: 220px;
-  background: linear-gradient(to bottom, transparent, var(--neutral-50-bg, #f6f6f7));
-  pointer-events: none;
-}
-
-.premium-gate-body {
-  background: var(--neutral-50-bg, #f6f6f7);
-  padding: 0 16px 24px;
-}
 
 /* ─── Premium upsell card ──────────────────────────────────────── */
 

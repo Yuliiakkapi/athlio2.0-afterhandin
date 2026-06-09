@@ -8,6 +8,7 @@ import user2 from "../assets/images/user2.jpg";
 import user3 from "../assets/images/user 3.jpg";
 import user4 from "../assets/images/user4.jpeg";
 import "./ScoutUpgradePro.css";
+import "./UpgradePro.css";
 
 const FEATURES = [
   {
@@ -106,16 +107,18 @@ export default function ScoutUpgradePro() {
             onClick={() => setPlan("monthly")}
             type="button"
           >
-            <span className="scout-plan-period">MONTHLY</span>
+            <div className="scout-plan-annual-header">
+              <span className="scout-plan-period">MONTHLY</span>
+              {plan === "monthly" && (
+                <div className="scout-plan-check" aria-hidden="true">
+                  <Check size={14} weight="bold" />
+                </div>
+              )}
+            </div>
             <div className="scout-plan-price-row">
-              <span className="scout-plan-price">€79.99</span>
+              <span className="scout-plan-price">{billing === "individual" ? "€29.99" : "€79.99"}</span>
               <span className="scout-plan-unit">per month</span>
             </div>
-            {plan === "monthly" && (
-              <div className="scout-plan-check" aria-hidden="true">
-                <Check size={14} weight="bold" />
-              </div>
-            )}
           </button>
 
           <button
@@ -123,7 +126,7 @@ export default function ScoutUpgradePro() {
             onClick={() => setPlan("annual")}
             type="button"
           >
-            <div className="scout-plan-save-badge">SAVE 33%</div>
+            <div className="scout-plan-save-badge">{billing === "individual" ? "SAVE 17%" : "SAVE 33%"}</div>
             <div className="scout-plan-annual-header">
               <span className="scout-plan-period">ANNUAL</span>
               {plan === "annual" && (
@@ -133,10 +136,10 @@ export default function ScoutUpgradePro() {
               )}
             </div>
             <div className="scout-plan-price-row">
-              <span className="scout-plan-price">€69.99</span>
+              <span className="scout-plan-price">{billing === "individual" ? "€25.00" : "€69.99"}</span>
               <span className="scout-plan-unit">per month</span>
             </div>
-            <span className="scout-plan-billed">Billed €839.88 per year</span>
+            <span className="scout-plan-billed">{billing === "individual" ? "Billed €300.00 per year" : "Billed €839.88 per year"}</span>
           </button>
         </div>
 
@@ -193,10 +196,10 @@ export default function ScoutUpgradePro() {
         </p>
       </div>
 
-      {/* Scout transition overlay */}
+      {/* Pro transition overlay */}
       {confirming && (
-        <div className="scout-upgrade-overlay">
-          <span className="scout-upgrade-overlay-text">PRO</span>
+        <div className="upgrade-pro-overlay">
+          <span className="upgrade-pro-overlay-text">PRO</span>
         </div>
       )}
     </div>
