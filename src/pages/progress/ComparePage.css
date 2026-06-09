@@ -42,6 +42,21 @@
   object-position: top center;
 }
 
+.cpv2-photo-initials {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  font-family: var(--font-condensed);
+  font-size: var(--heading-4xl);
+  font-weight: 700;
+  font-style: italic;
+  color: var(--primary-default);
+  background: var(--primary-50);
+  border-radius: 50%;
+}
+
 /* OVR badge positioning */
 .cpv2-ovr-wrap {
   position: absolute;

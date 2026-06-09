@@ -2,7 +2,7 @@ import { useState } from "react";
 import { CaretDown } from "@phosphor-icons/react";
 import OvrBadge from "../../../UI/OvrBadge";
 import AISuggestion from "../../Progress-athletes/AISuggestion";
-import PerformanceChartCard from "../../Performance/PerformanceChartCard";
+import SeasonOverviewCard from "../../Performance/SeasonOverviewCard";
 import {
   PredictionsSection,
   SkillTrendsSection,
@@ -69,7 +69,7 @@ export default function PerformanceTab({ viewerIsPro: initialIsPro = false }) {
 
   return (
     <div className="perf-tab">
-      <PerformanceChartCard />
+      <SeasonOverviewCard />
       {isPro ? (
         <>
           <AISuggestion

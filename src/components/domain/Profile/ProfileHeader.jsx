@@ -4,7 +4,6 @@ import {
   PencilSimple,
   ShareNetwork,
   Plus,
-  ChatCircle,
 } from "@phosphor-icons/react";
 import "./ProfileHeader.css";
 import Button from "../../UI/Button";
@@ -13,6 +12,8 @@ import ProfilePicture from "../../UI/ProfilePicture";
 
 import darkblueStripes from "../../../assets/images/darkblue-stripes.png";
 import { toPositionAbbr } from "../../../utils/positions";
+
+const PROFESSIONAL_ROLES = ["scout", "coach", "manager", "agent", "professional"];
 
 export default function ProfileHeader({
   profile,
@@ -27,6 +28,8 @@ export default function ProfileHeader({
 
   if (!profile) return null;
 
+  const isProfessional = PROFESSIONAL_ROLES.includes(profile.role);
+
   const positions = Array.isArray(profile.position)
     ? profile.position
     : profile.position
@@ -35,6 +38,8 @@ export default function ProfileHeader({
 
   const clubName = profile.clubs?.name || profile.club_other_name || null;
   const clubLogo = profile.clubs?.logo_url || null;
+
+  const hasBadge = isProfessional || positions.length > 0;
 
   function handleAvatarFileChange(e) {
     const f = e.target.files && e.target.files[0];
@@ -51,10 +56,8 @@ export default function ProfileHeader({
 
   function handleAvatarClick() {
     if (isMe && !profile.avatar_url) {
-      // If blank picture, open gallery
       fileRef.current?.click();
     } else if (isMe && profile.avatar_url) {
-      // If has picture, go to edit to change it
       navigate("/profile/me/edit");
     }
   }
@@ -109,8 +112,8 @@ export default function ProfileHeader({
                 <>
                   {" · "}
                   <span
+                    className="ph-following-link text-sm-medium"
                     onClick={() => navigate("/profile/me/following")}
-                    style={{ cursor: "pointer" }}
                   >
                     {(profile.following_count ?? 0).toLocaleString()} following
                   </span>
@@ -118,15 +121,19 @@ export default function ProfileHeader({
               )}
             </p>
             <div className="ph-meta-row">
-              {positions.slice(0, 3).map((pos) => (
-                <Badge
-                  key={pos}
-                  text={toPositionAbbr(pos)}
-                  color="light"
-                  size="s"
-                />
-              ))}
-              {(positions.length > 0 || true) && clubName && (
+              {isProfessional ? (
+                <Badge text={profile.role} color="light" size="s" />
+              ) : (
+                positions.slice(0, 3).map((pos) => (
+                  <Badge
+                    key={pos}
+                    text={toPositionAbbr(pos)}
+                    color="light"
+                    size="s"
+                  />
+                ))
+              )}
+              {hasBadge && clubName && (
                 <span className="ph-dot" aria-hidden="true" />
               )}
               {clubName && (
@@ -170,7 +177,7 @@ export default function ProfileHeader({
             <>
               <Button
                 size="small"
-                type={isFollowing ? "following" : "primary"}
+                type={isFollowing ? "following" : "secondary"}
                 label={isFollowing ? "Following" : "Follow"}
                 leadingIcon={isFollowing ? undefined : Plus}
                 fullWidth

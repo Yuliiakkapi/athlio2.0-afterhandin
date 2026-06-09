@@ -1,0 +1,180 @@
+.pro-info-tab {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.pro-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pro-section-title {
+  font-size: var(--text-l);
+  font-weight: 600;
+  color: var(--black);
+}
+
+/* About card */
+.pro-about-card {
+  background: var(--white);
+  border-radius: 8px;
+  box-shadow: 0 0 10.5px rgba(0, 0, 0, 0.08);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.pro-bio-text {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--black);
+  line-height: normal;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.pro-see-more {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--primary-default);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+  line-height: normal;
+}
+
+/* Experiences */
+.pro-experiences {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.pro-exp-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.pro-exp-card {
+  background: var(--white);
+  border-radius: 8px;
+  box-shadow: 0 0 10.5px rgba(0, 0, 0, 0.08);
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 59px;
+}
+
+.pro-exp-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  flex: 1;
+}
+
+.pro-exp-logo {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  flex-shrink: 0;
+  border-radius: 4px;
+}
+
+.pro-exp-logo-fallback {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--neutral-200);
+  color: var(--neutral-600);
+  font-size: 10px;
+  font-weight: 600;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.pro-exp-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.pro-exp-title {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--black);
+  line-height: normal;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pro-exp-org {
+  font-size: var(--text-xs);
+  font-weight: 500;
+  color: var(--muted);
+  line-height: normal;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pro-exp-date {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--muted);
+  line-height: normal;
+  text-align: right;
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-left: 8px;
+}
+
+/* Empty about card */
+.pro-about-empty {
+  align-items: center;
+  justify-content: center;
+  min-height: 56px;
+}
+
+.pro-add-about-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--primary-default);
+}
+
+/* Edit button */
+.pro-edit-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--primary-default);
+  height: 32px;
+}

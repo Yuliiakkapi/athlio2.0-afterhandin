@@ -4,7 +4,7 @@
 ────────────────────────────────────────────────────────────────── */
 
 .main-content:has(.scouting-page) {
-  padding: 56px 0 0;
+  padding: 0;
 }
 
 .scouting-page {
@@ -341,6 +341,10 @@
   position: relative;
   overflow: hidden;
   box-shadow: 0 0 21px rgba(0, 0, 0, 0.08);
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
 }
 
 /* Position tags — top left */
@@ -657,30 +661,26 @@
   border-radius: 12px;
   overflow: hidden;
   position: relative;
-  aspect-ratio: 358 / 316;
-  background: linear-gradient(180deg, #2a5c1e 0%, #1a3d0f 100%);
+  aspect-ratio: 358 / 285;
+  background: #1a3d0f;
+  display: block;
+  width: 100%;
+  border: none;
+  cursor: pointer;
+  padding: 0;
 }
 
-/* Outer field lines */
-.pitch-card::before {
-  content: "";
+.pitch-card-bg {
   position: absolute;
-  inset: 7%;
-  border: 1.5px solid rgba(255, 255, 255, 0.25);
-  border-radius: 3px;
-  pointer-events: none;
-}
-
-/* Center line */
-.pitch-card::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 7%;
-  right: 7%;
-  height: 1.5px;
-  background: rgba(255, 255, 255, 0.25);
-  transform: translateY(-50%);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: -50px;
+  width: 100%;
+  height: calc(100% + 50px);
+  object-fit: cover;
+  object-position: bottom;
+  display: block;
   pointer-events: none;
 }
 
@@ -689,7 +689,7 @@
   inset: 0;
   background: rgba(0, 0, 0, 0.36);
   pointer-events: none;
-  z-index: 0;
+  z-index: 1;
 }
 
 .pos-btn {
@@ -697,42 +697,63 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 3px;
+  gap: 0;
   background: none;
   border: none;
-  cursor: pointer;
   transform: translateX(-50%);
-  z-index: 1;
+  z-index: 2;
   padding: 0;
+  pointer-events: none;
 }
 
 .pos-label {
-  font-family: var(--font-sans);
-  font-size: 14px;
+  font-family: var(--font-condensed, 'Barlow Condensed', sans-serif);
+  font-size: 14.4px;
   font-weight: 600;
   font-style: italic;
   color: white;
   text-transform: uppercase;
   text-align: center;
   letter-spacing: -0.14px;
-  line-height: 19px;
+  line-height: 19.2px;
 }
 
 .pos-circle {
-  width: 38px;
-  height: 38px;
+  width: 38.4px;
+  height: 38.4px;
   border-radius: 50%;
   background: white;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--primary-default, #4051fd);
   overflow: hidden;
+  position: relative;
+}
+
+.pos-circle-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.pos-circle-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 50%;
 }
 
 .pos-btn--has-player .pos-circle {
-  border: 1px solid rgba(255, 255, 255, 0.8);
-  background: rgba(255, 255, 255, 0.9);
+  border: 0.8px solid white;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* section header bottom-aligned variant */
+.scout-section-header--bottom {
+  align-items: flex-end;
 }
 
 /* ─── Premium gate (free mode) ─────────────────────────────────── */

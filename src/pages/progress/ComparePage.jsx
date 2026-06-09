@@ -1,4 +1,5 @@
 import { X, Sparkle, CaretDown } from "@phosphor-icons/react";
+import { useLocation } from "react-router-dom";
 import { useUser } from "../../context/UserContext";
 import OvrBadge from "../../components/UI/OvrBadge";
 import Badge from "../../components/UI/Badge";
@@ -93,9 +94,38 @@ function StatRow({ label, left, right, fmt }) {
   );
 }
 
+function fromWatchlistPlayer(p) {
+  const gpm = parseFloat(p.stats?.find((s) => s.label === "GPM")?.value) || 0;
+  const apm = parseFloat(p.stats?.find((s) => s.label === "APM")?.value) || 0;
+  const winPctRaw = p.stats?.find((s) => s.label === "%WIN")?.value || "0%";
+  return {
+    name: p.name,
+    flag: "🏴",
+    positions: [p.position].filter(Boolean),
+    club: p.club || "",
+    age: p.age || 0,
+    foot: "Right foot",
+    ovr: p.ovr || 0,
+    img: p.avatarUrl || null,
+    initials: p.initials || p.name?.[0] || "?",
+    stats: {
+      matches: 0, minutes: 0,
+      winPct: parseInt(winPctRaw) || 0,
+      matchesStarted: 0,
+      goals: 0, gpm, goalsPerMin: 0,
+      assists: 0, assistsPerMatch: apm, assistsPerMin: 0,
+    },
+  };
+}
+
 export default function ComparePage() {
   const { profile } = useUser();
+  const location = useLocation();
   const meImg = profile?.avatar_url || playerImg;
+
+  const opponent = location.state?.player
+    ? fromWatchlistPlayer(location.state.player)
+    : OPPONENT;
 
   return (
     <div className="cpv2-page">
@@ -116,10 +146,13 @@ export default function ComparePage() {
 
         <div className="cpv2-photo-slot cpv2-photo-slot--right">
           <div className="cpv2-photo-circle">
-            <img src={OPPONENT.img} alt={OPPONENT.name} className="cpv2-photo-img" />
+            {opponent.img
+              ? <img src={opponent.img} alt={opponent.name} className="cpv2-photo-img" />
+              : <span className="cpv2-photo-initials">{opponent.initials}</span>
+            }
           </div>
           <div className="cpv2-ovr-wrap cpv2-ovr-wrap--left">
-            <OvrBadge value={OPPONENT.ovr} variant="default" size="md" />
+            <OvrBadge value={opponent.ovr} variant="default" size="md" />
           </div>
           <button className="cpv2-remove-btn cpv2-remove-btn--right">
             <X size={12} weight="bold" />
@@ -149,19 +182,19 @@ export default function ComparePage() {
 
         <div className="cpv2-info-player cpv2-info-player--right">
           <div className="cpv2-name-row cpv2-name-row--right">
-            <span className="cpv2-flag">{OPPONENT.flag}</span>
-            <span className="cpv2-player-name">{OPPONENT.name}</span>
+            <span className="cpv2-flag">{opponent.flag}</span>
+            <span className="cpv2-player-name">{opponent.name}</span>
           </div>
           <div className="cpv2-badges-row cpv2-badges-row--right">
-            {OPPONENT.positions.map((p) => <Badge key={p} text={p} color="light" size="xs" />)}
+            {opponent.positions.map((p) => <Badge key={p} text={p} color="light" size="xs" />)}
           </div>
           <div className="cpv2-meta-row cpv2-meta-row--right">
-            <span className="cpv2-meta-text">{OPPONENT.club}</span>
+            <span className="cpv2-meta-text">{opponent.club}</span>
             <span className="cpv2-dot" />
-            <span className="cpv2-meta-text">{OPPONENT.age}y.o.</span>
+            <span className="cpv2-meta-text">{opponent.age}y.o.</span>
           </div>
           <div className="cpv2-meta-row cpv2-meta-row--right">
-            <span className="cpv2-meta-text">{OPPONENT.foot}</span>
+            <span className="cpv2-meta-text">{opponent.foot}</span>
           </div>
         </div>
       </div>
@@ -175,7 +208,7 @@ export default function ComparePage() {
 
         <div className="cpv2-section-body">
           {SEASON_STATS.map(({ key, label, fmt }) => (
-            <StatRow key={key} label={label} left={ME.stats[key]} right={OPPONENT.stats[key]} fmt={fmt} />
+            <StatRow key={key} label={label} left={ME.stats[key]} right={opponent.stats[key]} fmt={fmt} />
           ))}
         </div>
 
@@ -184,7 +217,7 @@ export default function ComparePage() {
         </div>
         <div className="cpv2-section-body">
           {GOALS_STATS.map(({ key, label, fmt }) => (
-            <StatRow key={key} label={label} left={ME.stats[key]} right={OPPONENT.stats[key]} fmt={fmt} />
+            <StatRow key={key} label={label} left={ME.stats[key]} right={opponent.stats[key]} fmt={fmt} />
           ))}
         </div>
 
@@ -193,7 +226,7 @@ export default function ComparePage() {
         </div>
         <div className="cpv2-section-body">
           {ASSISTS_STATS.map(({ key, label, fmt }) => (
-            <StatRow key={key} label={label} left={ME.stats[key]} right={OPPONENT.stats[key]} fmt={fmt} />
+            <StatRow key={key} label={label} left={ME.stats[key]} right={opponent.stats[key]} fmt={fmt} />
           ))}
         </div>
       </div>
@@ -204,7 +237,7 @@ export default function ComparePage() {
           <Sparkle size={24} color="white" weight="fill" />
         </div>
         <p className="cpv2-ai-text">
-          Emil Bryld overall is showing bigger potential this season. However he has also less matches played and that means less experience.
+          Emil Bryld overall is showing bigger potential this season compared to {opponent.name}. However he has also less matches played and that means less experience.
         </p>
       </div>
 

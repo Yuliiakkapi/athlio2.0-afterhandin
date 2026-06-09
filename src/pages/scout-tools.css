@@ -300,6 +300,14 @@
   background: var(--neutral-200, #e1e1e4);
   flex-shrink: 0;
   align-self: center;
+  overflow: hidden;
+}
+
+.st-pc-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
 }
 
 .st-pc-info {
@@ -379,6 +387,7 @@
   border-radius: 50%;
   background: var(--neutral-200, #e1e1e4);
   flex-shrink: 0;
+  overflow: hidden;
 }
 
 .st-pc-name--premium {

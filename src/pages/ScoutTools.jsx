@@ -1,53 +1,62 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import FootballPitch from "../assets/graphics/football_pitch.svg";
 import { useUser } from "../context/UserContext";
+import { supabase } from "../lib/supabase";
 import ProUpgradeCard from "../components/domain/Progress-athletes/ProUpgradeCard";
+import { fetchPlayerSuggestions } from "../lib/profiles";
+import { toPositionAbbr } from "../utils/positions";
 import "./scout-tools.css";
+
+function seededRand(seed) {
+  let s = seed;
+  return function () {
+    s = (s * 1664525 + 1013904223) & 0xffffffff;
+    return (s >>> 0) / 0xffffffff;
+  };
+}
+
+function fakePlayerStats(idStr) {
+  const n = idStr.split("").reduce((a, c) => a + c.charCodeAt(0), 0);
+  const r = seededRand(n * 7919);
+  return [
+    { value: (r() * 1.8 + 0.2).toFixed(1), label: "GPM" },
+    { value: (r() * 2.0 + 0.3).toFixed(1), label: "APM" },
+    { value: (r() * 4.0 + 1.5).toFixed(1), label: "SHT" },
+  ];
+}
+
+function fakeOvr(idStr) {
+  const n = idStr.split("").reduce((a, c) => a + c.charCodeAt(0), 0);
+  const r = seededRand(n * 3571);
+  return Math.round(r() * 40 + 50);
+}
+
+function normalizeForSuggested(p) {
+  const positions = Array.isArray(p.position)
+    ? p.position
+    : p.position
+    ? [p.position]
+    : [];
+  const posAbbrs = positions.slice(0, 2).map(toPositionAbbr);
+  const clubName = p.club || null;
+  return {
+    id: p.id,
+    name: p.full_name || "Unknown",
+    avatarUrl: p.avatar_url || null,
+    positions: posAbbrs,
+    club: clubName,
+    age: p.age ?? null,
+    stats: fakePlayerStats(p.id),
+    ovr: fakeOvr(p.id),
+  };
+}
 
 const WATCHLIST_PLAYERS = [
   { id: 1, name: "J. Santos", position: "FW", a: 3, g: 8, rating: "7.4", ovr: 68 },
   { id: 2, name: "M. Rodriguez", position: "CM", a: 5, g: 2, rating: "6.9", ovr: 62 },
 ];
 
-const SUGGESTED_PLAYERS = [
-  {
-    id: 1,
-    name: "Emil Jonansen Bryld",
-    positions: ["ST", "LW"],
-    club: "AC Milan U21",
-    age: 20,
-    stats: [{ value: "1.2", label: "GPM" }, { value: "0.8", label: "APM" }, { value: "4.3", label: "SHT" }],
-    ovr: 72,
-  },
-  {
-    id: 2,
-    name: "Omar Diallo",
-    positions: ["CAM"],
-    club: "Stade Rennais",
-    age: 21,
-    stats: [{ value: "0.7", label: "GPM" }, { value: "1.1", label: "APM" }, { value: "3.1", label: "SHT" }],
-    ovr: 69,
-  },
-  {
-    id: 3,
-    name: "Tomáš Dvořák",
-    positions: ["CM"],
-    club: "Sparta Prague",
-    age: 22,
-    stats: [{ value: "0.4", label: "GPM" }, { value: "0.9", label: "APM" }, { value: "2.2", label: "SHT" }],
-    ovr: 71,
-  },
-  {
-    id: 4,
-    name: "Pierre Nkumu",
-    positions: ["CB"],
-    club: "RB Leipzig",
-    age: 19,
-    stats: [{ value: "0.1", label: "GPM" }, { value: "0.2", label: "APM" }, { value: "1.0", label: "SHT" }],
-    ovr: 67,
-  },
-];
 
 const LEADERBOARD_ROWS = [
   { rank: 1, name: "Carlos Vega", position: "ST", club: "Valencia CF", ovr: 56 },
@@ -79,11 +88,29 @@ const POSITIONS_ON_PITCH = [
 ];
 
 export default function ScoutTools() {
-  const { profile } = useUser();
+  const { profile, setProfile } = useUser();
   const navigate = useNavigate();
-  const [hasPremium, setHasPremium] = useState(false);
+  const hasPremium = !!profile?.is_pro;
+
+  async function handleUpgrade() {
+    if (!profile?.id) return;
+    const { data } = await supabase
+      .from("profiles")
+      .update({ is_pro: true })
+      .eq("id", profile.id)
+      .select()
+      .maybeSingle();
+    if (data) setProfile(data);
+  }
   const [selectedPosition, setSelectedPosition] = useState(null);
   const [aiInput, setAiInput] = useState("");
+  const [suggestedPlayers, setSuggestedPlayers] = useState([]);
+
+  useEffect(() => {
+    fetchPlayerSuggestions(8)
+      .then((raw) => setSuggestedPlayers(raw.map(normalizeForSuggested)))
+      .catch(console.error);
+  }, []);
 
   const positions = Array.isArray(profile?.position)
     ? profile.position
@@ -172,10 +199,15 @@ export default function ScoutTools() {
             <button className="st-see-all-link">Find more players</button>
           </div>
           <div className="st-players-scroll">
-            {SUGGESTED_PLAYERS.map((p) => (
+            {suggestedPlayers.map((p) => (
               hasPremium ? (
                 <div key={p.id} className="st-player-card st-player-card--premium">
-                  <div className="st-pc-avatar-corner" />
+                  <div className="st-pc-avatar-corner">
+                    {p.avatarUrl
+                      ? <img src={p.avatarUrl} alt={p.name} className="st-pc-avatar-img" />
+                      : null
+                    }
+                  </div>
                   <div className="st-pc-badges-row">
                     {p.positions.map((pos) => (
                       <span key={pos} className="st-pc-pos-badge">{pos}</span>
@@ -183,9 +215,9 @@ export default function ScoutTools() {
                   </div>
                   <span className="st-pc-name st-pc-name--premium">{p.name}</span>
                   <div className="st-pc-meta-row">
-                    <span className="st-pc-club">{p.club}</span>
-                    <span className="st-pc-dot">·</span>
-                    <span className="st-pc-age">{p.age} yrs</span>
+                    {p.club && <span className="st-pc-club">{p.club}</span>}
+                    {p.club && p.age && <span className="st-pc-dot">·</span>}
+                    {p.age && <span className="st-pc-age">{p.age} yrs</span>}
                   </div>
                   <div className="st-pc-stats-row">
                     {p.stats.map((s) => (
@@ -199,7 +231,12 @@ export default function ScoutTools() {
                 </div>
               ) : (
                 <div key={p.id} className="st-player-card">
-                  <div className="st-pc-avatar" />
+                  <div className="st-pc-avatar">
+                    {p.avatarUrl
+                      ? <img src={p.avatarUrl} alt={p.name} className="st-pc-avatar-img" />
+                      : null
+                    }
+                  </div>
                   <div className="st-pc-info">
                     <span className="st-pc-name">{p.name}</span>
                     <div className="st-pc-badges-row st-pc-badges-row--center">
@@ -215,7 +252,7 @@ export default function ScoutTools() {
                     </svg>
                     <span>Premium</span>
                   </div>
-                  <span className="st-pc-club-sm">{p.club}</span>
+                  {p.club && <span className="st-pc-club-sm">{p.club}</span>}
                 </div>
               )
             ))}
@@ -328,7 +365,7 @@ export default function ScoutTools() {
           <div className="st-unlock-wrap">
             <div className="st-unlock-fade" />
             <div className="st-unlock-banner">
-              <ProUpgradeCard badgeColor="pro-scout" buttonLabel="Get Premium features" onButtonClick={() => setHasPremium(true)} />
+              <ProUpgradeCard badgeColor="pro-scout" buttonLabel="Get Premium features" onButtonClick={handleUpgrade} />
             </div>
           </div>
         )}

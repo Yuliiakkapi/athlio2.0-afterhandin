@@ -25,6 +25,7 @@ export default function AppShell() {
     pathname.startsWith("/auth") ||
     pathname.startsWith("/intro") ||
     pathname.startsWith("/setup-profile") ||
+    pathname === "/scouting" ||
     pathname === "/scouting/watchlist" ||
     pathname === "/scouting/substitution" ||
     pathname === "/scouting/select-players";

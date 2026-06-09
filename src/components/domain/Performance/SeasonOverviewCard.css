@@ -1,0 +1,225 @@
+/* ── Season Overview Card ─────────────────────────────────────── */
+
+.season-overview-card {
+  background: var(--white);
+  border-radius: 12px;
+  box-shadow: 0 0 21px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  padding: 21px 25px 18px;
+}
+
+.season-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.season-title-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.season-title {
+  font-family: var(--font-condensed);
+  font-size: 28px;
+  font-weight: 700;
+  font-style: italic;
+  color: var(--primary-900, #222f8d);
+  text-transform: uppercase;
+  line-height: 1;
+  margin: 0;
+}
+
+.season-title-chevron {
+  color: var(--primary-900, #222f8d);
+  flex-shrink: 0;
+}
+
+.season-trend-badge {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: #effff5;
+  border-radius: 100px;
+  padding: 4px 8px;
+}
+
+.season-trend-arrow {
+  width: 11px;
+  height: 10px;
+  flex-shrink: 0;
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  background: #09de54;
+}
+
+.season-trend-label {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 500;
+  color: #09de54;
+  white-space: nowrap;
+}
+
+/* ── Stat sub-cards ────────────────────────────────────────────── */
+
+.season-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.season-stat-row {
+  background: var(--white);
+  border-radius: 12px;
+  box-shadow: 0 0 10.5px rgba(0, 0, 0, 0.08);
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+/* Left: label + big value */
+
+.season-stat-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  min-width: 0;
+}
+
+.season-stat-label {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--black, #151622);
+  text-transform: uppercase;
+  line-height: 1;
+  margin: 0 0 2px;
+  white-space: nowrap;
+}
+
+.season-stat-value-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.season-stat-value {
+  font-family: var(--font-condensed);
+  font-size: 32px;
+  font-weight: 700;
+  font-style: italic;
+  color: var(--primary-500, #4e6cff);
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.season-stat-pct-badge {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border-radius: 100px;
+  padding: 4px 8px;
+}
+
+.season-stat-arrow {
+  width: 11px;
+  height: 10px;
+  flex-shrink: 0;
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  background: #09de54;
+}
+
+.season-stat-pct {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 500;
+  color: #09de54;
+  white-space: nowrap;
+}
+
+/* Right: key-value details */
+
+.season-stat-right {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.season-stat-detail {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.season-stat-detail-label {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted, #72717a);
+  white-space: nowrap;
+}
+
+.season-stat-detail-value {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--black, #151622);
+  white-space: nowrap;
+}
+
+/* Cards badges */
+
+.season-cards-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.season-card-badge {
+  position: relative;
+  width: 13px;
+  height: 14px;
+}
+
+.season-card-badge::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: 0;
+  width: 13px;
+  height: 18px;
+  border-radius: 4px;
+}
+
+.season-card-badge--red::before {
+  background: var(--negative-default, #ff3d52);
+}
+
+.season-card-badge--yellow::before {
+  background: #ffc53d;
+}
+
+.season-card-num {
+  position: absolute;
+  top: 50%;
+  left: 3px;
+  transform: translateY(-50%);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.season-card-badge--red .season-card-num {
+  color: var(--white, #fff);
+}
+
+.season-card-badge--yellow .season-card-num {
+  color: var(--black, #151622);
+}

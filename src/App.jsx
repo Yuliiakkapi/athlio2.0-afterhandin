@@ -38,6 +38,7 @@ const AiScout = lazy(() => import("./pages/AiScout"));
 const TrainingsPage = lazy(() => import("./pages/progress/TrainingsPage"));
 const VisibilityPage = lazy(() => import("./pages/progress/VisibilityPage"));
 const ComparePage = lazy(() => import("./pages/progress/ComparePage"));
+const CompareSelectPage = lazy(() => import("./pages/progress/CompareSelectPage"));
 const LeaderboardPage = lazy(() => import("./pages/progress/LeaderboardPage"));
 const TargetsPage = lazy(() => import("./pages/progress/TargetsPage"));
 const ChallengesPage = lazy(() => import("./pages/progress/ChallengesPage"));
@@ -80,6 +81,7 @@ export default function App() {
         <Route path="progress/trainings" element={<TrainingsPage />} />
         <Route path="progress/visibility" element={<VisibilityPage />} />
         <Route path="progress/compare" element={<ComparePage />} />
+        <Route path="progress/compare/select" element={<CompareSelectPage />} />
         <Route path="progress/leaderboard" element={<LeaderboardPage />} />
         <Route path="progress/targets" element={<TargetsPage />} />
         <Route path="progress/challenges" element={<ChallengesPage />} />

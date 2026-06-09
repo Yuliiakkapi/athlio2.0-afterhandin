@@ -78,6 +78,11 @@
   margin: 0;
 }
 
+.ph-following-link {
+  cursor: pointer;
+  color: var(--neutral-300, #cecfd4);
+}
+
 /* Row: position badges + dot + club */
 .ph-meta-row {
   display: flex;

@@ -1,18 +1,50 @@
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import { CaretDown, CaretRight, Star, Sparkle as SparkleIcon } from "@phosphor-icons/react";
 import { useUser } from "../context/UserContext";
 import OvrBadge from "../components/UI/OvrBadge.jsx";
-// Use user-provided PNG background if present
 import WATCHLIST_BG from "../assets/images/watchlist-bg.png";
-// Upsell background provided by user
+import PitchBg from "../assets/images/position-bg.png";
 import ProUpgradeCard from "../components/domain/Progress-athletes/ProUpgradeCard";
+import { fetchPlayerSuggestions } from "../lib/profiles";
+import { toPositionAbbr } from "../utils/positions";
+import { supabase } from "../lib/supabase";
 import "./Scouting.css";
 
-// Decorative Figma vectors removed — using user's image as background instead
-
-// Figma placeholder assets — replace with permanent CDN assets (expire in 7 days)
-const PLACEHOLDER_AVATAR   = "https://www.figma.com/api/mcp/asset/10a27e2c-0a1a-4a66-b8ba-67c014ea8c9f";
-const PLACEHOLDER_CLUB_LOGO = "https://www.figma.com/api/mcp/asset/071f4d1e-d339-4179-84f5-6f1dc145661c";
+function seededRand(seed) {
+  let s = seed;
+  return () => { s = (s * 1664525 + 1013904223) & 0xffffffff; return (s >>> 0) / 0xffffffff; };
+}
+function fakeStat(idStr, base, range) {
+  const n = idStr.split("").reduce((a, c) => a + c.charCodeAt(0), 0);
+  return +(seededRand(n * 7919)() * range + base).toFixed(2);
+}
+function fakeOvr(idStr) {
+  const n = idStr.split("").reduce((a, c) => a + c.charCodeAt(0), 0);
+  return Math.round(seededRand(n * 3571)() * 40 + 50);
+}
+function normalizeForScouting(p) {
+  const positions = Array.isArray(p.position) ? p.position : p.position ? [p.position] : [];
+  const parts = (p.full_name || "Unknown").trim().split(" ");
+  const nameLine2 = parts.length > 1 ? parts.slice(1).join(" ") : parts[0];
+  const nameLine1 = parts.length > 1 ? parts[0] : "";
+  const initials = parts.slice(0, 2).map((w) => w[0]).join("").toUpperCase();
+  return {
+    id: p.id,
+    nameLine1,
+    nameLine2,
+    initials,
+    avatarUrl: p.avatar_url || null,
+    positions: positions.slice(0, 2).map(toPositionAbbr),
+    club: p.club || null,
+    clubLogo: p.club_logo || null,
+    age: p.age ?? null,
+    gpm: fakeStat(p.id, 0.2, 1.8),
+    apm: fakeStat(p.id + "a", 0.3, 2.0),
+    avgMin: Math.round(fakeStat(p.id + "m", 45, 50)),
+    ovr: fakeOvr(p.id),
+  };
+}
 
 
 
@@ -32,12 +64,6 @@ const MOCK_LEADERBOARD = [
   { id: 4, name: "Kylian Mbappe",  club: "Real Madrid FC",  assists: 17, goals: 9,  ovr: 56, initials: "KM" },
 ];
 
-const MOCK_SUGGESTED = [
-  { id: 1, nameLine1: "Emil Jonansen", nameLine2: "Bryld",   positions: ["ST", "LW"], gpm: 1.2,  avgMin: 72, apm: 0.82, initials: "EB", club: "Real Madrid",   clubLogo: PLACEHOLDER_CLUB_LOGO, age: 18, ovr: 72, avatarUrl: PLACEHOLDER_AVATAR },
-  { id: 2, nameLine1: "Omar",          nameLine2: "Diallo",  positions: ["CAM"],      gpm: 0.9,  avgMin: 68, apm: 0.71, initials: "OD", club: "FC Benfica",    clubLogo: null,                  age: 21, ovr: 68, avatarUrl: null },
-  { id: 3, nameLine1: "Tomáš",         nameLine2: "Dvořák",  positions: ["CM"],       gpm: 0.5,  avgMin: 81, apm: 0.56, initials: "TD", club: "Sparta Prague", clubLogo: null,                  age: 24, ovr: 65, avatarUrl: null },
-  { id: 4, nameLine1: "Pierre",        nameLine2: "Nkumu",   positions: ["CB"],       gpm: 0.2,  avgMin: 77, apm: 0.21, initials: "PN", club: "LOSC Lille",    clubLogo: null,                  age: 19, ovr: 61, avatarUrl: null },
-];
 
 const AI_PROMPTS = [
   "Who compares to young Modric at 17?",
@@ -45,11 +71,13 @@ const AI_PROMPTS = [
 ];
 
 const PITCH_POSITIONS = [
-  { key: "cdm", label: "CDM", cx: "50%", cy: "21%", hasPlayer: false },
-  { key: "cb",  label: "CB",  cx: "50%", cy: "42%", hasPlayer: true  },
-  { key: "lb",  label: "LB",  cx: "29%", cy: "35%", hasPlayer: false },
-  { key: "rb",  label: "RB",  cx: "70%", cy: "35%", hasPlayer: false },
-  { key: "gk",  label: "GK",  cx: "50%", cy: "62%", hasPlayer: false },
+  { key: "rb-top-l", label: "RB",  cx: "29%", cy: "7%",  hasPlayer: false },
+  { key: "rb-top-r", label: "RB",  cx: "71%", cy: "7%",  hasPlayer: false },
+  { key: "cdm",      label: "CDM", cx: "50%", cy: "27%", hasPlayer: false },
+  { key: "lb",       label: "LB",  cx: "29%", cy: "45%", hasPlayer: false },
+  { key: "rb",       label: "RB",  cx: "71%", cy: "41%", hasPlayer: false },
+  { key: "cb",       label: "CB",  cx: "50%", cy: "55%", hasPlayer: true  },
+  { key: "gk",       label: "GK",  cx: "50%", cy: "80%", hasPlayer: false },
 ];
 
 /* ─── Utility components ─────────────────────────────────────────── */
@@ -150,11 +178,11 @@ function WatchlistSection() {
 
 function SuggestedCard({ player }) {
   return (
-    <div className="sug-card">
+    <Link to={`/profile/${player.id}`} className="sug-card">
       {/* Position tags — top left */}
       <div className="sug-card-positions">
-        {player.positions.map((pos) => (
-          <PositionTag key={pos} text={pos} />
+        {player.positions.map((pos, i) => (
+          <PositionTag key={i} text={pos} />
         ))}
       </div>
 
@@ -202,11 +230,19 @@ function SuggestedCard({ player }) {
           <span className="sug-stat-label">Avg.min</span>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
 
 function SuggestedSection({ isPremium }) {
+  const [players, setPlayers] = useState([]);
+
+  useEffect(() => {
+    fetchPlayerSuggestions(8)
+      .then((raw) => setPlayers(raw.map(normalizeForScouting)))
+      .catch(console.error);
+  }, []);
+
   return (
     <section className="scout-section">
       <div className="scout-section-header">
@@ -219,7 +255,7 @@ function SuggestedSection({ isPremium }) {
         <button className="scout-link-btn text-sm-semibold">Find more players</button>
       </div>
       <div className="suggested-scroll">
-        {MOCK_SUGGESTED.map((p) => (
+        {players.map((p) => (
           <SuggestedCard key={p.id} player={p} />
         ))}
       </div>
@@ -311,6 +347,18 @@ function LeaderboardSection() {
 
 function YourTeamSection() {
   const navigate = useNavigate();
+  const [pitchPlayers, setPitchPlayers] = useState([]);
+
+  useEffect(() => {
+    supabase
+      .from("profiles")
+      .select("id, full_name, avatar_url")
+      .eq("role", "athlete")
+      .order("created_at", { ascending: false })
+      .limit(7)
+      .then(({ data }) => setPitchPlayers(data ?? []));
+  }, []);
+
   return (
     <section className="scout-section">
       <div className="scout-section-header">
@@ -318,34 +366,42 @@ function YourTeamSection() {
           <h2 className="scout-section-title text-lg-semibold">Your team</h2>
           <p className="scout-section-subtitle text-sm-medium">Ranking your position and age</p>
         </div>
-        <button className="scout-link-btn text-sm-semibold" onClick={() => navigate("/scouting/team")}>
-          View full team
-        </button>
+        <OvrBadge value={72} size="lg" variant="gold" />
       </div>
 
-      <div className="pitch-card">
+      <button
+        className="pitch-card"
+        onClick={() => navigate("/scouting/team")}
+        aria-label="View your team"
+      >
+        <img src={PitchBg} alt="" className="pitch-card-bg" />
         <div className="pitch-overlay" />
-        {PITCH_POSITIONS.map((pos) => (
-          <button
-            key={pos.key}
-            className={`pos-btn${pos.hasPlayer ? " pos-btn--has-player" : ""}`}
-            style={{ left: pos.cx, top: pos.cy }}
-          >
-            <span className="pos-label text-sm-semibold">{pos.label}</span>
-            <div className="pos-circle">
-              {pos.hasPlayer ? (
-                <PlayerAvatar initials="P" size={19} />
-              ) : (
-                /* Jersey icon */
-                <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                  <path d="M22 9l-4-6H6L2 9l3 2v10h14V11l3-2z" opacity=".15" />
-                  <path d="M6.2 3h11.6l3.8 5.7-2.4 1.6-.2.1V21H5V10.4l-.2-.1L2.4 8.7 6.2 3zm1.4 1.5L5.1 8.3l1.4.9.5.3V19.5h10V9.5l.5-.3 1.4-.9-2.5-3.8H7.6z" />
-                </svg>
-              )}
+        {PITCH_POSITIONS.map((pos, i) => {
+          const player = pitchPlayers[i] ?? null;
+          const hasAvatar = !!player?.avatar_url;
+          return (
+            <div
+              key={pos.key}
+              className={`pos-btn${hasAvatar ? " pos-btn--has-player" : ""}`}
+              style={{ left: pos.cx, top: pos.cy }}
+            >
+              <span className="pos-label">{pos.label}</span>
+              <div className="pos-circle">
+                {hasAvatar ? (
+                  <>
+                    <img src={player.avatar_url} alt="" className="pos-circle-img" />
+                    <div className="pos-circle-overlay" />
+                  </>
+                ) : (
+                  <svg width="19" height="19" viewBox="0 0 24 24" fill="var(--primary-default, #4051fd)" aria-hidden="true">
+                    <path d="M17 2.5H11L8 6.5H5L3 9L5 12.5H6.5V23.5H21.5V12.5H23L25 9L23 6.5H20L17 2.5Z" />
+                  </svg>
+                )}
+              </div>
             </div>
-          </button>
-        ))}
-      </div>
+          );
+        })}
+      </button>
     </section>
   );
 }
@@ -354,9 +410,20 @@ function YourTeamSection() {
 /* ─── Page ───────────────────────────────────────────────────────── */
 
 export default function Scouting() {
-  const { profile } = useUser();
+  const { profile, setProfile } = useUser();
   const navigate = useNavigate();
   const isPremium = !!profile?.is_pro;
+
+  async function handleUpgrade() {
+    if (!profile?.id) return;
+    const { data } = await supabase
+      .from("profiles")
+      .update({ is_pro: true })
+      .eq("id", profile.id)
+      .select()
+      .maybeSingle();
+    if (data) setProfile(data);
+  }
 
   return (
     <div className="scouting-page">
@@ -379,7 +446,7 @@ export default function Scouting() {
         <div className="scouting-premium-gate">
           <div className="premium-gate-fade" />
           <div className="premium-gate-body">
-            <ProUpgradeCard badgeColor="pro-scout" buttonLabel="Get Premium features" onButtonClick={() => navigate("/scout-upgrade-pro")} />
+            <ProUpgradeCard badgeColor="pro-scout" buttonLabel="Get Premium features" onButtonClick={handleUpgrade} />
           </div>
         </div>
       )}

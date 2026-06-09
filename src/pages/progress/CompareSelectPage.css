@@ -1,0 +1,314 @@
+/* ── Page ─────────────────────────────────────────────────────── */
+
+.csp-page {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100dvh - 60px);
+  padding-bottom: 80px;
+}
+
+/* ── Search bar ───────────────────────────────────────────────── */
+
+.csp-search-bar-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 0 16px;
+}
+
+.csp-search-bar {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--neutral-100, #eeeff1);
+  border-radius: 9999px;
+  padding: 0 16px;
+  height: 44px;
+}
+
+.csp-search-icon {
+  color: var(--muted);
+  flex-shrink: 0;
+}
+
+.csp-search-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-weight: 500;
+  color: var(--black);
+  outline: none;
+}
+
+.csp-search-input::placeholder {
+  color: var(--neutral-700, #7d7c86);
+}
+
+.csp-filter-btn {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: var(--black);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* ── Player list ──────────────────────────────────────────────── */
+
+.csp-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.csp-section-label {
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--black);
+}
+
+.csp-empty {
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  color: var(--muted);
+  text-align: center;
+  padding: 24px 0;
+}
+
+/* ── Player card ──────────────────────────────────────────────── */
+
+.csp-card {
+  width: 100%;
+  text-align: left;
+  background: var(--white);
+  border-radius: 12px;
+  box-shadow: 0 0 10.5px rgba(0, 0, 0, 0.08);
+  border: 1.5px solid transparent;
+  padding: 10px 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+  position: relative;
+}
+
+.csp-card--selected {
+  background: rgba(64, 81, 253, 0.05);
+  border-color: var(--primary-default);
+  box-shadow: 0 0 21px rgba(0, 0, 0, 0.08);
+}
+
+/* ── Card top row ─────────────────────────────────────────────── */
+
+.csp-card-top {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.csp-avatar-wrap {
+  position: relative;
+  width: 72px;
+  height: 72px;
+  flex-shrink: 0;
+}
+
+.csp-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: rgba(64, 81, 253, 0.1);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.csp-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.csp-avatar-initials {
+  font-family: var(--font-condensed);
+  font-size: var(--heading-2xl);
+  font-weight: 700;
+  font-style: italic;
+  color: var(--primary-default);
+  text-transform: uppercase;
+}
+
+.csp-ovr {
+  position: absolute;
+  left: 38px;
+  top: 34px;
+}
+
+.csp-card-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.csp-player-name {
+  font-family: var(--font-condensed);
+  font-size: var(--heading-2xl);
+  font-weight: 600;
+  font-style: italic;
+  text-transform: uppercase;
+  color: var(--black);
+  line-height: 1.1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.csp-player-meta {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: nowrap;
+}
+
+.csp-meta-text {
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.csp-dot {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--muted);
+  flex-shrink: 0;
+}
+
+/* ── Stat boxes ───────────────────────────────────────────────── */
+
+.csp-card-stats {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.csp-stat-box {
+  flex: 1;
+  height: 66px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 6px 8px;
+  background: var(--neutral-50-bg, #f6f6f7);
+  border-radius: 8px;
+  box-shadow: 0 0 10.5px rgba(0, 0, 0, 0.08);
+}
+
+.csp-stat-label {
+  font-family: var(--font-sans);
+  font-size: var(--text-2xs);
+  font-weight: 500;
+  color: var(--muted);
+  text-align: center;
+}
+
+.csp-stat-value {
+  font-family: var(--font-condensed);
+  font-size: var(--heading-2xl);
+  font-weight: 700;
+  font-style: italic;
+  text-transform: uppercase;
+  color: var(--black);
+  line-height: 1;
+  text-align: center;
+}
+
+/* ── Trend chip ───────────────────────────────────────────────── */
+
+.csp-trend {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 4px;
+  border-radius: 100px;
+  font-family: var(--font-sans);
+  font-size: var(--text-2xs);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.csp-trend--up {
+  background: #effff5;
+  color: var(--success-600, #00ab3d);
+}
+
+.csp-trend--down {
+  background: rgba(255, 61, 82, 0.10);
+  color: var(--negative-default, #ff3d52);
+}
+
+.csp-trend-arrow {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  flex-shrink: 0;
+}
+
+.csp-trend--up .csp-trend-arrow {
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-bottom: 6px solid var(--success-600, #00ab3d);
+}
+
+.csp-trend--down .csp-trend-arrow {
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 6px solid var(--negative-default, #ff3d52);
+}
+
+/* ── Sticky footer with Continue button ───────────────────────── */
+
+.csp-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 12px 16px 28px;
+  background: var(--neutral-50-bg, #f6f6f7);
+  border-top: 1px solid var(--neutral-100, #eeeff1);
+}
+
+.csp-continue-btn {
+  width: 100%;
+  height: 44px;
+  border: none;
+  border-radius: 8px;
+  background: var(--primary-default);
+  color: var(--white);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+
+.csp-continue-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
